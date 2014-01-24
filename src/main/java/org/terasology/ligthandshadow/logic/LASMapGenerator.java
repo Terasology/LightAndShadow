@@ -1,38 +1,55 @@
 package org.terasology.ligthandshadow.logic;
 
-import org.terasology.pathfinding.MazeChunkGenerator;
-import org.terasology.pathfinding.PathfinderTestGenerator;
-import org.terasology.world.block.Block;
-import org.terasology.world.block.management.BlockManager;
-import org.terasology.world.generator.BaseMapGenerator;
-import org.terasology.world.generator.MapGeneratorUri;
-import org.terasology.world.generator.core.BasicHMTerrainGenerator;
-import org.terasology.world.generator.core.FlatTerrainGenerator;
-import org.terasology.world.generator.core.FloraGenerator;
-import org.terasology.world.generator.core.ForestGenerator;
-import org.terasology.world.liquid.LiquidsGenerator;
+import org.terasology.cities.CityTerrainGenerator;
+import org.terasology.cities.CityWorldConfig;
+import org.terasology.cities.FloraGeneratorFast;
+import org.terasology.cities.HeightMapTerrainGenerator;
+import org.terasology.cities.terrain.NoiseHeightMap;
+import org.terasology.core.world.generator.AbstractBaseWorldGenerator;
+import org.terasology.engine.SimpleUri;
+import org.terasology.world.generator.RegisterWorldGenerator;
 
 /**
  * @author synopia
  */
-public class LASMapGenerator extends BaseMapGenerator {
-    public LASMapGenerator() {
-        super(new MapGeneratorUri("lightAndShadow:mapgen"));
+@RegisterWorldGenerator(id = "lasmap", displayName = "Light and Shadow World")
+public class LASMapGenerator extends AbstractBaseWorldGenerator {
+
+    private NoiseHeightMap heightMap;
+
+    /**
+     * @param uri the uri
+     */
+    public LASMapGenerator(SimpleUri uri) {
+        super(uri);
     }
 
     @Override
-    public String name() {
-        return "Light and Shadow Map";
+    public void initialize() {
+
+        // TODO: this should come from elsewhere
+        CityWorldConfig config = new CityWorldConfig();
+
+        heightMap = new NoiseHeightMap();
+
+        register(new HeightMapTerrainGenerator(heightMap, config));
+//        register(new BoundaryGenerator(heightMap));
+        register(new CityTerrainGenerator(heightMap, config));
+        register(new FloraGeneratorFast(heightMap));
     }
 
     @Override
-    public void setup() {
-        Block start = BlockManager.getInstance().getBlock("lightAndShadow:redSpawn");
-        Block target = BlockManager.getInstance().getBlock("lightAndShadow:redTarget");
-        registerChunkGenerator(new MazeChunkGenerator(80, 40, 25, 40,2));
-//        registerChunkGenerator(new BasicHMTerrainGenerator());
-        registerChunkGenerator(new FloraGenerator());
-        registerChunkGenerator(new ForestGenerator());
-        registerChunkGenerator(new LiquidsGenerator());
+    public void setWorldSeed(String seed) {
+        if (seed == null) {
+            return;
+        }
+
+        if (heightMap == null) {
+            heightMap = new NoiseHeightMap();
+        }
+
+        heightMap.setSeed(seed);
+
+        super.setWorldSeed(seed);
     }
 }

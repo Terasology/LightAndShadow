@@ -20,36 +20,33 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.asset.Assets;
 import org.terasology.audio.AudioManager;
-import org.terasology.components.BlockParticleEffectComponent;
-import org.terasology.components.ItemComponent;
-import org.terasology.components.world.LocationComponent;
-import org.terasology.entitySystem.EntityInfoComponent;
-import org.terasology.entitySystem.EntityManager;
-import org.terasology.entitySystem.EntityRef;
-import org.terasology.entitySystem.EventHandlerSystem;
-import org.terasology.entitySystem.In;
-import org.terasology.entitySystem.ReceiveEvent;
-import org.terasology.entitySystem.RegisterComponentSystem;
-import org.terasology.events.ActivateEvent;
-import org.terasology.events.DamageEvent;
-import org.terasology.events.NoHealthEvent;
-import org.terasology.events.inventory.ReceiveItemEvent;
+import org.terasology.entitySystem.entity.EntityManager;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ReceiveEvent;
+import org.terasology.entitySystem.systems.ComponentSystem;
+import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.logic.common.ActivateEvent;
+import org.terasology.logic.health.OnDamagedEvent;
+import org.terasology.logic.inventory.ItemComponent;
+import org.terasology.logic.location.LocationComponent;
+import org.terasology.logic.particles.BlockParticleEffectComponent;
 import org.terasology.math.Region3i;
 import org.terasology.math.Side;
 import org.terasology.math.Vector3i;
+import org.terasology.registry.In;
+import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockComponent;
-import org.terasology.world.block.BlockRegionComponent;
-import org.terasology.world.block.management.BlockManager;
+import org.terasology.world.block.regions.BlockRegionComponent;
 
 import javax.vecmath.Vector3f;
 
 /**
  * @author Immortius
  */
-@RegisterComponentSystem
-public class CardSystem implements EventHandlerSystem {
+@RegisterSystem
+public class CardSystem implements ComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(CardSystem.class);
 
     @In
@@ -58,6 +55,8 @@ public class CardSystem implements EventHandlerSystem {
     private EntityManager entityManager;
     @In
     private AudioManager audioManager;
+    @In
+    private BlockEntityRegistry blockEntityRegistry;
 
     @Override
     public void initialise() {
@@ -72,7 +71,7 @@ public class CardSystem implements EventHandlerSystem {
         CardComponent card = entity.getComponent(CardComponent.class);
         BlockComponent targetBlockComponent = event.getTarget().getComponent(BlockComponent.class);
         if (targetBlockComponent == null) {
-            event.cancel();
+            event.consume();
             return;
         }
 
@@ -80,7 +79,7 @@ public class CardSystem implements EventHandlerSystem {
         horizontalDir.y = 0;
         Side facingDir = Side.inDirection(horizontalDir);
         if (!facingDir.isHorizontal()) {
-            event.cancel();
+            event.consume();
             return;
         }
 
@@ -93,7 +92,7 @@ public class CardSystem implements EventHandlerSystem {
 
         Block primeBlock = worldProvider.getBlock(primePos);
         if (!primeBlock.isReplacementAllowed()) {
-            event.cancel();
+            event.consume();
             return;
         }
         logger.info("Prime block {} at pos {}", primeBlock, primePos);
@@ -116,14 +115,14 @@ public class CardSystem implements EventHandlerSystem {
             topBlockPos = new Vector3i(primePos.x, primePos.y + 1, primePos.z);
             topBlock = aboveBlock;
         } else {
-            event.cancel();
+            event.consume();
             return;
         }
 
-        worldProvider.setBlock(bottomBlockPos, card.bottomBlockFamily.getBlockForPlacing(worldProvider,
-            bottomBlockPos, facingDir, Side.TOP), bottomBlock);
-        worldProvider.setBlock(topBlockPos, card.topBlockFamily.getBlockForPlacing(worldProvider, topBlockPos, facingDir,
-            Side.TOP), topBlock);
+        worldProvider.setBlock(bottomBlockPos, card.bottomBlockFamily.getBlockForPlacement(worldProvider,
+                blockEntityRegistry, bottomBlockPos, facingDir, Side.TOP));
+        worldProvider.setBlock(topBlockPos, card.topBlockFamily.getBlockForPlacement(worldProvider, blockEntityRegistry, topBlockPos, facingDir,
+                Side.TOP));
 
         EntityRef newCard = entityManager.copy(entity);
         newCard.addComponent(new BlockRegionComponent(Region3i.createBounded(bottomBlockPos, topBlockPos)));
@@ -137,7 +136,7 @@ public class CardSystem implements EventHandlerSystem {
     }
 
     @ReceiveEvent(components = {CardComponent.class, LocationComponent.class})
-    public void onDamaged(DamageEvent event, EntityRef entity) {
+    public void onDamaged(OnDamagedEvent event, EntityRef entity) {
         LocationComponent location = entity.getComponent(LocationComponent.class);
         CardComponent cardComponent = entity.getComponent(CardComponent.class);
         Vector3f center = location.getWorldPosition();
@@ -162,6 +161,7 @@ public class CardSystem implements EventHandlerSystem {
         audioManager.playSound(Assets.getSound("engine:Dig"), 1.0f);
     }
 
+/*
     @ReceiveEvent(components = {CardComponent.class, BlockRegionComponent.class})
     public void onOutOfHealth(NoHealthEvent event, EntityRef entity) {
         BlockRegionComponent blockRegionComponent = entity.getComponent(BlockRegionComponent.class);
@@ -182,4 +182,5 @@ public class CardSystem implements EventHandlerSystem {
         entity.destroy();
         audioManager.playSound(Assets.getSound("engine:RemoveBlock"), 0.6f);
     }
+*/
 }

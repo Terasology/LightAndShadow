@@ -6,8 +6,20 @@
     "description" : "Light & Shadow is an experimental game type set in a quirky Alice in Wonderland inspired setting",
     "dependencies" : [
         {
+            "id" : "Core",
+            "minVersion" : "0.1.0"
+        },
+        {
             "id" : "Pathfinding",
             "minVersion" : "0.1.0"
+        },
+        {
+            "id" : "LightAndShadowResources",
+            "minVersion" : "0.1.0"
+        },
+        {
+            "id" : "Cities",
+            "minVersion" : "0.3.0"
         }
     ],
     "isServerSideOnly" : false

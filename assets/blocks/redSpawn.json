@@ -1,9 +1,0 @@
-{
-    "basedOn" : "lightAndShadow:spawn",
-    "categories" : ["lightSide", "stone"],
-
-    "entity" : {
-        "prefab" : "lightAndShadow:redSpawn",
-        "mode" : "persistent"
-    }
-}
