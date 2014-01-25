@@ -78,5 +78,10 @@ public class SetTargetTargetBlockNode extends Node {
                 return Status.FAILURE;
             }
         }
+
+        @Override
+        public void handle(Status result) {
+
+        }
     }
 }
