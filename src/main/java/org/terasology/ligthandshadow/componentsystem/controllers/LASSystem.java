@@ -46,7 +46,7 @@ public class LASSystem implements ComponentSystem {
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, InventoryComponent inventory) {
         BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
         inventoryManager.giveItem(player, blockFactory.newInstance(blockManager.getBlockFamily("redSpawn")));
-        inventoryManager.giveItem(player, blockFactory.newInstance(blockManager.getBlockFamily("redTarget")));
+        inventoryManager.giveItem(player, blockFactory.newInstance(blockManager.getBlockFamily("blackSpawn")));
     }
 
     @Override
