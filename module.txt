@@ -18,10 +18,6 @@
             "minVersion" : "0.1.0"
         },
         {
-            "id" : "Behaviors",
-            "minVersion" : "0.1.0"
-        },
-        {
             "id" : "Cities",
             "minVersion" : "0.3.0"
         }
