@@ -47,6 +47,11 @@ public class LASSystem implements ComponentSystem {
         BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
         inventoryManager.giveItem(player, blockFactory.newInstance(blockManager.getBlockFamily("redSpawn")));
         inventoryManager.giveItem(player, blockFactory.newInstance(blockManager.getBlockFamily("blackSpawn")));
+
+        inventoryManager.giveItem(player, entityManager.create("clubsAce"));
+        inventoryManager.giveItem(player, entityManager.create("diamondsAce"));
+        inventoryManager.giveItem(player, entityManager.create("heartsAce"));
+        inventoryManager.giveItem(player, entityManager.create("spadesAce"));
     }
 
     @Override
