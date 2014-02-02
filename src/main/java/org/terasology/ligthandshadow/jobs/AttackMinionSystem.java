@@ -54,6 +54,7 @@ public class AttackMinionSystem implements ComponentSystem {
 
     public class AttackMinionJob implements Job {
         private final SimpleUri uri;
+        private float duration = 5;
 
         public AttackMinionJob(String uri) {
             this.uri = new SimpleUri(uri);
@@ -85,8 +86,9 @@ public class AttackMinionSystem implements ComponentSystem {
         }
 
         @Override
-        public void letMinionWork(EntityRef block, EntityRef minion) {
-
+        public boolean letMinionWork(EntityRef block, EntityRef minion, float dt) {
+            duration -= dt;
+            return duration > 0;
         }
 
         @Override
