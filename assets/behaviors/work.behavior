@@ -1,0 +1,77 @@
+{
+  "model": {
+    "nodeType": "engine:RepeatNode",
+    "nodeId": 0,
+    "node": {
+      "child": {
+        "nodeType": "engine:SelectorNode",
+        "nodeId": 1,
+        "node": {
+          "children": [
+            {
+              "nodeType": "engine:ParallelNode",
+              "nodeId": 2,
+              "node": {
+                "successPolicy": "RequireAll",
+                "failurePolicy": "RequireOne",
+                "children": [
+                  {
+                    "nodeType": "pathfinding:FindWalkableBlockNode",
+                    "nodeId": 3,
+                    "node": {
+                      "child": {
+                        "nodeType": "pathfinding:MoveToNode",
+                        "nodeId": 4,
+                        "node": {
+                          "distance": 0.5
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "nodeType": "engine:SelectorNode",
+                    "nodeId": 5,
+                    "node": {
+                      "children": [
+                        {
+                          "nodeType": "pathfinding:FindJobNode",
+                          "nodeId": 6,
+                          "node": {
+                            "filter": "Pathfinding:walkToBlock",
+                            "child": {
+                              "nodeType": "engine:LookupNode",
+                              "nodeId": 7,
+                              "node": {
+                                "tree": "pathfinding:runjob"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "nodeType": "pathfinding:PlayAnimationNode",
+                          "nodeId": 8,
+                          "node": {
+                            "animation": "idle",
+                            "loop": false
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "nodeType": "pathfinding:PlayAnimationNode",
+              "nodeId": 9,
+              "node": {
+                "animation": "idle",
+                "loop": false
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
