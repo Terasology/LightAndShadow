@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,6 +22,7 @@ import org.terasology.entitySystem.systems.ComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.logic.inventory.action.GiveItemAction;
 import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.registry.In;
 import org.terasology.world.WorldProvider;
@@ -45,13 +46,13 @@ public class LASSystem implements ComponentSystem {
     @ReceiveEvent
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, InventoryComponent inventory) {
         BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
-        inventoryManager.giveItem(player, blockFactory.newInstance(blockManager.getBlockFamily("redSpawn")));
-        inventoryManager.giveItem(player, blockFactory.newInstance(blockManager.getBlockFamily("blackSpawn")));
+        player.send(new GiveItemAction(player, blockFactory.newInstance(blockManager.getBlockFamily("redSpawn"))));
+        player.send(new GiveItemAction(player, blockFactory.newInstance(blockManager.getBlockFamily("blackSpawn"))));
 
-        inventoryManager.giveItem(player, entityManager.create("clubsAce"));
-        inventoryManager.giveItem(player, entityManager.create("diamondsAce"));
-        inventoryManager.giveItem(player, entityManager.create("heartsAce"));
-        inventoryManager.giveItem(player, entityManager.create("spadesAce"));
+        player.send(new GiveItemAction(player, entityManager.create("clubsAce")));
+        player.send(new GiveItemAction(player, entityManager.create("diamondsAce")));
+        player.send(new GiveItemAction(player, entityManager.create("heartsAce")));
+        player.send(new GiveItemAction(player, entityManager.create("spadesAce")));
     }
 
     @Override
