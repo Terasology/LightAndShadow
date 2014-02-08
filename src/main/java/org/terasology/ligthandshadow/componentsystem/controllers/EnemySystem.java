@@ -25,11 +25,11 @@ import org.terasology.entitySystem.entity.lifecycleEvents.OnActivatedComponent;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.ComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.jobSystem.JobTargetComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeam;
 import org.terasology.logic.characters.events.OnEnterBlockEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.CoreRegistry;
+import org.terasology.work.WorkTargetComponent;
 
 import javax.vecmath.Vector3f;
 import java.util.Map;
@@ -64,13 +64,13 @@ public class EnemySystem implements ComponentSystem {
         teamEntities.add(entityRef);
         entities.add(entityRef);
 //        recalculateDistances();
-        JobTargetComponent component = new JobTargetComponent();
-        component.jobUri = "LightAndShadow:attackMinion" + team.team;
+        WorkTargetComponent component = new WorkTargetComponent();
+        component.workUri = "LightAndShadow:attackMinion" + team.team;
         entityRef.addComponent(component);
     }
 
     @ReceiveEvent
-    public void onRemoved(BeforeRemoveComponent event, EntityRef entityRef, LASTeam team, LocationComponent locationComponent, JobTargetComponent jobTargetComponent) {
+    public void onRemoved(BeforeRemoveComponent event, EntityRef entityRef, LASTeam team, LocationComponent locationComponent, WorkTargetComponent jobTargetComponent) {
         logger.info("removed " + entityRef + " " + team.team);
         entities.remove(entityRef);
         Set<EntityRef> map = teams.get(team.team);

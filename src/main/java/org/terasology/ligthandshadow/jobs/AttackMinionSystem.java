@@ -20,11 +20,11 @@ import org.terasology.engine.SimpleUri;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.ComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.jobSystem.Job;
-import org.terasology.jobSystem.JobFactory;
 import org.terasology.navgraph.WalkableBlock;
 import org.terasology.pathfinding.componentSystem.PathfinderSystem;
 import org.terasology.registry.In;
+import org.terasology.work.Work;
+import org.terasology.work.WorkFactory;
 
 import java.util.List;
 
@@ -36,15 +36,15 @@ public class AttackMinionSystem implements ComponentSystem {
     @In
     private PathfinderSystem pathfinderSystem;
     @In
-    private JobFactory jobFactory;
+    private WorkFactory workFactory;
 
     public AttackMinionSystem() {
     }
 
     @Override
     public void initialise() {
-        jobFactory.register(new AttackMinionJob("LightAndShadow:attackMinionBlack"));
-        jobFactory.register(new AttackMinionJob("LightAndShadow:attackMinionRed"));
+        workFactory.register(new AttackMinionWork("LightAndShadow:attackMinionBlack"));
+        workFactory.register(new AttackMinionWork("LightAndShadow:attackMinionRed"));
     }
 
     @Override
@@ -52,11 +52,11 @@ public class AttackMinionSystem implements ComponentSystem {
     }
 
 
-    public class AttackMinionJob implements Job {
+    public class AttackMinionWork implements Work {
         private final SimpleUri uri;
         private float duration = 5;
 
-        public AttackMinionJob(String uri) {
+        public AttackMinionWork(String uri) {
             this.uri = new SimpleUri(uri);
         }
 
