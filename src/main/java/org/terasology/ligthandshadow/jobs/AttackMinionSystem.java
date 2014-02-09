@@ -86,9 +86,12 @@ public class AttackMinionSystem implements ComponentSystem {
         }
 
         @Override
-        public boolean letMinionWork(EntityRef block, EntityRef minion, float dt) {
-            duration -= dt;
-            return duration > 0;
+        public void letMinionWork(EntityRef block, EntityRef minion) {
+        }
+
+        @Override
+        public float cooldownTime() {
+            return duration;
         }
 
         @Override
