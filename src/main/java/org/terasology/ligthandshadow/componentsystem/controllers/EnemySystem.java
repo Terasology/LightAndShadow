@@ -24,7 +24,6 @@ import org.terasology.entitySystem.entity.lifecycleEvents.BeforeRemoveComponent;
 import org.terasology.entitySystem.entity.lifecycleEvents.OnActivatedComponent;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.ComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeam;
 import org.terasology.logic.characters.events.OnEnterBlockEvent;
 import org.terasology.logic.location.LocationComponent;
@@ -38,7 +37,7 @@ import java.util.Set;
 /**
  * Created by synopia on 01.02.14.
  */
-@RegisterSystem
+//@RegisterSystem
 public class EnemySystem implements ComponentSystem {
     public static final Logger logger = LoggerFactory.getLogger(EnemySystem.class);
     private Map<String, Set<EntityRef>> teams = Maps.newHashMap();
