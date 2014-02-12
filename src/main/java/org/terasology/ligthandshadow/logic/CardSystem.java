@@ -1,5 +1,5 @@
 /*
- * Copyright 2012  Benjamin Glatzel <benjamin.glatzel@me.com>
+ * Copyright 2014 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import org.terasology.audio.AudioManager;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.ComponentSystem;
+import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.health.OnDamagedEvent;
@@ -46,7 +46,7 @@ import javax.vecmath.Vector3f;
  * @author Immortius
  */
 @RegisterSystem
-public class CardSystem implements ComponentSystem {
+public class CardSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(CardSystem.class);
 
     @In

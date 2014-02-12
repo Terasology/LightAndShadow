@@ -18,7 +18,7 @@ package org.terasology.ligthandshadow.jobs;
 import com.google.common.collect.Lists;
 import org.terasology.engine.SimpleUri;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.systems.ComponentSystem;
+import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.navgraph.WalkableBlock;
 import org.terasology.pathfinding.componentSystem.PathfinderSystem;
@@ -32,7 +32,7 @@ import java.util.List;
  * Created by synopia on 01.02.14.
  */
 @RegisterSystem
-public class AttackMinionSystem implements ComponentSystem {
+public class AttackMinionSystem extends BaseComponentSystem {
     @In
     private PathfinderSystem pathfinderSystem;
     @In
