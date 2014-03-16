@@ -15,14 +15,21 @@
  */
 package org.terasology.ligthandshadow.logic;
 
+import com.google.common.base.Optional;
+import com.google.common.collect.Maps;
+import org.terasology.cities.CitySpawnComponent;
+import org.terasology.cities.CityTerrainComponent;
 import org.terasology.cities.CityTerrainGenerator;
-import org.terasology.cities.CityWorldConfig;
 import org.terasology.cities.FloraGeneratorFast;
 import org.terasology.cities.HeightMapTerrainGenerator;
 import org.terasology.cities.heightmap.NoiseHeightMap;
 import org.terasology.core.world.generator.AbstractBaseWorldGenerator;
 import org.terasology.engine.SimpleUri;
+import org.terasology.entitySystem.Component;
 import org.terasology.world.generator.RegisterWorldGenerator;
+import org.terasology.world.generator.WorldConfigurator;
+
+import java.util.Map;
 
 /**
  * @author synopia
@@ -41,15 +48,11 @@ public class LASMapGenerator extends AbstractBaseWorldGenerator {
 
     @Override
     public void initialize() {
-
-        // TODO: this should come from elsewhere
-        CityWorldConfig config = new CityWorldConfig();
-
         heightMap = new NoiseHeightMap();
 
-        register(new HeightMapTerrainGenerator(heightMap, config));
+        register(new HeightMapTerrainGenerator(heightMap));
 //        register(new BoundaryGenerator(heightMap));
-        register(new CityTerrainGenerator(heightMap, config));
+        register(new CityTerrainGenerator(heightMap));
         register(new FloraGeneratorFast(heightMap));
     }
 
@@ -66,5 +69,23 @@ public class LASMapGenerator extends AbstractBaseWorldGenerator {
         heightMap.setSeed(seed);
 
         super.setWorldSeed(seed);
+    }
+
+    @Override
+    public Optional<WorldConfigurator> getConfigurator() {
+
+        WorldConfigurator wc = new WorldConfigurator() {
+
+            @Override
+            public Map<String, Component> getProperties() {
+                Map<String, Component> map = Maps.newHashMap();
+                map.put("Terrain", new CityTerrainComponent());
+                map.put("Spawning", new CitySpawnComponent());
+                return map;
+            }
+
+        };
+
+        return Optional.of(wc);
     }
 }
