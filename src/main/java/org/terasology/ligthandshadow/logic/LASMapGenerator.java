@@ -22,7 +22,7 @@ import org.terasology.cities.CityTerrainComponent;
 import org.terasology.cities.CityTerrainGenerator;
 import org.terasology.cities.FloraGeneratorFast;
 import org.terasology.cities.HeightMapTerrainGenerator;
-import org.terasology.cities.heightmap.NoiseHeightMap;
+import org.terasology.commonworld.heightmap.NoiseHeightMap;
 import org.terasology.core.world.generator.AbstractBaseWorldGenerator;
 import org.terasology.engine.SimpleUri;
 import org.terasology.entitySystem.Component;
