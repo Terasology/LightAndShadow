@@ -1,7 +1,7 @@
 {
     "id" : "LightAndShadow",
     "version" : "0.1.0",
-    "author" : "Terasology Community - http://forum.movingblocks.net/threads/light-and-shadow.762",
+    "author" : "Terasology Community - http://forum.terasology.org/threads/762",
     "displayName" : "Light & Shadow",
     "description" : "Light & Shadow is an experimental game type set in a quirky Alice in Wonderland inspired setting",
     "dependencies" : [
@@ -22,5 +22,7 @@
             "minVersion" : "0.3.0"
         }
     ],
-    "isServerSideOnly" : false
+    "isServerSideOnly" : false,
+    "isGameplay" : "true",
+    "defaultWorldGenerator" : "LightAndShadow:lasmap"
 }
