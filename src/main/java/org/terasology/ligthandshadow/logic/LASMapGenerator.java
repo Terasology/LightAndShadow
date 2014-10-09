@@ -21,11 +21,19 @@ import org.terasology.cities.CitySpawnComponent;
 import org.terasology.cities.CityTerrainComponent;
 import org.terasology.cities.CityTerrainGenerator;
 import org.terasology.cities.FloraGeneratorFast;
+import org.terasology.cities.HeightMapCompatibilityFacetProvider;
 import org.terasology.cities.HeightMapTerrainGenerator;
+import org.terasology.commonworld.heightmap.HeightMap;
+import org.terasology.commonworld.heightmap.HeightMaps;
 import org.terasology.commonworld.heightmap.NoiseHeightMap;
+import org.terasology.commonworld.symmetry.Symmetries;
 import org.terasology.core.world.generator.AbstractBaseWorldGenerator;
+import org.terasology.core.world.generator.facetProviders.SeaLevelProvider;
+import org.terasology.core.world.generator.facetProviders.World2dPreviewProvider;
 import org.terasology.engine.SimpleUri;
 import org.terasology.entitySystem.Component;
+import org.terasology.world.generation.World;
+import org.terasology.world.generation.WorldBuilder;
 import org.terasology.world.generator.RegisterWorldGenerator;
 import org.terasology.world.generator.WorldConfigurator;
 
@@ -37,7 +45,9 @@ import java.util.Map;
 @RegisterWorldGenerator(id = "lasmap", displayName = "Light and Shadow World")
 public class LASMapGenerator extends AbstractBaseWorldGenerator {
 
-    private NoiseHeightMap heightMap;
+    World world;
+    private NoiseHeightMap noiseMap;
+    private HeightMap heightMap;
 
     /**
      * @param uri the uri
@@ -48,12 +58,16 @@ public class LASMapGenerator extends AbstractBaseWorldGenerator {
 
     @Override
     public void initialize() {
-        heightMap = new NoiseHeightMap();
+
+        noiseMap = new NoiseHeightMap();
+        heightMap = HeightMaps.symmetric(noiseMap, Symmetries.alongNegativeDiagonal());
 
         register(new HeightMapTerrainGenerator(heightMap));
 //        register(new BoundaryGenerator(heightMap));
         register(new CityTerrainGenerator(heightMap));
         register(new FloraGeneratorFast(heightMap));
+
+        world.initialize();
     }
 
     @Override
@@ -63,10 +77,17 @@ public class LASMapGenerator extends AbstractBaseWorldGenerator {
         }
 
         if (heightMap == null) {
-            heightMap = new NoiseHeightMap();
+            noiseMap = new NoiseHeightMap();
+            heightMap = HeightMaps.symmetric(noiseMap, Symmetries.alongNegativeDiagonal());
         }
 
-        heightMap.setSeed(seed);
+        noiseMap.setSeed(seed);
+
+        world = new WorldBuilder(0)
+                .addProvider(new HeightMapCompatibilityFacetProvider(heightMap))
+                .addProvider(new SeaLevelProvider(2))
+                .addProvider(new World2dPreviewProvider())
+                .build();
 
         super.setWorldSeed(seed);
     }
@@ -87,5 +108,10 @@ public class LASMapGenerator extends AbstractBaseWorldGenerator {
         };
 
         return Optional.of(wc);
+    }
+
+    @Override
+    public World getWorld() {
+        return world;
     }
 }
