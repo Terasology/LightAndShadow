@@ -1,0 +1,17 @@
+{
+  "type": "TeamPointsHUD",
+  "skin": "HUD",
+  "contents": {
+    "type": "relativeLayout",
+    "contents": [
+      {
+        "type": "FlowLayout",
+        "id": "container",
+        "layoutInfo": {
+          "position-horizontal-center": {
+          }
+        }
+      }
+    ]
+  }
+}

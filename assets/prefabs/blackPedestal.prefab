@@ -1,0 +1,6 @@
+{
+  "parent": "LightAndShadowResources:pedestal",
+  "TeamPedestal": {
+    "team": "LightAndShadow:blackTeam"
+  }
+}

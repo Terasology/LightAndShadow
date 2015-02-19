@@ -1,0 +1,6 @@
+{
+  "basedOn": "LightAndShadowResources:pedestal",
+  "entity": {
+    "prefab": "LightAndShadow:blackPedestal"
+  }
+}
