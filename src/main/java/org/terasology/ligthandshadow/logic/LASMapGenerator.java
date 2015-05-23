@@ -15,8 +15,8 @@
  */
 package org.terasology.ligthandshadow.logic;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
+
 import org.terasology.cities.CitySpawnComponent;
 import org.terasology.cities.CityTerrainComponent;
 import org.terasology.cities.CityTerrainGenerator;
@@ -36,6 +36,7 @@ import org.terasology.world.generation.World;
 import org.terasology.world.generation.WorldBuilder;
 import org.terasology.world.generator.RegisterWorldGenerator;
 import org.terasology.world.generator.WorldConfigurator;
+import org.terasology.world.generator.WorldConfiguratorAdapter;
 
 import java.util.Map;
 
@@ -83,7 +84,8 @@ public class LASMapGenerator extends AbstractBaseWorldGenerator {
 
         noiseMap.setSeed(seed);
 
-        world = new WorldBuilder(0)
+        world = new WorldBuilder()
+                .setSeaLevel(2)
                 .addProvider(new HeightMapCompatibilityFacetProvider(heightMap))
                 .addProvider(new SeaLevelProvider(2))
                 .addProvider(new World2dPreviewProvider())
@@ -93,9 +95,9 @@ public class LASMapGenerator extends AbstractBaseWorldGenerator {
     }
 
     @Override
-    public Optional<WorldConfigurator> getConfigurator() {
+    public WorldConfigurator getConfigurator() {
 
-        WorldConfigurator wc = new WorldConfigurator() {
+        WorldConfigurator wc = new WorldConfiguratorAdapter() {
 
             @Override
             public Map<String, Component> getProperties() {
@@ -107,7 +109,7 @@ public class LASMapGenerator extends AbstractBaseWorldGenerator {
 
         };
 
-        return Optional.of(wc);
+        return wc;
     }
 
     @Override
