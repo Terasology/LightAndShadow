@@ -55,7 +55,7 @@ public class SpawnerComponent implements Component {
             nextSpawnedPrefab++;
             nextSpawnedPrefab %= prefabs.size();
             entity.saveComponent(this);
-            return Assets.getPrefab(name);
+            return Assets.getPrefab(name).get();
         }
         return null;
     }

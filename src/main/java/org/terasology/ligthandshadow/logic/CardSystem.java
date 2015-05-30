@@ -131,7 +131,7 @@ public class CardSystem extends BaseComponentSystem {
         CardComponent newCardComponent = newCard.getComponent(CardComponent.class);
         newCard.saveComponent(newCardComponent);
         newCard.removeComponent(ItemComponent.class);
-        audioManager.playSound(Assets.getSound("engine:PlaceBlock"), 0.5f);
+        audioManager.playSound(Assets.getSound("engine:PlaceBlock").get(), 0.5f);
     }
 
     @ReceiveEvent(components = {CardComponent.class, LocationComponent.class})
@@ -157,7 +157,7 @@ public class CardSystem extends BaseComponentSystem {
         particleEffect.collideWithBlocks = true;
         particlesEntity.addComponent(particleEffect);
 
-        audioManager.playSound(Assets.getSound("engine:Dig"), 1.0f);
+        audioManager.playSound(Assets.getSound("engine:Dig").get(), 1.0f);
     }
 
 /*
