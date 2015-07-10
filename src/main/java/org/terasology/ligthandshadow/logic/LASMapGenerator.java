@@ -85,12 +85,13 @@ public class LASMapGenerator extends AbstractBaseWorldGenerator {
 
         noiseMap.setSeed(seed);
 
-        world = new WorldBuilder(CoreRegistry.get(WorldGeneratorPluginLibrary.class))
+        WorldBuilder worldBuilder = new WorldBuilder(CoreRegistry.get(WorldGeneratorPluginLibrary.class))
                 .setSeaLevel(2)
                 .addProvider(new HeightMapCompatibilityFacetProvider(heightMap))
                 .addProvider(new SeaLevelProvider(2))
-                .addProvider(new World2dPreviewProvider())
-                .build();
+                .addProvider(new World2dPreviewProvider());
+        worldBuilder.setSeed(seed.hashCode());
+        world = worldBuilder.build();
 
         super.setWorldSeed(seed);
     }
