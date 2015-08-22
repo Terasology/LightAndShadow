@@ -87,7 +87,7 @@ public class LASMapGenerator extends AbstractBaseWorldGenerator {
 
         WorldBuilder worldBuilder = new WorldBuilder(CoreRegistry.get(WorldGeneratorPluginLibrary.class))
                 .setSeaLevel(2)
-                .addProvider(new HeightMapCompatibilityFacetProvider(heightMap))
+                .addProvider(new HeightMapCompatibilityFacetProvider())
                 .addProvider(new SeaLevelProvider(2))
                 .addProvider(new World2dPreviewProvider());
         worldBuilder.setSeed(seed.hashCode());
