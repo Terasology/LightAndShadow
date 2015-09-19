@@ -16,12 +16,14 @@
 package org.terasology.ligthandshadow.componentsystem.components;
 
 import com.google.common.collect.Lists;
+
 import org.terasology.asset.Assets;
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author synopia
@@ -38,10 +40,10 @@ public class SpawnerComponent implements Component {
     public List<Prefab> spawn(EntityRef entity) {
         List<Prefab> result = Lists.newArrayList();
         for (int i = 0; i < spawn; i++) {
-            Prefab prefab = nextPrefab(entity);
-            currentlyAlive++;
-            if (prefab != null) {
-                result.add(prefab);
+            Optional<Prefab> opt = nextPrefab(entity);
+            if (opt.isPresent()) {
+                currentlyAlive++;
+                result.add(opt.get());
             } else {
                 break;
             }
@@ -49,7 +51,7 @@ public class SpawnerComponent implements Component {
         return result;
     }
 
-    public Prefab nextPrefab(EntityRef entity) {
+    public Optional<Prefab> nextPrefab(EntityRef entity) {
         if (currentlyAlive < max) {
             String name = prefabs.get(nextSpawnedPrefab);
             nextSpawnedPrefab++;
