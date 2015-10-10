@@ -1,0 +1,128 @@
+{
+    "Dialog": {
+        "firstPage": "main",
+        "pages": [
+            {
+                "id": "main",
+                "title": "Welcome",
+                "paragraphText": [
+                    "Welcome to Light &amp; Shadow, ${player.name}! What's your favorite color?"
+                ],
+                "responses": [
+                    {
+                        "text": "That's BLACK!",
+                        "action": {
+                            "type": "NewDialogAction",
+                            "target": "blackColor"
+                        }
+                    },
+                    {
+                        "text": "That's WHITE!",
+                        "action": {
+                            "type": "NewDialogAction",
+                            "target": "whiteColor"
+                        }
+                    },
+                    {
+                        "text": "Can't you see? It's obviously ${player.color}!",
+                        "action": {
+                            "type": "NewDialogAction",
+                            "target": "myColor"
+                        }
+                    },
+                    {
+                        "text": "I need to leave now ..",
+                        "action": {
+                            "type": "CloseDialogAction"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "blackColor",
+                "title": "Black",
+                "paragraphText": [
+                    "Then you should come to the shadow!"
+                ],
+                "responses": [
+                    {
+                        "text": "Yup, sounds great!",
+                        "action": {
+                            "type": "NewDialogAction",
+                            "target": "main"
+                        }
+                    },
+                    {
+                        "text": "Ah well, maybe it's not really black ..",
+                        "action": {
+                            "type": "NewDialogAction",
+                            "target": "main"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "whiteColor",
+                "title": "White",
+                "paragraphText": [
+                    "Then you should come to the light!"
+                ],
+                "responses": [
+                    {
+                        "text": "Yup, sounds great!",
+                        "action": {
+                            "type": "NewDialogAction",
+                            "target": "main"
+                        }
+                    },
+                    {
+                        "text": "Ah well, maybe it's not really white ..",
+                        "action": {
+                            "type": "NewDialogAction",
+                            "target": "main"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "myColor",
+                "title": "My Color",
+                "paragraphText": [
+                    "This is a really weird answer, young fellow!"
+                ],
+                "responses": [
+                    {
+                        "text": "That is a really weird conversation!",
+                        "action": {
+                            "type": "NewDialogAction",
+                            "target": "myColor2"
+                        }
+                    },
+                    {
+                        "text": "Ah well, maybe it's not really my favorite ..",
+                        "action": {
+                            "type": "NewDialogAction",
+                            "target": "main"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "myColor2",
+                "title": "My Color2",
+                "paragraphText": [
+                    "Erm .. maybe - let's start over again, shall we?"
+                ],
+                "responses": [
+                    {
+                        "text": "Why not ..",
+                        "action": {
+                            "type": "NewDialogAction",
+                            "target": "main"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
