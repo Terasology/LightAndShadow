@@ -14,31 +14,37 @@
  * limitations under the License.
  */
 
-package org.terasology.las;
+package org.terasology.las.dialog.action;
 
+import org.terasology.dialogs.action.PlayerAction;
+import org.terasology.dialogs.components.DialogComponent;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeam;
 import org.terasology.logic.characters.CharacterComponent;
-import org.terasology.logic.spawner.Spawner;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.network.ClientComponent;
-import org.terasology.world.generation.World;
 
 /**
- * TODO Type description
+ *
  */
-public class LaSSpawner implements Spawner {
+public class SetTeamAction implements PlayerAction {
+
+    private String team;
+
+    public SetTeamAction(String team) {
+        this.team = team;
+    }
 
     @Override
-    public Vector3f getSpawnPosition(World world, EntityRef clientEntity) {
-        ClientComponent clientComponent = clientEntity.getComponent(ClientComponent.class);
+    public void execute(DialogComponent dialog, EntityRef charEntity) {
+        EntityRef controller = charEntity.getComponent(CharacterComponent.class).controller; // the client
+        ClientComponent clientComponent = controller.getComponent(ClientComponent.class);
         EntityRef clientInfo = clientComponent.clientInfo;
-        LASTeam teamComponent = clientInfo.getComponent(LASTeam.class);
 
-        if (teamComponent != null) {
-            return null;
-        }
-        return new Vector3f(0, 65, 0);
+        clientInfo.addComponent(new LASTeam(team));
+    }
+
+    public String getTeam() {
+        return team;
     }
 
 }

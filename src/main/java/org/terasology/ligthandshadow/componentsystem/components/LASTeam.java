@@ -20,6 +20,14 @@ import org.terasology.entitySystem.Component;
 /**
  * Created by synopia on 25.01.14.
  */
-public class LASTeam implements Component {
+public final class LASTeam implements Component {
     public String team;
+
+    public LASTeam() {
+        // serialization
+    }
+
+    public LASTeam(String team) {
+        this.team = team;
+    }
 }

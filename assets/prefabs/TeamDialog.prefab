@@ -47,10 +47,14 @@
                 "responses": [
                     {
                         "text": "Yup, sounds great!",
-                        "action": {
-                            "type": "NewDialogAction",
-                            "target": "main"
-                        }
+                        "action": [{
+                                "type": "SetTeamAction",
+                                "team": "shadow"
+                            },
+                            {
+                                "type": "CloseDialogAction"
+                            }
+                        ]
                     },
                     {
                         "text": "Ah well, maybe it's not really black ..",
@@ -70,10 +74,14 @@
                 "responses": [
                     {
                         "text": "Yup, sounds great!",
-                        "action": {
-                            "type": "NewDialogAction",
-                            "target": "main"
-                        }
+                        "action": [{
+                                "type": "SetTeamAction",
+                                "team": "light"
+                            },
+                            {
+                                "type": "CloseDialogAction"
+                            }
+                        ]
                     },
                     {
                         "text": "Ah well, maybe it's not really white ..",
