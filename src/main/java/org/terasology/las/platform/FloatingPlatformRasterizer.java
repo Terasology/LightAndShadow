@@ -42,20 +42,14 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
     public void initialize() {
         BlockManager blockManager = CoreRegistry.get(BlockManager.class);
         theme = BlockTheme.builder(blockManager)
-                .register(BlockTypes.ROOF_FLAT, "core:plank")  // TODO: rename BlockTypes to CityBlockType
+                .register(BlockTypes.ROOF_FLAT, "LightAndShadowResources:MagicPlank")
                 .register(BlockTypes.FENCE, "LightAndShadowResources:MagicGlass")
-                .register(BlockTypes.BUILDING_WALL, "core:Stone")
+                .register(BlockTypes.BUILDING_WALL, "LightAndShadowResources:MagicStone")
                 .build();
     }
 
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
-        BlockManager blockManager = CoreRegistry.get(BlockManager.class);
-        theme = BlockTheme.builder(blockManager)
-                .register(BlockTypes.ROOF_FLAT, "core:plank")  // TODO: rename BlockTypes to CityBlockType
-                .register(BlockTypes.FENCE, "LightAndShadowResources:MagicGlass")
-                .register(BlockTypes.BUILDING_WALL, "core:Stone")
-                .build();
 
         FloatingPlatformFacet platformFacet = chunkRegion.getFacet(FloatingPlatformFacet.class);
 

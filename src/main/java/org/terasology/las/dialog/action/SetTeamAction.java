@@ -35,7 +35,7 @@ public class SetTeamAction implements PlayerAction {
     }
 
     @Override
-    public void execute(DialogComponent dialog, EntityRef charEntity) {
+    public void execute(EntityRef charEntity, EntityRef talkTo) {
         EntityRef controller = charEntity.getComponent(CharacterComponent.class).controller; // the client
         ClientComponent clientComponent = controller.getComponent(ClientComponent.class);
         EntityRef clientInfo = clientComponent.clientInfo;
