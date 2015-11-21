@@ -17,7 +17,8 @@
 package org.terasology.las.platform;
 
 import org.terasology.cities.BlockTheme;
-import org.terasology.cities.BlockTypes;
+import org.terasology.cities.BlockType;
+import org.terasology.cities.DefaultBlockType;
 import org.terasology.cities.raster.AbstractPen;
 import org.terasology.cities.raster.ChunkRasterTarget;
 import org.terasology.cities.raster.Pen;
@@ -42,9 +43,9 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
     public void initialize() {
         BlockManager blockManager = CoreRegistry.get(BlockManager.class);
         theme = BlockTheme.builder(blockManager)
-                .register(BlockTypes.ROOF_FLAT, "LightAndShadowResources:MagicPlank")
-                .register(BlockTypes.FENCE, "LightAndShadowResources:MagicGlass")
-                .register(BlockTypes.BUILDING_WALL, "LightAndShadowResources:MagicStone")
+                .register(DefaultBlockType.ROOF_FLAT, "LightAndShadowResources:MagicPlank")
+                .register(DefaultBlockType.FENCE, "LightAndShadowResources:MagicGlass")
+                .register(DefaultBlockType.BUILDING_WALL, "LightAndShadowResources:MagicStone")
                 .build();
     }
 
@@ -71,7 +72,7 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
                     public void draw(int x, int z) {
                         int bx = (x / 4) % 3;
                         int bz = (z / 3) % 3;
-                        BlockTypes type = (bx == 0 || bz == 0) ? BlockTypes.ROOF_FLAT : BlockTypes.FENCE;
+                        BlockType type = (bx == 0 || bz == 0) ? DefaultBlockType.ROOF_FLAT : DefaultBlockType.FENCE;
                         target.setBlock(x, base, z, type);
                     }
                 };
@@ -86,8 +87,8 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
 
                     @Override
                     public void draw(int x, int z) {
-                        BlockTypes type = (x % 14 == 0) && (z % 14 == 0) ?
-                                BlockTypes.BUILDING_WALL : BlockTypes.FENCE;
+                        BlockType type = (x % 14 == 0) && (z % 14 == 0) ?
+                                DefaultBlockType.BUILDING_WALL : DefaultBlockType.FENCE;
 
                         for (int y = bot; y <= top; y++) {
                             target.setBlock(x, y, z, type);
