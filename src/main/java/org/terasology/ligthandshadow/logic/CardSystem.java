@@ -39,6 +39,7 @@ import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockComponent;
+import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.regions.BlockRegionComponent;
 
 /**
@@ -144,7 +145,7 @@ public class CardSystem extends BaseComponentSystem {
 
         BlockParticleEffectComponent particleEffect = new BlockParticleEffectComponent();
         particleEffect.spawnCount = 64;
-        particleEffect.blockType = cardComponent.bottomBlockFamily;
+        particleEffect.blockType = cardComponent.bottomBlockFamily.getArchetypeBlock().getURI().toString();
         particleEffect.initialVelocityRange.set(4, 4, 4);
         particleEffect.spawnRange.set(0.3f, 0.3f, 0.3f);
         particleEffect.destroyEntityOnCompletion = true;
