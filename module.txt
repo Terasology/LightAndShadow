@@ -18,11 +18,11 @@
             "minVersion" : "0.2.0"
         },
         {
-            "id" : "Cities",
-            "minVersion" : "0.6.0"
+            "id" : "StaticCities",
+            "minVersion" : "0.1.0"
         }
     ],
     "isServerSideOnly" : false,
     "isGameplay" : "true",
-    "defaultWorldGenerator" : "Cities:city"
+    "defaultWorldGenerator" : "StaticCities:staticCities"
 }
