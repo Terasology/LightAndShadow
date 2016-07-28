@@ -23,7 +23,7 @@
         },
         {
             "id" : "ItemRendering",
-            "minVersion" : "0.1.2"
+            "minVersion" : "0.2.0"
         }
     ],
     "isServerSideOnly" : false,
