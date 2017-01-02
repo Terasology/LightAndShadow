@@ -79,16 +79,30 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
         float deltaDistance = TeraMath.fastAbs(pos.distance(lastPos));
         if (deltaDistance > 0.2f) {
             logger.info("CharacerMoveInputEvent: position: {} - distance from O: {}, delta: {}", pos, distance, deltaDistance);
-            lastPos.set(pos);
 
-            if (distance > WORLD_RADIUS) {
-                logger.info("Sending player back!");
+            if (lastPos.length()<WORLD_RADIUS && lastPos.length()<pos.length() && distance > WORLD_RADIUS) {
+                logger.info("Sending player back inside!");
                 Vector3f impulse = pos.normalize().invert();
+
                 impulse.set(impulse.scale(64).setY(6));
                 player.send(new CharacterImpulseEvent(impulse));
 
                 player.send(new PlaySoundEvent(magicDomeEntity.getComponent(MagicDome.class).hitSound, 2f));
             }
+
+            if(lastPos.length()>WORLD_RADIUS && lastPos.length()>pos.length() && distance < WORLD_RADIUS) {
+                logger.info("Sending player back outside");
+                Vector3f impulse = pos.normalize();
+
+                impulse.set(impulse.scale(64).setY(6));
+                player.send(new CharacterImpulseEvent(impulse));
+
+                player.send(new PlaySoundEvent(magicDomeEntity.getComponent(MagicDome.class).hitSound, 2f));
+
+            }
+
+            lastPos.set(pos);
+
         }
     }
 
