@@ -25,6 +25,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.itemRendering.components.AnimateRotationComponent;
+import org.terasology.logic.actions.PlaySoundActionComponent;
 import org.terasology.logic.characters.CharacterImpulseEvent;
 import org.terasology.logic.characters.CharacterMoveInputEvent;
 import org.terasology.logic.location.LocationComponent;
@@ -77,32 +78,41 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
         float distance = pos.length();
 
         float deltaDistance = TeraMath.fastAbs(pos.distance(lastPos));
-        if (deltaDistance > 0.2f) {
-            logger.info("CharacerMoveInputEvent: position: {} - distance from O: {}, delta: {}", pos, distance, deltaDistance);
 
-            if (lastPos.length()<WORLD_RADIUS && lastPos.length()<pos.length() && distance > WORLD_RADIUS) {
-                logger.info("Sending player back inside!");
-                Vector3f impulse = pos.normalize().invert();
+        for (EntityRef domeEntity : entityManager.getEntitiesWith(MagicDome.class, LocationComponent.class)) {
+            LocationComponent domeLocationComponent = domeEntity.getComponent(LocationComponent.class);
+            Vector3f domeCenter = domeLocationComponent.getWorldPosition();
+            Vector3f domeVerticalTop = domeCenter.addY(WORLD_RADIUS);
 
-                impulse.set(impulse.scale(64).setY(6));
-                player.send(new CharacterImpulseEvent(impulse));
+            MagicDome dome = domeEntity.getComponent(MagicDome.class);
 
-                player.send(new PlaySoundEvent(magicDomeEntity.getComponent(MagicDome.class).hitSound, 2f));
+            if (deltaDistance > 0.2f) {
+                logger.info("CharacerMoveInputEvent: position: {} - distance from O: {}, delta: {}", pos, distance, deltaDistance);
+
+                if (lastPos.length() < WORLD_RADIUS && lastPos.length() < pos.length() && distance > WORLD_RADIUS) {
+                    logger.info("Sending player back inside!");
+                    Vector3f impulse = pos.normalize().invert();
+
+                    impulse.set(impulse.scale(64).setY(6));
+                    player.send(new CharacterImpulseEvent(impulse));
+
+                    player.send(new PlaySoundEvent(magicDomeEntity.getComponent(MagicDome.class).hitSound, 2f));
+                }
+
+                if (lastPos.length() > WORLD_RADIUS && lastPos.length() > pos.length() && distance < WORLD_RADIUS) {
+                    logger.info("Sending player back outside");
+                    Vector3f impulse = pos.normalize();
+                    float verticalDiff = TeraMath.sqrt(TeraMath.fastAbs(TeraMath.sqr(lastPos.getY())-TeraMath.sqr(domeVerticalTop.getY())));
+                    float impulseY = (TeraMath.fastAbs(verticalDiff)/(float)WORLD_RADIUS)*3f;
+
+                    impulse.set(impulse.scale(64)).addY(impulseY);
+                    player.send(new CharacterImpulseEvent(impulse));
+
+                    player.send(new PlaySoundEvent(magicDomeEntity.getComponent(MagicDome.class).hitSound, 2f));
+
+                }
+                lastPos.set(pos);
             }
-
-            if(lastPos.length()>WORLD_RADIUS && lastPos.length()>pos.length() && distance < WORLD_RADIUS) {
-                logger.info("Sending player back outside");
-                Vector3f impulse = pos.normalize();
-
-                impulse.set(impulse.scale(64).setY(6));
-                player.send(new CharacterImpulseEvent(impulse));
-
-                player.send(new PlaySoundEvent(magicDomeEntity.getComponent(MagicDome.class).hitSound, 2f));
-
-            }
-
-            lastPos.set(pos);
-
         }
     }
 
