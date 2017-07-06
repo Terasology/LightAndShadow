@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.prefab.PrefabManager;
+import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.utilities.Assets;
 import org.terasology.audio.AudioManager;
 import org.terasology.entitySystem.entity.EntityManager;
@@ -95,7 +96,7 @@ public class CardSystem extends BaseComponentSystem {
             event.consume();
             return;
         }
-        logger.info("Prime block {} at pos {}", primeBlock, primePos);
+
         Block belowBlock = worldProvider.getBlock(primePos.x, primePos.y - 1, primePos.z);
         Block aboveBlock = worldProvider.getBlock(primePos.x, primePos.y + 1, primePos.z);
 
@@ -124,24 +125,29 @@ public class CardSystem extends BaseComponentSystem {
         worldProvider.setBlock(topBlockPos, card.topBlockFamily.getBlockForPlacement(worldProvider, blockEntityRegistry, topBlockPos, facingDir,
                 Side.TOP));
 
-        EntityRef newCard = entityManager.copy(entity);
-        newCard.addComponent(new BlockRegionComponent(Region3i.createBounded(bottomBlockPos, topBlockPos)));
+        EntityRef cardEntity = entity.copy();
+        cardEntity.addComponent(new BlockRegionComponent(Region3i.createBounded(bottomBlockPos, topBlockPos)));
         Vector3f cardCenter = bottomBlockPos.toVector3f();
         cardCenter.y += 0.5f;
-        newCard.addComponent(new LocationComponent(cardCenter));
-        CardComponent newCardComponent = newCard.getComponent(CardComponent.class);
-        newCard.saveComponent(newCardComponent);
-        newCard.removeComponent(ItemComponent.class);
+        cardEntity.saveComponent(new LocationComponent(cardCenter));
+        CardComponent newCardComponent = cardEntity.getComponent(CardComponent.class);
+        cardEntity.saveComponent(newCardComponent);
+        cardEntity.removeComponent(ItemComponent.class);
+
+        Prefab particleEffectPrefab = prefabManager.getPrefab("LightAndShadowResources:cardParticleEffect");
+
+        for (Component component: particleEffectPrefab.iterateComponents()) {
+            cardEntity.addOrSaveComponent(component);
+        }
+
         audioManager.playSound(Assets.getSound("engine:PlaceBlock").get(), 0.5f);
     }
 
     @ReceiveEvent(components = {CardComponent.class, LocationComponent.class})
     public void onDamaged(OnDamagedEvent event, EntityRef entity) {
-        //TODO change particle texture to match block texture
-        Prefab particleEffectPrefab = prefabManager.getPrefab("LightAndShadowResources:cardParticleEffect");
-        for (Component c : particleEffectPrefab.iterateComponents()) {
-            entity.addComponent(c);
-        }
+        ParticleEmitterComponent emitter =  entity.getComponent(ParticleEmitterComponent.class);
+        emitter.particleSpawnsLeft = emitter.maxParticles;
+        entity.saveComponent(emitter);
 
         audioManager.playSound(Assets.getSound("engine:Dig").get(), 1.0f);
     }
