@@ -54,7 +54,7 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
     public void postBegin() {
 
         if (!entityManager.getEntitiesWith(MagicDome.class).iterator().hasNext()) {
-            logger.info("Spawning magic dome!");
+//            logger.info("Spawning magic dome!");
 
             magicDomeEntity = entityManager.create("lightAndShadowResources:magicDome", Vector3f.zero());
             LocationComponent loc = magicDomeEntity.getComponent(LocationComponent.class);
@@ -87,10 +87,10 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
             MagicDome dome = domeEntity.getComponent(MagicDome.class);
 
             if (deltaDistance > 0.2f) {
-                logger.info("CharacerMoveInputEvent: position: {} - distance from O: {}, delta: {}", pos, distance, deltaDistance);
+//                logger.info("CharacerMoveInputEvent: position: {} - distance from O: {}, delta: {}", pos, distance, deltaDistance);
 
                 if (lastPos.length() < WORLD_RADIUS && lastPos.length() < pos.length() && distance > WORLD_RADIUS) {
-                    logger.info("Sending player back inside!");
+//                    logger.info("Sending player back inside!");
                     Vector3f impulse = pos.normalize().invert();
 
                     impulse.set(impulse.scale(64).setY(6));
@@ -100,7 +100,7 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
                 }
 
                 if (lastPos.length() > WORLD_RADIUS && lastPos.length() > pos.length() && distance < WORLD_RADIUS) {
-                    logger.info("Sending player back outside");
+//                    logger.info("Sending player back outside");
                     Vector3f impulse = pos.normalize();
                     float verticalDiff = TeraMath.sqrt(TeraMath.fastAbs(TeraMath.sqr(lastPos.getY())-TeraMath.sqr(domeVerticalTop.getY())));
                     float impulseY = (TeraMath.fastAbs(verticalDiff)/(float)WORLD_RADIUS)*3f;
