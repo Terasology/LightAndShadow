@@ -17,6 +17,7 @@
 package org.terasology.ligthandshadow.logic;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.world.block.family.BlockFamily;
 
 /**
@@ -25,4 +26,5 @@ import org.terasology.world.block.family.BlockFamily;
 public class CardComponent implements Component {
     public BlockFamily topBlockFamily;
     public BlockFamily bottomBlockFamily;
+    public Prefab cardBlockPrefab;
 }

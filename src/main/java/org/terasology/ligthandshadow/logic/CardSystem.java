@@ -21,7 +21,9 @@ import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.prefab.PrefabManager;
+import org.terasology.logic.health.HealthComponent;
 import org.terasology.particles.components.ParticleEmitterComponent;
+import org.terasology.rendering.logic.MeshComponent;
 import org.terasology.utilities.Assets;
 import org.terasology.audio.AudioManager;
 import org.terasology.entitySystem.entity.EntityManager;
@@ -42,6 +44,7 @@ import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockComponent;
+import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.regions.BlockRegionComponent;
 
 @RegisterSystem
@@ -54,6 +57,8 @@ public class CardSystem extends BaseComponentSystem {
     private EntityManager entityManager;
     @In
     private AudioManager audioManager;
+    @In
+    private BlockManager blockManager;
     @In
     private BlockEntityRegistry blockEntityRegistry;
     @In
@@ -125,7 +130,8 @@ public class CardSystem extends BaseComponentSystem {
         worldProvider.setBlock(topBlockPos, card.topBlockFamily.getBlockForPlacement(worldProvider, blockEntityRegistry, topBlockPos, facingDir,
                 Side.TOP));
 
-        EntityRef cardEntity = entity.copy();
+        EntityRef cardEntity = entityManager.create(card.cardBlockPrefab);
+        entity.removeComponent(MeshComponent.class);
         cardEntity.addComponent(new BlockRegionComponent(Region3i.createBounded(bottomBlockPos, topBlockPos)));
         Vector3f cardCenter = bottomBlockPos.toVector3f();
         cardCenter.y += 0.5f;
@@ -150,28 +156,7 @@ public class CardSystem extends BaseComponentSystem {
         entity.saveComponent(emitter);
 
         audioManager.playSound(Assets.getSound("engine:Dig").get(), 1.0f);
-    }
 
-/*
-    @ReceiveEvent(components = {CardComponent.class, BlockRegionComponent.class})
-    public void onOutOfHealth(NoHealthEvent event, EntityRef entity) {
-        BlockRegionComponent blockRegionComponent = entity.getComponent(BlockRegionComponent.class);
-        for (Vector3i blockPos : blockRegionComponent.region) {
-            worldProvider.setBlock(blockPos, BlockManager.getInstance().getAir(), worldProvider.getBlock(blockPos));
-        }
-        EntityInfoComponent entityInfo = entity.getComponent(EntityInfoComponent.class);
-        if (entityInfo != null) {
-            EntityRef cardItem = entityManager.create(entityInfo.parentPrefab);
-            if (event.getInstigator().exists()) {
-                event.getInstigator().send(new ReceiveItemEvent(cardItem));
-            }
-            ItemComponent itemComp = cardItem.getComponent(ItemComponent.class);
-            if (itemComp != null && !itemComp.container.exists()) {
-                cardItem.destroy();
-            }
-        }
-        entity.destroy();
-        audioManager.playSound(Assets.getSound("engine:RemoveBlock"), 0.6f);
+        logger.info("current health: {}", entity.getComponent(HealthComponent.class).currentHealth);
     }
-*/
 }
