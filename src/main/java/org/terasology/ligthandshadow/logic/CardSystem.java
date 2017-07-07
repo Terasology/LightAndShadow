@@ -18,17 +18,12 @@ package org.terasology.ligthandshadow.logic;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.entitySystem.Component;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.entitySystem.prefab.PrefabManager;
-import org.terasology.logic.health.HealthComponent;
-import org.terasology.particles.components.ParticleEmitterComponent;
-import org.terasology.rendering.logic.MeshComponent;
-import org.terasology.utilities.Assets;
 import org.terasology.audio.AudioManager;
+import org.terasology.entitySystem.entity.EntityBuilder;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
+import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.common.ActivateEvent;
@@ -37,9 +32,12 @@ import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.Region3i;
 import org.terasology.math.Side;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.math.geom.Vector3f;
+import org.terasology.math.geom.Vector3i;
+import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
+import org.terasology.rendering.logic.MeshComponent;
+import org.terasology.utilities.Assets;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.Block;
@@ -140,23 +138,15 @@ public class CardSystem extends BaseComponentSystem {
         cardEntity.saveComponent(newCardComponent);
         cardEntity.removeComponent(ItemComponent.class);
 
-        Prefab particleEffectPrefab = prefabManager.getPrefab("LightAndShadowResources:cardParticleEffect");
-
-        for (Component component: particleEffectPrefab.iterateComponents()) {
-            cardEntity.addOrSaveComponent(component);
-        }
-
         audioManager.playSound(Assets.getSound("engine:PlaceBlock").get(), 0.5f);
     }
 
     @ReceiveEvent(components = {CardComponent.class, LocationComponent.class})
     public void onDamaged(OnDamagedEvent event, EntityRef entity) {
-        ParticleEmitterComponent emitter =  entity.getComponent(ParticleEmitterComponent.class);
-        emitter.particleSpawnsLeft = emitter.maxParticles;
-        entity.saveComponent(emitter);
-
-        audioManager.playSound(Assets.getSound("engine:Dig").get(), 1.0f);
-
-        logger.info("current health: {}", entity.getComponent(HealthComponent.class).currentHealth);
+        EntityBuilder builder = entityManager.newBuilder("LightAndShadowResources:cardParticleEffect");
+        builder.getComponent(ParticleEmitterComponent.class).particleSpawnsLeft = 12;
+        builder.getComponent(ParticleEmitterComponent.class).destroyEntityWhenDead = true;
+        builder.saveComponent(entity.getComponent(LocationComponent.class));
+        builder.build();
     }
 }
