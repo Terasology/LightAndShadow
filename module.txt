@@ -15,7 +15,7 @@
         },
         {
             "id" : "LightAndShadowResources",
-            "minVersion" : "0.2.0"
+            "minVersion" : "0.2.0-SNAPSHOT"
         },
         {
             "id" : "StaticCities",
