@@ -20,11 +20,11 @@ import org.terasology.engine.SimpleUri;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.minion.work.Work;
+import org.terasology.minion.work.WorkFactory;
 import org.terasology.navgraph.WalkableBlock;
 import org.terasology.pathfinding.componentSystem.PathfinderSystem;
 import org.terasology.registry.In;
-import org.terasology.work.Work;
-import org.terasology.work.WorkFactory;
 
 import java.util.List;
 

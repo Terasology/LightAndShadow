@@ -51,9 +51,9 @@ public class LASSystem extends BaseComponentSystem {
             EntityRef itemInSlot = inventoryManager.getItemInSlot(player, i);
             player.send(new RemoveItemAction(player, itemInSlot, true));
         }
-        player.send(new GiveItemAction(player, entityManager.create("Pathfinding:jobWalkToBlock"), 1));
-        player.send(new GiveItemAction(player, entityManager.create("Pathfinding:jobBuildBlock"), 2));
-        player.send(new GiveItemAction(player, entityManager.create("Pathfinding:jobRemoveBlock"), 3));
+        player.send(new GiveItemAction(player, entityManager.create("Behaviors:jobWalkToBlock"), 1));
+        player.send(new GiveItemAction(player, entityManager.create("Behaviors:jobBuildBlock"), 2));
+        player.send(new GiveItemAction(player, entityManager.create("Behaviors:jobRemoveBlock"), 3));
 
         player.send(new GiveItemAction(player, blockFactory.newInstance(blockManager.getBlockFamily("redSpawn")), 4));
         player.send(new GiveItemAction(player, blockFactory.newInstance(blockManager.getBlockFamily("blackSpawn")), 5));
