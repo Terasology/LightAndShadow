@@ -18,7 +18,8 @@ package org.terasology.ligthandshadow.logic;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.asset.Assets;
+import org.terasology.entitySystem.entity.EntityBuilder;
+import org.terasology.utilities.Assets;
 import org.terasology.audio.AudioManager;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -29,7 +30,7 @@ import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.health.OnDamagedEvent;
 import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.logic.particles.BlockParticleEffectComponent;
+import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.math.Region3i;
 import org.terasology.math.Side;
 import org.terasology.math.geom.Vector3i;
@@ -136,26 +137,11 @@ public class CardSystem extends BaseComponentSystem {
 
     @ReceiveEvent(components = {CardComponent.class, LocationComponent.class})
     public void onDamaged(OnDamagedEvent event, EntityRef entity) {
-        LocationComponent location = entity.getComponent(LocationComponent.class);
-        CardComponent cardComponent = entity.getComponent(CardComponent.class);
-        Vector3f center = location.getWorldPosition();
-        EntityRef particlesEntity = entityManager.create();
-        particlesEntity.addComponent(new LocationComponent(center));
-
-        BlockParticleEffectComponent particleEffect = new BlockParticleEffectComponent();
-        particleEffect.spawnCount = 64;
-        particleEffect.blockType = cardComponent.bottomBlockFamily;
-        particleEffect.initialVelocityRange.set(4, 4, 4);
-        particleEffect.spawnRange.set(0.3f, 0.3f, 0.3f);
-        particleEffect.destroyEntityOnCompletion = true;
-        particleEffect.minSize = 0.05f;
-        particleEffect.maxSize = 0.1f;
-        particleEffect.minLifespan = 1f;
-        particleEffect.maxLifespan = 1.5f;
-        particleEffect.targetVelocity.set(0, -5, 0);
-        particleEffect.acceleration.set(2f, 2f, 2f);
-        particleEffect.collideWithBlocks = true;
-        particlesEntity.addComponent(particleEffect);
+        EntityBuilder builder = entityManager.newBuilder("LightAndShadowResources:cardParticleEffect");
+        builder.getComponent(ParticleEmitterComponent.class).particleSpawnsLeft = 12;
+        builder.getComponent(ParticleEmitterComponent.class).destroyEntityWhenDead = true;
+        builder.saveComponent(entity.getComponent(LocationComponent.class));
+        builder.build();
 
         audioManager.playSound(Assets.getSound("engine:Dig").get(), 1.0f);
     }
