@@ -17,6 +17,7 @@
 package org.terasology.las;
 
 import org.terasology.cities.CityWorldGenerator;
+import org.terasology.cities.bldg.Building;
 import org.terasology.cities.bldg.BuildingFacetProvider;
 import org.terasology.cities.blocked.BlockedAreaFacetProvider;
 import org.terasology.cities.door.DoorFacetProvider;
@@ -25,6 +26,7 @@ import org.terasology.cities.door.WingDoorRasterizer;
 import org.terasology.cities.fences.FenceFacetProvider;
 import org.terasology.cities.fences.SimpleFenceRasterizer;
 import org.terasology.cities.lakes.LakeFacetProvider;
+import org.terasology.cities.parcels.Parcel;
 import org.terasology.cities.parcels.ParcelFacetProvider;
 import org.terasology.cities.raster.standard.RectPartRasterizer;
 import org.terasology.cities.raster.standard.RoundPartRasterizer;
@@ -47,12 +49,15 @@ import org.terasology.cities.walls.TownWallRasterizer;
 import org.terasology.cities.window.RectWindowRasterizer;
 import org.terasology.cities.window.SimpleWindowRasterizer;
 import org.terasology.cities.window.WindowFacetProvider;
+import org.terasology.commonworld.heightmap.HeightMap;
 import org.terasology.core.world.generator.facetProviders.DefaultFloraProvider;
-import org.terasology.core.world.generator.facetProviders.EnsureSpawnableChunkZeroProvider;
+//import org.terasology.core.world.generator.facetProviders.EnsureSpawnableChunkZeroProvider;
 import org.terasology.core.world.generator.facetProviders.SeaLevelProvider;
 import org.terasology.core.world.generator.facetProviders.SurfaceToDensityProvider;
 import org.terasology.core.world.generator.rasterizers.FloraRasterizer;
 import org.terasology.core.world.generator.rasterizers.SolidRasterizer;
+
+
 import org.terasology.engine.SimpleUri;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.logic.spawner.Spawner;
