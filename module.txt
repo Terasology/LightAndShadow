@@ -5,30 +5,15 @@
     "displayName" : "Light & Shadow",
     "description" : "Light & Shadow is an experimental game type set in a quirky Alice in Wonderland inspired setting",
     "dependencies" : [
-        {
-            "id" : "Core",
-            "minVersion" : "0.54.0"
-        },
-        {
-            "id" : "Pathfinding",
-            "minVersion" : "0.1.0"
-        },
-        {
-            "id" : "Dialogs",
-            "minVersion" : "0.1.0-SNAPSHOT"
-        },
-        {
-            "id" : "LightAndShadowResources",
-            "minVersion" : "0.2.0-SNAPSHOT"
-        },
-        {
-            "id" : "Cities",
-            "minVersion" : "0.5.0"
-        },
-        {
-            "id" : "Tasks",
-            "minVersion" : "0.2.0-SNAPSHOT"
-        }
+        {"id" : "Behaviors", "minVersion" : "0.2.0"},
+        {"id" : "Core", "minVersion" : "2.0.0"},
+        {"id" : "Pathfinding","minVersion" : "0.3.0"},
+        {"id" : "LightAndShadowResources", "minVersion" : "0.2.0"},
+        {"id" : "StaticCities", "minVersion" : "0.2.0"},
+        {"id" : "ItemRendering", "minVersion" : "1.0.0"},
+        {"id" : "Dialogs", "minVersion" : "0.1.0-SNAPSHOT"},
+        {"id" : "Tasks", "minVersion" : "0.2.0-SNAPSHOT"},
+        {"id" : "Cities", "minVersion" : "0.6.2-SNAPSHOT"}
     ],
     "isServerSideOnly" : false,
     "isGameplay" : "true",
