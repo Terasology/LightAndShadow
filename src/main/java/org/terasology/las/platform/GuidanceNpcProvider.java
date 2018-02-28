@@ -16,7 +16,7 @@
 
 package org.terasology.las.platform;
 
-import org.terasology.asset.Assets;
+import org.terasology.utilities.Assets;
 import org.terasology.dialogs.components.DialogComponent;
 import org.terasology.entitySystem.entity.EntityStore;
 import org.terasology.entitySystem.prefab.Prefab;
