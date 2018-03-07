@@ -27,6 +27,7 @@ import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.itemRendering.components.AnimateRotationComponent;
 import org.terasology.logic.characters.CharacterImpulseEvent;
 import org.terasology.logic.characters.CharacterMoveInputEvent;
+import org.terasology.logic.console.commandSystem.annotations.Command;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.TeraMath;
 import org.terasology.math.geom.Vector3f;
@@ -51,9 +52,19 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
 
     @Override
     public void postBegin() {
+        //toggleDome();
+    }
+
+    @Command( shortDescription = "Activate/Deactivate dome barrier", helpText = "Activates or deactivates the dome barrier around the world" )
+    public String dome() {
+        toggleDome();
+        return "Toggled dome.";
+    }
+
+    public void toggleDome() {
 
         if (!entityManager.getEntitiesWith(MagicDome.class).iterator().hasNext()) {
-//            logger.info("Spawning magic dome!");
+            logger.info("Spawning magic dome!");
 
             magicDomeEntity = entityManager.create("lightAndShadowResources:magicDome", Vector3f.zero());
             LocationComponent loc = magicDomeEntity.getComponent(LocationComponent.class);
@@ -67,6 +78,8 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
             rotationComponent.pitchSpeed = 0.01f;
             rotationComponent.yawSpeed = 0.01f;
             magicDomeEntity.addOrSaveComponent(rotationComponent);
+        } else {
+            magicDomeEntity.destroy();
         }
     }
 
