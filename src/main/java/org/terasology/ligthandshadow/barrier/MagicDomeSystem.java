@@ -55,7 +55,7 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
         //toggleDome();
     }
 
-    @Command( shortDescription = "Activate/Deactivate dome barrier", helpText = "Activates or deactivates the dome barrier around the world" )
+    @Command( shortDescription = "Activate/Deactivate dome barrier", helpText = "Activates or deactivates the dome barrier around the world", runOnServer = true )
     public String dome() {
         toggleDome();
         return "Toggled dome.";
