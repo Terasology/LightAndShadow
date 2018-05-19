@@ -199,6 +199,5 @@ public class LaSWorldGenerator extends CityWorldGenerator {
                 .addRasterizer(new LaSFloraRasterizer())
                 .addRasterizer(new TreeRasterizer());
         return worldBuilder;
-        //return super.createWorld();
     }
 }
