@@ -30,10 +30,14 @@ import org.terasology.world.generation.WorldRasterizer;
 
 public class BaseRasterizer implements WorldRasterizer {
     private Block stone;
+    private Block redFlag;
+    private Block blackFlag;
 
     @Override
     public void initialize() {
         stone = CoreRegistry.get(BlockManager.class).getBlock("Core:Stone");
+        redFlag = CoreRegistry.get(BlockManager.class).getBlock("LightAndShadowResources:redFlag");
+        blackFlag = CoreRegistry.get(BlockManager.class).getBlock("LightAndShadowResources:blackFlag");
     }
 
     @Override
@@ -45,16 +49,28 @@ public class BaseRasterizer implements WorldRasterizer {
             Vector3i centerBasePosition = new Vector3i(entry.getKey());
             int extent = entry.getValue().getExtent();
             centerBasePosition.add(0, extent, 0);
-            //Region3i walls = Region3i.createFromCenterExtents(centerBasePosition, extent);
             Vector3i min = new Vector3i(centerBasePosition.x() - extent + 2, centerBasePosition.y() - extent, centerBasePosition.z() - extent);
             Vector3i max = new Vector3i(centerBasePosition.x() + extent - 2, centerBasePosition.y() - extent, centerBasePosition.z() + extent);
             Region3i walls = Region3i.createFromMinMax(min, max);
 
             // loop through each of the positions in the base
             for (Vector3i newBlockPosition : walls) {
+                //place base stone
                 if (chunkRegion.getRegion().encompasses(newBlockPosition)) {
                     chunk.setBlock(ChunkMath.calcBlockPos(newBlockPosition), stone);
                 }
+                //place flags
+                if (centerBasePosition.x > 0){
+                    if (chunkRegion.getRegion().encompasses(centerBasePosition)) {
+                        chunk.setBlock(ChunkMath.calcBlockPos(centerBasePosition.x(), centerBasePosition.y() - extent + 1, centerBasePosition.z() + 2), redFlag);
+                    }
+                }
+                if (centerBasePosition.x < 0){
+                    if (chunkRegion.getRegion().encompasses(centerBasePosition)) {
+                        chunk.setBlock(ChunkMath.calcBlockPos(centerBasePosition.x(), centerBasePosition.y() - extent + 1, centerBasePosition.z() + 2), blackFlag);
+                    }
+                }
+
             }
         }
     }
