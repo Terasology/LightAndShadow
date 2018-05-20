@@ -35,7 +35,7 @@ public class BaseRasterizer implements WorldRasterizer {
 
     @Override
     public void initialize() {
-        stone = CoreRegistry.get(BlockManager.class).getBlock("Core:HardStone");
+        stone = CoreRegistry.get(BlockManager.class).getBlock("Core:Stone");
         redFlag = CoreRegistry.get(BlockManager.class).getBlock("LightAndShadowResources:redFlag");
         blackFlag = CoreRegistry.get(BlockManager.class).getBlock("LightAndShadowResources:blackFlag");
     }
