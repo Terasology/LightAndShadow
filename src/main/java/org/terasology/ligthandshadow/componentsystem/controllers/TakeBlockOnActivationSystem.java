@@ -65,7 +65,8 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
         EntityRef flagTaker = event.getInstigator();
         if (blockComponent.getBlock().getBlockFamily().getURI().toString().equals("LightAndShadowResources:blackFlag")) {
             flagTaker.send(new GiveItemAction(flagTaker, blockFactory.newInstance(blockManager.getBlockFamily("LightAndShadowResources:blackFlag"))));
-        } else {
+        }
+        if (blockComponent.getBlock().getBlockFamily().getURI().toString().equals("LightAndShadowResources:redFlag")) {
             flagTaker.send(new GiveItemAction(flagTaker, blockFactory.newInstance(blockManager.getBlockFamily("LightAndShadowResources:redFlag"))));
         }
         worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));

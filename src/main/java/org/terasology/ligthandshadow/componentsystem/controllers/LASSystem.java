@@ -44,17 +44,9 @@ public class LASSystem extends BaseComponentSystem {
     @In
     private BlockManager blockManager;
 
-    @ReceiveEvent
+    @ReceiveEvent //give player inventory items on game start
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, InventoryComponent inventory) {
         BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
-//
-//        player.send(new GiveItemAction(player, entityManager.create("Pathfinding:jobWalkToBlock"), 1));
-//        player.send(new GiveItemAction(player, entityManager.create("Pathfinding:jobBuildBlock"), 2));
-//
-//        player.send(new GiveItemAction(player, blockFactory.newInstance(blockManager.getBlockFamily("redSpawn")), 4));
-//        player.send(new GiveItemAction(player, blockFactory.newInstance(blockManager.getBlockFamily("blackSpawn")), 5));
-
-
     }
 
 
