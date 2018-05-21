@@ -15,11 +15,8 @@
  */
 package org.terasology.las.bases;
 
-import java.util.Map.Entry;
-
 import org.terasology.math.ChunkMath;
 import org.terasology.math.Region3i;
-import org.terasology.math.geom.BaseVector3i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
@@ -44,33 +41,23 @@ public class BaseRasterizer implements WorldRasterizer {
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
         BaseFacet baseFacet = chunkRegion.getFacet(BaseFacet.class);
 
-        for (Entry<BaseVector3i, Base> entry : baseFacet.getWorldEntries().entrySet()) {
+        for (Base base : baseFacet.getBases()) {
+            Region3i baseRegion = base.getArea();
+            Region3i flagRegion = base.getFlagArea();
 
-            Vector3i centerBasePosition = new Vector3i(entry.getKey());
-            int extent = entry.getValue().getExtent();
-            centerBasePosition.add(0, extent, 0);
-            Vector3i min = new Vector3i(centerBasePosition.x() - extent + 2, centerBasePosition.y() - extent, centerBasePosition.z() - extent);
-            Vector3i max = new Vector3i(centerBasePosition.x() + extent - 2, centerBasePosition.y() - extent, centerBasePosition.z() + extent);
-            Region3i walls = Region3i.createFromMinMax(min, max);
-
-            // loop through each of the positions in the base
-            for (Vector3i newBlockPosition : walls) {
-                //place base stone
-                if (chunkRegion.getRegion().encompasses(newBlockPosition)) {
-                    chunk.setBlock(ChunkMath.calcBlockPos(newBlockPosition), stone);
+            //place blocks for each of the bases and flags
+            for (Vector3i baseBlockPosition : baseRegion) {
+                if (chunkRegion.getRegion().encompasses(baseBlockPosition)) {
+                    chunk.setBlock(ChunkMath.calcBlockPos(baseBlockPosition), stone);
                 }
-                //place flags
-                if (centerBasePosition.x > 0){
-                    if (chunkRegion.getRegion().encompasses(centerBasePosition)) {
-                        chunk.setBlock(ChunkMath.calcBlockPos(centerBasePosition.x(), centerBasePosition.y() - extent + 1, centerBasePosition.z() + 2), redFlag);
-                    }
+            }
+            for (Vector3i flagPosition : flagRegion) {
+                //flag type depends on the x position of the flag to determine which base it's at
+                if (chunkRegion.getRegion().encompasses(flagPosition) && flagPosition.x > 0) {
+                    chunk.setBlock(ChunkMath.calcBlockPos(flagPosition), redFlag);
+                } else if (chunkRegion.getRegion().encompasses(flagPosition)) {
+                    chunk.setBlock(ChunkMath.calcBlockPos(flagPosition), blackFlag);
                 }
-                if (centerBasePosition.x < 0){
-                    if (chunkRegion.getRegion().encompasses(centerBasePosition)) {
-                        chunk.setBlock(ChunkMath.calcBlockPos(centerBasePosition.x(), centerBasePosition.y() - extent + 1, centerBasePosition.z() + 2), blackFlag);
-                    }
-                }
-
             }
         }
     }

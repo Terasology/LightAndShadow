@@ -15,8 +15,21 @@
  */
 package org.terasology.las.bases;
 
+import org.terasology.math.Region3i;
+
 public class Base {
-    public int getExtent() {
-        return 4; //use this to adjust base size
+    private Region3i area;
+    private Region3i flagArea;
+
+    public Base(Region3i baseRegion, Region3i flagRegion) {
+        this.area = baseRegion;
+        this.flagArea = flagRegion;
+    }
+
+    public Region3i getArea() {
+        return area;
+    }
+    public Region3i getFlagArea() {
+        return flagArea;
     }
 }

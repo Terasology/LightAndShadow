@@ -15,14 +15,30 @@
  */
 package org.terasology.las.bases;
 
-import org.terasology.math.TeraMath;
-import org.terasology.math.geom.Rect2i;
+import com.google.common.collect.ImmutableSet;
+import org.terasology.math.Region3i;
+import org.terasology.math.geom.Vector3i;
 import org.terasology.world.generation.*;
 import org.terasology.world.generation.facets.SurfaceHeightFacet;
+import java.util.Collection;
 
 @Produces(BaseFacet.class)
 @Requires(@Facet(SurfaceHeightFacet.class))
+
 public class BaseProvider implements FacetProvider {
+    int baseExtent = 2; //determines size of base (# of tiles from center)
+
+    Vector3i centerRedBasePosition = new Vector3i(30, 10, 0);
+    Region3i redBaseRegion = Region3i.createFromMinMax(new Vector3i(centerRedBasePosition.x() - baseExtent, centerRedBasePosition.y(), centerRedBasePosition.z() - baseExtent), new Vector3i(centerRedBasePosition.x() + baseExtent, centerRedBasePosition.y(), centerRedBasePosition.z() + baseExtent));
+    Region3i redFlagRegion = Region3i.createFromMinMax(new Vector3i(centerRedBasePosition.x(), centerRedBasePosition.y() + 1, centerRedBasePosition.z()), new Vector3i(centerRedBasePosition.x(), centerRedBasePosition.y() + 1, centerRedBasePosition.z()));
+
+    Vector3i centerBlackBasePosition = new Vector3i(-30, 10, 0);
+    Region3i blackBaseRegion = Region3i.createFromMinMax(new Vector3i(centerBlackBasePosition.x() - baseExtent, centerBlackBasePosition.y(), centerBlackBasePosition.z() - baseExtent), new Vector3i(centerBlackBasePosition.x() + baseExtent, centerBlackBasePosition.y(), centerBlackBasePosition.z() + baseExtent));
+    Region3i blackFlagRegion = Region3i.createFromMinMax(new Vector3i(centerBlackBasePosition.x(), centerBlackBasePosition.y() + 1, centerBlackBasePosition.z()), new Vector3i(centerBlackBasePosition.x(), centerBlackBasePosition.y() + 1, centerBlackBasePosition.z()));
+
+    private Collection<Base> fixedBases = ImmutableSet.of(
+            new Base(redBaseRegion, redFlagRegion),
+            new Base(blackBaseRegion, blackFlagRegion));
 
     @Override
     public void setSeed(long seed) {
@@ -30,31 +46,11 @@ public class BaseProvider implements FacetProvider {
 
     @Override
     public void process(GeneratingRegion region) {
-
-        //Don't forget you sometimes have to extend the borders.
-        //extendBy(top, bottom, sides) is the method used for this.
-
         Border3D border = region.getBorderForFacet(BaseFacet.class).extendBy(0, 8, 4);
         BaseFacet facet = new BaseFacet(region.getRegion(), border);
-        SurfaceHeightFacet surfaceHeightFacet = region.getRegionFacet(SurfaceHeightFacet.class);
 
-        Rect2i worldRegion = surfaceHeightFacet.getWorldRegion();
-
-        for (int wz = worldRegion.minY(); wz <= worldRegion.maxY(); wz++) {
-            for (int wx = worldRegion.minX(); wx <= worldRegion.maxX(); wx++) {
-                int surfaceHeight = TeraMath.floorToInt(surfaceHeightFacet.getWorld(wx, wz));
-                if (surfaceHeight >= facet.getWorldRegion().minY() &&
-                        surfaceHeight <= facet.getWorldRegion().maxY()) {
-                    //hardcoding coordinates for base 1
-                    if (wx == 30 && wz == 0) {
-                        facet.setWorld(wx, surfaceHeight, wz, new Base());
-                    }
-                    //hardcoding coordinates for base 2
-                    if (wx == -30 && wz == 0) {
-                        facet.setWorld(wx, surfaceHeight, wz, new Base());
-                    }
-                }
-            }
+        for (Base base : fixedBases) {
+                facet.add(base);
         }
 
         region.setRegionFacet(BaseFacet.class, facet);
