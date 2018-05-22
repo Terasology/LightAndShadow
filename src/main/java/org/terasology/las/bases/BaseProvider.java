@@ -26,15 +26,16 @@ import java.util.Collection;
 @Requires(@Facet(SurfaceHeightFacet.class))
 
 public class BaseProvider implements FacetProvider {
-    int baseExtent = 2; //determines size of base (# of tiles from center)
+    /** Base is a square of side 2 * BASE_EXTENT + 1 with the flag at the center */
+    static final int BASE_EXTENT = 2; /** determines size of base (# of tiles from center) */
+    static final Vector3i CENTER_RED_BASE_POSITION = new Vector3i(30, 10, 0); /** position of red base */
+    static final Vector3i CENTER_BLACK_BASE_POSITION = new Vector3i(-30, 10, 0); /** position of black base */
 
-    Vector3i centerRedBasePosition = new Vector3i(30, 10, 0);
-    Region3i redBaseRegion = Region3i.createFromMinMax(new Vector3i(centerRedBasePosition.x() - baseExtent, centerRedBasePosition.y(), centerRedBasePosition.z() - baseExtent), new Vector3i(centerRedBasePosition.x() + baseExtent, centerRedBasePosition.y(), centerRedBasePosition.z() + baseExtent));
-    Region3i redFlagRegion = Region3i.createFromMinMax(new Vector3i(centerRedBasePosition.x(), centerRedBasePosition.y() + 1, centerRedBasePosition.z()), new Vector3i(centerRedBasePosition.x(), centerRedBasePosition.y() + 1, centerRedBasePosition.z()));
+    Region3i redBaseRegion = CreateBaseRegionFromVector(CENTER_RED_BASE_POSITION);
+    Region3i blackBaseRegion = CreateBaseRegionFromVector(CENTER_BLACK_BASE_POSITION);
 
-    Vector3i centerBlackBasePosition = new Vector3i(-30, 10, 0);
-    Region3i blackBaseRegion = Region3i.createFromMinMax(new Vector3i(centerBlackBasePosition.x() - baseExtent, centerBlackBasePosition.y(), centerBlackBasePosition.z() - baseExtent), new Vector3i(centerBlackBasePosition.x() + baseExtent, centerBlackBasePosition.y(), centerBlackBasePosition.z() + baseExtent));
-    Region3i blackFlagRegion = Region3i.createFromMinMax(new Vector3i(centerBlackBasePosition.x(), centerBlackBasePosition.y() + 1, centerBlackBasePosition.z()), new Vector3i(centerBlackBasePosition.x(), centerBlackBasePosition.y() + 1, centerBlackBasePosition.z()));
+    Region3i redFlagRegion = CreateFlagRegionFromVector(CENTER_RED_BASE_POSITION);
+    Region3i blackFlagRegion = CreateFlagRegionFromVector(CENTER_BLACK_BASE_POSITION);
 
     private Collection<Base> fixedBases = ImmutableSet.of(
             new Base(redBaseRegion, redFlagRegion),
@@ -46,13 +47,19 @@ public class BaseProvider implements FacetProvider {
 
     @Override
     public void process(GeneratingRegion region) {
-        Border3D border = region.getBorderForFacet(BaseFacet.class).extendBy(0, 8, 4);
+        Border3D border = region.getBorderForFacet(BaseFacet.class).extendBy(0, 0, 0);
         BaseFacet facet = new BaseFacet(region.getRegion(), border);
 
         for (Base base : fixedBases) {
                 facet.add(base);
         }
-
         region.setRegionFacet(BaseFacet.class, facet);
+    }
+
+    private Region3i CreateBaseRegionFromVector(Vector3i centerBasePosition) {
+        return Region3i.createFromMinMax(new Vector3i(centerBasePosition.x() - BASE_EXTENT, centerBasePosition.y(), centerBasePosition.z() - BASE_EXTENT), new Vector3i(centerBasePosition.x() + BASE_EXTENT, centerBasePosition.y(), centerBasePosition.z() + BASE_EXTENT));
+    }
+    private Region3i CreateFlagRegionFromVector(Vector3i centerBasePosition) {
+        return Region3i.createFromMinMax(new Vector3i(centerBasePosition.x(), centerBasePosition.y() + 1, centerBasePosition.z()), new Vector3i(centerBasePosition.x(), centerBasePosition.y() + 1, centerBasePosition.z()));
     }
 }
