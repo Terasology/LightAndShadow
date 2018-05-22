@@ -26,6 +26,7 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.components.TakeBlockOnActivateComponent;
 import org.terasology.logic.common.ActivateEvent;
+import org.terasology.logic.inventory.InventoryAuthoritySystem;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.action.GiveItemAction;
 import org.terasology.math.geom.Vector3f;
@@ -59,15 +60,16 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     @ReceiveEvent(components = {TakeBlockOnActivateComponent.class, BlockComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
         BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
+        inventoryManager = new InventoryAuthoritySystem();
 
         BlockComponent blockComponent = entity.getComponent(BlockComponent.class);
 
         EntityRef flagTaker = event.getInstigator();
         if (blockComponent.getBlock().getBlockFamily().getURI().toString().equals("LightAndShadowResources:blackFlag")) {
-            flagTaker.send(new GiveItemAction(flagTaker, blockFactory.newInstance(blockManager.getBlockFamily("LightAndShadowResources:blackFlag"))));
+            inventoryManager.giveItem(flagTaker, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily("LightAndShadowResources:blackFlag")));
         }
         if (blockComponent.getBlock().getBlockFamily().getURI().toString().equals("LightAndShadowResources:redFlag")) {
-            flagTaker.send(new GiveItemAction(flagTaker, blockFactory.newInstance(blockManager.getBlockFamily("LightAndShadowResources:redFlag"))));
+            inventoryManager.giveItem(flagTaker, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily("LightAndShadowResources:redFlag")));
         }
         worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
         entity.destroy();
