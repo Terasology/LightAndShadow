@@ -26,10 +26,14 @@ import java.util.Collection;
 @Requires(@Facet(SurfaceHeightFacet.class))
 
 public class BaseProvider implements FacetProvider {
-    /** Base is a square of side 2 * BASE_EXTENT + 1 with the flag at the center */
-    static final int BASE_EXTENT = 2; /** determines size of base (# of tiles from center) */
-    static final Vector3i CENTER_RED_BASE_POSITION = new Vector3i(30, 10, 0); /** position of red base */
-    static final Vector3i CENTER_BLACK_BASE_POSITION = new Vector3i(-30, 10, 0); /** position of black base */
+    /** Determines size of base
+     * Base is a square of side 2 * BASE_EXTENT + 1 with the flag at the center
+     */
+    static final int BASE_EXTENT = 2;
+    /** Position of Red base */
+    static final Vector3i CENTER_RED_BASE_POSITION = new Vector3i(30, 10, 0);
+    /** Position of Black base */
+    static final Vector3i CENTER_BLACK_BASE_POSITION = new Vector3i(-30, 10, 0);
 
     Region3i redBaseRegion = CreateBaseRegionFromVector(CENTER_RED_BASE_POSITION);
     Region3i blackBaseRegion = CreateBaseRegionFromVector(CENTER_BLACK_BASE_POSITION);
@@ -47,7 +51,7 @@ public class BaseProvider implements FacetProvider {
 
     @Override
     public void process(GeneratingRegion region) {
-        Border3D border = region.getBorderForFacet(BaseFacet.class).extendBy(0, 0, 0);
+        Border3D border = region.getBorderForFacet(BaseFacet.class);
         BaseFacet facet = new BaseFacet(region.getRegion(), border);
 
         for (Base base : fixedBases) {
