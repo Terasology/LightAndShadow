@@ -29,11 +29,11 @@ public class BaseProvider implements FacetProvider {
     /** Determines size of base
      * Base is a square of side 2 * BASE_EXTENT + 1 with the flag at the center
      */
-    static final int BASE_EXTENT = 2;
+    private static final int BASE_EXTENT = 2;
     /** Position of Red base */
-    static final Vector3i CENTER_RED_BASE_POSITION = new Vector3i(30, 10, 0);
+    private static final Vector3i CENTER_RED_BASE_POSITION = new Vector3i(30, 10, 0);
     /** Position of Black base */
-    static final Vector3i CENTER_BLACK_BASE_POSITION = new Vector3i(-30, 10, 0);
+    private static final Vector3i CENTER_BLACK_BASE_POSITION = new Vector3i(-30, 10, 0);
 
     Region3i redBaseRegion = CreateBaseRegionFromVector(CENTER_RED_BASE_POSITION);
     Region3i blackBaseRegion = CreateBaseRegionFromVector(CENTER_BLACK_BASE_POSITION);

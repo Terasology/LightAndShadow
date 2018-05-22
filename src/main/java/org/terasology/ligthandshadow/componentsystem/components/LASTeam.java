@@ -24,7 +24,6 @@ public final class LASTeam implements Component {
     public String team;
 
     public LASTeam() {
-        // serialization
     }
 
     public LASTeam(String team) {
