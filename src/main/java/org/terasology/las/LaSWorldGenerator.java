@@ -16,11 +16,7 @@
 
 package org.terasology.las;
 
-import org.terasology.cities.BlockTheme;
-import org.terasology.cities.CityWorldGenerator;
-import org.terasology.cities.DefaultBlockType;
-import org.terasology.cities.SimpleBiomeProvider;
-import org.terasology.cities.bldg.Building;
+import org.terasology.cities.*;
 import org.terasology.cities.bldg.BuildingFacetProvider;
 import org.terasology.cities.blocked.BlockedAreaFacetProvider;
 import org.terasology.cities.deco.ColumnRasterizer;
@@ -34,7 +30,6 @@ import org.terasology.cities.fences.SimpleFenceRasterizer;
 import org.terasology.cities.flora.FloraFacetProvider;
 import org.terasology.cities.flora.TreeFacetProvider;
 import org.terasology.cities.lakes.LakeFacetProvider;
-import org.terasology.cities.parcels.Parcel;
 import org.terasology.cities.parcels.ParcelFacetProvider;
 import org.terasology.cities.raster.standard.HollowBuildingPartRasterizer;
 import org.terasology.cities.raster.standard.RectPartRasterizer;
@@ -42,13 +37,7 @@ import org.terasology.cities.raster.standard.RoundPartRasterizer;
 import org.terasology.cities.raster.standard.StaircaseRasterizer;
 import org.terasology.cities.roads.RoadFacetProvider;
 import org.terasology.cities.roads.RoadRasterizer;
-import org.terasology.cities.roof.ConicRoofRasterizer;
-import org.terasology.cities.roof.DomeRoofRasterizer;
-import org.terasology.cities.roof.FlatRoofRasterizer;
-import org.terasology.cities.roof.HipRoofRasterizer;
-import org.terasology.cities.roof.PentRoofRasterizer;
-import org.terasology.cities.roof.RoofFacetProvider;
-import org.terasology.cities.roof.SaddleRoofRasterizer;
+import org.terasology.cities.roof.*;
 import org.terasology.cities.settlements.SettlementFacetProvider;
 import org.terasology.cities.sites.SiteFacetProvider;
 import org.terasology.cities.surface.InfiniteSurfaceHeightFacetProvider;
@@ -59,17 +48,10 @@ import org.terasology.cities.walls.TownWallRasterizer;
 import org.terasology.cities.window.RectWindowRasterizer;
 import org.terasology.cities.window.SimpleWindowRasterizer;
 import org.terasology.cities.window.WindowFacetProvider;
-import org.terasology.commonworld.heightmap.HeightMap;
-import org.terasology.core.world.generator.facetProviders.DefaultFloraProvider;
-//import org.terasology.core.world.generator.facetProviders.EnsureSpawnableChunkZeroProvider;
 import org.terasology.core.world.generator.facetProviders.PerlinHumidityProvider;
 import org.terasology.core.world.generator.facetProviders.SeaLevelProvider;
 import org.terasology.core.world.generator.facetProviders.SurfaceToDensityProvider;
-import org.terasology.core.world.generator.rasterizers.FloraRasterizer;
 import org.terasology.core.world.generator.rasterizers.SolidRasterizer;
-
-import org.terasology.cities.SettlementEntityProvider;
-
 import org.terasology.core.world.generator.rasterizers.TreeRasterizer;
 import org.terasology.engine.SimpleUri;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -78,13 +60,12 @@ import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.registry.In;
 import org.terasology.world.block.BlockManager;
-import org.terasology.world.generation.BaseFacetedWorldGenerator;
 import org.terasology.world.generation.World;
 import org.terasology.world.generation.WorldBuilder;
 import org.terasology.world.generator.RegisterWorldGenerator;
 import org.terasology.world.generator.plugin.WorldGeneratorPluginLibrary;
 
-import org.terasology.las.LaSFloraRasterizer;
+//import org.terasology.core.world.generator.facetProviders.EnsureSpawnableChunkZeroProvider;
 
 @RegisterWorldGenerator(id = "las", displayName = "Light & Shadow World")
 public class LaSWorldGenerator extends CityWorldGenerator {

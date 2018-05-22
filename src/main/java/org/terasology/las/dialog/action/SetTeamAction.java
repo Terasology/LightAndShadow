@@ -17,7 +17,6 @@
 package org.terasology.las.dialog.action;
 
 import org.terasology.dialogs.action.PlayerAction;
-import org.terasology.dialogs.components.DialogComponent;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeam;
 import org.terasology.logic.characters.CharacterComponent;

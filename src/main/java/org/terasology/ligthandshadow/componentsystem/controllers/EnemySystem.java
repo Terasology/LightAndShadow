@@ -28,8 +28,8 @@ import org.terasology.ligthandshadow.componentsystem.components.LASTeam;
 import org.terasology.logic.characters.events.OnEnterBlockEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.registry.CoreRegistry;
 import org.terasology.minion.work.WorkTargetComponent;
+import org.terasology.registry.CoreRegistry;
 
 import java.util.Map;
 import java.util.Set;

@@ -36,7 +36,6 @@ import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
 
 
-
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     @In
@@ -51,7 +50,6 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     private EntityManager entityManager;
 
 
-
     private static final Logger LOG = LoggerFactory.getLogger(TakeBlockOnActivationSystem.class);
 
     @ReceiveEvent(components = {TakeBlockOnActivateComponent.class, BlockComponent.class})
@@ -63,10 +61,10 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
         LASTeam teamComponent = entity.getComponent(LASTeam.class);
 
         EntityRef flagTaker = event.getInstigator();
-        if (teamComponent.team.equals("red")){
+        if (teamComponent.team.equals("red")) {
             inventoryManager.giveItem(flagTaker, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily("LightAndShadowResources:redFlag")));
         }
-        if (teamComponent.team.equals("black")){
+        if (teamComponent.team.equals("black")) {
             inventoryManager.giveItem(flagTaker, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily("LightAndShadowResources:blackFlag")));
         }
         worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));

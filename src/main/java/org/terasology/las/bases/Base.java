@@ -29,6 +29,7 @@ public class Base {
     public Region3i getArea() {
         return area;
     }
+
     public Region3i getFlagArea() {
         return flagArea;
     }

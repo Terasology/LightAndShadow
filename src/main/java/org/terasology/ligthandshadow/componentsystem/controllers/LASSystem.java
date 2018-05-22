@@ -22,8 +22,6 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.logic.inventory.action.GiveItemAction;
-import org.terasology.logic.inventory.action.RemoveItemAction;
 import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.registry.In;
 import org.terasology.world.WorldProvider;
@@ -44,7 +42,9 @@ public class LASSystem extends BaseComponentSystem {
     @In
     private BlockManager blockManager;
 
-    /** give player inventory items on game start */
+    /**
+     * give player inventory items on game start
+     */
     @ReceiveEvent
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, InventoryComponent inventory) {
         BlockItemFactory blockFactory = new BlockItemFactory(entityManager);

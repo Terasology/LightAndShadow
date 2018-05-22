@@ -29,7 +29,6 @@ import org.terasology.world.block.BlockManager;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 
-
 import java.util.List;
 import java.util.Map;
 

@@ -20,19 +20,25 @@ import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.world.generation.*;
 import org.terasology.world.generation.facets.SurfaceHeightFacet;
+
 import java.util.Collection;
 
 @Produces(BaseFacet.class)
 @Requires(@Facet(SurfaceHeightFacet.class))
 
 public class BaseProvider implements FacetProvider {
-    /** Determines size of base
+    /**
+     * Determines size of base
      * Base is a square of side 2 * BASE_EXTENT + 1 with the flag at the center
      */
     private static final int BASE_EXTENT = 2;
-    /** Position of Red base */
+    /**
+     * Position of Red base
+     */
     private static final Vector3i CENTER_RED_BASE_POSITION = new Vector3i(30, 10, 0);
-    /** Position of Black base */
+    /**
+     * Position of Black base
+     */
     private static final Vector3i CENTER_BLACK_BASE_POSITION = new Vector3i(-30, 10, 0);
 
     Region3i redBaseRegion = CreateBaseRegionFromVector(CENTER_RED_BASE_POSITION);
@@ -55,7 +61,7 @@ public class BaseProvider implements FacetProvider {
         BaseFacet facet = new BaseFacet(region.getRegion(), border);
 
         for (Base base : fixedBases) {
-                facet.add(base);
+            facet.add(base);
         }
         region.setRegionFacet(BaseFacet.class, facet);
     }
@@ -63,6 +69,7 @@ public class BaseProvider implements FacetProvider {
     private Region3i CreateBaseRegionFromVector(Vector3i centerBasePosition) {
         return Region3i.createFromMinMax(new Vector3i(centerBasePosition.x() - BASE_EXTENT, centerBasePosition.y(), centerBasePosition.z() - BASE_EXTENT), new Vector3i(centerBasePosition.x() + BASE_EXTENT, centerBasePosition.y(), centerBasePosition.z() + BASE_EXTENT));
     }
+
     private Region3i CreateFlagRegionFromVector(Vector3i centerBasePosition) {
         return Region3i.createFromMinMax(new Vector3i(centerBasePosition.x(), centerBasePosition.y() + 1, centerBasePosition.z()), new Vector3i(centerBasePosition.x(), centerBasePosition.y() + 1, centerBasePosition.z()));
     }

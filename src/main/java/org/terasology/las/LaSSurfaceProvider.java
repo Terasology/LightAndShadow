@@ -38,7 +38,7 @@ public class LaSSurfaceProvider implements FacetProvider {
 
         // Loop through every position in our 2d array
         Rect2i processRegion = facet.getWorldRegion();
-        for (BaseVector2i position: processRegion.contents()) {
+        for (BaseVector2i position : processRegion.contents()) {
             facet.setWorld(position, 10f);
         }
 
