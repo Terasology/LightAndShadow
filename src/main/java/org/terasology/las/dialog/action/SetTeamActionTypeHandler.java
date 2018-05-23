@@ -16,8 +16,7 @@
 
 package org.terasology.las.dialog.action;
 
-import java.util.Map;
-
+import com.google.common.collect.ImmutableMap;
 import org.terasology.persistence.typeHandling.DeserializationContext;
 import org.terasology.persistence.typeHandling.PersistedData;
 import org.terasology.persistence.typeHandling.PersistedDataMap;
@@ -25,7 +24,7 @@ import org.terasology.persistence.typeHandling.RegisterTypeHandler;
 import org.terasology.persistence.typeHandling.SerializationContext;
 import org.terasology.persistence.typeHandling.SimpleTypeHandler;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.Map;
 
 @RegisterTypeHandler
 public class SetTeamActionTypeHandler extends SimpleTypeHandler<SetTeamAction> {
@@ -39,7 +38,7 @@ public class SetTeamActionTypeHandler extends SimpleTypeHandler<SetTeamAction> {
         Map<String, PersistedData> data = ImmutableMap.of(
                 "type", context.create(action.getClass().getSimpleName()),
                 "team", context.create(action.getTeam())
-                );
+        );
 
         return context.create(data);
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 MovingBlocks
+ * Copyright 2017 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,40 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.terasology.las.platform;
+package org.terasology.las.bases;
 
 import org.terasology.math.Region3i;
 import org.terasology.world.generation.Border3D;
-import org.terasology.world.generation.facets.base.BaseFacet2D;
+import org.terasology.world.generation.facets.base.SparseObjectFacet3D;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-/**
- *
- */
-public class FloatingPlatformFacet extends BaseFacet2D {
+public class BaseFacet extends SparseObjectFacet3D<Base> {
+    private final Collection<Base> bases = new ArrayList<>();
 
-    private final Collection<FloatingPlatform> platforms = new ArrayList<>();
-
-    public FloatingPlatformFacet(Region3i targetRegion, Border3D border) {
+    public BaseFacet(Region3i targetRegion, Border3D border) {
         super(targetRegion, border);
     }
 
-    /**
-     * @param platform the platform to add
-     */
-    public void add(FloatingPlatform platform) {
-        platforms.add(platform);
+    public void add(Base base) {
+        bases.add(base);
     }
 
-    /**
-     * @return an unmodifiable view
-     */
-    public Collection<FloatingPlatform> getPlatforms() {
-        return Collections.unmodifiableCollection(platforms);
+    public Collection<Base> getBases() {
+        return Collections.unmodifiableCollection(bases);
     }
-
 }

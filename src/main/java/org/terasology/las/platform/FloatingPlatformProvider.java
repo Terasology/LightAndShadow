@@ -16,9 +16,6 @@
 
 package org.terasology.las.platform;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import org.terasology.entitySystem.Component;
 import org.terasology.math.geom.Rect2i;
 import org.terasology.world.generation.Border3D;
@@ -27,6 +24,9 @@ import org.terasology.world.generation.FacetProviderPlugin;
 import org.terasology.world.generation.GeneratingRegion;
 import org.terasology.world.generation.Produces;
 import org.terasology.world.generator.plugin.RegisterPlugin;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Provides {@link FloatingPlatformFacet} instances.

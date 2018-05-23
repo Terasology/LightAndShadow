@@ -16,12 +16,12 @@
 
 package org.terasology.las.platform;
 
-import org.terasology.utilities.Assets;
 import org.terasology.dialogs.components.DialogComponent;
 import org.terasology.entitySystem.entity.EntityStore;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
+import org.terasology.utilities.Assets;
 import org.terasology.world.generation.EntityBuffer;
 import org.terasology.world.generation.EntityProviderPlugin;
 import org.terasology.world.generation.Region;

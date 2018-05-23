@@ -22,8 +22,6 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.logic.inventory.action.GiveItemAction;
-import org.terasology.logic.inventory.action.RemoveItemAction;
 import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.registry.In;
 import org.terasology.world.WorldProvider;
@@ -44,33 +42,14 @@ public class LASSystem extends BaseComponentSystem {
     @In
     private BlockManager blockManager;
 
+    /**
+     * give player inventory items on game start
+     */
     @ReceiveEvent
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, InventoryComponent inventory) {
         BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
-        for (int i = 0; i < inventoryManager.getNumSlots(player); i++) {
-            EntityRef itemInSlot = inventoryManager.getItemInSlot(player, i);
-            player.send(new RemoveItemAction(player, itemInSlot, true));
-        }
-        player.send(new GiveItemAction(player, entityManager.create("Pathfinding:jobWalkToBlock"), 1));
-        player.send(new GiveItemAction(player, entityManager.create("Pathfinding:jobBuildBlock"), 2));
-        player.send(new GiveItemAction(player, entityManager.create("Pathfinding:jobRemoveBlock"), 3));
-
-        player.send(new GiveItemAction(player, blockFactory.newInstance(blockManager.getBlockFamily("redSpawn")), 4));
-        player.send(new GiveItemAction(player, blockFactory.newInstance(blockManager.getBlockFamily("blackSpawn")), 5));
-
-        giveItem(player, 6, "clubsAce");
-        giveItem(player, 7, "diamondsAce");
-        giveItem(player, 8, "heartsAce");
-        giveItem(player, 9, "spadesAce");
     }
 
-    private void giveItem(EntityRef player, int slot, String name) {
-        int stackSize = 64;
-        for (int i = 0; i < stackSize; i++) {
-            EntityRef item = entityManager.create(name);
-            player.send(new GiveItemAction(player, item, slot));
-        }
-    }
 
     @Override
     public void initialise() {
