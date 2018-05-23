@@ -17,7 +17,12 @@
 package org.terasology.las.dialog.action;
 
 import com.google.common.collect.ImmutableMap;
-import org.terasology.persistence.typeHandling.*;
+import org.terasology.persistence.typeHandling.DeserializationContext;
+import org.terasology.persistence.typeHandling.PersistedData;
+import org.terasology.persistence.typeHandling.PersistedDataMap;
+import org.terasology.persistence.typeHandling.RegisterTypeHandler;
+import org.terasology.persistence.typeHandling.SerializationContext;
+import org.terasology.persistence.typeHandling.SimpleTypeHandler;
 
 import java.util.Map;
 
