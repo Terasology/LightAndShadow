@@ -123,10 +123,8 @@ public class CardSystem extends BaseComponentSystem {
             return;
         }
 
-        worldProvider.setBlock(bottomBlockPos, card.bottomBlockFamily.getBlockForPlacement(worldProvider,
-                blockEntityRegistry, bottomBlockPos, facingDir, Side.TOP));
-        worldProvider.setBlock(topBlockPos, card.topBlockFamily.getBlockForPlacement(worldProvider, blockEntityRegistry, topBlockPos, facingDir,
-                Side.TOP));
+        worldProvider.setBlock(bottomBlockPos, card.bottomBlockFamily.getBlockForPlacement(bottomBlockPos, facingDir, Side.TOP));
+        worldProvider.setBlock(topBlockPos, card.topBlockFamily.getBlockForPlacement(topBlockPos, facingDir, Side.TOP));
 
         EntityRef cardEntity = entityManager.create(card.cardBlockPrefab);
         entity.removeComponent(MeshComponent.class);
