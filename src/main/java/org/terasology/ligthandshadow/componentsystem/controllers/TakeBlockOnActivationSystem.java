@@ -58,16 +58,21 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
         inventoryManager = new InventoryAuthoritySystem();
 
         BlockComponent blockComponent = entity.getComponent(BlockComponent.class);
-        LASTeam teamComponent = entity.getComponent(LASTeam.class);
+        LASTeam flagTeamComponent = entity.getComponent(LASTeam.class);
+
 
         EntityRef flagTaker = event.getInstigator();
-        if (teamComponent.team.equals("red")) {
+        LASTeam playerTeamComponent = flagTaker.getComponent(LASTeam.class);
+        //if the flag being taken is a red flag and the player is on the black team, let them take the flag
+        if (flagTeamComponent.team.equals("red") && playerTeamComponent.team.equals("black")) {
             inventoryManager.giveItem(flagTaker, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily("LightAndShadowResources:redFlag")));
+            worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
+            entity.destroy();
         }
-        if (teamComponent.team.equals("black")) {
+        if (flagTeamComponent.team.equals("black") && playerTeamComponent.team.equals("red")) {
             inventoryManager.giveItem(flagTaker, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily("LightAndShadowResources:blackFlag")));
+            worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
+            entity.destroy();
         }
-        worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
-        entity.destroy();
     }
 }
