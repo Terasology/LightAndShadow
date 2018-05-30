@@ -25,7 +25,6 @@ import org.terasology.world.generation.Facet;
 import org.terasology.world.generation.GeneratingRegion;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.FacetProvider;
-
 import java.util.Collection;
 
 @Produces(BaseFacet.class)

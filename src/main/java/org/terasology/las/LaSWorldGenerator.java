@@ -133,7 +133,6 @@ public class LaSWorldGenerator extends CityWorldGenerator {
                 .registerFamily(DefaultBlockType.PILLAR_MIDDLE, "core:CobbleStone:StructuralResources:pillar")
                 .registerFamily(DefaultBlockType.PILLAR_TOP, "core:CobbleStone:StructuralResources:pillarTop")
                 .registerFamily(DefaultBlockType.TORCH, "Core:Torch")
-
                 .build();
 
         PerlinHumidityProvider.Configuration humidityConfig = new PerlinHumidityProvider.Configuration();
