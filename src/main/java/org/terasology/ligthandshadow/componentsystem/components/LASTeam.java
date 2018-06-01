@@ -29,4 +29,7 @@ public final class LASTeam implements Component {
     public LASTeam(String team) {
         this.team = team;
     }
+    public void setTeam(String team) {
+        this.team = team;
+    }
 }

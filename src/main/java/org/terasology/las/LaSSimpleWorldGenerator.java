@@ -16,6 +16,7 @@
 package org.terasology.las;
 
 import org.terasology.cities.BlockTheme;
+import org.terasology.cities.SettlementEntityProvider;
 import org.terasology.engine.SimpleUri;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.logic.spawner.Spawner;
@@ -73,6 +74,7 @@ public class LaSSimpleWorldGenerator extends BaseFacetedWorldGenerator {
                 .addProvider(new SeaLevelProvider(0))
                 .addProvider(new BaseProvider())
                 .addProvider(new FloatingPlatformProvider())
+                .addPlugins()
                 .addRasterizer(new LaSSimpleWorldRasterizer())
                 .addRasterizer(new FloatingPlatformRasterizer())
                 .addRasterizer(new BaseRasterizer());
