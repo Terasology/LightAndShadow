@@ -1,0 +1,23 @@
+{
+    "skeletalmesh" : {
+        "mesh" : "fool",
+        "heightOffset" : -0.5,
+        "material" : "blackFoolSkin",
+        "animation" : "foolStill",
+        "loop" : true
+    },
+    "CapsuleShape" : {
+        "radius" : 1,
+        "height" : 2
+    },
+    "persisted" : true,
+    "AnimateBounce": {
+        "maxHeight" : 0.15,
+        "period" : 8.0
+    },
+    "RigidBody" : {
+        "kinematic" : false,
+        "mass" : 0
+    }
+}
+

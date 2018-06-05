@@ -1,11 +1,11 @@
 /*
- * Copyright 2014 MovingBlocks
+ * Copyright 2015 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *  http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,20 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.ligthandshadow.componentsystem.components;
 
-import org.terasology.entitySystem.Component;
+package org.terasology.las.platform;
+
+import org.terasology.math.geom.Rect2i;
 
 /**
- * Created by synopia on 25.01.14.
+ *
  */
-public final class LASTeam implements Component {
-    public String team;
+public class FloatingPlatform {
 
-    public LASTeam() {
+    private Rect2i area;
+    private int baseHeight;
+
+    public FloatingPlatform(Rect2i area, int baseHeight) {
+        this.area = area;
+        this.baseHeight = baseHeight;
     }
 
-    public LASTeam(String team) {
-        this.team = team;
+    public Rect2i getArea() {
+        return area;
     }
+
+    public int getBaseHeight() {
+        return baseHeight;
+    }
+
+
 }

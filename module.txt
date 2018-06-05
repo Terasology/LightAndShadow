@@ -10,9 +10,12 @@
         {"id" : "Pathfinding","minVersion" : "0.3.0"},
         {"id" : "LightAndShadowResources", "minVersion" : "0.2.0"},
         {"id" : "StaticCities", "minVersion" : "0.2.0"},
-        {"id" : "ItemRendering", "minVersion" : "1.0.0"}
+        {"id" : "ItemRendering", "minVersion" : "1.0.0"},
+        {"id" : "Dialogs", "minVersion" : "0.1.0-SNAPSHOT"},
+        {"id" : "Tasks", "minVersion" : "0.2.0-SNAPSHOT"},
+        {"id" : "Cities", "minVersion" : "0.6.2-SNAPSHOT"}
     ],
     "isServerSideOnly" : false,
     "isGameplay" : "true",
-    "defaultWorldGenerator" : "StaticCities:staticCities"
+    "defaultWorldGenerator" : "LightAndShadow:LaSWorldGenerator"
 }

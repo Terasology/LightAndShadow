@@ -1,0 +1,28 @@
+{
+    "Dialog": {
+        "firstPage": "main",
+        "pages": [
+            {
+                "id": "main",
+                "title": "Teleport",
+                "paragraphText": [
+                    "I heard that you want to leave, ${player.name}? What's your destination?"
+                ],
+                "responses": [
+                    {
+                        "text": "That's A!"
+                    },
+                    {
+                        "text": "That's B!"
+                    },
+                    {
+                        "text": "I need to leave now ..",
+                        "action": {
+                            "type": "CloseDialogAction"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
