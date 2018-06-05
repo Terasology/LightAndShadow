@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,6 @@ package org.terasology.ligthandshadow.componentsystem.components;
 
 import org.terasology.entitySystem.Component;
 
-/**
- * Created by synopia on 25.01.14.
- */
 public final class LASTeam implements Component {
     public String team;
 

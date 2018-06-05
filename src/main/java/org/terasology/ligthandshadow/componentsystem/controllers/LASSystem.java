@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,14 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.logic.inventory.action.GiveItemAction;
+import org.terasology.logic.inventory.action.RemoveItemAction;
 import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.registry.In;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
 
-/**
- * Created by synopia on 24.01.14.
- */
 @RegisterSystem
 public class LASSystem extends BaseComponentSystem {
     @In
@@ -52,10 +51,7 @@ public class LASSystem extends BaseComponentSystem {
             EntityRef itemInSlot = inventoryManager.getItemInSlot(player, i);
             player.send(new RemoveItemAction(player, itemInSlot, true));
         }
-        player.send(new GiveItemAction(player, entityManager.create("Behaviors:jobWalkToBlock"), 1));
-        player.send(new GiveItemAction(player, entityManager.create("Behaviors:jobBuildBlock"), 2));
-        player.send(new GiveItemAction(player, entityManager.create("Behaviors:jobRemoveBlock"), 3));
-
+    }
 
     @Override
     public void initialise() {
