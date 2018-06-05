@@ -16,6 +16,7 @@
 
 package org.terasology.las.platform;
 
+import org.terasology.math.Region3i;
 import org.terasology.math.geom.Rect2i;
 
 /**
@@ -25,9 +26,13 @@ public class FloatingPlatform {
 
     private Rect2i area;
     private int baseHeight;
+    private Region3i redTeleporterRegion;
+    private Region3i blackTeleporterRegion;
 
-    public FloatingPlatform(Rect2i area, int baseHeight) {
+    public FloatingPlatform(Rect2i area, int baseHeight, Region3i redTeleporterRegion, Region3i blackTeleporterRegion) {
         this.area = area;
+        this.redTeleporterRegion = redTeleporterRegion;
+        this.blackTeleporterRegion = blackTeleporterRegion;
         this.baseHeight = baseHeight;
     }
 
@@ -38,6 +43,9 @@ public class FloatingPlatform {
     public int getBaseHeight() {
         return baseHeight;
     }
+
+    public Region3i getRedTeleporterRegion() { return redTeleporterRegion; }
+    public Region3i getBlackTeleporterRegion() { return blackTeleporterRegion; }
 
 
 }

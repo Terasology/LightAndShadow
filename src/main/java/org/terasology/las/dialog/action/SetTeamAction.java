@@ -35,14 +35,11 @@ public class SetTeamAction implements PlayerAction {
 
     @Override
     public void execute(EntityRef charEntity, EntityRef talkTo) {
-
         EntityRef controller = charEntity.getComponent(CharacterComponent.class).controller; // the client
         ClientComponent clientComponent = controller.getComponent(ClientComponent.class);
-        EntityRef playerEntity = clientComponent.character;
-        LASTeam playerTeam = playerEntity.getComponent(LASTeam.class);
-        playerTeam.setTeam(team);
-        //EntityRef clientInfo = clientComponent.clientInfo;
-        //clientInfo.addComponent(new LASTeam(team));
+        EntityRef clientInfo = clientComponent.clientInfo;
+
+        clientInfo.addComponent(new LASTeam(team));
     }
 
     public String getTeam() {

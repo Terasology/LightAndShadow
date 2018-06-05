@@ -23,8 +23,11 @@ import org.terasology.cities.raster.AbstractPen;
 import org.terasology.cities.raster.ChunkRasterTarget;
 import org.terasology.cities.raster.Pen;
 import org.terasology.cities.raster.RasterUtil;
+import org.terasology.math.ChunkMath;
 import org.terasology.math.Region3i;
+import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
+import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
@@ -38,6 +41,8 @@ import org.terasology.world.generator.plugin.RegisterPlugin;
 public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
 
     private BlockTheme theme;
+    private Block redDice;
+    private Block blackDice;
 
     @Override
     public void initialize() {
@@ -47,6 +52,8 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
                 .register(DefaultBlockType.FENCE, "LightAndShadowResources:MagicGlass")
                 .register(DefaultBlockType.BUILDING_WALL, "LightAndShadowResources:MagicStone")
                 .build();
+        redDice = CoreRegistry.get(BlockManager.class).getBlock("LightAndShadowResources:redDice");
+        blackDice = CoreRegistry.get(BlockManager.class).getBlock("LightAndShadowResources:blackDice");
     }
 
     @Override
@@ -96,6 +103,21 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
                     }
                 };
                 RasterUtil.drawRect(wallPen, platform.getArea());
+            }
+            Region3i blackTeleporterRegion = platform.getBlackTeleporterRegion();
+            Region3i redTeleporterRegion = platform.getRedTeleporterRegion();
+
+            for (Vector3i blackTeleporterPosition : blackTeleporterRegion) {
+                //set down the teleporter at every square in the designated region
+                if (chunkRegion.getRegion().encompasses(blackTeleporterPosition)) {
+                    chunk.setBlock(ChunkMath.calcBlockPos(blackTeleporterPosition), blackDice);
+                }
+            }
+            for (Vector3i redTeleporterPosition : redTeleporterRegion) {
+                //set down the teleporter at every square in the designated region
+                if (chunkRegion.getRegion().encompasses(redTeleporterPosition)) {
+                    chunk.setBlock(ChunkMath.calcBlockPos(redTeleporterPosition), redDice);
+                }
             }
         }
     }
