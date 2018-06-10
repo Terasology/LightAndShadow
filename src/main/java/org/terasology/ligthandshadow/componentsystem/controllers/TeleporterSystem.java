@@ -31,9 +31,9 @@ import org.terasology.math.geom.Vector3f;
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TeleporterSystem extends BaseComponentSystem {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TeleporterSystem.class);
+    private static final Logger logger = LoggerFactory.getLogger(TeleporterSystem.class);
 
-    /**the position near the team's base that player will be teleported to on choosing a team**/
+    // The position near the team's base that player will be teleported to on choosing a team
     private static final Vector3f RED_TELEPORT_DESTINATION = new Vector3f(29, 12, 0);
     private static final Vector3f BLACK_TELEPORT_DESTINATION = new Vector3f(-29, 12, 0);
 
@@ -43,16 +43,15 @@ public class TeleporterSystem extends BaseComponentSystem {
         EntityRef player = event.getInstigator();
         LASTeam playerTeamComponent = player.getComponent(LASTeam.class);
 
-        /* depending on which teleporter the player chooses, they are set to that team
-        * and teleported to that base
-        */
-        if (teleporterTeamComponent.team.equals("red")) {
-            playerTeamComponent.team = "red";
+        /* Depending on which teleporter the player chooses, they are set to that team
+        * and teleported to that base */
+        if (teleporterTeamComponent.team.equals(teleporterTeamComponent.RED)) {
+            playerTeamComponent.team = teleporterTeamComponent.team;
             player.send(new CharacterTeleportEvent(new Vector3f(RED_TELEPORT_DESTINATION)));
         }
 
-        if (teleporterTeamComponent.team.equals("black")) {
-            playerTeamComponent.team = "black";
+        if (teleporterTeamComponent.team.equals(teleporterTeamComponent.BLACK)) {
+            playerTeamComponent.team = teleporterTeamComponent.team;
             player.send(new CharacterTeleportEvent(new Vector3f(BLACK_TELEPORT_DESTINATION)));
         }
     }

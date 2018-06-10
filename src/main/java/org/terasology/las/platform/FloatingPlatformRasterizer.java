@@ -41,8 +41,8 @@ import org.terasology.world.generator.plugin.RegisterPlugin;
 public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
 
     private BlockTheme theme;
-    private Block redDice;
-    private Block blackDice;
+    private static final Block RED_DICE = CoreRegistry.get(BlockManager.class).getBlock("LightAndShadowResources:redDice");
+    private static final Block BLACK_DICE = CoreRegistry.get(BlockManager.class).getBlock("LightAndShadowResources:blackDice");
 
     @Override
     public void initialize() {
@@ -52,8 +52,6 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
                 .register(DefaultBlockType.FENCE, "LightAndShadowResources:MagicGlass")
                 .register(DefaultBlockType.BUILDING_WALL, "LightAndShadowResources:MagicStone")
                 .build();
-        redDice = CoreRegistry.get(BlockManager.class).getBlock("LightAndShadowResources:redDice");
-        blackDice = CoreRegistry.get(BlockManager.class).getBlock("LightAndShadowResources:blackDice");
     }
 
     @Override
@@ -110,16 +108,16 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
             for (Vector3i blackTeleporterPosition : blackTeleporterRegion) {
                 //set down the teleporter at every square in the designated region
                 if (chunkRegion.getRegion().encompasses(blackTeleporterPosition)) {
-                    chunk.setBlock(ChunkMath.calcBlockPos(blackTeleporterPosition), blackDice);
+                    chunk.setBlock(ChunkMath.calcBlockPos(blackTeleporterPosition), BLACK_DICE);
                 }
             }
+
             for (Vector3i redTeleporterPosition : redTeleporterRegion) {
                 //set down the teleporter at every square in the designated region
                 if (chunkRegion.getRegion().encompasses(redTeleporterPosition)) {
-                    chunk.setBlock(ChunkMath.calcBlockPos(redTeleporterPosition), redDice);
+                    chunk.setBlock(ChunkMath.calcBlockPos(redTeleporterPosition), RED_DICE);
                 }
             }
         }
     }
-
 }
