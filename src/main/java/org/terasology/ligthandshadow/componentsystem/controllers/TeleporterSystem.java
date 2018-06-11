@@ -47,11 +47,13 @@ public class TeleporterSystem extends BaseComponentSystem {
         * and teleported to that base */
         if (teleporterTeamComponent.team.equals(teleporterTeamComponent.RED)) {
             playerTeamComponent.team = teleporterTeamComponent.team;
+            player.saveComponent(playerTeamComponent);
             player.send(new CharacterTeleportEvent(new Vector3f(RED_TELEPORT_DESTINATION)));
         }
 
         if (teleporterTeamComponent.team.equals(teleporterTeamComponent.BLACK)) {
             playerTeamComponent.team = teleporterTeamComponent.team;
+            player.saveComponent(playerTeamComponent);
             player.send(new CharacterTeleportEvent(new Vector3f(BLACK_TELEPORT_DESTINATION)));
         }
     }
