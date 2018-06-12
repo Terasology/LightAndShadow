@@ -30,13 +30,6 @@ public class LaSSpawner implements Spawner {
 
     @Override
     public Vector3f getSpawnPosition(World world, EntityRef clientEntity) {
-        ClientComponent clientComponent = clientEntity.getComponent(ClientComponent.class);
-        EntityRef clientInfo = clientComponent.clientInfo;
-        LASTeam teamComponent = clientInfo.getComponent(LASTeam.class);
-
-        if (teamComponent != null) {
-            return null;
-        }
         return new Vector3f(0, 65, 0);
     }
 
