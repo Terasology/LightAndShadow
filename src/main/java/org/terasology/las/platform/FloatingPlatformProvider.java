@@ -17,7 +17,9 @@
 package org.terasology.las.platform;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.math.Region3i;
 import org.terasology.math.geom.Rect2i;
+import org.terasology.math.geom.Vector3i;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.ConfigurableFacetProvider;
 import org.terasology.world.generation.FacetProviderPlugin;
@@ -34,11 +36,13 @@ import java.util.Collections;
 @RegisterPlugin
 @Produces(FloatingPlatformFacet.class)
 public class FloatingPlatformProvider implements ConfigurableFacetProvider, FacetProviderPlugin {
+    private static final Region3i RED_TELEPORTER_REGION = Region3i.createFromMinMax(new Vector3i(4, 61, 24),new Vector3i(4, 61, 24));
+    private static final Region3i BLACK_TELEPORTER_REGION = Region3i.createFromMinMax(new Vector3i(-4, 61, 24),new Vector3i(-4, 61, 24));
 
     private Config configuration = new Config();
 
     private Collection<FloatingPlatform> fixedPlatforms = Collections.singleton(
-            new FloatingPlatform(Rect2i.createFromMinAndMax(-14, -28, 14, 28), 60));
+            new FloatingPlatform(Rect2i.createFromMinAndMax(-14, -28, 14, 28), 60, RED_TELEPORTER_REGION, BLACK_TELEPORTER_REGION));
 
     @Override
     public void process(GeneratingRegion region) {

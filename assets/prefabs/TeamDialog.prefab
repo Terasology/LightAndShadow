@@ -6,32 +6,11 @@
                 "id": "main",
                 "title": "Welcome",
                 "paragraphText": [
-                    "Welcome to Light &amp; Shadow, ${player.name}! What's your favorite color?"
+                    "Welcome to Light &amp; Shadow, ${player.name}! It is time for you to choose a side in this battle. Approach a teleporter and activate it to join that side in a fight for victory."
                 ],
                 "responses": [
                     {
-                        "text": "That's BLACK!",
-                        "action": {
-                            "type": "NewDialogAction",
-                            "target": "blackColor"
-                        }
-                    },
-                    {
-                        "text": "That's WHITE!",
-                        "action": {
-                            "type": "NewDialogAction",
-                            "target": "whiteColor"
-                        }
-                    },
-                    {
-                        "text": "Can't you see? It's obviously ${player.color}!",
-                        "action": {
-                            "type": "NewDialogAction",
-                            "target": "myColor"
-                        }
-                    },
-                    {
-                        "text": "I need to leave now ..",
+                        "text": "Very well..",
                         "action": {
                             "type": "CloseDialogAction"
                         }
