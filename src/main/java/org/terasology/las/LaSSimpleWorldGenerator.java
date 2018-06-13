@@ -16,7 +16,6 @@
 package org.terasology.las;
 
 import org.terasology.cities.BlockTheme;
-import org.terasology.cities.SettlementEntityProvider;
 import org.terasology.engine.SimpleUri;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.logic.spawner.Spawner;
@@ -28,8 +27,6 @@ import org.terasology.world.generator.RegisterWorldGenerator;
 import org.terasology.world.generator.plugin.WorldGeneratorPluginLibrary;
 import org.terasology.las.platform.FloatingPlatformProvider;
 import org.terasology.las.platform.FloatingPlatformRasterizer;
-import org.terasology.logic.spawner.Spawner;
-import org.terasology.registry.CoreRegistry;
 import org.terasology.world.generation.WorldBuilder;
 import org.terasology.core.world.generator.facetProviders.SeaLevelProvider;
 import org.terasology.las.bases.BaseProvider;

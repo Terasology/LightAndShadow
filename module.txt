@@ -17,5 +17,5 @@
     ],
     "isServerSideOnly" : false,
     "isGameplay" : "true",
-    "defaultWorldGenerator" : "LightAndShadow:LaSWorldGenerator"
+    "defaultWorldGenerator" : "LightAndShadow:LaSSimpleWorld"
 }
