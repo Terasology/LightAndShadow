@@ -1,0 +1,19 @@
+{
+    "type": "ScoreHud",
+    "contents": {
+        "type": "relativeLayout",
+        "contents": [
+            {
+                "type": "UIText",
+                 "id": "scoreArea",
+                 "text": "",
+                  "layoutInfo": {
+                      "use-content-width": true,
+                      "use-content-height": true,
+                      "position-horizontal-center": {},
+                      "width": 275
+                  }
+            }
+        ]
+    }
+}
