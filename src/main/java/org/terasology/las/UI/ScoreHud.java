@@ -16,24 +16,44 @@
 package org.terasology.las.UI;
 
 import org.terasology.engine.Time;
+import org.terasology.entitySystem.entity.EntityManager;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.ligthandshadow.componentsystem.components.ScoreComponent;
+import org.terasology.logic.health.HealthComponent;
+import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
+import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.layers.hud.CoreHudWidget;
 import org.terasology.rendering.nui.widgets.UIText;
 
 public class ScoreHud extends CoreHudWidget {
-    public int redScore;
-    public int blackScore;
+    @In
+    private EntityManager entityManager;
 
     private UIText scoreArea;
-
-    @In
-    private Time time;
+    private EntityRef scoreEntity;
+    private ScoreComponent score;
 
     @Override
     public void initialise() {
-        scoreArea = find("scoreArea", UIText.class);
-        String scoreText = "Red Team: " + redScore + "        " +
-                "Black Team: " + blackScore;
-        scoreArea.setText(String.format(scoreText));
+        for (EntityRef entity : entityManager.getEntitiesWith(ScoreComponent.class)) {
+            scoreEntity = entity;
+            score = scoreEntity.getComponent(ScoreComponent.class);
+        }
+        if (!scoreEntity.equals(EntityRef.NULL)) {
+            scoreArea = find("scoreArea", UIText.class);
+            scoreArea.bindText(new ReadOnlyBinding<String>() {
+                @Override
+                public String get() {
+                    return String.valueOf(score.blackScore);
+                }
+            });
+        }
+
+//        String scoreText = "Red Team: " + redScore + "        " +
+//                "Black Team: " + blackScore;
+//        scoreArea.setText(String.format(scoreText));
     }
+
+
 }

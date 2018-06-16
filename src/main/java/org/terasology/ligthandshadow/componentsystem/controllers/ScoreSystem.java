@@ -17,6 +17,7 @@ package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -24,6 +25,7 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.components.FlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeam;
+import org.terasology.ligthandshadow.componentsystem.components.ScoreComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.common.ActivateEvent;
@@ -42,14 +44,23 @@ public class ScoreSystem extends BaseComponentSystem {
     @In
     private NUIManager nuiManager;
 
-    private int redScore;
-    private int blackScore;
-    private String scoreScreenURI = "ScoreHud";
-    HUDScreenLayer scoreScreen;
+    @In
+    private EntityManager entityManager;
+
+    private HUDScreenLayer scoreScreen;
+    private EntityRef score;
+
+
+    @Override
+    public void postBegin() {
+        score = entityManager.create(new ScoreComponent(0, 0));
+        //score.addComponent(new ScoreComponent(0, 0));
+    }
 
     @Override
     public void initialise() {
         // Displays score UI on game start
+        String scoreScreenURI = "ScoreHud";
         nuiManager.getHUD().addHUDElement(scoreScreenURI);
     }
 
@@ -62,11 +73,11 @@ public class ScoreSystem extends BaseComponentSystem {
 
         //check to see if player has other team's flag
         if (baseTeamComponent.team.equals(baseTeamComponent.RED) && heldItem.hasComponent(FlagComponent.class) && heldItem.getComponent(LASTeam.class).team.equals("black")) {
-            redScore++;
+            score.getComponent(ScoreComponent.class).redScore++;
         }
 
         if (baseTeamComponent.team.equals(baseTeamComponent.BLACK) && heldItem.hasComponent(FlagComponent.class) && heldItem.getComponent(LASTeam.class).team.equals("red")) {
-            blackScore++;
+            score.getComponent(ScoreComponent.class).blackScore++;
         }
     }
 }
