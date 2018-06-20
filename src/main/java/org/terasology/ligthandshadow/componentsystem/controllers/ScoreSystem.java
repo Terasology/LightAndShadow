@@ -15,6 +15,7 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.mockito.internal.matchers.Null;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
@@ -63,7 +64,6 @@ public class ScoreSystem extends BaseComponentSystem {
     private int blackScore;
     private UILabel blackScoreArea;
     private UILabel redScoreArea;
-    boolean hasItem;
 
     @Override
     public void postBegin() {
@@ -91,13 +91,12 @@ public class ScoreSystem extends BaseComponentSystem {
         nuiManager.getHUD().addHUDElement("ScoreHud");
     }
 
-    @ReceiveEvent(components = {WinConditionCheckOnActivateComponent.class})
+    @ReceiveEvent(components = {WinConditionCheckOnActivateComponent.class, LASTeam.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
         LASTeam baseTeamComponent = entity.getComponent(LASTeam.class);
         EntityRef player = event.getInstigator();
         CharacterHeldItemComponent characterHeldItemComponent = player.getComponent(CharacterHeldItemComponent.class);
         EntityRef heldItem = characterHeldItemComponent.selectedItem;
-        hasItem = heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equalsIgnoreCase("LightAndShadowResources:RedFlag");
 
         //check to see if player has other team's flag
         if (baseTeamComponent.team.equals(baseTeamComponent.RED) && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString()
