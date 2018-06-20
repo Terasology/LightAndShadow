@@ -62,6 +62,7 @@ public class ScoreSystem extends BaseComponentSystem {
     private int redScore;
     private int blackScore;
     private UILabel blackScoreArea;
+    private UILabel redScoreArea;
     boolean hasItem;
 
     @Override
@@ -75,6 +76,13 @@ public class ScoreSystem extends BaseComponentSystem {
                 return String.valueOf(blackScore);
             }
         });
+        redScoreArea = scoreScreen.find("redScoreArea", UILabel.class);
+        redScoreArea.bindText(new ReadOnlyBinding<String>() {
+            @Override
+            public String get() {
+                return String.valueOf(redScore);
+            }
+        });
     }
 
     @Override
@@ -84,7 +92,6 @@ public class ScoreSystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent(components = {WinConditionCheckOnActivateComponent.class})
-
     public void onActivate(ActivateEvent event, EntityRef entity) {
         LASTeam baseTeamComponent = entity.getComponent(LASTeam.class);
         EntityRef player = event.getInstigator();

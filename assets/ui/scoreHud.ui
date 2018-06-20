@@ -34,6 +34,33 @@
                                                 "target": "RIGHT"
                                             }
                                         }
+                                    },
+{
+                                        "type": "UILabel",
+                                        "id": "redScoreLabel",
+                                        "text": "Red Score: ",
+                                        "layoutInfo": {
+                                            "use-content-width": true,
+                                            "height": 30,
+                                            "position-left": {
+                                                "widget": "blackScoreArea",
+                                                "target": "RIGHT",
+                                                "offset": 45
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "type": "UILabel",
+                                        "text": "0",
+                                        "id": "redScoreArea",
+                                        "layoutInfo": {
+                                            "use-content-width": true,
+                                            "height": 30,
+                                            "position-left": {
+                                                "widget": "redScoreLabel",
+                                                "target": "RIGHT"
+                                            }
+                                        }
                                     }
                                 ]
                         }
