@@ -20,9 +20,4 @@ import org.terasology.entitySystem.Component;
 public class ScoreComponent implements Component {
     public int redScore;
     public int blackScore;
-
-    public ScoreComponent(int redScore, int blackScore) {
-        this.redScore = redScore;
-        this.blackScore = blackScore;
-    }
 }

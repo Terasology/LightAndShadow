@@ -27,6 +27,7 @@ import org.terasology.rendering.nui.layers.hud.CoreHudWidget;
 import org.terasology.rendering.nui.widgets.UIText;
 
 public class ScoreHud extends CoreHudWidget {
+
     @In
     private EntityManager entityManager;
 
@@ -36,24 +37,6 @@ public class ScoreHud extends CoreHudWidget {
 
     @Override
     public void initialise() {
-        for (EntityRef entity : entityManager.getEntitiesWith(ScoreComponent.class)) {
-            scoreEntity = entity;
-            score = scoreEntity.getComponent(ScoreComponent.class);
-        }
-        if (!scoreEntity.equals(EntityRef.NULL)) {
-            scoreArea = find("scoreArea", UIText.class);
-            scoreArea.bindText(new ReadOnlyBinding<String>() {
-                @Override
-                public String get() {
-                    return String.valueOf(score.blackScore);
-                }
-            });
-        }
 
-//        String scoreText = "Red Team: " + redScore + "        " +
-//                "Black Team: " + blackScore;
-//        scoreArea.setText(String.format(scoreText));
     }
-
-
 }
