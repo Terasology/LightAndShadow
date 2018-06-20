@@ -15,14 +15,10 @@
  */
 package org.terasology.las.UI;
 
-import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.ligthandshadow.componentsystem.components.ScoreComponent;
-import org.terasology.logic.health.HealthComponent;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
-import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.layers.hud.CoreHudWidget;
 import org.terasology.rendering.nui.widgets.UIText;
 

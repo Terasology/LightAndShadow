@@ -44,7 +44,7 @@ public class TeleporterSystem extends BaseComponentSystem {
         LASTeam playerTeamComponent = player.getComponent(LASTeam.class);
 
         /* Depending on which teleporter the player chooses, they are set to that team
-        * and teleported to that base */
+         * and teleported to that base */
         if (teleporterTeamComponent.team.equals(teleporterTeamComponent.RED)) {
             playerTeamComponent.team = teleporterTeamComponent.team;
             player.saveComponent(playerTeamComponent);

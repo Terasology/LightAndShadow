@@ -17,10 +17,8 @@
 package org.terasology.las;
 
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.ligthandshadow.componentsystem.components.LASTeam;
 import org.terasology.logic.spawner.Spawner;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.network.ClientComponent;
 import org.terasology.world.generation.World;
 
 /**

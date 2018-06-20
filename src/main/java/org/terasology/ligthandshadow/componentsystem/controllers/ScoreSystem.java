@@ -15,34 +15,24 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.mockito.internal.matchers.Null;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.las.UI.ScoreHud;
-import org.terasology.ligthandshadow.componentsystem.components.FlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeam;
-import org.terasology.ligthandshadow.componentsystem.components.ScoreComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.common.ActivateEvent;
-import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.math.geom.Quat4f;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.ControlWidget;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
-import org.terasology.rendering.nui.layers.hud.CoreHudWidget;
-import org.terasology.rendering.nui.layers.hud.HUDScreenLayer;
 import org.terasology.rendering.nui.widgets.UILabel;
-import org.terasology.rendering.nui.widgets.UIText;
 import org.terasology.world.block.items.BlockItemComponent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
@@ -96,17 +86,19 @@ public class ScoreSystem extends BaseComponentSystem {
         LASTeam baseTeamComponent = entity.getComponent(LASTeam.class);
         EntityRef player = event.getInstigator();
         CharacterHeldItemComponent characterHeldItemComponent = player.getComponent(CharacterHeldItemComponent.class);
-        EntityRef heldItem = characterHeldItemComponent.selectedItem;
+        if (characterHeldItemComponent != null) {
+            EntityRef heldItem = characterHeldItemComponent.selectedItem;
 
-        //check to see if player has other team's flag
-        if (baseTeamComponent.team.equals(baseTeamComponent.RED) && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString()
-                .equalsIgnoreCase("LightAndShadowResources:BlackFlag")) {
-            redScore++;
-        }
+            //check to see if player has other team's flag
+            if (baseTeamComponent.team.equals(baseTeamComponent.RED) && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString()
+                    .equalsIgnoreCase("LightAndShadowResources:BlackFlag")) {
+                redScore++;
+            }
 
-        if (baseTeamComponent.team.equals(baseTeamComponent.BLACK) && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString()
-                .equalsIgnoreCase("LightAndShadowResources:RedFlag")) {
-            blackScore++;
+            if (baseTeamComponent.team.equals(baseTeamComponent.BLACK) && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString()
+                    .equalsIgnoreCase("LightAndShadowResources:RedFlag")) {
+                blackScore++;
+            }
         }
     }
 }

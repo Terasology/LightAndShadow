@@ -55,7 +55,7 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
         //toggleDome();
     }
 
-    @Command( shortDescription = "Activate/Deactivate dome barrier", helpText = "Activates or deactivates the dome barrier around the world", runOnServer = true )
+    @Command(shortDescription = "Activate/Deactivate dome barrier", helpText = "Activates or deactivates the dome barrier around the world", runOnServer = true)
     public String dome() {
         toggleDome();
         return "Toggled dome.";
@@ -114,8 +114,8 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
                 if (lastPos.length() > WORLD_RADIUS && lastPos.length() > pos.length() && distance < WORLD_RADIUS) {
 //                    logger.info("Sending player back outside");
                     Vector3f impulse = pos.normalize();
-                    float verticalDiff = TeraMath.sqrt(TeraMath.fastAbs(TeraMath.sqr(lastPos.getY())-TeraMath.sqr(domeVerticalTop.getY())));
-                    float impulseY = (TeraMath.fastAbs(verticalDiff)/(float)WORLD_RADIUS)*3f;
+                    float verticalDiff = TeraMath.sqrt(TeraMath.fastAbs(TeraMath.sqr(lastPos.getY()) - TeraMath.sqr(domeVerticalTop.getY())));
+                    float impulseY = (TeraMath.fastAbs(verticalDiff) / (float) WORLD_RADIUS) * 3f;
 
                     impulse.set(impulse.scale(64)).addY(impulseY);
                     player.send(new CharacterImpulseEvent(impulse));
