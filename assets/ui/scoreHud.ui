@@ -3,17 +3,41 @@
     "contents": {
         "type": "relativeLayout",
         "contents": [
-            {
-                "type": "UIText",
-                 "id": "scoreArea",
-                 "text": "",
-                  "layoutInfo": {
-                      "use-content-width": true,
-                      "use-content-height": true,
-                      "position-horizontal-center": {},
-                      "width": 275
-                  }
-            }
-        ]
+                    {
+                        "type": "UIBox",
+                        "layoutInfo": {
+                            "width": 300,
+                            "height": 50,
+                            "position-horizontal-center": {}
+                        },
+                        "content": {
+                            "type": "relativeLayout",
+                                "contents": [
+                                {
+                                        "type": "UILabel",
+                                        "id": "blackScoreLabel",
+                                        "text": "Black Score: ",
+                                        "layoutInfo": {
+                                            "use-content-width": true,
+                                            "height": 30
+                                        }
+                                    },
+                                    {
+                                        "type": "UILabel",
+                                        "text": "0",
+                                        "id": "blackScoreArea",
+                                        "layoutInfo": {
+                                            "use-content-width": true,
+                                            "height": 30,
+                                            "position-left": {
+                                                "widget": "blackScoreLabel",
+                                                "target": "RIGHT"
+                                            }
+                                        }
+                                    }
+                                ]
+                        }
+                    }
+                ]
     }
 }
