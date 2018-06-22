@@ -23,7 +23,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.ligthandshadow.componentsystem.components.LASTeam;
+import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.common.ActivateEvent;
@@ -50,8 +50,8 @@ public class ScoreSystem extends BaseComponentSystem {
 
     private ControlWidget scoreScreen;
     private EntityRef score;
-    private int redScore;
-    private int blackScore;
+    private int redScore = 0;
+    private int blackScore = 0;
     private UILabel blackScoreArea;
     private UILabel redScoreArea;
 
@@ -81,9 +81,9 @@ public class ScoreSystem extends BaseComponentSystem {
         nuiManager.getHUD().addHUDElement("ScoreHud");
     }
 
-    @ReceiveEvent(components = {WinConditionCheckOnActivateComponent.class, LASTeam.class})
+    @ReceiveEvent(components = {WinConditionCheckOnActivateComponent.class, LASTeamComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
-        LASTeam baseTeamComponent = entity.getComponent(LASTeam.class);
+        LASTeamComponent baseTeamComponent = entity.getComponent(LASTeamComponent.class);
         EntityRef player = event.getInstigator();
         CharacterHeldItemComponent characterHeldItemComponent = player.getComponent(CharacterHeldItemComponent.class);
         if (characterHeldItemComponent != null) {
