@@ -17,6 +17,7 @@ package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -26,10 +27,18 @@ import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent
 import org.terasology.ligthandshadow.componentsystem.components.SetTeamOnActivateComponent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.common.ActivateEvent;
+import org.terasology.logic.inventory.InventoryAuthoritySystem;
+import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.math.geom.Vector3f;
+import org.terasology.registry.In;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TeleporterSystem extends BaseComponentSystem {
+    @In
+    InventoryManager inventoryManager;
+
+    @In
+    EntityManager entityManager;
 
     private static final Logger logger = LoggerFactory.getLogger(TeleporterSystem.class);
 
@@ -49,12 +58,14 @@ public class TeleporterSystem extends BaseComponentSystem {
             playerTeamComponent.team = teleporterTeamComponent.team;
             player.saveComponent(playerTeamComponent);
             player.send(new CharacterTeleportEvent(new Vector3f(RED_TELEPORT_DESTINATION)));
+            inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create("LightAndShadowResources:magicStaff"));
         }
 
         if (teleporterTeamComponent.team.equals(teleporterTeamComponent.BLACK)) {
             playerTeamComponent.team = teleporterTeamComponent.team;
             player.saveComponent(playerTeamComponent);
             player.send(new CharacterTeleportEvent(new Vector3f(BLACK_TELEPORT_DESTINATION)));
+            inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create("LightAndShadowResources:magicStaff"));
         }
     }
 }
