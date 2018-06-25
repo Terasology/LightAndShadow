@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.terasology.entitySystem.entity.EntityManager;
@@ -21,13 +22,16 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.ligthandshadow.componentsystem.components.RaycastOnActivateComponent;
 import org.terasology.logic.common.ActivateEvent;
+import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.logic.inventory.InventoryUtils;
 import org.terasology.logic.players.LocalPlayer;
+import org.terasology.logic.players.PlayerCharacterComponent;
+import org.terasology.math.geom.Vector3f;
+import org.terasology.physics.CollisionGroup;
 import org.terasology.physics.HitResult;
 import org.terasology.physics.Physics;
+import org.terasology.physics.StandardCollisionGroup;
 import org.terasology.registry.In;
-import org.terasology.world.block.items.BlockItemComponent;
 
 public class AttackSystem extends BaseComponentSystem {
     @In
@@ -42,20 +46,26 @@ public class AttackSystem extends BaseComponentSystem {
     @In
     private LocalPlayer localPlayer;
 
+    private CollisionGroup filter = StandardCollisionGroup.ALL;
+
     @ReceiveEvent(components = {RaycastOnActivateComponent.class})
-    public void onActivate(ActivateEvent event, EntityRef entity) {
-//        EntityRef player = event.getInstigator();
-//        EntityRef opponent = EntityRef.NULL;
-//
-//        // Shoot a raycast
-           // HitResult result;
-            //result = physicsRenderer.rayTrace(position, dir, plazMasterComponent.maxDistance, filter);
-//
-//
-//        // If raycast hits another player and another player has flag, make player drop flag
-//        int flagSlot = inventoryManager.findSlotWithItem(opponent, entityManager.create("LightAndShadowResources:RedFlag"));
-//        if (raycast.hits && flagSlot != -1) {
-//            inventoryManager.removeItem(opponent, opponent, flagSlot, false, 1);
-//        }
+    public void onActivate(ActivateEvent event, EntityRef entity, RaycastOnActivateComponent raycastOnActivateComponent) {
+        // Shoot a raycast
+        Vector3f dir;
+        Vector3f position = new Vector3f(event.getOrigin());
+        dir = new Vector3f(event.getDirection());
+        HitResult result;
+        result = physicsRenderer.rayTrace(position, dir, 100f, filter);
+        EntityRef hitEntity = result.getEntity();
+
+        // If raycast hits another player and another player has flag, make player drop flag
+        if (hitEntity.hasComponent(PlayerCharacterComponent.class) && hitEntity.hasComponent(InventoryComponent.class)) {
+            int flagSlot = inventoryManager.findSlotWithItem(hitEntity, entityManager.create("LightAndShadowResources:RedFlag"));
+            // If hit person has flag
+            if (flagSlot != -1) {
+                inventoryManager.removeItem(hitEntity, EntityRef.NULL, flagSlot, false, 1);
+            }
+        }
+
     }
 }
