@@ -63,7 +63,7 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
 
         EntityRef flagTaker = event.getInstigator();
         LASTeamComponent playerTeamComponent = flagTaker.getComponent(LASTeamComponent.class);
-        //if the flag being taken is a red flag and the player is on the black team, let them take the flag
+        // If the flag being taken is a red flag and the player is on the black team, let them take the flag
         if (flagTeamComponent.team.equals(flagTeamComponent.RED) && playerTeamComponent.team.equals(playerTeamComponent.BLACK)) {
             inventoryManager.giveItem(flagTaker, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily("LightAndShadowResources:redFlag")));
             worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
