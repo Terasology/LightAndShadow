@@ -16,38 +16,33 @@
 
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.terasology.entitySystem.entity.EntityBuilder;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
-import org.terasology.ligthandshadow.componentsystem.components.RaycastComponent;
+import org.terasology.entitySystem.systems.RegisterMode;
+import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.ligthandshadow.componentsystem.components.FlagDropOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.components.RaycastOnActivateComponent;
-import org.terasology.logic.characters.GazeMountPointComponent;
+import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.common.ActivateEvent;
-import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.logic.inventory.InventoryUtils;
-import org.terasology.logic.inventory.events.DropItemEvent;
 import org.terasology.logic.inventory.events.DropItemRequest;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.logic.players.PlayerCharacterComponent;
-import org.terasology.math.geom.Quat4f;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.physics.CollisionGroup;
-import org.terasology.physics.HitResult;
 import org.terasology.physics.Physics;
 import org.terasology.physics.StandardCollisionGroup;
-import org.terasology.physics.events.ImpulseEvent;
 import org.terasology.registry.In;
-import org.terasology.utilities.Assets;
+import org.terasology.world.block.items.BlockItemComponent;
 
-public class AttackSystem extends BaseComponentSystem implements UpdateSubscriberSystem {
+@RegisterSystem(RegisterMode.AUTHORITY)
+public class AttackSystem extends BaseComponentSystem {
+    private static final String BLACK_FLAG_URI = "LightAndShadowResources:blackFlag";
+    private static final String RED_FLAG_URI = "LightAndShadowResources:redFlag";
     @In
     InventoryManager inventoryManager;
 
@@ -60,55 +55,31 @@ public class AttackSystem extends BaseComponentSystem implements UpdateSubscribe
     @In
     private LocalPlayer localPlayer;
 
-
-
     private CollisionGroup filter = StandardCollisionGroup.ALL;
 
-    @Override
-    public void update(float delta) {
-        for (EntityRef projectile : entityManager.getEntitiesWith(RaycastComponent.class)) {
-            LocationComponent location = projectile.getComponent(LocationComponent.class);
-            RaycastComponent shot = projectile.getComponent(RaycastComponent.class);
+    @ReceiveEvent(components = {FlagDropOnActivateComponent.class})
+    public void onActivate(ActivateEvent event, EntityRef entity) {
+        // Entity refers to the thing being activated (in this case the other player)
+        EntityRef attackingPlayer = event.getInstigator(); // The player using the staff
 
-            location.setWorldPosition(location.getWorldPosition().add(location.getWorldDirection().mul(shot.velocity)));
-            projectile.saveComponent(location);
-        }
-    }
+        // If the attacking player is holding the magic staff when activating
+        if (attackingPlayer.getComponent(CharacterHeldItemComponent.class).selectedItem.hasComponent(RaycastOnActivateComponent.class)) {
 
-    @ReceiveEvent(components = {RaycastOnActivateComponent.class})
-    public void onActivate(ActivateEvent event, EntityRef entity, RaycastOnActivateComponent raycastOnActivateComponent) {
-        // Shoot a raycast
-        Vector3f target = event.getHitNormal();
-        Vector3i blockPos = new Vector3i(target);
-
-        Vector3f position = new Vector3f(event.getOrigin());
-        Vector3f dir = new Vector3f(event.getDirection());
-
-        HitResult result;
-        result = physicsRenderer.rayTrace(position, dir, 50, filter);
-
-        EntityBuilder builder = entityManager.newBuilder("Core:defaultBlockParticles");
-        builder.getComponent(LocationComponent.class).setWorldPosition(target);
-        builder.build();
-        EntityRef hitEntity = result.getEntity();
-
-        // If raycast hits another player and another player has flag, make player drop flag
-        if (hitEntity.hasComponent(PlayerCharacterComponent.class) && hitEntity.hasComponent(InventoryComponent.class)) {
-            int flagSlot = inventoryManager.findSlotWithItem(hitEntity, entityManager.create("LightAndShadowResources:redFlag"));
-
-             //If hit person has flag
-            if (flagSlot != -1) {
-                EntityRef flag = InventoryUtils.getItemAt(hitEntity, flagSlot);
-                Vector3f direction = localPlayer.getViewDirection();
-                Vector3f newPosition = new Vector3f(position.x + direction.x * 1.5f,
-                        position.y + direction.y * 1.5f,
-                        position.z + direction.z * 1.5f
-                );
-                Vector3f impulseVector = new Vector3f(direction);
-                hitEntity.send(new DropItemRequest(flag, hitEntity, impulseVector, newPosition));
-//                inventoryManager.removeItem(hitEntity, EntityRef.NULL, flagSlot, false, 1);
+            // If raycast hits another player and another player has flag, make player drop flag
+            if (entity.hasComponent(PlayerCharacterComponent.class) && entity.hasComponent(CharacterHeldItemComponent.class)) {
+                CharacterHeldItemComponent characterHeldItemComponent = entity.getComponent(CharacterHeldItemComponent.class);
+                EntityRef heldItem = characterHeldItemComponent.selectedItem;
+                if (heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(BLACK_FLAG_URI)) {
+                    Vector3f position = new Vector3f(attackingPlayer.getComponent(LocationComponent.class).getLocalPosition());
+                    Vector3f direction = localPlayer.getViewDirection();
+                    Vector3f newPosition = new Vector3f(position.x + direction.x * 1.5f,
+                            position.y + direction.y * 1.5f,
+                            position.z + direction.z * 1.5f
+                    );
+                    Vector3f impulseVector = new Vector3f(direction);
+                    entity.send(new DropItemRequest(heldItem, entity, impulseVector, newPosition));
+                }
             }
         }
-
     }
 }
