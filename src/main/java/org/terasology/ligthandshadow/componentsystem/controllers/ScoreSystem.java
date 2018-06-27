@@ -38,6 +38,8 @@ import org.terasology.world.block.items.BlockItemComponent;
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class ScoreSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(ScoreSystem.class);
+    private static final String BLACK_FLAG_URI = "LightAndShadowResources:blackFlag";
+    private static final String RED_FLAG_URI = "LightAndShadowResources:redFlag";
 
     @In
     private InventoryManager inventoryManager;
@@ -48,25 +50,22 @@ public class ScoreSystem extends BaseComponentSystem {
     @In
     private EntityManager entityManager;
 
-    private ControlWidget scoreScreen;
     private EntityRef score;
     private int redScore = 0;
     private int blackScore = 0;
-    private UILabel blackScoreArea;
-    private UILabel redScoreArea;
 
     @Override
     public void postBegin() {
         // Sets score screen bindings
-        scoreScreen = nuiManager.getHUD().getHUDElement("LightAndShadow:ScoreHud");
-        blackScoreArea = scoreScreen.find("blackScoreArea", UILabel.class);
+        ControlWidget scoreScreen = nuiManager.getHUD().getHUDElement("LightAndShadow:ScoreHud");
+        UILabel blackScoreArea = scoreScreen.find("blackScoreArea", UILabel.class);
         blackScoreArea.bindText(new ReadOnlyBinding<String>() {
             @Override
             public String get() {
                 return String.valueOf(blackScore);
             }
         });
-        redScoreArea = scoreScreen.find("redScoreArea", UILabel.class);
+        UILabel redScoreArea = scoreScreen.find("redScoreArea", UILabel.class);
         redScoreArea.bindText(new ReadOnlyBinding<String>() {
             @Override
             public String get() {
@@ -89,14 +88,14 @@ public class ScoreSystem extends BaseComponentSystem {
         if (characterHeldItemComponent != null) {
             EntityRef heldItem = characterHeldItemComponent.selectedItem;
 
-            //check to see if player has other team's flag
-            if (baseTeamComponent.team.equals(baseTeamComponent.RED) && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString()
-                    .equalsIgnoreCase("LightAndShadowResources:BlackFlag")) {
+            // Check to see if player has other team's flag
+            if (baseTeamComponent.team.equals(baseTeamComponent.RED)
+                    && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(BLACK_FLAG_URI)) {
                 redScore++;
             }
 
-            if (baseTeamComponent.team.equals(baseTeamComponent.BLACK) && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString()
-                    .equalsIgnoreCase("LightAndShadowResources:RedFlag")) {
+            if (baseTeamComponent.team.equals(baseTeamComponent.BLACK)
+                    && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(RED_FLAG_URI)) {
                 blackScore++;
             }
         }
