@@ -17,16 +17,16 @@ package org.terasology.ligthandshadow.componentsystem.components;
 
 import org.terasology.entitySystem.Component;
 
-public final class LASTeam implements Component {
+public final class LASTeamComponent implements Component {
     public static final String RED = "red";
     public static final String BLACK = "black";
 
     public String team;
 
-    public LASTeam() {
+    public LASTeamComponent() {
     }
 
-    public LASTeam(String team) {
+    public LASTeamComponent(String team) {
         this.team = team;
     }
 

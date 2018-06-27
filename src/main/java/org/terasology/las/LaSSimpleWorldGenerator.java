@@ -16,22 +16,22 @@
 package org.terasology.las;
 
 import org.terasology.cities.BlockTheme;
+import org.terasology.cities.DefaultBlockType;
+import org.terasology.core.world.generator.facetProviders.SeaLevelProvider;
 import org.terasology.engine.SimpleUri;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.las.bases.BaseProvider;
+import org.terasology.las.bases.BaseRasterizer;
+import org.terasology.las.platform.FloatingPlatformProvider;
+import org.terasology.las.platform.FloatingPlatformRasterizer;
 import org.terasology.logic.spawner.Spawner;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.generation.BaseFacetedWorldGenerator;
+import org.terasology.world.generation.WorldBuilder;
 import org.terasology.world.generator.RegisterWorldGenerator;
 import org.terasology.world.generator.plugin.WorldGeneratorPluginLibrary;
-import org.terasology.las.platform.FloatingPlatformProvider;
-import org.terasology.las.platform.FloatingPlatformRasterizer;
-import org.terasology.world.generation.WorldBuilder;
-import org.terasology.core.world.generator.facetProviders.SeaLevelProvider;
-import org.terasology.las.bases.BaseProvider;
-import org.terasology.las.bases.BaseRasterizer;
-import org.terasology.cities.DefaultBlockType;
 
 @RegisterWorldGenerator(id = "LaSSimpleWorld", displayName = "Light and Shadow (Simple)")
 public class LaSSimpleWorldGenerator extends BaseFacetedWorldGenerator {

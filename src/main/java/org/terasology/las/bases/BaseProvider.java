@@ -18,13 +18,14 @@ package org.terasology.las.bases;
 import com.google.common.collect.ImmutableSet;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.world.generation.facets.SurfaceHeightFacet;
+import org.terasology.world.generation.Border3D;
+import org.terasology.world.generation.Facet;
+import org.terasology.world.generation.FacetProvider;
+import org.terasology.world.generation.GeneratingRegion;
 import org.terasology.world.generation.Produces;
 import org.terasology.world.generation.Requires;
-import org.terasology.world.generation.Facet;
-import org.terasology.world.generation.GeneratingRegion;
-import org.terasology.world.generation.Border3D;
-import org.terasology.world.generation.FacetProvider;
+import org.terasology.world.generation.facets.SurfaceHeightFacet;
+
 import java.util.Collection;
 
 @Produces(BaseFacet.class)

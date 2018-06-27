@@ -22,7 +22,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.ligthandshadow.componentsystem.components.LASTeam;
+import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.SetTeamOnActivateComponent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.common.ActivateEvent;
@@ -39,12 +39,12 @@ public class TeleporterSystem extends BaseComponentSystem {
 
     @ReceiveEvent(components = {SetTeamOnActivateComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
-        LASTeam teleporterTeamComponent = entity.getComponent(LASTeam.class);
+        LASTeamComponent teleporterTeamComponent = entity.getComponent(LASTeamComponent.class);
         EntityRef player = event.getInstigator();
-        LASTeam playerTeamComponent = player.getComponent(LASTeam.class);
+        LASTeamComponent playerTeamComponent = player.getComponent(LASTeamComponent.class);
 
         /* Depending on which teleporter the player chooses, they are set to that team
-        * and teleported to that base */
+         * and teleported to that base */
         if (teleporterTeamComponent.team.equals(teleporterTeamComponent.RED)) {
             playerTeamComponent.team = teleporterTeamComponent.team;
             player.saveComponent(playerTeamComponent);

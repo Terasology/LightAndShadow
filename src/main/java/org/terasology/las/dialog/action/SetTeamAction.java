@@ -18,7 +18,7 @@ package org.terasology.las.dialog.action;
 
 import org.terasology.dialogs.action.PlayerAction;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.ligthandshadow.componentsystem.components.LASTeam;
+import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.logic.characters.CharacterComponent;
 import org.terasology.network.ClientComponent;
 
@@ -39,7 +39,7 @@ public class SetTeamAction implements PlayerAction {
         ClientComponent clientComponent = controller.getComponent(ClientComponent.class);
         EntityRef clientInfo = clientComponent.clientInfo;
 
-        clientInfo.addComponent(new LASTeam(team));
+        clientInfo.addComponent(new LASTeamComponent(team));
     }
 
     public String getTeam() {

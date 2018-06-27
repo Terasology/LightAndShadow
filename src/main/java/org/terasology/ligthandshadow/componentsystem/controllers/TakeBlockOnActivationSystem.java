@@ -23,7 +23,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.ligthandshadow.componentsystem.components.LASTeam;
+import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.TakeBlockOnActivateComponent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryAuthoritySystem;
@@ -58,12 +58,12 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
         inventoryManager = new InventoryAuthoritySystem();
 
         BlockComponent blockComponent = entity.getComponent(BlockComponent.class);
-        LASTeam flagTeamComponent = entity.getComponent(LASTeam.class);
+        LASTeamComponent flagTeamComponent = entity.getComponent(LASTeamComponent.class);
 
 
         EntityRef flagTaker = event.getInstigator();
-        LASTeam playerTeamComponent = flagTaker.getComponent(LASTeam.class);
-        //if the flag being taken is a red flag and the player is on the black team, let them take the flag
+        LASTeamComponent playerTeamComponent = flagTaker.getComponent(LASTeamComponent.class);
+        // If the flag being taken is a red flag and the player is on the black team, let them take the flag
         if (flagTeamComponent.team.equals(flagTeamComponent.RED) && playerTeamComponent.team.equals(playerTeamComponent.BLACK)) {
             inventoryManager.giveItem(flagTaker, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily("LightAndShadowResources:redFlag")));
             worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));

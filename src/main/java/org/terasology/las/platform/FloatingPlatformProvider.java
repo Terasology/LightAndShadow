@@ -36,8 +36,8 @@ import java.util.Collections;
 @RegisterPlugin
 @Produces(FloatingPlatformFacet.class)
 public class FloatingPlatformProvider implements ConfigurableFacetProvider, FacetProviderPlugin {
-    private static final Region3i RED_TELEPORTER_REGION = Region3i.createFromMinMax(new Vector3i(4, 61, 24),new Vector3i(4, 61, 24));
-    private static final Region3i BLACK_TELEPORTER_REGION = Region3i.createFromMinMax(new Vector3i(-4, 61, 24),new Vector3i(-4, 61, 24));
+    private static final Region3i RED_TELEPORTER_REGION = Region3i.createFromMinMax(new Vector3i(4, 61, 24), new Vector3i(4, 61, 24));
+    private static final Region3i BLACK_TELEPORTER_REGION = Region3i.createFromMinMax(new Vector3i(-4, 61, 24), new Vector3i(-4, 61, 24));
 
     private Config configuration = new Config();
 

@@ -24,7 +24,7 @@ import org.terasology.entitySystem.entity.lifecycleEvents.BeforeRemoveComponent;
 import org.terasology.entitySystem.entity.lifecycleEvents.OnActivatedComponent;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.ligthandshadow.componentsystem.components.LASTeam;
+import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.logic.characters.events.OnEnterBlockEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
@@ -53,7 +53,7 @@ public class EnemySystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void onActivated(OnActivatedComponent event, EntityRef entityRef, LASTeam team, LocationComponent locationComponent) {
+    public void onActivated(OnActivatedComponent event, EntityRef entityRef, LASTeamComponent team, LocationComponent locationComponent) {
         logger.info("activated " + entityRef + " " + team.team);
         Set<EntityRef> teamEntities = teams.get(team.team);
         if (teamEntities == null) {
@@ -69,7 +69,7 @@ public class EnemySystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void onRemoved(BeforeRemoveComponent event, EntityRef entityRef, LASTeam team, LocationComponent locationComponent, WorkTargetComponent jobTargetComponent) {
+    public void onRemoved(BeforeRemoveComponent event, EntityRef entityRef, LASTeamComponent team, LocationComponent locationComponent, WorkTargetComponent jobTargetComponent) {
         logger.info("removed " + entityRef + " " + team.team);
         entities.remove(entityRef);
         Set<EntityRef> map = teams.get(team.team);
@@ -77,7 +77,7 @@ public class EnemySystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void onBlockChange(OnEnterBlockEvent event, EntityRef entityRef, LASTeam team) {
+    public void onBlockChange(OnEnterBlockEvent event, EntityRef entityRef, LASTeamComponent team) {
         if (entities.contains(entityRef)) {
 //            recalculateDistances();
         }
