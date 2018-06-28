@@ -69,7 +69,8 @@ public class AttackSystem extends BaseComponentSystem {
             if (entity.hasComponent(PlayerCharacterComponent.class) && entity.hasComponent(CharacterHeldItemComponent.class)) {
                 CharacterHeldItemComponent characterHeldItemComponent = entity.getComponent(CharacterHeldItemComponent.class);
                 EntityRef heldItem = characterHeldItemComponent.selectedItem;
-                if (heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(BLACK_FLAG_URI)) {
+                if (heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(BLACK_FLAG_URI)
+                        || heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(RED_FLAG_URI)) {
                     Vector3f position = new Vector3f(attackingPlayer.getComponent(LocationComponent.class).getLocalPosition());
                     Vector3f direction = localPlayer.getViewDirection();
                     Vector3f newPosition = new Vector3f(position.x + direction.x * 1.5f,
