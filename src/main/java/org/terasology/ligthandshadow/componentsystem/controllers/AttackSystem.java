@@ -22,6 +22,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.FlagDropOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.components.RaycastOnActivateComponent;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
@@ -41,8 +42,8 @@ import org.terasology.world.block.items.BlockItemComponent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class AttackSystem extends BaseComponentSystem {
-    private static final String BLACK_FLAG_URI = "LightAndShadowResources:blackFlag";
-    private static final String RED_FLAG_URI = "LightAndShadowResources:redFlag";
+    private static final float NEW_DIRECTION_MODIFIER = 1.5f;
+
     @In
     InventoryManager inventoryManager;
 
@@ -69,13 +70,13 @@ public class AttackSystem extends BaseComponentSystem {
             if (entity.hasComponent(PlayerCharacterComponent.class) && entity.hasComponent(CharacterHeldItemComponent.class)) {
                 CharacterHeldItemComponent characterHeldItemComponent = entity.getComponent(CharacterHeldItemComponent.class);
                 EntityRef heldItem = characterHeldItemComponent.selectedItem;
-                if (heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(BLACK_FLAG_URI)
-                        || heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(RED_FLAG_URI)) {
+                if (heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI)
+                        || heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.RED_FLAG_URI)) {
                     Vector3f position = new Vector3f(attackingPlayer.getComponent(LocationComponent.class).getLocalPosition());
                     Vector3f direction = localPlayer.getViewDirection();
-                    Vector3f newPosition = new Vector3f(position.x + direction.x * 1.5f,
-                            position.y + direction.y * 1.5f,
-                            position.z + direction.z * 1.5f
+                    Vector3f newPosition = new Vector3f(position.x + direction.x * NEW_DIRECTION_MODIFIER,
+                            position.y + direction.y * NEW_DIRECTION_MODIFIER,
+                            position.z + direction.z * NEW_DIRECTION_MODIFIER
                     );
                     Vector3f impulseVector = new Vector3f(direction);
                     entity.send(new DropItemRequest(heldItem, entity, impulseVector, newPosition));

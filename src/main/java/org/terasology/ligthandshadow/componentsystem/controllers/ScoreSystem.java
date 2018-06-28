@@ -23,6 +23,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
@@ -38,8 +39,6 @@ import org.terasology.world.block.items.BlockItemComponent;
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class ScoreSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(ScoreSystem.class);
-    private static final String BLACK_FLAG_URI = "LightAndShadowResources:blackFlag";
-    private static final String RED_FLAG_URI = "LightAndShadowResources:redFlag";
 
     @In
     private InventoryManager inventoryManager;
@@ -89,13 +88,13 @@ public class ScoreSystem extends BaseComponentSystem {
             EntityRef heldItem = characterHeldItemComponent.selectedItem;
 
             // Check to see if player has other team's flag
-            if (baseTeamComponent.team.equals(baseTeamComponent.RED)
-                    && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(BLACK_FLAG_URI)) {
+            if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)
+                    && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI)) {
                 redScore++;
             }
 
-            if (baseTeamComponent.team.equals(baseTeamComponent.BLACK)
-                    && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(RED_FLAG_URI)) {
+            if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)
+                    && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.RED_FLAG_URI)) {
                 blackScore++;
             }
         }

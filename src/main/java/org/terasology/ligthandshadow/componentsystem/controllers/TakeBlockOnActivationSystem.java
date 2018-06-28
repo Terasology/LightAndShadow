@@ -23,6 +23,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.TakeBlockOnActivateComponent;
 import org.terasology.logic.common.ActivateEvent;
@@ -64,13 +65,13 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
         EntityRef flagTaker = event.getInstigator();
         LASTeamComponent playerTeamComponent = flagTaker.getComponent(LASTeamComponent.class);
         // If the flag being taken is a red flag and the player is on the black team, let them take the flag
-        if (flagTeamComponent.team.equals(flagTeamComponent.RED) && playerTeamComponent.team.equals(playerTeamComponent.BLACK)) {
-            inventoryManager.giveItem(flagTaker, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily("LightAndShadowResources:redFlag")));
+        if (flagTeamComponent.team.equals(LASUtils.RED_TEAM) && playerTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
+            inventoryManager.giveItem(flagTaker, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.RED_FLAG_URI)));
             worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
             entity.destroy();
         }
-        if (flagTeamComponent.team.equals(flagTeamComponent.BLACK) && playerTeamComponent.team.equals(playerTeamComponent.RED)) {
-            inventoryManager.giveItem(flagTaker, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily("LightAndShadowResources:blackFlag")));
+        if (flagTeamComponent.team.equals(LASUtils.BLACK_TEAM) && playerTeamComponent.team.equals(LASUtils.RED_TEAM)) {
+            inventoryManager.giveItem(flagTaker, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.BLACK_FLAG_URI)));
             worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
             entity.destroy();
         }
