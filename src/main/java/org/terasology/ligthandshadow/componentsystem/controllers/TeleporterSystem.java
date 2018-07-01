@@ -37,14 +37,10 @@ import org.terasology.registry.In;
 public class TeleporterSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(TeleporterSystem.class);
     private static final String MAGIC_STAFF_URI = "LightAndShadowResources:magicStaff";
-
     @In
     InventoryManager inventoryManager;
-
     @In
     EntityManager entityManager;
-
-
 
     // The position near the team's base that player will be teleported to on choosing a team
     private static final Vector3f RED_TELEPORT_DESTINATION = new Vector3f(29, 12, 0);
@@ -63,6 +59,7 @@ public class TeleporterSystem extends BaseComponentSystem {
             player.saveComponent(playerTeamComponent);
             player.send(new CharacterTeleportEvent(new Vector3f(RED_TELEPORT_DESTINATION)));
             inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(MAGIC_STAFF_URI));
+            return;
         }
 
         if (teleporterTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
@@ -70,6 +67,7 @@ public class TeleporterSystem extends BaseComponentSystem {
             player.saveComponent(playerTeamComponent);
             player.send(new CharacterTeleportEvent(new Vector3f(BLACK_TELEPORT_DESTINATION)));
             inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(MAGIC_STAFF_URI));
+            return;
         }
     }
 }
