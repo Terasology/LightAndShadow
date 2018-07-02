@@ -27,6 +27,7 @@ import org.terasology.ligthandshadow.componentsystem.components.FlagDropOnActiva
 import org.terasology.ligthandshadow.componentsystem.components.RaycastOnActivateComponent;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.common.ActivateEvent;
+import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.events.DropItemRequest;
@@ -60,14 +61,13 @@ public class AttackSystem extends BaseComponentSystem {
 
         // If the attacking player is holding the magic staff when activating
         if (attackingPlayer.getComponent(CharacterHeldItemComponent.class).selectedItem.hasComponent(RaycastOnActivateComponent.class)) {
-
             // If raycast hits another player and another player has flag, make player drop flag
-            if (entity.hasComponent(PlayerCharacterComponent.class) && entity.hasComponent(CharacterHeldItemComponent.class)) {
-                InventoryComponent inventoryComponent = entity.getComponent(InventoryComponent.class);
-                //EntityRef heldItem = characterHeldItemComponent.selectedItem;
-                for (EntityRef item : inventoryComponent.itemSlots) {
-                    if (item.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI)
-                            || item.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.RED_FLAG_URI)) {
+            if (entity.hasComponent(PlayerCharacterComponent.class)) {
+                int inventorySize = inventoryManager.getNumSlots(entity);
+                for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
+                    EntityRef inventorySlot = inventoryManager.getItemInSlot(entity, slotNumber);
+                    if (inventorySlot.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI)
+                            || inventorySlot.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.RED_FLAG_URI)) {
                         Vector3f position = new Vector3f(attackingPlayer.getComponent(LocationComponent.class).getLocalPosition());
                         Vector3f direction = localPlayer.getViewDirection();
                         Vector3f newPosition = new Vector3f(position.x + direction.x,
@@ -75,7 +75,7 @@ public class AttackSystem extends BaseComponentSystem {
                                 position.z + direction.z
                         );
                         Vector3f impulseVector = new Vector3f(direction);
-                        entity.send(new DropItemRequest(item, entity, impulseVector, newPosition));
+                        entity.send(new DropItemRequest(inventorySlot, entity, impulseVector, newPosition));
                         return;
                     }
                 }
