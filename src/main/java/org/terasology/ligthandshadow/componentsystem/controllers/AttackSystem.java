@@ -42,17 +42,12 @@ import org.terasology.world.block.items.BlockItemComponent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class AttackSystem extends BaseComponentSystem {
-    private static final float NEW_DIRECTION_MODIFIER = 1.5f;
-
     @In
     InventoryManager inventoryManager;
-
     @In
     EntityManager entityManager;
-
     @In
     private Physics physicsRenderer;
-
     @In
     private LocalPlayer localPlayer;
 
@@ -68,18 +63,21 @@ public class AttackSystem extends BaseComponentSystem {
 
             // If raycast hits another player and another player has flag, make player drop flag
             if (entity.hasComponent(PlayerCharacterComponent.class) && entity.hasComponent(CharacterHeldItemComponent.class)) {
-                CharacterHeldItemComponent characterHeldItemComponent = entity.getComponent(CharacterHeldItemComponent.class);
-                EntityRef heldItem = characterHeldItemComponent.selectedItem;
-                if (heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI)
-                        || heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.RED_FLAG_URI)) {
-                    Vector3f position = new Vector3f(attackingPlayer.getComponent(LocationComponent.class).getLocalPosition());
-                    Vector3f direction = localPlayer.getViewDirection();
-                    Vector3f newPosition = new Vector3f(position.x + direction.x * NEW_DIRECTION_MODIFIER,
-                            position.y + direction.y * NEW_DIRECTION_MODIFIER,
-                            position.z + direction.z * NEW_DIRECTION_MODIFIER
-                    );
-                    Vector3f impulseVector = new Vector3f(direction);
-                    entity.send(new DropItemRequest(heldItem, entity, impulseVector, newPosition));
+                InventoryComponent inventoryComponent = entity.getComponent(InventoryComponent.class);
+                //EntityRef heldItem = characterHeldItemComponent.selectedItem;
+                for (EntityRef item : inventoryComponent.itemSlots) {
+                    if (item.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI)
+                            || item.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.RED_FLAG_URI)) {
+                        Vector3f position = new Vector3f(attackingPlayer.getComponent(LocationComponent.class).getLocalPosition());
+                        Vector3f direction = localPlayer.getViewDirection();
+                        Vector3f newPosition = new Vector3f(position.x + direction.x,
+                                position.y + direction.y,
+                                position.z + direction.z
+                        );
+                        Vector3f impulseVector = new Vector3f(direction);
+                        entity.send(new DropItemRequest(item, entity, impulseVector, newPosition));
+                        return;
+                    }
                 }
             }
         }
