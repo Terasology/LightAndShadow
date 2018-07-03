@@ -16,6 +16,7 @@
 package org.terasology.las.bases;
 
 import com.google.common.collect.ImmutableSet;
+import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.world.generation.Border3D;
@@ -37,20 +38,11 @@ public class BaseProvider implements FacetProvider {
      * Base is a square of side 2 * BASE_EXTENT + 1 with the flag at the center
      */
     private static final int BASE_EXTENT = 2;
-    /**
-     * Position of Red base
-     */
-    private static final Vector3i CENTER_RED_BASE_POSITION = new Vector3i(30, 10, 0);
-    /**
-     * Position of Black base
-     */
-    private static final Vector3i CENTER_BLACK_BASE_POSITION = new Vector3i(-30, 10, 0);
+    Region3i redBaseRegion = CreateBaseRegionFromVector(LASUtils.CENTER_RED_BASE_POSITION);
+    Region3i blackBaseRegion = CreateBaseRegionFromVector(LASUtils.CENTER_BLACK_BASE_POSITION);
 
-    Region3i redBaseRegion = CreateBaseRegionFromVector(CENTER_RED_BASE_POSITION);
-    Region3i blackBaseRegion = CreateBaseRegionFromVector(CENTER_BLACK_BASE_POSITION);
-
-    Region3i redFlagRegion = CreateFlagRegionFromVector(CENTER_RED_BASE_POSITION);
-    Region3i blackFlagRegion = CreateFlagRegionFromVector(CENTER_BLACK_BASE_POSITION);
+    Region3i redFlagRegion = CreateFlagRegionFromVector(LASUtils.CENTER_RED_BASE_POSITION);
+    Region3i blackFlagRegion = CreateFlagRegionFromVector(LASUtils.CENTER_BLACK_BASE_POSITION);
 
     private Collection<Base> fixedBases = ImmutableSet.of(
             new Base(redBaseRegion, redFlagRegion),

@@ -15,9 +15,15 @@
  */
 package org.terasology.ligthandshadow.componentsystem;
 
+import org.terasology.math.geom.Vector3i;
+
 public final class LASUtils {
     public static final String BLACK_FLAG_URI = "LightAndShadowResources:blackFlag";
     public static final String RED_FLAG_URI = "LightAndShadowResources:redFlag";
     public static final String RED_TEAM = "red";
     public static final String BLACK_TEAM = "black";
+    /** Position of Red base */
+    public static final Vector3i CENTER_RED_BASE_POSITION = new Vector3i(30, 10, 0);
+    /** Position of Black base */
+    public static final Vector3i CENTER_BLACK_BASE_POSITION = new Vector3i(-30, 10, 0);
 }
