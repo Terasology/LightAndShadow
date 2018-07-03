@@ -29,12 +29,19 @@ import org.terasology.ligthandshadow.componentsystem.components.WinConditionChec
 import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.math.ChunkMath;
+import org.terasology.math.geom.Vector3i;
+import org.terasology.registry.CoreRegistry;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.ControlWidget;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.widgets.UILabel;
+import org.terasology.world.WorldProvider;
+import org.terasology.world.block.Block;
+import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemComponent;
+import org.terasology.world.generation.WorldRasterizer;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class ScoreSystem extends BaseComponentSystem {
@@ -42,12 +49,14 @@ public class ScoreSystem extends BaseComponentSystem {
 
     @In
     private InventoryManager inventoryManager;
-
     @In
     private NUIManager nuiManager;
-
     @In
     private EntityManager entityManager;
+    @In
+    private BlockManager blockManager;
+    @In
+    private WorldProvider worldProvider;
 
     private EntityRef score;
     private int redScore = 0;
@@ -89,13 +98,19 @@ public class ScoreSystem extends BaseComponentSystem {
 
             // Check to see if player has other team's flag
             if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)
+                    && heldItem.hasComponent(BlockItemComponent.class)
                     && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI)) {
                 redScore++;
+                inventoryManager.removeItem(player, player, heldItem, true);
+                worldProvider.setBlock(new Vector3i(LASUtils.CENTER_BLACK_BASE_POSITION.x, LASUtils.CENTER_BLACK_BASE_POSITION.y + 1, LASUtils.CENTER_BLACK_BASE_POSITION.z), blockManager.getBlock(LASUtils.BLACK_FLAG_URI));
             }
 
             if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)
+                    && heldItem.hasComponent(BlockItemComponent.class)
                     && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.RED_FLAG_URI)) {
                 blackScore++;
+                inventoryManager.removeItem(player, player, heldItem, true);
+                worldProvider.setBlock(new Vector3i(LASUtils.CENTER_RED_BASE_POSITION.x, LASUtils.CENTER_RED_BASE_POSITION.y + 1, LASUtils.CENTER_RED_BASE_POSITION.x), blockManager.getBlock(LASUtils.RED_FLAG_URI));
             }
         }
     }
