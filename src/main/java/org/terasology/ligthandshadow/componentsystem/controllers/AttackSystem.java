@@ -22,8 +22,10 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.FlagDropOnActivateComponent;
+import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.RaycastOnActivateComponent;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.common.ActivateEvent;
@@ -33,18 +35,25 @@ import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.math.geom.Vector3f;
+import org.terasology.math.geom.Vector3i;
 import org.terasology.physics.Physics;
 import org.terasology.registry.In;
+import org.terasology.world.WorldProvider;
+import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemComponent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
-public class AttackSystem extends BaseComponentSystem {
+public class AttackSystem extends BaseComponentSystem implements UpdateSubscriberSystem {
     @In
     InventoryManager inventoryManager;
     @In
     EntityManager entityManager;
     @In
     private LocalPlayer localPlayer;
+    @In
+    private WorldProvider worldProvider;
+    @In
+    private BlockManager blockManager;
 
     @ReceiveEvent(components = {FlagDropOnActivateComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
@@ -69,6 +78,41 @@ public class AttackSystem extends BaseComponentSystem {
                             );
                             Vector3f impulseVector = new Vector3f(direction);
                             entity.send(new DropItemRequest(inventorySlot, entity, impulseVector, newPosition));
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void update(float delta) {
+        // Check inventory to see if player ever picks up flag of the same team
+        // If so, move flag back to base
+        if (localPlayer.getCharacterEntity().hasComponent(LASTeamComponent.class)) {
+            // If player team and flag team are the same, return flag to base
+            if (localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team.equals(LASUtils.BLACK_TEAM)) {
+                int inventorySize = inventoryManager.getNumSlots(localPlayer.getCharacterEntity());
+                for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
+                    EntityRef inventorySlot = inventoryManager.getItemInSlot(localPlayer.getCharacterEntity(), slotNumber);
+                    if (inventorySlot.hasComponent(BlockItemComponent.class)) {
+                        if (inventorySlot.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI)) {
+                            inventoryManager.removeItem(localPlayer.getCharacterEntity(), localPlayer.getCharacterEntity(), slotNumber, true, 1);
+                            worldProvider.setBlock(new Vector3i(LASUtils.CENTER_BLACK_BASE_POSITION.x, LASUtils.CENTER_BLACK_BASE_POSITION.y + 1, LASUtils.CENTER_BLACK_BASE_POSITION.z), blockManager.getBlock(LASUtils.BLACK_FLAG_URI));
+                            return;
+                        }
+                    }
+                }
+            }
+            if (localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team.equals(LASUtils.RED_TEAM)) {
+                int inventorySize = inventoryManager.getNumSlots(localPlayer.getCharacterEntity());
+                for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
+                    EntityRef inventorySlot = inventoryManager.getItemInSlot(localPlayer.getCharacterEntity(), slotNumber);
+                    if (inventorySlot.hasComponent(BlockItemComponent.class)) {
+                        if (inventorySlot.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI)) {
+                            inventoryManager.removeItem(localPlayer.getCharacterEntity(), localPlayer.getCharacterEntity(), slotNumber, true, 1);
+                            worldProvider.setBlock(new Vector3i(LASUtils.CENTER_RED_BASE_POSITION.x, LASUtils.CENTER_RED_BASE_POSITION.y + 1, LASUtils.CENTER_RED_BASE_POSITION.z), blockManager.getBlock(LASUtils.RED_FLAG_URI));
                             return;
                         }
                     }
