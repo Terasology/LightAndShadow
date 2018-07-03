@@ -55,8 +55,8 @@ public class AttackSystem extends BaseComponentSystem implements UpdateSubscribe
     @In
     private BlockManager blockManager;
 
-    EntityRef blackFlagSlot;
-    EntityRef redFlagSlot;
+    public EntityRef blackFlagSlot;
+    public EntityRef redFlagSlot;
 
     @ReceiveEvent(components = {FlagDropOnActivateComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
