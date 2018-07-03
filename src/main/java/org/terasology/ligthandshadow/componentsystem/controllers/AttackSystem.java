@@ -27,17 +27,13 @@ import org.terasology.ligthandshadow.componentsystem.components.FlagDropOnActiva
 import org.terasology.ligthandshadow.componentsystem.components.RaycastOnActivateComponent;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.common.ActivateEvent;
-import org.terasology.logic.common.DisplayNameComponent;
-import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.events.DropItemRequest;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.physics.CollisionGroup;
 import org.terasology.physics.Physics;
-import org.terasology.physics.StandardCollisionGroup;
 import org.terasology.registry.In;
 import org.terasology.world.block.items.BlockItemComponent;
 
@@ -48,11 +44,7 @@ public class AttackSystem extends BaseComponentSystem {
     @In
     EntityManager entityManager;
     @In
-    private Physics physicsRenderer;
-    @In
     private LocalPlayer localPlayer;
-
-    private CollisionGroup filter = StandardCollisionGroup.ALL;
 
     @ReceiveEvent(components = {FlagDropOnActivateComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
@@ -66,17 +58,19 @@ public class AttackSystem extends BaseComponentSystem {
                 int inventorySize = inventoryManager.getNumSlots(entity);
                 for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
                     EntityRef inventorySlot = inventoryManager.getItemInSlot(entity, slotNumber);
-                    if (inventorySlot.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI)
-                            || inventorySlot.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.RED_FLAG_URI)) {
-                        Vector3f position = new Vector3f(attackingPlayer.getComponent(LocationComponent.class).getLocalPosition());
-                        Vector3f direction = localPlayer.getViewDirection();
-                        Vector3f newPosition = new Vector3f(position.x + direction.x,
-                                position.y + direction.y,
-                                position.z + direction.z
-                        );
-                        Vector3f impulseVector = new Vector3f(direction);
-                        entity.send(new DropItemRequest(inventorySlot, entity, impulseVector, newPosition));
-                        return;
+                    if (inventorySlot.hasComponent(BlockItemComponent.class)) {
+                        if (inventorySlot.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI)
+                                || inventorySlot.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.RED_FLAG_URI)) {
+                            Vector3f position = new Vector3f(attackingPlayer.getComponent(LocationComponent.class).getLocalPosition());
+                            Vector3f direction = localPlayer.getViewDirection();
+                            Vector3f newPosition = new Vector3f(position.x + direction.x,
+                                    position.y + direction.y,
+                                    position.z + direction.z
+                            );
+                            Vector3f impulseVector = new Vector3f(direction);
+                            entity.send(new DropItemRequest(inventorySlot, entity, impulseVector, newPosition));
+                            return;
+                        }
                     }
                 }
             }
