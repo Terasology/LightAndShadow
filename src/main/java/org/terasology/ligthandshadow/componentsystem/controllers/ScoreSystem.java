@@ -110,7 +110,7 @@ public class ScoreSystem extends BaseComponentSystem {
                     && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.RED_FLAG_URI)) {
                 blackScore++;
                 inventoryManager.removeItem(player, player, heldItem, true);
-                worldProvider.setBlock(new Vector3i(LASUtils.CENTER_RED_BASE_POSITION.x, LASUtils.CENTER_RED_BASE_POSITION.y + 1, LASUtils.CENTER_RED_BASE_POSITION.x), blockManager.getBlock(LASUtils.RED_FLAG_URI));
+                worldProvider.setBlock(new Vector3i(LASUtils.CENTER_RED_BASE_POSITION.x, LASUtils.CENTER_RED_BASE_POSITION.y + 1, LASUtils.CENTER_RED_BASE_POSITION.z), blockManager.getBlock(LASUtils.RED_FLAG_URI));
             }
         }
     }
