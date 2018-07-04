@@ -1,3 +1,11 @@
 {
-    "font": "lightAndShadowResources:WickedQueen"
+    "font" : "lightAndShadowResources:WickedQueen",
+    "families" : {
+        "blackText" : {
+            "text-color" : "696969FF"
+        },
+        "redText" : {
+            "text-color" : "FF0000FF"
+        }
+    }
 }
