@@ -61,6 +61,8 @@ public class AttackSystem extends BaseComponentSystem {
     public EntityRef blackFlagSlot;
     public EntityRef redFlagSlot;
 
+    // When player activates another with the magic staff, checks to see if the attacked player has a flag
+    // If so, makes the player drop the flag
     @ReceiveEvent(components = {FlagDropOnActivateComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
         // Entity refers to the thing being activated (in this case the other player)
@@ -88,11 +90,11 @@ public class AttackSystem extends BaseComponentSystem {
         }
     }
 
+    // Checks to see if player picks up flag of the same team
+    // If so, moves flag back to base
     @ReceiveEvent
     public void onInventorySlotChanged(InventorySlotChangedEvent event, EntityRef entity) {
-        // Check inventory to see if player picks up flag of the same team
-        // If so, move flag back to base
-        EntityRef playerEntity = localPlayer.getCharacterEntity();
+        EntityRef playerEntity = entity;
         EntityRef item = event.getNewItem();
         if (playerEntity.hasComponent(LASTeamComponent.class) && item.hasComponent(BlockItemComponent.class)) {
             // If player team and flag team are the same, return flag to base
