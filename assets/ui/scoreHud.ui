@@ -1,5 +1,6 @@
 {
     "type": "ScoreHud",
+    "skin": "ScoreSkin",
     "contents": {
         "type": "relativeLayout",
         "contents": [
@@ -7,8 +8,9 @@
                 "type": "UIBox",
                 "layoutInfo": {
                     "width": 300,
-                    "height": 50,
-                    "position-horizontal-center": {}
+                    "height": 100,
+                    "position-horizontal-center": {},
+                    "offset": 20
                 },
                 "content": {
                     "type": "relativeLayout",
@@ -19,7 +21,7 @@
                             "text": "Black Score: ",
                             "layoutInfo": {
                                 "use-content-width": true,
-                                "height": 30
+                                "height": 60
                             }
                         },
                         {
@@ -28,7 +30,7 @@
                             "id": "blackScoreArea",
                             "layoutInfo": {
                                 "use-content-width": true,
-                                "height": 30,
+                                "height": 60,
                                 "position-left": {
                                     "widget": "blackScoreLabel",
                                     "target": "RIGHT"
@@ -41,7 +43,7 @@
                             "text": "Red Score: ",
                             "layoutInfo": {
                                 "use-content-width": true,
-                                "height": 30,
+                                "height": 60,
                                 "position-left": {
                                     "widget": "blackScoreArea",
                                     "target": "RIGHT",
@@ -55,7 +57,7 @@
                             "id": "redScoreArea",
                             "layoutInfo": {
                                 "use-content-width": true,
-                                "height": 30,
+                                "height": 60,
                                 "position-left": {
                                     "widget": "redScoreLabel",
                                     "target": "RIGHT"
