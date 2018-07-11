@@ -26,4 +26,11 @@ public final class LASUtils {
     public static final Vector3i CENTER_RED_BASE_POSITION = new Vector3i(30, 10, 0);
     /** Position of Black base */
     public static final Vector3i CENTER_BLACK_BASE_POSITION = new Vector3i(-30, 10, 0);
+    public static final String BLACK_BASE_STONE = "LightAndShadowResources:blackBaseStone";
+    public static final String RED_BASE_STONE = "LightAndShadowResources:redBaseStone";
+    /**
+     * Determines size of base
+     * Base is a square of side 2 * BASE_EXTENT + 1 with the flag at the center
+     */
+    public static final int BASE_EXTENT = 2;
 }

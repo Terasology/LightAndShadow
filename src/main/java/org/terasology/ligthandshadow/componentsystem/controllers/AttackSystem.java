@@ -24,9 +24,12 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
+import org.terasology.ligthandshadow.componentsystem.components.BlackFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.FlagDropOnActivateComponent;
+import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.RaycastOnActivateComponent;
+import org.terasology.ligthandshadow.componentsystem.components.RedFlagComponent;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
@@ -58,72 +61,72 @@ public class AttackSystem extends BaseComponentSystem {
     @In
     private BlockManager blockManager;
 
-    public EntityRef blackFlagSlot;
-    public EntityRef redFlagSlot;
+    private EntityRef flagSlot;
 
-    // When player activates another with the magic staff, checks to see if the attacked player has a flag
-    // If so, makes the player drop the flag
-    @ReceiveEvent(components = {FlagDropOnActivateComponent.class})
+
+    @ReceiveEvent(components = {FlagDropOnActivateComponent.class, PlayerCharacterComponent.class, HasFlagComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
-        // Entity refers to the thing being activated (in this case the other player)
-        EntityRef attackingPlayer = event.getInstigator(); // The player using the staff
+        dropFlagOnPlayerAttack(event, entity);
+    }
 
-        // If the attacking player is holding the magic staff when activating
-        if (attackingPlayer.getComponent(CharacterHeldItemComponent.class).selectedItem.hasComponent(RaycastOnActivateComponent.class)) {
-            // If raycast hits another player and another player has flag, make player drop flag
-            if (entity.hasComponent(PlayerCharacterComponent.class)) {
-                blackFlagSlot = searchInventoryForFlag(entity, LASUtils.BLACK_FLAG_URI);
-                if (blackFlagSlot != EntityRef.NULL) {
-                    Vector3f position = new Vector3f(entity.getComponent(LocationComponent.class).getLocalPosition());
-                    Vector3f impulseVector = new Vector3f(attackingPlayer.getComponent(LocationComponent.class).getLocalPosition());
-                    entity.send(new DropItemRequest(blackFlagSlot, entity, impulseVector, position));
+    /** When player activates another with the magic staff, checks to see if the attacked player has a flag
+     * If so, makes the player drop the flag
+     * targetPlayer is player being attacked */
+    private void dropFlagOnPlayerAttack(ActivateEvent event, EntityRef targetPlayer) {
+        EntityRef attackingPlayer = event.getInstigator(); // The player using the staff to attack
+        if (canPlayerAttack(attackingPlayer)) {
+            if (targetPlayer.hasComponent(PlayerCharacterComponent.class) && targetPlayer.hasComponent(HasFlagComponent.class)) {
+                // If the target player has the black flag
+                if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
+                    dropFlag(targetPlayer, attackingPlayer, LASUtils.BLACK_FLAG_URI);
                     return;
                 }
-                redFlagSlot = searchInventoryForFlag(entity, LASUtils.RED_FLAG_URI);
-                if (redFlagSlot != EntityRef.NULL) {
-                    Vector3f position = new Vector3f(entity.getComponent(LocationComponent.class).getLocalPosition());
-                    Vector3f impulseVector = new Vector3f(attackingPlayer.getComponent(LocationComponent.class).getLocalPosition());
-                    entity.send(new DropItemRequest(redFlagSlot, entity, impulseVector, position));
+                if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
+                    dropFlag(targetPlayer, attackingPlayer, LASUtils.RED_FLAG_URI);
                     return;
                 }
             }
         }
+    }
+
+    private void dropFlag(EntityRef targetPlayer, EntityRef attackingPlayer, String flagTeam) {
+        int inventorySize = inventoryManager.getNumSlots(targetPlayer);
+        for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
+            EntityRef inventorySlot = inventoryManager.getItemInSlot(targetPlayer, slotNumber);
+            if (inventorySlot.hasComponent(BlockItemComponent.class)) {
+                if (inventorySlot.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(flagTeam)) {
+                    flagSlot = inventorySlot;
+                }
+            }
+        }
+        Vector3f position = new Vector3f(targetPlayer.getComponent(LocationComponent.class).getLocalPosition());
+        Vector3f impulseVector = new Vector3f(attackingPlayer.getComponent(LocationComponent.class).getLocalPosition());
+        targetPlayer.send(new DropItemRequest(flagSlot, targetPlayer, impulseVector, position));
+    }
+
+    private boolean canPlayerAttack(EntityRef attackingPlayer) {
+        if (!attackingPlayer.hasComponent(CharacterHeldItemComponent.class)) {
+            return false;
+        }
+        EntityRef heldItem = attackingPlayer.getComponent(CharacterHeldItemComponent.class).selectedItem;
+        return heldItem.hasComponent(RaycastOnActivateComponent.class);
     }
 
     // Checks to see if player picks up flag of the same team
     // If so, moves flag back to base
-    @ReceiveEvent
+    @ReceiveEvent(components = {LASTeamComponent.class})
     public void onInventorySlotChanged(InventorySlotChangedEvent event, EntityRef entity) {
         EntityRef playerEntity = entity;
         EntityRef item = event.getNewItem();
-        if (playerEntity.hasComponent(LASTeamComponent.class) && item.hasComponent(BlockItemComponent.class)) {
-            // If player team and flag team are the same, return flag to base
-            if (item.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.RED_FLAG_URI)
-                    && playerEntity.getComponent(LASTeamComponent.class).team.equals(LASUtils.RED_TEAM)) {
-                worldProvider.setBlock(new Vector3i(LASUtils.CENTER_RED_BASE_POSITION.x, LASUtils.CENTER_RED_BASE_POSITION.y + 1, LASUtils.CENTER_RED_BASE_POSITION.z), blockManager.getBlock(LASUtils.RED_FLAG_URI));
-                inventoryManager.removeItem(playerEntity, EntityRef.NULL, item, true, 1);
-                return;
-            }
-            if (item.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI)
-                    && playerEntity.getComponent(LASTeamComponent.class).team.equals(LASUtils.BLACK_TEAM)) {
-                worldProvider.setBlock(new Vector3i(LASUtils.CENTER_BLACK_BASE_POSITION.x, LASUtils.CENTER_BLACK_BASE_POSITION.y + 1, LASUtils.CENTER_BLACK_BASE_POSITION.z), blockManager.getBlock(LASUtils.BLACK_FLAG_URI));
-                inventoryManager.removeItem(playerEntity, EntityRef.NULL, item, true, 1);
-                return;
-            }
+        if (item.hasComponent(BlackFlagComponent.class)) { //&& playerEntity.getComponent(LASTeamComponent.class).team.equals(LASUtils.BLACK_TEAM)
+            worldProvider.setBlock(new Vector3i(LASUtils.CENTER_BLACK_BASE_POSITION.x, LASUtils.CENTER_BLACK_BASE_POSITION.y + 1, LASUtils.CENTER_BLACK_BASE_POSITION.z), blockManager.getBlock(LASUtils.BLACK_FLAG_URI));
+            inventoryManager.removeItem(playerEntity, EntityRef.NULL, item, true, 1);
+            return;
         }
-    }
-
-    /** Returns entityRef of item in inventory */
-    public EntityRef searchInventoryForFlag(EntityRef entity, String flagTeam) {
-        int inventorySize = inventoryManager.getNumSlots(entity);
-        for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
-            EntityRef inventorySlot = inventoryManager.getItemInSlot(entity, slotNumber);
-            if (inventorySlot.hasComponent(BlockItemComponent.class)) {
-                if (inventorySlot.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(flagTeam)) {
-                    return inventorySlot;
-                }
-            }
+        if (item.hasComponent(RedFlagComponent.class) && playerEntity.getComponent(LASTeamComponent.class).team.equals(LASUtils.RED_TEAM)) {
+            worldProvider.setBlock(new Vector3i(LASUtils.CENTER_RED_BASE_POSITION.x, LASUtils.CENTER_RED_BASE_POSITION.y + 1, LASUtils.CENTER_RED_BASE_POSITION.z), blockManager.getBlock(LASUtils.RED_FLAG_URI));
+            inventoryManager.removeItem(playerEntity, EntityRef.NULL, item, true, 1);
+            return;
         }
-        return EntityRef.NULL;
     }
 }

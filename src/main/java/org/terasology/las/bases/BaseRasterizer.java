@@ -27,9 +27,6 @@ import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
 
 public class BaseRasterizer implements WorldRasterizer {
-    private static final String BLACK_BASE_STONE_URI = "LightAndShadowResources:blackBaseStone";
-    private static final String RED_BASE_STONE_URI = "LightAndShadowResources:redBaseStone";
-
     private Block blackBaseStone;
     private Block redBaseStone;
     private Block redFlag;
@@ -38,8 +35,8 @@ public class BaseRasterizer implements WorldRasterizer {
 
     @Override
     public void initialize() {
-        blackBaseStone = CoreRegistry.get(BlockManager.class).getBlock(BLACK_BASE_STONE_URI);
-        redBaseStone = CoreRegistry.get(BlockManager.class).getBlock(RED_BASE_STONE_URI);
+        blackBaseStone = CoreRegistry.get(BlockManager.class).getBlock(LASUtils.BLACK_BASE_STONE);
+        redBaseStone = CoreRegistry.get(BlockManager.class).getBlock(LASUtils.RED_BASE_STONE);
         redFlag = CoreRegistry.get(BlockManager.class).getBlock(LASUtils.RED_FLAG_URI);
         blackFlag = CoreRegistry.get(BlockManager.class).getBlock(LASUtils.BLACK_FLAG_URI);
     }

@@ -33,11 +33,6 @@ import java.util.Collection;
 @Requires(@Facet(SurfaceHeightFacet.class))
 
 public class BaseProvider implements FacetProvider {
-    /**
-     * Determines size of base
-     * Base is a square of side 2 * BASE_EXTENT + 1 with the flag at the center
-     */
-    private static final int BASE_EXTENT = 2;
     Region3i redBaseRegion = CreateBaseRegionFromVector(LASUtils.CENTER_RED_BASE_POSITION);
     Region3i blackBaseRegion = CreateBaseRegionFromVector(LASUtils.CENTER_BLACK_BASE_POSITION);
 
@@ -64,7 +59,7 @@ public class BaseProvider implements FacetProvider {
     }
 
     private Region3i CreateBaseRegionFromVector(Vector3i centerBasePosition) {
-        return Region3i.createFromMinMax(new Vector3i(centerBasePosition.x() - BASE_EXTENT, centerBasePosition.y(), centerBasePosition.z() - BASE_EXTENT), new Vector3i(centerBasePosition.x() + BASE_EXTENT, centerBasePosition.y(), centerBasePosition.z() + BASE_EXTENT));
+        return Region3i.createFromMinMax(new Vector3i(centerBasePosition.x() - LASUtils.BASE_EXTENT, centerBasePosition.y(), centerBasePosition.z() - LASUtils.BASE_EXTENT), new Vector3i(centerBasePosition.x() + LASUtils.BASE_EXTENT, centerBasePosition.y(), centerBasePosition.z() + LASUtils.BASE_EXTENT));
     }
 
     private Region3i CreateFlagRegionFromVector(Vector3i centerBasePosition) {
