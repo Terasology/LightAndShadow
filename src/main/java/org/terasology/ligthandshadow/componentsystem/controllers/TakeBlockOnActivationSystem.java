@@ -66,15 +66,13 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
         LASTeamComponent playerTeamComponent = flagTaker.getComponent(LASTeamComponent.class);
         // If the flag being taken is a red flag and the player is on the black team, let them take the flag
         if (flagTeamComponent.team.equals(LASUtils.RED_TEAM) && playerTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
-            flagTaker.addComponent(new HasFlagComponent());
-            flagTaker.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM);
+            flagTaker.addComponent(new HasFlagComponent(LASUtils.RED_TEAM));
             inventoryManager.giveItem(flagTaker, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.RED_FLAG_URI)));
             worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
             entity.destroy();
         }
         if (flagTeamComponent.team.equals(LASUtils.BLACK_TEAM) && playerTeamComponent.team.equals(LASUtils.RED_TEAM)) {
-            flagTaker.addComponent(new HasFlagComponent());
-            flagTaker.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM);
+            flagTaker.addComponent(new HasFlagComponent(LASUtils.BLACK_TEAM));
             inventoryManager.giveItem(flagTaker, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.BLACK_FLAG_URI)));
             worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
             entity.destroy();

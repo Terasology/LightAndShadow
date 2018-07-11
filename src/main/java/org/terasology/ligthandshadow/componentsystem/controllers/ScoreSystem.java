@@ -90,28 +90,58 @@ public class ScoreSystem extends BaseComponentSystem {
 
     @ReceiveEvent(components = {WinConditionCheckOnActivateComponent.class, LASTeamComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
+        checkAndResetGameOnScore(event, entity);
+    }
+
+    private void checkAndResetGameOnScore(ActivateEvent event, EntityRef entity) {
         LASTeamComponent baseTeamComponent = entity.getComponent(LASTeamComponent.class);
         EntityRef player = event.getInstigator();
-        CharacterHeldItemComponent characterHeldItemComponent = player.getComponent(CharacterHeldItemComponent.class);
-        if (characterHeldItemComponent != null) {
+        if (player.hasComponent(CharacterHeldItemComponent.class)) {
+            CharacterHeldItemComponent characterHeldItemComponent = player.getComponent(CharacterHeldItemComponent.class);
             EntityRef heldItem = characterHeldItemComponent.selectedItem;
-
-            // Check to see if player has other team's flag
-            if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)
-                    && heldItem.hasComponent(BlockItemComponent.class)
-                    && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI)) {
-                redScore++;
-                inventoryManager.removeItem(player, player, heldItem, true);
-                worldProvider.setBlock(new Vector3i(LASUtils.CENTER_BLACK_BASE_POSITION.x, LASUtils.CENTER_BLACK_BASE_POSITION.y + 1, LASUtils.CENTER_BLACK_BASE_POSITION.z), blockManager.getBlock(LASUtils.BLACK_FLAG_URI));
-            }
-
-            if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)
-                    && heldItem.hasComponent(BlockItemComponent.class)
-                    && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.RED_FLAG_URI)) {
-                blackScore++;
-                inventoryManager.removeItem(player, player, heldItem, true);
-                worldProvider.setBlock(new Vector3i(LASUtils.CENTER_RED_BASE_POSITION.x, LASUtils.CENTER_RED_BASE_POSITION.y + 1, LASUtils.CENTER_RED_BASE_POSITION.z), blockManager.getBlock(LASUtils.RED_FLAG_URI));
+            if (checkIfTeamScores(baseTeamComponent, heldItem)) {
+                incrementScore(baseTeamComponent);
+                resetRound(player, baseTeamComponent, heldItem);
             }
         }
+    }
+
+    private boolean checkIfTeamScores(LASTeamComponent baseTeamComponent, EntityRef heldItem) {
+        // Check to see if player has other team's flag
+        if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)
+                && heldItem.hasComponent(BlockItemComponent.class)
+                && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI)) {
+            return true;
+        }
+        if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)
+                && heldItem.hasComponent(BlockItemComponent.class)
+                && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.RED_FLAG_URI)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    private void incrementScore(LASTeamComponent baseTeamComponent) {
+        if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)) {
+            redScore++;
+            return;
+        }
+        if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
+            blackScore++;
+            return;
+        }
+    }
+
+    private void resetRound(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
+        if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)) {
+            inventoryManager.removeItem(player, player, heldItem, true);
+            worldProvider.setBlock(new Vector3i(LASUtils.CENTER_BLACK_BASE_POSITION.x, LASUtils.CENTER_BLACK_BASE_POSITION.y + 1, LASUtils.CENTER_BLACK_BASE_POSITION.z), blockManager.getBlock(LASUtils.BLACK_FLAG_URI));
+        }
+        if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
+            inventoryManager.removeItem(player, player, heldItem, true);
+            worldProvider.setBlock(new Vector3i(LASUtils.CENTER_RED_BASE_POSITION.x, LASUtils.CENTER_RED_BASE_POSITION.y + 1, LASUtils.CENTER_RED_BASE_POSITION.z), blockManager.getBlock(LASUtils.RED_FLAG_URI));
+        }
+
     }
 }

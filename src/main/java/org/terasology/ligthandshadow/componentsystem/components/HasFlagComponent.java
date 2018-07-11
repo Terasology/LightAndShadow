@@ -19,4 +19,11 @@ import org.terasology.entitySystem.Component;
 
 public class HasFlagComponent implements Component {
     public String flag;
+
+    public HasFlagComponent() {
+    }
+
+    public HasFlagComponent(String flag) {
+        this.flag = flag;
+    }
 }
