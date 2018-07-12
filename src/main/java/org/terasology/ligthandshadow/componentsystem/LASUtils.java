@@ -16,8 +16,13 @@
 package org.terasology.ligthandshadow.componentsystem;
 
 import org.terasology.math.geom.Vector3i;
+import org.terasology.registry.In;
+import org.terasology.world.block.BlockManager;
 
 public final class LASUtils {
+    @In
+    private BlockManager blockManager;
+
     public static final String BLACK_FLAG_URI = "LightAndShadowResources:blackFlag";
     public static final String RED_FLAG_URI = "LightAndShadowResources:redFlag";
     public static final String RED_TEAM = "red";
@@ -33,4 +38,24 @@ public final class LASUtils {
      * Base is a square of side 2 * BASE_EXTENT + 1 with the flag at the center
      */
     public static final int BASE_EXTENT = 2;
+
+    public static Vector3i getFlagLocation(String flagTeam) {
+        if (flagTeam.equals(RED_TEAM)) {
+            return (new Vector3i(CENTER_RED_BASE_POSITION.x, CENTER_RED_BASE_POSITION.y + 1, CENTER_RED_BASE_POSITION.z));
+        }
+        if (flagTeam.equals(BLACK_TEAM)) {
+            return (new Vector3i(CENTER_BLACK_BASE_POSITION.x, CENTER_BLACK_BASE_POSITION.y + 1, CENTER_BLACK_BASE_POSITION.z));
+        }
+        return null;
+    }
+
+    public static String getFlagURI(String flagTeam) {
+        if (flagTeam.equals(RED_TEAM)) {
+            return RED_FLAG_URI;
+        }
+        if (flagTeam.equals(BLACK_TEAM)) {
+            return BLACK_FLAG_URI;
+        }
+        return null;
+    }
 }

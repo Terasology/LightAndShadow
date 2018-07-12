@@ -62,6 +62,7 @@ public class AttackSystem extends BaseComponentSystem {
     private BlockManager blockManager;
 
     private EntityRef flagSlot;
+    private EntityRef item;
 
 
     @ReceiveEvent(components = {FlagDropOnActivateComponent.class, PlayerCharacterComponent.class, HasFlagComponent.class})
@@ -117,16 +118,33 @@ public class AttackSystem extends BaseComponentSystem {
     @ReceiveEvent(components = {LASTeamComponent.class})
     public void onInventorySlotChanged(InventorySlotChangedEvent event, EntityRef entity) {
         EntityRef playerEntity = entity;
-        EntityRef item = event.getNewItem();
-        if (item.hasComponent(BlackFlagComponent.class)) { //&& playerEntity.getComponent(LASTeamComponent.class).team.equals(LASUtils.BLACK_TEAM)
-            worldProvider.setBlock(new Vector3i(LASUtils.CENTER_BLACK_BASE_POSITION.x, LASUtils.CENTER_BLACK_BASE_POSITION.y + 1, LASUtils.CENTER_BLACK_BASE_POSITION.z), blockManager.getBlock(LASUtils.BLACK_FLAG_URI));
-            inventoryManager.removeItem(playerEntity, EntityRef.NULL, item, true, 1);
-            return;
+        moveFlagToBaseIfPickedBySameTeamPlayer(event, playerEntity);
+    }
+
+    private void moveFlagToBaseIfPickedBySameTeamPlayer(InventorySlotChangedEvent event, EntityRef playerEntity) {
+        String flagTeam = checkWhichFlagPicked(event);
+        if (flagTeam != null) {
+            if (isPlayerInTeam(flagTeam, playerEntity)) {
+                worldProvider.setBlock(LASUtils.getFlagLocation(flagTeam), blockManager.getBlock(LASUtils.getFlagURI(flagTeam)));
+                inventoryManager.removeItem(playerEntity, EntityRef.NULL, item, true, 1);
+            }
         }
-        if (item.hasComponent(RedFlagComponent.class) && playerEntity.getComponent(LASTeamComponent.class).team.equals(LASUtils.RED_TEAM)) {
-            worldProvider.setBlock(new Vector3i(LASUtils.CENTER_RED_BASE_POSITION.x, LASUtils.CENTER_RED_BASE_POSITION.y + 1, LASUtils.CENTER_RED_BASE_POSITION.z), blockManager.getBlock(LASUtils.RED_FLAG_URI));
-            inventoryManager.removeItem(playerEntity, EntityRef.NULL, item, true, 1);
-            return;
+    }
+
+    private boolean isPlayerInTeam(String flagTeam, EntityRef playerEntity) {
+        return playerEntity.getComponent(LASTeamComponent.class).team.equals(flagTeam);
+    }
+
+    private String checkWhichFlagPicked(InventorySlotChangedEvent event) {
+        item = event.getNewItem();
+        if (item.hasComponent(BlockItemComponent.class)) {
+            if (item.hasComponent(BlackFlagComponent.class)) {
+                return LASUtils.BLACK_TEAM;
+            }
+            if (item.hasComponent(RedFlagComponent.class)) {
+                return LASUtils.RED_TEAM;
+            }
         }
+        return null;
     }
 }
