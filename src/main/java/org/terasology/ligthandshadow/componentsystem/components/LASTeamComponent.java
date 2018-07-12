@@ -18,7 +18,6 @@ package org.terasology.ligthandshadow.componentsystem.components;
 import org.terasology.entitySystem.Component;
 
 public final class LASTeamComponent implements Component {
-
     public String team;
 
     public LASTeamComponent() {
@@ -27,5 +26,4 @@ public final class LASTeamComponent implements Component {
     public LASTeamComponent(String team) {
         this.team = team;
     }
-
 }
