@@ -2,7 +2,7 @@
     "font" : "lightAndShadowResources:WickedQueen",
     "families" : {
         "blackText" : {
-            "text-color" : "696969FF"
+            "text-color" : "000000FF"
         },
         "redText" : {
             "text-color" : "FF0000FF"
