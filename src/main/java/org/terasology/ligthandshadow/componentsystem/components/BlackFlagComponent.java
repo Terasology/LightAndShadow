@@ -16,6 +16,8 @@
 package org.terasology.ligthandshadow.componentsystem.components;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.world.block.items.AddToBlockBasedItem;
 
+@AddToBlockBasedItem
 public class BlackFlagComponent implements Component {
 }
