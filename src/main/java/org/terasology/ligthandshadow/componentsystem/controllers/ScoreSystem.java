@@ -27,22 +27,17 @@ import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
-import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.math.ChunkMath;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.registry.CoreRegistry;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.ControlWidget;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.world.WorldProvider;
-import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemComponent;
-import org.terasology.world.generation.WorldRasterizer;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class ScoreSystem extends BaseComponentSystem {
@@ -60,7 +55,6 @@ public class ScoreSystem extends BaseComponentSystem {
     @In
     private WorldProvider worldProvider;
 
-    private EntityRef score;
     private int redScore = 0;
     private int blackScore = 0;
     private Vector3i basePosition = null;
@@ -101,8 +95,6 @@ public class ScoreSystem extends BaseComponentSystem {
         LASTeamComponent baseTeamComponent = entity.getComponent(LASTeamComponent.class);
         EntityRef player = event.getInstigator();
         if (player.hasComponent(HasFlagComponent.class)) {
-            //CharacterHeldItemComponent characterHeldItemComponent = player.getComponent(CharacterHeldItemComponent.class);
-            //EntityRef heldItem = characterHeldItemComponent.selectedItem;
             if (player.getComponent(LASTeamComponent.class).team.equals(LASUtils.RED_TEAM)) {
                 flag = LASUtils.BLACK_FLAG_URI;
             }
@@ -117,7 +109,6 @@ public class ScoreSystem extends BaseComponentSystem {
                 } else {
                     resetLevel(player, baseTeamComponent, heldFlag);
                 }
-
             }
         }
     }
