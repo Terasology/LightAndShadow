@@ -23,13 +23,16 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.las.UI.ScoreHud;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
+import org.terasology.ligthandshadow.componentsystem.components.ScoreComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.math.geom.Vector3i;
+import org.terasology.protobuf.EntityData;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.ControlWidget;
 import org.terasology.rendering.nui.NUIManager;
@@ -42,7 +45,6 @@ import org.terasology.world.block.items.BlockItemComponent;
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class ScoreSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(ScoreSystem.class);
-    private static final int GOAL_SCORE = 5;
 
     @In
     private InventoryManager inventoryManager;
@@ -63,12 +65,13 @@ public class ScoreSystem extends BaseComponentSystem {
     @Override
     public void postBegin() {
         // Sets score screen bindings
+        entityManager.get
         ControlWidget scoreScreen = nuiManager.getHUD().getHUDElement("LightAndShadow:ScoreHud");
         UILabel blackScoreArea = scoreScreen.find("blackScoreArea", UILabel.class);
         blackScoreArea.bindText(new ReadOnlyBinding<String>() {
             @Override
             public String get() {
-                return String.valueOf(blackScore);
+                return String.valueOf(ScoreHud.ScoreComponent.blackScore);
             }
         });
         UILabel redScoreArea = scoreScreen.find("redScoreArea", UILabel.class);
@@ -104,7 +107,7 @@ public class ScoreSystem extends BaseComponentSystem {
             EntityRef heldFlag = getHeldFlag(player);
             if (checkIfTeamScores(baseTeamComponent, heldFlag)) {
                 incrementScore(baseTeamComponent);
-                if (redScore < GOAL_SCORE && blackScore < GOAL_SCORE) {
+                if (redScore < LASUtils.GOAL_SCORE && blackScore < LASUtils.GOAL_SCORE) {
                     resetRound(player, baseTeamComponent, heldFlag);
                 } else {
                     resetLevel(player, baseTeamComponent, heldFlag);
