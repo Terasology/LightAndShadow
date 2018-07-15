@@ -32,6 +32,9 @@ import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServe
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.math.geom.Vector3i;
+import org.terasology.network.ClientComponent;
+import org.terasology.network.PingSubscriberComponent;
+import org.terasology.network.events.PingFromServerEvent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.rendering.nui.ControlWidget;
@@ -150,15 +153,23 @@ public class ScoreSystem extends BaseComponentSystem {
         if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)) {
             redScore++;
             // Send event to clients to update their Score UI
-            EntityRef client = entityManager.create();
-            client.send(new ScoreUpdateFromServerEvent(LASUtils.RED_TEAM, redScore));
+            if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
+                Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
+                for (EntityRef client : clients) {
+                    client.send(new ScoreUpdateFromServerEvent(LASUtils.RED_TEAM, redScore));
+                }
+            }
             return;
         }
         if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
             blackScore++;
             // Send event to clients to update their Score UI
-            EntityRef client = entityManager.create();
-            client.send(new ScoreUpdateFromServerEvent(LASUtils.BLACK_TEAM, blackScore));
+            if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
+                Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
+                for (EntityRef client : clients) {
+                    client.send(new ScoreUpdateFromServerEvent(LASUtils.BLACK_TEAM, blackScore));
+                }
+            }
             return;
         }
     }
