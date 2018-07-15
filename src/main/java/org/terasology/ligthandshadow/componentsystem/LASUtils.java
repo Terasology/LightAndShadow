@@ -38,6 +38,7 @@ public final class LASUtils {
      * Base is a square of side 2 * BASE_EXTENT + 1 with the flag at the center
      */
     public static final int BASE_EXTENT = 2;
+    public static final int GOAL_SCORE = 5;
 
     public static Vector3i getFlagLocation(String flagTeam) {
         if (flagTeam.equals(RED_TEAM)) {

@@ -26,11 +26,14 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
+import org.terasology.ligthandshadow.componentsystem.components.ScoreComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
+import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
+import org.terasology.registry.Share;
 import org.terasology.rendering.nui.ControlWidget;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
@@ -39,10 +42,12 @@ import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemComponent;
 
+import java.time.Instant;
+
 @RegisterSystem(RegisterMode.AUTHORITY)
+@Share(ScoreSystem.class)
 public class ScoreSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(ScoreSystem.class);
-    private static final int GOAL_SCORE = 5;
 
     @In
     private InventoryManager inventoryManager;
@@ -104,7 +109,7 @@ public class ScoreSystem extends BaseComponentSystem {
             EntityRef heldFlag = getHeldFlag(player);
             if (checkIfTeamScores(baseTeamComponent, heldFlag)) {
                 incrementScore(baseTeamComponent);
-                if (redScore < GOAL_SCORE && blackScore < GOAL_SCORE) {
+                if (redScore < LASUtils.GOAL_SCORE && blackScore < LASUtils.GOAL_SCORE) {
                     resetRound(player, baseTeamComponent, heldFlag);
                 } else {
                     resetLevel(player, baseTeamComponent, heldFlag);
@@ -144,10 +149,16 @@ public class ScoreSystem extends BaseComponentSystem {
     private void incrementScore(LASTeamComponent baseTeamComponent) {
         if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)) {
             redScore++;
+            // Send event to clients to update their Score UI
+            EntityRef client = entityManager.create();
+            client.send(new ScoreUpdateFromServerEvent(LASUtils.RED_TEAM, redScore));
             return;
         }
         if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
             blackScore++;
+            // Send event to clients to update their Score UI
+            EntityRef client = entityManager.create();
+            client.send(new ScoreUpdateFromServerEvent(LASUtils.BLACK_TEAM, blackScore));
             return;
         }
     }
