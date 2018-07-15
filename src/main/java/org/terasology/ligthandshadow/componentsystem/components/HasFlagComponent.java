@@ -17,6 +17,11 @@ package org.terasology.ligthandshadow.componentsystem.components;
 
 import org.terasology.entitySystem.Component;
 
+/**
+ * This is attached to player entities to indicate whether or not they have a
+ * flag in their inventory
+ * String flag indicates the team of the flag being held
+ */
 public class HasFlagComponent implements Component {
     public String flag;
 

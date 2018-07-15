@@ -70,9 +70,11 @@ public class AttackSystem extends BaseComponentSystem {
         dropFlagOnPlayerAttack(event, entity);
     }
 
-    /** When player activates another with the magic staff, checks to see if the attacked player has a flag
+    /**
+     * When player activates another with the magic staff, checks to see if the attacked player has a flag
      * If so, makes the player drop the flag
-     * targetPlayer is player being attacked */
+     * targetPlayer is player being attacked
+     */
     private void dropFlagOnPlayerAttack(ActivateEvent event, EntityRef targetPlayer) {
         EntityRef attackingPlayer = event.getInstigator(); // The player using the staff to attack
         if (canPlayerAttack(attackingPlayer)) {
@@ -113,8 +115,11 @@ public class AttackSystem extends BaseComponentSystem {
         return heldItem.hasComponent(RaycastOnActivateComponent.class);
     }
 
-    // Checks to see if player picks up flag of the same team
-    // If so, moves flag back to base
+    /**
+     * Checks if player picks up flag of the same team.
+     * If so, moves flag back to base
+     */
+
     @ReceiveEvent(components = {LASTeamComponent.class})
     public void onInventorySlotChanged(InventorySlotChangedEvent event, EntityRef entity) {
         EntityRef playerEntity = entity;
