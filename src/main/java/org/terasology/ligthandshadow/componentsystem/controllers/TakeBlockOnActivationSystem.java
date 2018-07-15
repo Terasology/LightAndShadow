@@ -37,7 +37,6 @@ import org.terasology.world.block.BlockComponent;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
 
-
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     @In
