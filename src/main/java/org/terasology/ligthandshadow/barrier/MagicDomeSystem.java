@@ -64,7 +64,6 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
     public void toggleDome() {
 
         if (!entityManager.getEntitiesWith(MagicDome.class).iterator().hasNext()) {
-            logger.info("Spawning magic dome!");
 
             magicDomeEntity = entityManager.create("lightAndShadowResources:magicDome", Vector3f.zero());
             LocationComponent loc = magicDomeEntity.getComponent(LocationComponent.class);

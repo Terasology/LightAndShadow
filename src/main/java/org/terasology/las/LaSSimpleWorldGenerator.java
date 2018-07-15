@@ -37,16 +37,13 @@ import org.terasology.world.generator.plugin.WorldGeneratorPluginLibrary;
 public class LaSSimpleWorldGenerator extends BaseFacetedWorldGenerator {
     @In
     private WorldGeneratorPluginLibrary worldGeneratorPluginLibrary;
-
     @In
     private BlockManager blockManager;
 
     public LaSSimpleWorldGenerator(SimpleUri uri) {
         super(uri);
     }
-
     private final Spawner spawner = new LaSSpawner();
-
     private BlockTheme theme;
 
     @Override

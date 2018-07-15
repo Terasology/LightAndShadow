@@ -15,6 +15,7 @@
  */
 package org.terasology.las.bases;
 
+import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.math.ChunkMath;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
@@ -31,12 +32,13 @@ public class BaseRasterizer implements WorldRasterizer {
     private Block redFlag;
     private Block blackFlag;
 
+
     @Override
     public void initialize() {
-        blackBaseStone = CoreRegistry.get(BlockManager.class).getBlock("LightAndShadowResources:blackBaseStone");
-        redBaseStone = CoreRegistry.get(BlockManager.class).getBlock("LightAndShadowResources:redBaseStone");
-        redFlag = CoreRegistry.get(BlockManager.class).getBlock("LightAndShadowResources:redFlag");
-        blackFlag = CoreRegistry.get(BlockManager.class).getBlock("LightAndShadowResources:blackFlag");
+        blackBaseStone = CoreRegistry.get(BlockManager.class).getBlock(LASUtils.BLACK_BASE_STONE);
+        redBaseStone = CoreRegistry.get(BlockManager.class).getBlock(LASUtils.RED_BASE_STONE);
+        redFlag = CoreRegistry.get(BlockManager.class).getBlock(LASUtils.RED_FLAG_URI);
+        blackFlag = CoreRegistry.get(BlockManager.class).getBlock(LASUtils.BLACK_FLAG_URI);
     }
 
     @Override

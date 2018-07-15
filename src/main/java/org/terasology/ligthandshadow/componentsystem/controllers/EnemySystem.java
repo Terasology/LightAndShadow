@@ -54,7 +54,6 @@ public class EnemySystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void onActivated(OnActivatedComponent event, EntityRef entityRef, LASTeamComponent team, LocationComponent locationComponent) {
-        logger.info("activated " + entityRef + " " + team.team);
         Set<EntityRef> teamEntities = teams.get(team.team);
         if (teamEntities == null) {
             teamEntities = Sets.newHashSet();
@@ -70,7 +69,6 @@ public class EnemySystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void onRemoved(BeforeRemoveComponent event, EntityRef entityRef, LASTeamComponent team, LocationComponent locationComponent, WorkTargetComponent jobTargetComponent) {
-        logger.info("removed " + entityRef + " " + team.team);
         entities.remove(entityRef);
         Set<EntityRef> map = teams.get(team.team);
         map.remove(entityRef);

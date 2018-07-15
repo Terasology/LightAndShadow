@@ -17,21 +17,30 @@ package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.SetTeamOnActivateComponent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.common.ActivateEvent;
+import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.math.geom.Vector3f;
+import org.terasology.registry.In;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
-public class TeleporterSystem extends BaseComponentSystem {
 
+public class TeleporterSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(TeleporterSystem.class);
+    private static final String MAGIC_STAFF_URI = "LightAndShadowResources:magicStaff";
+    @In
+    InventoryManager inventoryManager;
+    @In
+    EntityManager entityManager;
 
     // The position near the team's base that player will be teleported to on choosing a team
     private static final Vector3f RED_TELEPORT_DESTINATION = new Vector3f(29, 12, 0);
@@ -45,16 +54,20 @@ public class TeleporterSystem extends BaseComponentSystem {
 
         /* Depending on which teleporter the player chooses, they are set to that team
          * and teleported to that base */
-        if (teleporterTeamComponent.team.equals(teleporterTeamComponent.RED)) {
+        if (teleporterTeamComponent.team.equals(LASUtils.RED_TEAM)) {
             playerTeamComponent.team = teleporterTeamComponent.team;
             player.saveComponent(playerTeamComponent);
             player.send(new CharacterTeleportEvent(new Vector3f(RED_TELEPORT_DESTINATION)));
+            inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(MAGIC_STAFF_URI));
+            return;
         }
 
-        if (teleporterTeamComponent.team.equals(teleporterTeamComponent.BLACK)) {
+        if (teleporterTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
             playerTeamComponent.team = teleporterTeamComponent.team;
             player.saveComponent(playerTeamComponent);
             player.send(new CharacterTeleportEvent(new Vector3f(BLACK_TELEPORT_DESTINATION)));
+            inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(MAGIC_STAFF_URI));
+            return;
         }
     }
 }

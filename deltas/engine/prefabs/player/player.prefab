@@ -1,5 +1,6 @@
 {
     "LASTeam" : {
         "team" : "white"
-    }
+    },
+    "FlagDropOnActivate" : {}
 }
