@@ -35,8 +35,6 @@ public class ClientScoreSystem extends BaseComponentSystem {
     private NUIManager nuiManager;
     @In
     private LocalPlayer localPlayer;
-    @In
-    private ScoreSystem scoreSystem;
 
     private int redScore = 0;
     private int blackScore = 0;
