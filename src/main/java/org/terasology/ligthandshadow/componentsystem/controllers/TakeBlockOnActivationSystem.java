@@ -17,6 +17,7 @@ package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.entitySystem.entity.EntityBuilder;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -30,6 +31,9 @@ import org.terasology.ligthandshadow.componentsystem.components.TakeBlockOnActiv
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryAuthoritySystem;
 import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.logic.location.LocationComponent;
+import org.terasology.math.geom.Vector3f;
+import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.WorldProvider;
@@ -63,6 +67,7 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
         // If the flag being taken is a red flag and the player is on the black team, let them take the flag
         if (!playerTeamMatchesFlagTeam(entity, flagTaker)) {
             giveFlagToPlayer(entity, flagTaker);
+            attachParticleEmitterToPlayer(flagTaker);
         }
     }
 
@@ -79,5 +84,17 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
         player.addComponent(new HasFlagComponent(flagTeamComponent.team));
         worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
         flag.destroy();
+    }
+
+    private void attachParticleEmitterToPlayer(EntityRef player) {
+        EntityBuilder builder = null;
+        if (player.getComponent(LASTeamComponent.class).team.equals(LASUtils.RED_TEAM)) {
+            builder = entityManager.newBuilder("LightAndShadowResources:blackFlagParticleEffect");
+        }
+        if (player.getComponent(LASTeamComponent.class).team.equals(LASUtils.BLACK_TEAM)) {
+            builder = entityManager.newBuilder("LightAndShadowResources:redFlagParticleEffect");
+        }
+        builder.saveComponent(player.getComponent(LocationComponent.class));
+        builder.build();
     }
 }
