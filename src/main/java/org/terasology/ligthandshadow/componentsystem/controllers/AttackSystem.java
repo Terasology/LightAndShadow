@@ -41,6 +41,7 @@ import org.terasology.logic.players.LocalPlayer;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
+import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.physics.Physics;
 import org.terasology.protobuf.EntityData;
 import org.terasology.registry.In;
@@ -88,11 +89,21 @@ public class AttackSystem extends BaseComponentSystem {
                     dropFlag(targetPlayer, attackingPlayer, LASUtils.RED_FLAG_URI);
                     return;
                 }
+                removeParticleEmitterFromPlayer();
+            }
+        }
+    }
+    private void removeParticleEmitterFromPlayer() {
+        if (entityManager.getCountOfEntitiesWith(ParticleEmitterComponent.class) != 0) {
+            Iterable<EntityRef> particleEmitters = entityManager.getEntitiesWith(ParticleEmitterComponent.class);
+            for (EntityRef particleEmitter : particleEmitters) {
+                particleEmitter.removeComponent(ParticleEmitterComponent.class);
             }
         }
     }
 
     private void dropFlag(EntityRef targetPlayer, EntityRef attackingPlayer, String flagTeam) {
+        targetPlayer.removeComponent(HasFlagComponent.class);
         int inventorySize = inventoryManager.getNumSlots(targetPlayer);
         for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
             EntityRef inventorySlot = inventoryManager.getItemInSlot(targetPlayer, slotNumber);
