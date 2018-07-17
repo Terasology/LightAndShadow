@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
@@ -30,7 +29,6 @@ import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.common.ActivateEvent;
-import org.terasology.logic.health.EntityDestructionAuthoritySystem;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.network.ClientComponent;
@@ -44,8 +42,6 @@ import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemComponent;
-
-import java.time.Instant;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 @Share(ScoreSystem.class)
@@ -175,21 +171,14 @@ public class ScoreSystem extends BaseComponentSystem {
     }
 
     private void resetRound(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
-        if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)) {
-            basePosition = LASUtils.CENTER_BLACK_BASE_POSITION;
-            flag = LASUtils.BLACK_FLAG_URI;
-            movePlayerFlagToBase(player, heldItem);
+        Iterable<EntityRef> playersWithFlag = entityManager.getEntitiesWith(HasFlagComponent.class);
+        for (EntityRef playerWithFlag : playersWithFlag) {
+            movePlayerFlagToBase(playerWithFlag, baseTeamComponent, heldItem);
         }
-        if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
-            basePosition = LASUtils.CENTER_RED_BASE_POSITION;
-            flag = LASUtils.RED_FLAG_URI;
-            movePlayerFlagToBase(player, heldItem);
-        }
-        removeParticleEmitterFromPlayer();
-        player.removeComponent(HasFlagComponent.class);
+        removeParticleEmitterFromPlayers();
     }
 
-    private void removeParticleEmitterFromPlayer() {
+    private void removeParticleEmitterFromPlayers() {
         if (entityManager.getCountOfEntitiesWith(ParticleEmitterComponent.class) != 0) {
             Iterable<EntityRef> particleEmitters = entityManager.getEntitiesWith(ParticleEmitterComponent.class);
             for (EntityRef particleEmitter : particleEmitters) {
@@ -198,23 +187,22 @@ public class ScoreSystem extends BaseComponentSystem {
         }
     }
 
+    //TODO: Handle level reset
     private void resetLevel(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
+
+    }
+
+    private void movePlayerFlagToBase(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
         if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)) {
             basePosition = LASUtils.CENTER_BLACK_BASE_POSITION;
             flag = LASUtils.BLACK_FLAG_URI;
-            movePlayerFlagToBase(player, heldItem);
         }
         if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
             basePosition = LASUtils.CENTER_RED_BASE_POSITION;
             flag = LASUtils.RED_FLAG_URI;
-            movePlayerFlagToBase(player, heldItem);
         }
-        removeParticleEmitterFromPlayer();
-        player.removeComponent(HasFlagComponent.class);
-    }
-
-    private void movePlayerFlagToBase(EntityRef player, EntityRef heldItem) {
         inventoryManager.removeItem(player, player, heldItem, true);
         worldProvider.setBlock(new Vector3i(basePosition.x, basePosition.y + 1, basePosition.z), blockManager.getBlock(flag));
+        player.removeComponent(HasFlagComponent.class);
     }
 }
