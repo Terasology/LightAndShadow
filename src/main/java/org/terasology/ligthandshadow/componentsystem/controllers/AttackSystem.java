@@ -126,7 +126,6 @@ public class AttackSystem extends BaseComponentSystem {
      * Checks if player picks up flag of the same team.
      * If so, moves flag back to base
      */
-
     @ReceiveEvent(components = {LASTeamComponent.class})
     public void onInventorySlotChanged(InventorySlotChangedEvent event, EntityRef entity) {
         EntityRef playerEntity = entity;
