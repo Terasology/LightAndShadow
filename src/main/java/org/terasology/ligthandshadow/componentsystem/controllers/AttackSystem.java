@@ -35,7 +35,6 @@ import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.events.DropItemRequest;
 import org.terasology.logic.inventory.events.InventorySlotChangedEvent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.logic.players.LocalPlayer;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.particles.components.ParticleEmitterComponent;
@@ -50,8 +49,6 @@ public class AttackSystem extends BaseComponentSystem {
     InventoryManager inventoryManager;
     @In
     EntityManager entityManager;
-    @In
-    private LocalPlayer localPlayer;
     @In
     private WorldProvider worldProvider;
     @In
