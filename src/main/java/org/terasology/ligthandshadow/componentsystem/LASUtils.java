@@ -27,6 +27,8 @@ public final class LASUtils {
     public static final String RED_FLAG_URI = "LightAndShadowResources:redFlag";
     public static final String RED_TEAM = "red";
     public static final String BLACK_TEAM = "black";
+    public static final String RED_FLAG_PARTICLE = "LightAndShadowResources:redFlagParticleEffect";
+    public static final String BLACK_FLAG_PARTICLE = "LightAndShadowResources:blackFlagParticleEffect";
     /** Position of Red base */
     public static final Vector3i CENTER_RED_BASE_POSITION = new Vector3i(30, 10, 0);
     /** Position of Black base */
@@ -39,7 +41,7 @@ public final class LASUtils {
      */
     public static final int BASE_EXTENT = 2;
     public static final int GOAL_SCORE = 5;
-
+    
     public static Vector3i getFlagLocation(String flagTeam) {
         if (flagTeam.equals(RED_TEAM)) {
             return (new Vector3i(CENTER_RED_BASE_POSITION.x, CENTER_RED_BASE_POSITION.y + 1, CENTER_RED_BASE_POSITION.z));

@@ -87,10 +87,10 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     private void attachParticleEmitterToPlayer(EntityRef player) {
         EntityBuilder builder = null;
         if (player.getComponent(LASTeamComponent.class).team.equals(LASUtils.RED_TEAM)) {
-            builder = entityManager.newBuilder("LightAndShadowResources:blackFlagParticleEffect");
+            builder = entityManager.newBuilder(LASUtils.BLACK_FLAG_PARTICLE);
         }
         if (player.getComponent(LASTeamComponent.class).team.equals(LASUtils.BLACK_TEAM)) {
-            builder = entityManager.newBuilder("LightAndShadowResources:redFlagParticleEffect");
+            builder = entityManager.newBuilder(LASUtils.RED_FLAG_PARTICLE);
         }
         builder.saveComponent(player.getComponent(LocationComponent.class));
         builder.build();
