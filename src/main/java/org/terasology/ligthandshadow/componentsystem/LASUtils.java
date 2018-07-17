@@ -20,9 +20,6 @@ import org.terasology.registry.In;
 import org.terasology.world.block.BlockManager;
 
 public final class LASUtils {
-    @In
-    private BlockManager blockManager;
-
     public static final String BLACK_FLAG_URI = "LightAndShadowResources:blackFlag";
     public static final String RED_FLAG_URI = "LightAndShadowResources:redFlag";
     public static final String RED_TEAM = "red";
@@ -42,6 +39,9 @@ public final class LASUtils {
     public static final int BASE_EXTENT = 2;
     public static final int GOAL_SCORE = 5;
     
+    @In
+    private BlockManager blockManager;
+
     public static Vector3i getFlagLocation(String flagTeam) {
         if (flagTeam.equals(RED_TEAM)) {
             return (new Vector3i(CENTER_RED_BASE_POSITION.x, CENTER_RED_BASE_POSITION.y + 1, CENTER_RED_BASE_POSITION.z));
