@@ -22,7 +22,6 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.BlackFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.FlagDropOnActivateComponent;
@@ -34,16 +33,12 @@ import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.events.DropItemRequest;
-import org.terasology.logic.inventory.events.GiveItemEvent;
 import org.terasology.logic.inventory.events.InventorySlotChangedEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.particles.components.ParticleEmitterComponent;
-import org.terasology.physics.Physics;
-import org.terasology.protobuf.EntityData;
 import org.terasology.registry.In;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
@@ -93,6 +88,7 @@ public class AttackSystem extends BaseComponentSystem {
             }
         }
     }
+
     private void removeParticleEmitterFromPlayer() {
         if (entityManager.getCountOfEntitiesWith(ParticleEmitterComponent.class) != 0) {
             Iterable<EntityRef> particleEmitters = entityManager.getEntitiesWith(ParticleEmitterComponent.class);

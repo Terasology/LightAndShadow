@@ -17,11 +17,9 @@ package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.entitySystem.entity.EntityBuilder;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
@@ -29,17 +27,13 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
-import org.terasology.ligthandshadow.componentsystem.components.ScoreComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.health.EntityDestructionAuthoritySystem;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.network.ClientComponent;
-import org.terasology.network.PingSubscriberComponent;
-import org.terasology.network.events.PingFromServerEvent;
 import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
@@ -68,10 +62,6 @@ public class ScoreSystem extends BaseComponentSystem {
     private BlockManager blockManager;
     @In
     private WorldProvider worldProvider;
-    @In
-    private PrefabManager prefabManager;
-    @In
-    private EntityDestructionAuthoritySystem entityDestroyer;
 
     private int redScore = 0;
     private int blackScore = 0;

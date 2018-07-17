@@ -32,8 +32,6 @@ import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryAuthoritySystem;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector3f;
-import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.WorldProvider;
