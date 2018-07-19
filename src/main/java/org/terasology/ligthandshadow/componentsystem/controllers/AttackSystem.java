@@ -128,25 +128,31 @@ public class AttackSystem extends BaseComponentSystem {
         if (item.hasComponent(BlackFlagComponent.class) || item.hasComponent(RedFlagComponent.class)) {
             String flagTeam = checkWhichFlagPicked(event);
             if (flagTeam.equals(player.getComponent(LASTeamComponent.class).team)) {
-                moveFlagToBase(event, player);
+                moveFlagToBase(player, flagTeam);
             } else {
-                // TODO: Handle if player picks up flag of opposite team -- add particle emitter and HasFlagComponent
+                handleFlagPickup(player, flagTeam);
             }
         }
     }
 
-    private void moveFlagToBase(InventorySlotChangedEvent event, EntityRef playerEntity) {
-        String flagTeam = checkWhichFlagPicked(event);
-        if (flagTeam != null) {
-            if (isPlayerInTeam(flagTeam, playerEntity)) {
-                worldProvider.setBlock(LASUtils.getFlagLocation(flagTeam), blockManager.getBlock(LASUtils.getFlagURI(flagTeam)));
-                inventoryManager.removeItem(playerEntity, EntityRef.NULL, item, true, 1);
-            }
-        }
+    private void handleFlagPickup(EntityRef player, String flagTeam) {
+        player.addComponent(new HasFlagComponent(flagTeam));
+        addParticleEmitterToPlayer(player, flagTeam);
     }
 
-    private boolean isPlayerInTeam(String flagTeam, EntityRef playerEntity) {
-        return playerEntity.getComponent(LASTeamComponent.class).team.equals(flagTeam);
+    private void addParticleEmitterToPlayer(EntityRef player, String flagTeam) {
+        if (flagTeam.equals(LASUtils.BLACK_TEAM)) {
+            player.addOrSaveComponent(LASUtils.getSpadesParticleSprite());
+        }
+        if (flagTeam.equals(LASUtils.RED_TEAM)) {
+            player.addOrSaveComponent(LASUtils.getHeartsParticleSprite());
+        }
+        player.addOrSaveComponent(LASUtils.getParticleEmitterComponent());
+    }
+
+    private void moveFlagToBase(EntityRef playerEntity, String flagTeam) {
+        worldProvider.setBlock(LASUtils.getFlagLocation(flagTeam), blockManager.getBlock(LASUtils.getFlagURI(flagTeam)));
+        inventoryManager.removeItem(playerEntity, EntityRef.NULL, item, true, 1);
     }
 
     private String checkWhichFlagPicked(InventorySlotChangedEvent event) {

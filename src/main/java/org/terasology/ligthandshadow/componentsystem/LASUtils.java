@@ -15,8 +15,14 @@
  */
 package org.terasology.ligthandshadow.componentsystem;
 
+import org.terasology.entitySystem.Component;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.math.geom.Vector3i;
+import org.terasology.particles.components.ParticleDataSpriteComponent;
+import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
+import org.terasology.utilities.Assets;
 import org.terasology.world.block.BlockManager;
 
 public final class LASUtils {
@@ -60,5 +66,24 @@ public final class LASUtils {
             return BLACK_FLAG_URI;
         }
         return null;
+    }
+
+    public static Component getHeartsParticleSprite() {
+        ParticleDataSpriteComponent particleDataSpriteComponent = new ParticleDataSpriteComponent();
+        particleDataSpriteComponent.texture = Assets.getTexture(LASUtils.HEARTS_PARTICLE).get();
+        return particleDataSpriteComponent;
+    }
+
+    public static Component getSpadesParticleSprite() {
+        ParticleDataSpriteComponent particleDataSpriteComponent = new ParticleDataSpriteComponent();
+        particleDataSpriteComponent.texture = Assets.getTexture(LASUtils.HEARTS_PARTICLE).get();
+        return particleDataSpriteComponent;
+    }
+
+    public static Component getParticleEmitterComponent() {
+        ParticleEmitterComponent particleEmitterComponent = new ParticleEmitterComponent();
+        particleEmitterComponent.lifeTime = -1;
+        particleEmitterComponent.destroyEntityWhenDead = false;
+        return particleEmitterComponent;
     }
 }

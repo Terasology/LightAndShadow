@@ -88,17 +88,12 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     }
 
     private void attachParticleEmitterToPlayer(EntityRef player) {
-        ParticleDataSpriteComponent particleDataSpriteComponent = new ParticleDataSpriteComponent();
         if (player.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
-            particleDataSpriteComponent.texture = Assets.getTexture(LASUtils.HEARTS_PARTICLE).get();
+            player.addComponent(LASUtils.getHeartsParticleSprite());
         }
         if (player.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
-            particleDataSpriteComponent.texture = Assets.getTexture(LASUtils.SPADES_PARTICLE).get();
+            player.addComponent(LASUtils.getSpadesParticleSprite());
         }
-        player.addComponent(particleDataSpriteComponent);
-        ParticleEmitterComponent particleEmitterComponent = new ParticleEmitterComponent();
-        particleEmitterComponent.lifeTime = -1;
-        particleEmitterComponent.destroyEntityWhenDead = false;
-        player.addComponent(particleEmitterComponent);
+        player.addComponent(LASUtils.getParticleEmitterComponent());
     }
 }
