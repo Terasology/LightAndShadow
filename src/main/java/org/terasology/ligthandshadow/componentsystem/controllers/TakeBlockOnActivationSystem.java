@@ -32,7 +32,10 @@ import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryAuthoritySystem;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.particles.components.ParticleDataSpriteComponent;
+import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
+import org.terasology.utilities.Assets;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockComponent;
@@ -85,14 +88,17 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     }
 
     private void attachParticleEmitterToPlayer(EntityRef player) {
-        EntityBuilder builder = null;
-        if (player.getComponent(LASTeamComponent.class).team.equals(LASUtils.RED_TEAM)) {
-            builder = entityManager.newBuilder(LASUtils.BLACK_FLAG_PARTICLE);
-        }
+        ParticleDataSpriteComponent particleDataSpriteComponent = new ParticleDataSpriteComponent();
+        ParticleEmitterComponent particleEmitterComponent = new ParticleEmitterComponent();
         if (player.getComponent(LASTeamComponent.class).team.equals(LASUtils.BLACK_TEAM)) {
-            builder = entityManager.newBuilder(LASUtils.RED_FLAG_PARTICLE);
+            particleDataSpriteComponent.texture = Assets.getTexture(LASUtils.RED_PARTICLE).get();
         }
-        builder.saveComponent(player.getComponent(LocationComponent.class));
-        builder.build();
+        if (player.getComponent(LASTeamComponent.class).team.equals(LASUtils.RED_TEAM)) {
+            particleDataSpriteComponent.texture = Assets.getTexture(LASUtils.BLACK_PARTICLE).get();
+        }
+        particleEmitterComponent.lifeTime = -1;
+        particleEmitterComponent.destroyEntityWhenDead = false;
+        player.addComponent(particleDataSpriteComponent);
+        player.addComponent(particleEmitterComponent);
     }
 }
