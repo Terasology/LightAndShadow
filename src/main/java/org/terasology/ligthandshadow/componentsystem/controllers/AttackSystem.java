@@ -76,13 +76,14 @@ public class AttackSystem extends BaseComponentSystem {
                 // If the target player has the black flag
                 if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
                     dropFlag(targetPlayer, attackingPlayer, LASUtils.BLACK_FLAG_URI);
+                    removeParticleEmitterFromPlayer(targetPlayer);
                     return;
                 }
                 if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
                     dropFlag(targetPlayer, attackingPlayer, LASUtils.RED_FLAG_URI);
+                    removeParticleEmitterFromPlayer(targetPlayer);
                     return;
                 }
-                removeParticleEmitterFromPlayer(targetPlayer);
             }
         }
     }

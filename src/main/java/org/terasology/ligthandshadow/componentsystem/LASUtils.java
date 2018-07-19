@@ -76,7 +76,7 @@ public final class LASUtils {
 
     public static Component getSpadesParticleSprite() {
         ParticleDataSpriteComponent particleDataSpriteComponent = new ParticleDataSpriteComponent();
-        particleDataSpriteComponent.texture = Assets.getTexture(LASUtils.HEARTS_PARTICLE).get();
+        particleDataSpriteComponent.texture = Assets.getTexture(LASUtils.SPADES_PARTICLE).get();
         return particleDataSpriteComponent;
     }
 
