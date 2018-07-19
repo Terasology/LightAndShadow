@@ -36,8 +36,8 @@ public final class LASUtils {
      */
     public static final int BASE_EXTENT = 2;
     public static final int GOAL_SCORE = 5;
-    public static final String BLACK_PARTICLE = "LightAndShadowResources:spadesParticle";
-    public static final String  RED_PARTICLE = "LightAndShadowResources:heartsParticle";
+    public static final String SPADES_PARTICLE = "LightAndShadowResources:spadesParticle";
+    public static final String  HEARTS_PARTICLE = "LightAndShadowResources:heartsParticle";
 
     @In
     private BlockManager blockManager;

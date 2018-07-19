@@ -37,6 +37,7 @@ import org.terasology.logic.inventory.events.InventorySlotChangedEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.math.geom.Vector3f;
+import org.terasology.particles.components.ParticleDataSpriteComponent;
 import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
 import org.terasology.world.WorldProvider;
@@ -81,18 +82,14 @@ public class AttackSystem extends BaseComponentSystem {
                     dropFlag(targetPlayer, attackingPlayer, LASUtils.RED_FLAG_URI);
                     return;
                 }
-                removeParticleEmitterFromPlayer();
+                removeParticleEmitterFromPlayer(targetPlayer);
             }
         }
     }
 
-    private void removeParticleEmitterFromPlayer() {
-        if (entityManager.getCountOfEntitiesWith(ParticleEmitterComponent.class) != 0) {
-            Iterable<EntityRef> particleEmitters = entityManager.getEntitiesWith(ParticleEmitterComponent.class);
-            for (EntityRef particleEmitter : particleEmitters) {
-                particleEmitter.removeComponent(ParticleEmitterComponent.class);
-            }
-        }
+    private void removeParticleEmitterFromPlayer(EntityRef player) {
+        player.removeComponent(ParticleEmitterComponent.class);
+        player.removeComponent(ParticleDataSpriteComponent.class);
     }
 
     private void dropFlag(EntityRef targetPlayer, EntityRef attackingPlayer, String flagTeam) {
@@ -123,13 +120,22 @@ public class AttackSystem extends BaseComponentSystem {
      * Checks if player picks up flag of the same team.
      * If so, moves flag back to base
      */
+    // TODO: Handle player dropping flag
     @ReceiveEvent(components = {LASTeamComponent.class})
     public void onInventorySlotChanged(InventorySlotChangedEvent event, EntityRef entity) {
-        EntityRef playerEntity = entity;
-        moveFlagToBaseIfPickedBySameTeamPlayer(event, playerEntity);
+        EntityRef player = entity;
+        item = event.getNewItem();
+        if (item.hasComponent(BlackFlagComponent.class) || item.hasComponent(RedFlagComponent.class)) {
+            String flagTeam = checkWhichFlagPicked(event);
+            if (flagTeam.equals(player.getComponent(LASTeamComponent.class).team)) {
+                moveFlagToBase(event, player);
+            } else {
+                // TODO: Handle if player picks up flag of opposite team -- add particle emitter and HasFlagComponent
+            }
+        }
     }
 
-    private void moveFlagToBaseIfPickedBySameTeamPlayer(InventorySlotChangedEvent event, EntityRef playerEntity) {
+    private void moveFlagToBase(InventorySlotChangedEvent event, EntityRef playerEntity) {
         String flagTeam = checkWhichFlagPicked(event);
         if (flagTeam != null) {
             if (isPlayerInTeam(flagTeam, playerEntity)) {
@@ -145,13 +151,11 @@ public class AttackSystem extends BaseComponentSystem {
 
     private String checkWhichFlagPicked(InventorySlotChangedEvent event) {
         item = event.getNewItem();
-        if (item.hasComponent(BlockItemComponent.class)) {
-            if (item.hasComponent(BlackFlagComponent.class)) {
-                return LASUtils.BLACK_TEAM;
-            }
-            if (item.hasComponent(RedFlagComponent.class)) {
-                return LASUtils.RED_TEAM;
-            }
+        if (item.hasComponent(BlackFlagComponent.class)) {
+            return LASUtils.BLACK_TEAM;
+        }
+        if (item.hasComponent(RedFlagComponent.class)) {
+            return LASUtils.RED_TEAM;
         }
         return null;
     }

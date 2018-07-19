@@ -24,14 +24,17 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
+import org.terasology.ligthandshadow.componentsystem.components.BlackFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
+import org.terasology.ligthandshadow.componentsystem.components.RedFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.network.ClientComponent;
+import org.terasology.particles.components.ParticleDataSpriteComponent;
 import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
@@ -109,7 +112,7 @@ public class ScoreSystem extends BaseComponentSystem {
             if (checkIfTeamScores(baseTeamComponent, heldFlag)) {
                 incrementScore(baseTeamComponent);
                 if (redScore < LASUtils.GOAL_SCORE && blackScore < LASUtils.GOAL_SCORE) {
-                    resetRound(player, baseTeamComponent, heldFlag);
+                    resetRound(baseTeamComponent, heldFlag);
                 } else {
                     resetLevel(player, baseTeamComponent, heldFlag);
                 }
@@ -132,14 +135,10 @@ public class ScoreSystem extends BaseComponentSystem {
 
     private boolean checkIfTeamScores(LASTeamComponent baseTeamComponent, EntityRef heldItem) {
         // Check to see if player has other team's flag
-        if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)
-                && heldItem.hasComponent(BlockItemComponent.class)
-                && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI)) {
+        if (baseTeamComponent.team.equals(LASUtils.RED_TEAM) && heldItem.hasComponent(BlackFlagComponent.class)) {
             return true;
         }
-        if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)
-                && heldItem.hasComponent(BlockItemComponent.class)
-                && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.RED_FLAG_URI)) {
+        if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM) && heldItem.hasComponent(RedFlagComponent.class)) {
             return true;
         }
         return false;
@@ -170,24 +169,21 @@ public class ScoreSystem extends BaseComponentSystem {
         }
     }
 
-    private void resetRound(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
+    private void resetRound(LASTeamComponent baseTeamComponent, EntityRef heldItem) {
         Iterable<EntityRef> playersWithFlag = entityManager.getEntitiesWith(HasFlagComponent.class);
         for (EntityRef playerWithFlag : playersWithFlag) {
             movePlayerFlagToBase(playerWithFlag, baseTeamComponent, heldItem);
-        }
-        removeParticleEmitterFromPlayers();
-    }
-
-    private void removeParticleEmitterFromPlayers() {
-        if (entityManager.getCountOfEntitiesWith(ParticleEmitterComponent.class) != 0) {
-            Iterable<EntityRef> particleEmitters = entityManager.getEntitiesWith(ParticleEmitterComponent.class);
-            for (EntityRef particleEmitter : particleEmitters) {
-                particleEmitter.removeComponent(ParticleEmitterComponent.class);
-            }
+            removeParticleEmitterFromPlayer(playerWithFlag);
+            playerWithFlag.removeComponent(HasFlagComponent.class);
         }
     }
 
-    //TODO: Handle level reset
+    private void removeParticleEmitterFromPlayer(EntityRef player) {
+        player.removeComponent(ParticleEmitterComponent.class);
+        player.removeComponent(ParticleDataSpriteComponent.class);
+    }
+
+    // TODO: Handle level reset
     private void resetLevel(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
 
     }
@@ -203,6 +199,5 @@ public class ScoreSystem extends BaseComponentSystem {
         }
         inventoryManager.removeItem(player, player, heldItem, true);
         worldProvider.setBlock(new Vector3i(basePosition.x, basePosition.y + 1, basePosition.z), blockManager.getBlock(flag));
-        player.removeComponent(HasFlagComponent.class);
     }
 }
