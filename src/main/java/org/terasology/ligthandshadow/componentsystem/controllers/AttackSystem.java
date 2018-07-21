@@ -129,21 +129,38 @@ public class AttackSystem extends BaseComponentSystem {
 
     /**
      * Checks if player picks up flag of the same team.
-     * If so, moves flag back to base
+     * If so, moves flag back to base, otherwise adds particle emitter and HasFlagComponent to player
+     *
+     * Otherwise checks if player puts down flag. If so, removes particle emitter and HasFlagComponent from player
      */
     // TODO: Handle player placing flag in world
     @ReceiveEvent(components = {LASTeamComponent.class})
     public void onInventorySlotChanged(InventorySlotChangedEvent event, EntityRef entity) {
         EntityRef player = entity;
+
+        // Check if player picks up flag
         item = event.getNewItem();
-        if (item.hasComponent(BlackFlagComponent.class) || item.hasComponent(RedFlagComponent.class)) {
+        if (itemIsFlag(item)) {
             String flagTeam = checkWhichFlagPicked(event);
             if (flagTeam.equals(player.getComponent(LASTeamComponent.class).team)) {
                 moveFlagToBase(player, flagTeam);
+                return;
             } else {
                 handleFlagPickup(player, flagTeam);
+                return;
             }
         }
+
+        // Checks if player puts down flag
+        item = event.getOldItem();
+        if (itemIsFlag(item)) {
+            removeParticleEmitterFromPlayer(player);
+            player.removeComponent(HasFlagComponent.class);
+        }
+    }
+
+    private boolean itemIsFlag(EntityRef checkedItem) {
+        return (checkedItem.hasComponent(BlackFlagComponent.class) || checkedItem.hasComponent(RedFlagComponent.class));
     }
 
     private void handleFlagPickup(EntityRef player, String flagTeam) {
