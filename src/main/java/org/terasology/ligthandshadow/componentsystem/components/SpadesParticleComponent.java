@@ -17,5 +17,5 @@ package org.terasology.ligthandshadow.componentsystem.components;
 
 import org.terasology.entitySystem.Component;
 
-public class BaseComponent implements Component {
+public class SpadesParticleComponent implements Component {
 }

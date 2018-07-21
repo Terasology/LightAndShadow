@@ -16,6 +16,7 @@
 
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.terasology.entitySystem.entity.EntityBuilder;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -26,9 +27,11 @@ import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.BlackFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.FlagDropOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
+import org.terasology.ligthandshadow.componentsystem.components.HeartsParticleComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.RaycastOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.components.RedFlagComponent;
+import org.terasology.ligthandshadow.componentsystem.components.SpadesParticleComponent;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
@@ -37,7 +40,6 @@ import org.terasology.logic.inventory.events.InventorySlotChangedEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.particles.components.ParticleDataSpriteComponent;
 import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
 import org.terasology.world.WorldProvider;
@@ -57,7 +59,8 @@ public class AttackSystem extends BaseComponentSystem {
 
     private EntityRef flagSlot;
     private EntityRef item;
-
+    private EntityBuilder builder;
+    private Iterable<EntityRef> particleEntities;
 
     @ReceiveEvent(components = {FlagDropOnActivateComponent.class, PlayerCharacterComponent.class, HasFlagComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
@@ -75,13 +78,13 @@ public class AttackSystem extends BaseComponentSystem {
             if (targetPlayer.hasComponent(PlayerCharacterComponent.class) && targetPlayer.hasComponent(HasFlagComponent.class)) {
                 // If the target player has the black flag
                 if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
-                    dropFlag(targetPlayer, attackingPlayer, LASUtils.BLACK_FLAG_URI);
                     removeParticleEmitterFromPlayer(targetPlayer);
+                    dropFlag(targetPlayer, attackingPlayer, LASUtils.BLACK_FLAG_URI);
                     return;
                 }
                 if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
-                    dropFlag(targetPlayer, attackingPlayer, LASUtils.RED_FLAG_URI);
                     removeParticleEmitterFromPlayer(targetPlayer);
+                    dropFlag(targetPlayer, attackingPlayer, LASUtils.RED_FLAG_URI);
                     return;
                 }
             }
@@ -89,8 +92,15 @@ public class AttackSystem extends BaseComponentSystem {
     }
 
     private void removeParticleEmitterFromPlayer(EntityRef player) {
-        player.removeComponent(ParticleEmitterComponent.class);
-        player.removeComponent(ParticleDataSpriteComponent.class);
+        if (player.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
+            particleEntities = entityManager.getEntitiesWith(HeartsParticleComponent.class);
+        }
+        if (player.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
+            particleEntities = entityManager.getEntitiesWith(SpadesParticleComponent.class);
+        }
+        for (EntityRef particleEntity : particleEntities) {
+            particleEntity.removeComponent(ParticleEmitterComponent.class);
+        }
     }
 
     private void dropFlag(EntityRef targetPlayer, EntityRef attackingPlayer, String flagTeam) {
@@ -121,7 +131,7 @@ public class AttackSystem extends BaseComponentSystem {
      * Checks if player picks up flag of the same team.
      * If so, moves flag back to base
      */
-    // TODO: Handle player dropping flag
+    // TODO: Handle player placing flag in world
     @ReceiveEvent(components = {LASTeamComponent.class})
     public void onInventorySlotChanged(InventorySlotChangedEvent event, EntityRef entity) {
         EntityRef player = entity;
@@ -138,17 +148,18 @@ public class AttackSystem extends BaseComponentSystem {
 
     private void handleFlagPickup(EntityRef player, String flagTeam) {
         player.addComponent(new HasFlagComponent(flagTeam));
-        addParticleEmitterToPlayer(player, flagTeam);
+        attachParticleEmitterToPlayer(player, flagTeam);
     }
 
-    private void addParticleEmitterToPlayer(EntityRef player, String flagTeam) {
+    private void attachParticleEmitterToPlayer(EntityRef player, String flagTeam) {
         if (flagTeam.equals(LASUtils.BLACK_TEAM)) {
-            player.addOrSaveComponent(LASUtils.getSpadesParticleSprite());
+            builder = entityManager.newBuilder(LASUtils.SPADES_PARTICLE);
         }
         if (flagTeam.equals(LASUtils.RED_TEAM)) {
-            player.addOrSaveComponent(LASUtils.getHeartsParticleSprite());
+            builder = entityManager.newBuilder(LASUtils.HEARTS_PARTICLE);
         }
-        player.addOrSaveComponent(LASUtils.getParticleEmitterComponent());
+        builder.saveComponent(player.getComponent(LocationComponent.class));
+        builder.build();
     }
 
     private void moveFlagToBase(EntityRef playerEntity, String flagTeam) {

@@ -26,15 +26,16 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.BlackFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
+import org.terasology.ligthandshadow.componentsystem.components.HeartsParticleComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.RedFlagComponent;
+import org.terasology.ligthandshadow.componentsystem.components.SpadesParticleComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.network.ClientComponent;
-import org.terasology.particles.components.ParticleDataSpriteComponent;
 import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
@@ -173,19 +174,22 @@ public class ScoreSystem extends BaseComponentSystem {
         Iterable<EntityRef> playersWithFlag = entityManager.getEntitiesWith(HasFlagComponent.class);
         for (EntityRef playerWithFlag : playersWithFlag) {
             movePlayerFlagToBase(playerWithFlag, baseTeamComponent, heldItem);
-            removeParticleEmitterFromPlayer(playerWithFlag);
             playerWithFlag.removeComponent(HasFlagComponent.class);
         }
+        removeParticleEmitterFromPlayers();
     }
 
-    private void removeParticleEmitterFromPlayer(EntityRef player) {
-        player.removeComponent(ParticleEmitterComponent.class);
-        player.removeComponent(ParticleDataSpriteComponent.class);
+    private void removeParticleEmitterFromPlayers() {
+        Iterable<EntityRef> particleEntities = entityManager.getEntitiesWith(ParticleEmitterComponent.class);
+        for (EntityRef particleEntity : particleEntities) {
+            if (particleEntity.hasComponent(SpadesParticleComponent.class) || particleEntity.hasComponent(HeartsParticleComponent.class)) {
+                particleEntity.removeComponent(ParticleEmitterComponent.class);
+            }
+        }
     }
 
     // TODO: Handle level reset
     private void resetLevel(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
-
     }
 
     private void movePlayerFlagToBase(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {

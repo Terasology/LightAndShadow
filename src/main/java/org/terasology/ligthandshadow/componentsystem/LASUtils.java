@@ -42,8 +42,8 @@ public final class LASUtils {
      */
     public static final int BASE_EXTENT = 2;
     public static final int GOAL_SCORE = 5;
-    public static final String SPADES_PARTICLE = "LightAndShadowResources:spadesParticle";
-    public static final String  HEARTS_PARTICLE = "LightAndShadowResources:heartsParticle";
+    public static final String SPADES_PARTICLE = "LightAndShadowResources:blackFlagParticleEffect";
+    public static final String  HEARTS_PARTICLE = "LightAndShadowResources:redFlagParticleEffect";
 
     @In
     private BlockManager blockManager;
@@ -66,24 +66,5 @@ public final class LASUtils {
             return BLACK_FLAG_URI;
         }
         return null;
-    }
-
-    public static Component getHeartsParticleSprite() {
-        ParticleDataSpriteComponent particleDataSpriteComponent = new ParticleDataSpriteComponent();
-        particleDataSpriteComponent.texture = Assets.getTexture(LASUtils.HEARTS_PARTICLE).get();
-        return particleDataSpriteComponent;
-    }
-
-    public static Component getSpadesParticleSprite() {
-        ParticleDataSpriteComponent particleDataSpriteComponent = new ParticleDataSpriteComponent();
-        particleDataSpriteComponent.texture = Assets.getTexture(LASUtils.SPADES_PARTICLE).get();
-        return particleDataSpriteComponent;
-    }
-
-    public static Component getParticleEmitterComponent() {
-        ParticleEmitterComponent particleEmitterComponent = new ParticleEmitterComponent();
-        particleEmitterComponent.lifeTime = -1;
-        particleEmitterComponent.destroyEntityWhenDead = false;
-        return particleEmitterComponent;
     }
 }

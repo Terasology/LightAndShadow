@@ -32,10 +32,7 @@ import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryAuthoritySystem;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.particles.components.ParticleDataSpriteComponent;
-import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
-import org.terasology.utilities.Assets;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockComponent;
@@ -44,6 +41,8 @@ import org.terasology.world.block.items.BlockItemFactory;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TakeBlockOnActivationSystem extends BaseComponentSystem {
+    private static final Logger logger = LoggerFactory.getLogger(TakeBlockOnActivationSystem.class);
+
     @In
     private WorldProvider worldProvider;
     @In
@@ -55,9 +54,8 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     @In
     private EntityManager entityManager;
 
-    BlockItemFactory blockFactory;
-
-    private static final Logger logger = LoggerFactory.getLogger(TakeBlockOnActivationSystem.class);
+    private BlockItemFactory blockFactory;
+    private EntityBuilder builder;
 
     @ReceiveEvent(components = {TakeBlockOnActivateComponent.class, BlockComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
@@ -89,11 +87,12 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
 
     private void attachParticleEmitterToPlayer(EntityRef player) {
         if (player.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
-            player.addComponent(LASUtils.getHeartsParticleSprite());
+            builder = entityManager.newBuilder(LASUtils.HEARTS_PARTICLE);
         }
         if (player.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
-            player.addComponent(LASUtils.getSpadesParticleSprite());
+            builder = entityManager.newBuilder(LASUtils.SPADES_PARTICLE);
         }
-        player.addComponent(LASUtils.getParticleEmitterComponent());
+        builder.saveComponent(player.getComponent(LocationComponent.class));
+        builder.build();
     }
 }
