@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.Event;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
@@ -31,6 +32,8 @@ import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent
 import org.terasology.ligthandshadow.componentsystem.components.RedFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.SpadesParticleComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
+import org.terasology.ligthandshadow.componentsystem.events.AttachParticleEmitterToPlayerEvent;
+import org.terasology.ligthandshadow.componentsystem.events.RemoveParticleEmitterFromPlayerEvent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
@@ -149,23 +152,13 @@ public class ScoreSystem extends BaseComponentSystem {
         if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)) {
             redScore++;
             // Send event to clients to update their Score UI
-            if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
-                Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
-                for (EntityRef client : clients) {
-                    client.send(new ScoreUpdateFromServerEvent(LASUtils.RED_TEAM, redScore));
-                }
-            }
+            sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.RED_TEAM, redScore));
             return;
         }
         if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
             blackScore++;
             // Send event to clients to update their Score UI
-            if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
-                Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
-                for (EntityRef client : clients) {
-                    client.send(new ScoreUpdateFromServerEvent(LASUtils.BLACK_TEAM, blackScore));
-                }
-            }
+            sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.BLACK_TEAM, blackScore));
             return;
         }
     }
@@ -179,11 +172,13 @@ public class ScoreSystem extends BaseComponentSystem {
         removeParticleEmitterFromPlayers();
     }
 
+    // Removes particle effects from anyone with redFlag or blackFlag particles
     private void removeParticleEmitterFromPlayers() {
         Iterable<EntityRef> particleEntities = entityManager.getEntitiesWith(ParticleEmitterComponent.class);
         for (EntityRef particleEntity : particleEntities) {
             if (particleEntity.hasComponent(SpadesParticleComponent.class) || particleEntity.hasComponent(HeartsParticleComponent.class)) {
                 particleEntity.removeComponent(ParticleEmitterComponent.class);
+                sendEventToClients(new RemoveParticleEmitterFromPlayerEvent(particleEntity));
             }
         }
     }
@@ -203,5 +198,14 @@ public class ScoreSystem extends BaseComponentSystem {
         }
         inventoryManager.removeItem(player, player, heldItem, true);
         worldProvider.setBlock(new Vector3i(basePosition.x, basePosition.y + 1, basePosition.z), blockManager.getBlock(flag));
+    }
+
+    private void sendEventToClients(Event event) {
+        if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
+            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
+            for (EntityRef client : clients) {
+                client.send(event);
+            }
+        }
     }
 }

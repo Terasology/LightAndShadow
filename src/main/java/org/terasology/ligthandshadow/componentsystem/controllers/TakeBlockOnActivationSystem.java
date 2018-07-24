@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityBuilder;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.Event;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
@@ -28,10 +29,13 @@ import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.TakeBlockOnActivateComponent;
+import org.terasology.ligthandshadow.componentsystem.events.AttachParticleEmitterToPlayerEvent;
+import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryAuthoritySystem;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.WorldProvider;
@@ -88,11 +92,27 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     private void attachParticleEmitterToPlayer(EntityRef player) {
         if (player.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
             builder = entityManager.newBuilder(LASUtils.HEARTS_PARTICLE);
+            builder.saveComponent(player.getComponent(LocationComponent.class));
+            builder.build();
+            // Send event to clients to add particle emitter
+            sendEventToClients(new AttachParticleEmitterToPlayerEvent(LASUtils.RED_TEAM, player));
+            return;
         }
         if (player.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
             builder = entityManager.newBuilder(LASUtils.SPADES_PARTICLE);
+            builder.saveComponent(player.getComponent(LocationComponent.class));
+            builder.build();
+            // Send event to clients to add particle emitter
+            sendEventToClients(new AttachParticleEmitterToPlayerEvent(LASUtils.BLACK_TEAM, player));
+            return;
         }
-        builder.saveComponent(player.getComponent(LocationComponent.class));
-        builder.build();
+    }
+    private void sendEventToClients(Event event) {
+        if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
+            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
+            for (EntityRef client : clients) {
+                client.send(event);
+            }
+        }
     }
 }
