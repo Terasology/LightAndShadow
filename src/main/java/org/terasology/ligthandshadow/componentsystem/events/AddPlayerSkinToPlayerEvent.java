@@ -20,13 +20,15 @@ import org.terasology.entitySystem.event.Event;
 import org.terasology.network.BroadcastEvent;
 
 @BroadcastEvent
-public class RemoveParticleEmitterFromPlayerEvent implements Event {
-    public EntityRef particleEntity;
+public class AddPlayerSkinToPlayerEvent implements Event {
+    public String team;
+    public EntityRef player;
 
-    public RemoveParticleEmitterFromPlayerEvent() {
+    public AddPlayerSkinToPlayerEvent() {
     }
 
-    public RemoveParticleEmitterFromPlayerEvent(EntityRef particleEntity) {
-        this.particleEntity = particleEntity;
+    public AddPlayerSkinToPlayerEvent(String team, EntityRef player) {
+        this.team = team;
+        this.player = player;
     }
 }

@@ -24,40 +24,31 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
+import org.terasology.ligthandshadow.componentsystem.events.AddPlayerSkinToPlayerEvent;
 import org.terasology.ligthandshadow.componentsystem.events.AttachParticleEmitterToPlayerEvent;
-import org.terasology.ligthandshadow.componentsystem.events.RemoveParticleEmitterFromPlayerEvent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
 
 @RegisterSystem(RegisterMode.CLIENT)
-public class ClientParticleSystem extends BaseComponentSystem {
+public class ClientSkinSystem extends BaseComponentSystem {
     @In
     private EntityManager entityManager;
 
     private EntityBuilder builder;
 
     @ReceiveEvent
-    public void onAttachParticleEmitterToPlayer(AttachParticleEmitterToPlayerEvent event, EntityRef entity) {
+    public void onAddPlayerSkinToPlayer(AddPlayerSkinToPlayerEvent event, EntityRef entity) {
         String team = event.team;
         EntityRef player = event.player;
-        if (team.equals(LASUtils.RED_TEAM)) {
-            builder = entityManager.newBuilder(LASUtils.HEARTS_PARTICLE);
-            builder.saveComponent(player.getComponent(LocationComponent.class));
-            builder.build();
-            return;
-        }
         if (team.equals(LASUtils.BLACK_TEAM)) {
-            builder = entityManager.newBuilder(LASUtils.SPADES_PARTICLE);
+            builder = entityManager.newBuilder(LASUtils.BLACK_PAWN);
             builder.saveComponent(player.getComponent(LocationComponent.class));
             builder.build();
-            return;
         }
-    }
-
-    @ReceiveEvent
-    public void onRemoveParticleEmitterFromPlayer(RemoveParticleEmitterFromPlayerEvent event, EntityRef entity) {
-        EntityRef particleEntity = event.particleEntity;
-        particleEntity.removeComponent(ParticleEmitterComponent.class);
+        if (team.equals(LASUtils.RED_TEAM)) {
+            builder = entityManager.newBuilder(LASUtils.RED_PAWN);
+            builder.saveComponent(player.getComponent(LocationComponent.class));
+            builder.build();
+        }
     }
 }

@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityBuilder;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.Event;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
@@ -28,11 +29,14 @@ import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.SetTeamOnActivateComponent;
+import org.terasology.ligthandshadow.componentsystem.events.AddPlayerSkinToPlayerEvent;
+import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
+import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
@@ -65,12 +69,40 @@ public class TeleporterSystem extends BaseComponentSystem {
         if (teleporterTeam.equals(LASUtils.RED_TEAM)) {
             player.send(new CharacterTeleportEvent(new Vector3f(RED_TELEPORT_DESTINATION)));
             inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(MAGIC_STAFF_URI));
+            setPlayerSkin(player, teleporterTeam);
             return;
         }
         if (teleporterTeam.equals(LASUtils.BLACK_TEAM)) {
             player.send(new CharacterTeleportEvent(new Vector3f(BLACK_TELEPORT_DESTINATION)));
             inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(MAGIC_STAFF_URI));
+            setPlayerSkin(player, teleporterTeam);
             return;
+        }
+    }
+
+    private void setPlayerSkin(EntityRef player, String team) {
+        if (team.equals(LASUtils.RED_TEAM)) {
+            builder = entityManager.newBuilder(LASUtils.RED_PAWN);
+            builder.saveComponent(player.getComponent(LocationComponent.class));
+            builder.build();
+            sendEventToClients(new AddPlayerSkinToPlayerEvent(team, player));
+            return;
+        }
+        if (team.equals(LASUtils.BLACK_TEAM)) {
+            builder = entityManager.newBuilder(LASUtils.BLACK_PAWN);
+            builder.saveComponent(player.getComponent(LocationComponent.class));
+            builder.build();
+            sendEventToClients(new AddPlayerSkinToPlayerEvent(team, player));
+            return;
+        }
+    }
+
+    private void sendEventToClients(Event event) {
+        if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
+            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
+            for (EntityRef client : clients) {
+                client.send(event);
+            }
         }
     }
 }

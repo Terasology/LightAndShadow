@@ -107,6 +107,7 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
             return;
         }
     }
+
     private void sendEventToClients(Event event) {
         if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
             Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);

@@ -15,14 +15,8 @@
  */
 package org.terasology.ligthandshadow.componentsystem;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.particles.components.ParticleDataSpriteComponent;
-import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
-import org.terasology.utilities.Assets;
 import org.terasology.world.block.BlockManager;
 
 public final class LASUtils {
@@ -44,6 +38,8 @@ public final class LASUtils {
     public static final int GOAL_SCORE = 5;
     public static final String SPADES_PARTICLE = "LightAndShadowResources:blackFlagParticleEffect";
     public static final String  HEARTS_PARTICLE = "LightAndShadowResources:redFlagParticleEffect";
+    public static final String BLACK_PAWN = "LightAndShadowResources:blackPawnPlayerSkin";
+    public static final String  RED_PAWN = "LightAndShadowResources:redPawnPlayerSkin";
 
     @In
     private BlockManager blockManager;
