@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 MovingBlocks
+ * Copyright 2018 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,12 @@ import org.terasology.persistence.typeHandling.PersistedData;
 import org.terasology.persistence.typeHandling.PersistedDataMap;
 import org.terasology.persistence.typeHandling.RegisterTypeHandler;
 import org.terasology.persistence.typeHandling.SerializationContext;
-import org.terasology.persistence.typeHandling.SimpleTypeHandler;
+import org.terasology.persistence.typeHandling.TypeHandler;
 
 import java.util.Map;
 
 @RegisterTypeHandler
-public class SetTeamActionTypeHandler extends SimpleTypeHandler<SetTeamAction> {
+public class SetTeamActionTypeHandler implements TypeHandler<SetTeamAction> {
 
     public SetTeamActionTypeHandler() {
 
