@@ -63,4 +63,14 @@ public final class LASUtils {
         }
         return null;
     }
+
+    public static String getFlagParticle(String flagTeam) {
+        if (flagTeam.equals(RED_TEAM)) {
+            return HEARTS_PARTICLE;
+        }
+        if (flagTeam.equals(BLACK_TEAM)) {
+            return SPADES_PARTICLE;
+        }
+        return null;
+    }
 }

@@ -26,6 +26,7 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.BlackFlagComponent;
+import org.terasology.ligthandshadow.componentsystem.components.FlagParticleComponent;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.HeartsParticleComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
@@ -168,19 +169,17 @@ public class ScoreSystem extends BaseComponentSystem {
         for (EntityRef playerWithFlag : playersWithFlag) {
             movePlayerFlagToBase(playerWithFlag, baseTeamComponent, heldItem);
             playerWithFlag.removeComponent(HasFlagComponent.class);
+            removeParticleEmitterFromPlayer(playerWithFlag);
         }
-        removeParticleEmitterFromPlayers();
     }
 
-    // Removes particle effects from anyone with redFlag or blackFlag particles
-    private void removeParticleEmitterFromPlayers() {
-        Iterable<EntityRef> particleEntities = entityManager.getEntitiesWith(ParticleEmitterComponent.class);
-        for (EntityRef particleEntity : particleEntities) {
-            if (particleEntity.hasComponent(SpadesParticleComponent.class) || particleEntity.hasComponent(HeartsParticleComponent.class)) {
-                particleEntity.removeComponent(ParticleEmitterComponent.class);
-                sendEventToClients(new RemoveParticleEmitterFromPlayerEvent(particleEntity));
-            }
+    // Removes particle effects from player
+    private void removeParticleEmitterFromPlayer(EntityRef target) {
+        EntityRef particleEntity = getParticleComponent(target).getParticleEntity();
+        if (particleEntity != null) {
+            particleEntity.destroy();
         }
+        target.removeComponent(FlagParticleComponent.class);
     }
 
     // TODO: Handle level reset
@@ -207,5 +206,15 @@ public class ScoreSystem extends BaseComponentSystem {
                 client.send(event);
             }
         }
+    }
+
+    private FlagParticleComponent getParticleComponent(EntityRef target) {
+        FlagParticleComponent particleComponent;
+        if (target.hasComponent(FlagParticleComponent.class)) {
+            particleComponent = target.getComponent(FlagParticleComponent.class);
+        } else {
+            particleComponent = new FlagParticleComponent();
+        }
+        return particleComponent;
     }
 }

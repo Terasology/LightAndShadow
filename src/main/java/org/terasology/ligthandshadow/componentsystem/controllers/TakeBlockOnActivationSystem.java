@@ -26,6 +26,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
+import org.terasology.ligthandshadow.componentsystem.components.FlagParticleComponent;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.TakeBlockOnActivateComponent;
@@ -34,6 +35,7 @@ import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServe
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryAuthoritySystem;
 import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.logic.location.Location;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
@@ -89,22 +91,18 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
         flag.destroy();
     }
 
-    private void attachParticleEmitterToPlayer(EntityRef player) {
-        if (player.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
-            builder = entityManager.newBuilder(LASUtils.HEARTS_PARTICLE);
-            builder.saveComponent(player.getComponent(LocationComponent.class));
-            builder.build();
-            // Send event to clients to add particle emitter
-            sendEventToClients(new AttachParticleEmitterToPlayerEvent(LASUtils.RED_TEAM, player));
-            return;
-        }
-        if (player.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
-            builder = entityManager.newBuilder(LASUtils.SPADES_PARTICLE);
-            builder.saveComponent(player.getComponent(LocationComponent.class));
-            builder.build();
-            // Send event to clients to add particle emitter
-            sendEventToClients(new AttachParticleEmitterToPlayerEvent(LASUtils.BLACK_TEAM, player));
-            return;
+    private void attachParticleEmitterToPlayer(EntityRef target) {
+        if (target.exists()) {
+            FlagParticleComponent particleComponent = getParticleComponent(target);
+            EntityRef particleEntity = entityManager.create(LASUtils.getFlagParticle(target.getComponent(HasFlagComponent.class).flag));
+
+            LocationComponent targetLoc = target.getComponent(LocationComponent.class);
+            LocationComponent childLoc = particleEntity.getComponent(LocationComponent.class);
+            childLoc.setWorldPosition(targetLoc.getWorldPosition());
+            Location.attachChild(target, particleEntity);
+            particleEntity.setOwner(target);
+
+            target.addOrSaveComponent(particleComponent);
         }
     }
 
@@ -115,5 +113,15 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
                 client.send(event);
             }
         }
+    }
+
+    private FlagParticleComponent getParticleComponent(EntityRef target) {
+        FlagParticleComponent particleComponent;
+        if (target.hasComponent(FlagParticleComponent.class)) {
+            particleComponent = target.getComponent(FlagParticleComponent.class);
+        } else {
+            particleComponent = new FlagParticleComponent();
+        }
+        return particleComponent;
     }
 }
