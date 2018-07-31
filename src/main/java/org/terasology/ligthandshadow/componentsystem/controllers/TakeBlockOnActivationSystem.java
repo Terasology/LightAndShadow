@@ -20,24 +20,16 @@ import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityBuilder;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.Event;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.ligthandshadow.componentsystem.components.FlagParticleComponent;
-import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.TakeBlockOnActivateComponent;
-import org.terasology.ligthandshadow.componentsystem.events.AttachParticleEmitterToPlayerEvent;
-import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryAuthoritySystem;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.logic.location.Location;
-import org.terasology.logic.location.LocationComponent;
-import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 import org.terasology.world.BlockEntityRegistry;
 import org.terasology.world.WorldProvider;
@@ -72,7 +64,6 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
         // If the flag being taken is a red flag and the player is on the black team, let them take the flag
         if (!playerTeamMatchesFlagTeam(entity, flagTaker)) {
             giveFlagToPlayer(entity, flagTaker);
-            //attachParticleEmitterToPlayer(flagTaker);
         }
     }
 
@@ -86,42 +77,7 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
         BlockComponent blockComponent = flag.getComponent(BlockComponent.class);
         LASTeamComponent flagTeamComponent = flag.getComponent(LASTeamComponent.class);
         inventoryManager.giveItem(player, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.getFlagURI(flagTeamComponent.team))));
-        //player.addComponent(new HasFlagComponent(flagTeamComponent.team));
         worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
         flag.destroy();
     }
-
-    private void attachParticleEmitterToPlayer(EntityRef target) {
-//        if (target.exists()) {
-//            FlagParticleComponent particleComponent = getParticleComponent(target);
-//            EntityRef particleEntity = entityManager.create(LASUtils.getFlagParticle(target.getComponent(HasFlagComponent.class).flag));
-//
-//            LocationComponent targetLoc = target.getComponent(LocationComponent.class);
-//            LocationComponent childLoc = particleEntity.getComponent(LocationComponent.class);
-//            childLoc.setWorldPosition(targetLoc.getWorldPosition());
-//            Location.attachChild(target, particleEntity);
-//            particleEntity.setOwner(target);
-//
-//            target.addOrSaveComponent(particleComponent);
-//        }
-    }
-
-    private void sendEventToClients(Event event) {
-        if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
-            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
-            for (EntityRef client : clients) {
-                client.send(event);
-            }
-        }
-    }
-
-//    private FlagParticleComponent getParticleComponent(EntityRef target) {
-//        FlagParticleComponent particleComponent;
-//        if (target.hasComponent(FlagParticleComponent.class)) {
-//            particleComponent = target.getComponent(FlagParticleComponent.class);
-//        } else {
-//            particleComponent = new FlagParticleComponent();
-//        }
-//        return particleComponent;
-//    }
 }

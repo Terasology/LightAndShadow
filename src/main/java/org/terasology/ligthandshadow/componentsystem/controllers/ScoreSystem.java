@@ -26,21 +26,15 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.BlackFlagComponent;
-import org.terasology.ligthandshadow.componentsystem.components.FlagParticleComponent;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
-import org.terasology.ligthandshadow.componentsystem.components.HeartsParticleComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.RedFlagComponent;
-import org.terasology.ligthandshadow.componentsystem.components.SpadesParticleComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
-import org.terasology.ligthandshadow.componentsystem.events.AttachParticleEmitterToPlayerEvent;
-import org.terasology.ligthandshadow.componentsystem.events.RemoveParticleEmitterFromPlayerEvent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.network.ClientComponent;
-import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.rendering.nui.ControlWidget;
@@ -168,8 +162,6 @@ public class ScoreSystem extends BaseComponentSystem {
         Iterable<EntityRef> playersWithFlag = entityManager.getEntitiesWith(HasFlagComponent.class);
         for (EntityRef playerWithFlag : playersWithFlag) {
             movePlayerFlagToBase(playerWithFlag, baseTeamComponent, heldItem);
-            //playerWithFlag.removeComponent(HasFlagComponent.class);
-            //removeParticleEmitterFromPlayer(playerWithFlag);
         }
     }
 
