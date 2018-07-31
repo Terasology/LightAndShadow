@@ -72,7 +72,7 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
         // If the flag being taken is a red flag and the player is on the black team, let them take the flag
         if (!playerTeamMatchesFlagTeam(entity, flagTaker)) {
             giveFlagToPlayer(entity, flagTaker);
-            attachParticleEmitterToPlayer(flagTaker);
+            //attachParticleEmitterToPlayer(flagTaker);
         }
     }
 
@@ -86,24 +86,24 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
         BlockComponent blockComponent = flag.getComponent(BlockComponent.class);
         LASTeamComponent flagTeamComponent = flag.getComponent(LASTeamComponent.class);
         inventoryManager.giveItem(player, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.getFlagURI(flagTeamComponent.team))));
-        player.addComponent(new HasFlagComponent(flagTeamComponent.team));
+        //player.addComponent(new HasFlagComponent(flagTeamComponent.team));
         worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
         flag.destroy();
     }
 
     private void attachParticleEmitterToPlayer(EntityRef target) {
-        if (target.exists()) {
-            FlagParticleComponent particleComponent = getParticleComponent(target);
-            EntityRef particleEntity = entityManager.create(LASUtils.getFlagParticle(target.getComponent(HasFlagComponent.class).flag));
-
-            LocationComponent targetLoc = target.getComponent(LocationComponent.class);
-            LocationComponent childLoc = particleEntity.getComponent(LocationComponent.class);
-            childLoc.setWorldPosition(targetLoc.getWorldPosition());
-            Location.attachChild(target, particleEntity);
-            particleEntity.setOwner(target);
-
-            target.addOrSaveComponent(particleComponent);
-        }
+//        if (target.exists()) {
+//            FlagParticleComponent particleComponent = getParticleComponent(target);
+//            EntityRef particleEntity = entityManager.create(LASUtils.getFlagParticle(target.getComponent(HasFlagComponent.class).flag));
+//
+//            LocationComponent targetLoc = target.getComponent(LocationComponent.class);
+//            LocationComponent childLoc = particleEntity.getComponent(LocationComponent.class);
+//            childLoc.setWorldPosition(targetLoc.getWorldPosition());
+//            Location.attachChild(target, particleEntity);
+//            particleEntity.setOwner(target);
+//
+//            target.addOrSaveComponent(particleComponent);
+//        }
     }
 
     private void sendEventToClients(Event event) {

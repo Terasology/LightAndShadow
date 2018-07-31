@@ -82,12 +82,12 @@ public class AttackSystem extends BaseComponentSystem {
             if (targetPlayer.hasComponent(PlayerCharacterComponent.class) && targetPlayer.hasComponent(HasFlagComponent.class)) {
                 // If the target player has the black flag
                 if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
-                    removeParticleEmitterFromPlayer(targetPlayer);
+                    //removeParticleEmitterFromPlayer(targetPlayer);
                     dropFlag(targetPlayer, attackingPlayer, LASUtils.BLACK_FLAG_URI);
                     return;
                 }
                 if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
-                    removeParticleEmitterFromPlayer(targetPlayer);
+                    //removeParticleEmitterFromPlayer(targetPlayer);
                     dropFlag(targetPlayer, attackingPlayer, LASUtils.RED_FLAG_URI);
                     return;
                 }
@@ -108,7 +108,7 @@ public class AttackSystem extends BaseComponentSystem {
     }
 
     private void dropFlag(EntityRef targetPlayer, EntityRef attackingPlayer, String flagTeam) {
-        targetPlayer.removeComponent(HasFlagComponent.class);
+        //targetPlayer.removeComponent(HasFlagComponent.class);
         int inventorySize = inventoryManager.getNumSlots(targetPlayer);
         for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
             EntityRef inventorySlot = inventoryManager.getItemInSlot(targetPlayer, slotNumber);
@@ -176,13 +176,13 @@ public class AttackSystem extends BaseComponentSystem {
             builder = entityManager.newBuilder(LASUtils.SPADES_PARTICLE);
             builder.saveComponent(player.getComponent(LocationComponent.class));
             builder.build();
-            sendEventToClients(new AttachParticleEmitterToPlayerEvent(LASUtils.BLACK_TEAM, player));
+            //sendEventToClients(new AttachParticleEmitterToPlayerEvent(LASUtils.BLACK_TEAM, player));
         }
         if (flagTeam.equals(LASUtils.RED_TEAM)) {
             builder = entityManager.newBuilder(LASUtils.HEARTS_PARTICLE);
             builder.saveComponent(player.getComponent(LocationComponent.class));
             builder.build();
-            sendEventToClients(new AttachParticleEmitterToPlayerEvent(LASUtils.RED_TEAM, player));
+            //sendEventToClients(new AttachParticleEmitterToPlayerEvent(LASUtils.RED_TEAM, player));
         }
     }
 

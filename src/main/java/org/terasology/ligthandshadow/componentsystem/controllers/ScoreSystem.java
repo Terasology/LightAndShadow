@@ -168,8 +168,8 @@ public class ScoreSystem extends BaseComponentSystem {
         Iterable<EntityRef> playersWithFlag = entityManager.getEntitiesWith(HasFlagComponent.class);
         for (EntityRef playerWithFlag : playersWithFlag) {
             movePlayerFlagToBase(playerWithFlag, baseTeamComponent, heldItem);
-            playerWithFlag.removeComponent(HasFlagComponent.class);
-            removeParticleEmitterFromPlayer(playerWithFlag);
+            //playerWithFlag.removeComponent(HasFlagComponent.class);
+            //removeParticleEmitterFromPlayer(playerWithFlag);
         }
     }
 
