@@ -173,15 +173,6 @@ public class ScoreSystem extends BaseComponentSystem {
         }
     }
 
-    // Removes particle effects from player
-    private void removeParticleEmitterFromPlayer(EntityRef target) {
-        EntityRef particleEntity = getParticleComponent(target).getParticleEntity();
-        if (particleEntity != null) {
-            particleEntity.destroy();
-        }
-        target.removeComponent(FlagParticleComponent.class);
-    }
-
     // TODO: Handle level reset
     private void resetLevel(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
     }
@@ -206,15 +197,5 @@ public class ScoreSystem extends BaseComponentSystem {
                 client.send(event);
             }
         }
-    }
-
-    private FlagParticleComponent getParticleComponent(EntityRef target) {
-        FlagParticleComponent particleComponent;
-        if (target.hasComponent(FlagParticleComponent.class)) {
-            particleComponent = target.getComponent(FlagParticleComponent.class);
-        } else {
-            particleComponent = new FlagParticleComponent();
-        }
-        return particleComponent;
     }
 }

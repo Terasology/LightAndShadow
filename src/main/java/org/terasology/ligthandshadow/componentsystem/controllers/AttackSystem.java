@@ -27,6 +27,7 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.BlackFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.FlagDropOnActivateComponent;
+import org.terasology.ligthandshadow.componentsystem.components.FlagParticleComponent;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.HeartsParticleComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
@@ -40,6 +41,7 @@ import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.events.DropItemRequest;
 import org.terasology.logic.inventory.events.InventorySlotChangedEvent;
+import org.terasology.logic.location.Location;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.math.geom.Vector3f;
@@ -96,15 +98,23 @@ public class AttackSystem extends BaseComponentSystem {
     }
 
     private void removeParticleEmitterFromPlayer(EntityRef player) {
-        if (player.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
-            particleEntities = entityManager.getEntitiesWith(HeartsParticleComponent.class);
-        } else if (player.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
-            particleEntities = entityManager.getEntitiesWith(SpadesParticleComponent.class);
+        if (player.hasComponent(FlagParticleComponent.class)) {
+            EntityRef particleEntity = player.getComponent(FlagParticleComponent.class).particleEntity;
+            if (particleEntity != EntityRef.NULL) {
+                particleEntity.destroy();
+            }
+            player.removeComponent(FlagParticleComponent.class);
         }
-        for (EntityRef particleEntity : particleEntities) {
-            particleEntity.removeComponent(ParticleEmitterComponent.class);
-            sendEventToClients(new RemoveParticleEmitterFromPlayerEvent(particleEntity));
-        }
+
+//        if (player.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
+//            particleEntities = entityManager.getEntitiesWith(HeartsParticleComponent.class);
+//        } else if (player.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
+//            particleEntities = entityManager.getEntitiesWith(SpadesParticleComponent.class);
+//        }
+//        for (EntityRef particleEntity : particleEntities) {
+//            particleEntity.removeComponent(ParticleEmitterComponent.class);
+//            sendEventToClients(new RemoveParticleEmitterFromPlayerEvent(particleEntity));
+//        }
     }
 
     private void dropFlag(EntityRef targetPlayer, EntityRef attackingPlayer, String flagTeam) {
@@ -171,19 +181,32 @@ public class AttackSystem extends BaseComponentSystem {
         attachParticleEmitterToPlayer(player, flagTeam);
     }
 
-    private void attachParticleEmitterToPlayer(EntityRef player, String flagTeam) {
-        if (flagTeam.equals(LASUtils.BLACK_TEAM)) {
-            builder = entityManager.newBuilder(LASUtils.SPADES_PARTICLE);
-            builder.saveComponent(player.getComponent(LocationComponent.class));
-            builder.build();
-            //sendEventToClients(new AttachParticleEmitterToPlayerEvent(LASUtils.BLACK_TEAM, player));
+    private void attachParticleEmitterToPlayer(EntityRef target, String flagTeam) {
+        if (target.exists()) {
+            EntityRef particleEntity = entityManager.create(LASUtils.getFlagParticle(flagTeam));
+            FlagParticleComponent particleComponent = new FlagParticleComponent(particleEntity);
+
+            LocationComponent targetLoc = target.getComponent(LocationComponent.class);
+            LocationComponent childLoc = particleEntity.getComponent(LocationComponent.class);
+            childLoc.setWorldPosition(targetLoc.getWorldPosition());
+            Location.attachChild(target, particleEntity);
+            particleEntity.setOwner(target);
+
+            target.addOrSaveComponent(particleComponent);
         }
-        if (flagTeam.equals(LASUtils.RED_TEAM)) {
-            builder = entityManager.newBuilder(LASUtils.HEARTS_PARTICLE);
-            builder.saveComponent(player.getComponent(LocationComponent.class));
-            builder.build();
-            //sendEventToClients(new AttachParticleEmitterToPlayerEvent(LASUtils.RED_TEAM, player));
-        }
+
+//        if (flagTeam.equals(LASUtils.BLACK_TEAM)) {
+//            builder = entityManager.newBuilder(LASUtils.SPADES_PARTICLE);
+//            builder.saveComponent(player.getComponent(LocationComponent.class));
+//            builder.build();
+//            //sendEventToClients(new AttachParticleEmitterToPlayerEvent(LASUtils.BLACK_TEAM, player));
+//        }
+//        if (flagTeam.equals(LASUtils.RED_TEAM)) {
+//            builder = entityManager.newBuilder(LASUtils.HEARTS_PARTICLE);
+//            builder.saveComponent(player.getComponent(LocationComponent.class));
+//            builder.build();
+//            //sendEventToClients(new AttachParticleEmitterToPlayerEvent(LASUtils.RED_TEAM, player));
+//        }
     }
 
     private void moveFlagToBase(EntityRef playerEntity, String flagTeam) {

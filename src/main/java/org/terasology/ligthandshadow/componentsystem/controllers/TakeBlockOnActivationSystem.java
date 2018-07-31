@@ -115,13 +115,13 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
         }
     }
 
-    private FlagParticleComponent getParticleComponent(EntityRef target) {
-        FlagParticleComponent particleComponent;
-        if (target.hasComponent(FlagParticleComponent.class)) {
-            particleComponent = target.getComponent(FlagParticleComponent.class);
-        } else {
-            particleComponent = new FlagParticleComponent();
-        }
-        return particleComponent;
-    }
+//    private FlagParticleComponent getParticleComponent(EntityRef target) {
+//        FlagParticleComponent particleComponent;
+//        if (target.hasComponent(FlagParticleComponent.class)) {
+//            particleComponent = target.getComponent(FlagParticleComponent.class);
+//        } else {
+//            particleComponent = new FlagParticleComponent();
+//        }
+//        return particleComponent;
+//    }
 }

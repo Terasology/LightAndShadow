@@ -21,6 +21,13 @@ import org.terasology.entitySystem.entity.EntityRef;
 public class FlagParticleComponent implements Component {
     public EntityRef particleEntity = EntityRef.NULL;
 
+    public FlagParticleComponent() {
+    }
+
+    public FlagParticleComponent(EntityRef particleEntity) {
+        this.particleEntity = particleEntity;
+    }
+
     public EntityRef getParticleEntity() {
         return particleEntity;
     }
