@@ -25,6 +25,7 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.FlagParticleComponent;
+import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.events.FlagDropEvent;
 import org.terasology.ligthandshadow.componentsystem.events.FlagPickupEvent;
 import org.terasology.logic.location.Location;
@@ -41,16 +42,21 @@ public class ClientParticleSystem extends BaseComponentSystem {
         String team = event.team;
         EntityRef player = event.player;
 
-        EntityRef particleEntity = entityManager.create(LASUtils.getFlagParticle(team));
-        FlagParticleComponent particleComponent = new FlagParticleComponent(particleEntity);
+        if (!player.hasComponent(FlagParticleComponent.class)) {
+            EntityRef particleEntity = entityManager.create(LASUtils.getFlagParticle(team));
+            FlagParticleComponent particleComponent = new FlagParticleComponent(particleEntity);
 
-        LocationComponent targetLoc = player.getComponent(LocationComponent.class);
-        LocationComponent childLoc = particleEntity.getComponent(LocationComponent.class);
-        childLoc.setWorldPosition(targetLoc.getWorldPosition());
-        Location.attachChild(player, particleEntity);
-        particleEntity.setOwner(player);
+            LocationComponent targetLoc = player.getComponent(LocationComponent.class);
+            LocationComponent childLoc = particleEntity.getComponent(LocationComponent.class);
+            childLoc.setWorldPosition(targetLoc.getWorldPosition());
+            Location.attachChild(player, particleEntity);
+            particleEntity.setOwner(player);
+            player.addOrSaveComponent(particleComponent);
+        }
+        if (!player.hasComponent(HasFlagComponent.class)) {
+            player.addComponent(new HasFlagComponent(team));
+        }
 
-        player.addOrSaveComponent(particleComponent);
     }
 
     @ReceiveEvent
@@ -62,6 +68,9 @@ public class ClientParticleSystem extends BaseComponentSystem {
                 particleEntity.destroy();
             }
             player.removeComponent(FlagParticleComponent.class);
+        }
+        if (player.hasComponent(HasFlagComponent.class)) {
+            player.removeComponent(HasFlagComponent.class);
         }
     }
 }

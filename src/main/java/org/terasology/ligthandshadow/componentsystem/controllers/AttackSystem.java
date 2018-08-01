@@ -89,16 +89,6 @@ public class AttackSystem extends BaseComponentSystem {
         }
     }
 
-    private void removeParticleEmitterFromPlayer(EntityRef player) {
-        if (player.hasComponent(FlagParticleComponent.class)) {
-            EntityRef particleEntity = player.getComponent(FlagParticleComponent.class).particleEntity;
-            if (particleEntity != EntityRef.NULL) {
-                particleEntity.destroy();
-            }
-            player.removeComponent(FlagParticleComponent.class);
-        }
-    }
-
     private void dropFlag(EntityRef targetPlayer, EntityRef attackingPlayer, String flagTeam) {
         int inventorySize = inventoryManager.getNumSlots(targetPlayer);
         for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
@@ -157,30 +147,11 @@ public class AttackSystem extends BaseComponentSystem {
     }
 
     private void handleFlagPickup(EntityRef player, String flagTeam) {
-        player.addComponent(new HasFlagComponent(flagTeam));
-        attachParticleEmitterToPlayer(player, flagTeam);
         sendEventToClients(new FlagPickupEvent(player, flagTeam));
     }
 
     private void handleFlagDrop(EntityRef player) {
         sendEventToClients(new FlagDropEvent(player));
-        removeParticleEmitterFromPlayer(player);
-        player.removeComponent(HasFlagComponent.class);
-    }
-
-    private void attachParticleEmitterToPlayer(EntityRef target, String flagTeam) {
-        if (target.exists()) {
-            EntityRef particleEntity = entityManager.create(LASUtils.getFlagParticle(flagTeam));
-            FlagParticleComponent particleComponent = new FlagParticleComponent(particleEntity);
-
-            LocationComponent targetLoc = target.getComponent(LocationComponent.class);
-            LocationComponent childLoc = particleEntity.getComponent(LocationComponent.class);
-            childLoc.setWorldPosition(targetLoc.getWorldPosition());
-            Location.attachChild(target, particleEntity);
-            particleEntity.setOwner(target);
-
-            target.addOrSaveComponent(particleComponent);
-        }
     }
 
     private void moveFlagToBase(EntityRef playerEntity, String flagTeam) {
