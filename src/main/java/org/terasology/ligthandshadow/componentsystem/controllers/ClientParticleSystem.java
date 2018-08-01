@@ -24,8 +24,13 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
+import org.terasology.ligthandshadow.componentsystem.components.FlagParticleComponent;
+import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.events.AttachParticleEmitterToPlayerEvent;
+import org.terasology.ligthandshadow.componentsystem.events.FlagDropEvent;
+import org.terasology.ligthandshadow.componentsystem.events.FlagPickupEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RemoveParticleEmitterFromPlayerEvent;
+import org.terasology.logic.location.Location;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
@@ -38,26 +43,31 @@ public class ClientParticleSystem extends BaseComponentSystem {
     private EntityBuilder builder;
 
     @ReceiveEvent
-    public void onAttachParticleEmitterToPlayer(AttachParticleEmitterToPlayerEvent event, EntityRef entity) {
+    public void onFlagPickup(FlagPickupEvent event, EntityRef entity) {
         String team = event.team;
         EntityRef player = event.player;
-        if (team.equals(LASUtils.RED_TEAM)) {
-            builder = entityManager.newBuilder(LASUtils.HEARTS_PARTICLE);
-            builder.saveComponent(player.getComponent(LocationComponent.class));
-            builder.build();
-            return;
-        }
-        if (team.equals(LASUtils.BLACK_TEAM)) {
-            builder = entityManager.newBuilder(LASUtils.SPADES_PARTICLE);
-            builder.saveComponent(player.getComponent(LocationComponent.class));
-            builder.build();
-            return;
-        }
+
+        EntityRef particleEntity = entityManager.create(LASUtils.getFlagParticle(team));
+        FlagParticleComponent particleComponent = new FlagParticleComponent(particleEntity);
+
+        LocationComponent targetLoc = player.getComponent(LocationComponent.class);
+        LocationComponent childLoc = particleEntity.getComponent(LocationComponent.class);
+        childLoc.setWorldPosition(targetLoc.getWorldPosition());
+        Location.attachChild(player, particleEntity);
+        particleEntity.setOwner(player);
+
+        player.addOrSaveComponent(particleComponent);
     }
 
     @ReceiveEvent
-    public void onRemoveParticleEmitterFromPlayer(RemoveParticleEmitterFromPlayerEvent event, EntityRef entity) {
-        EntityRef particleEntity = event.particleEntity;
-        particleEntity.removeComponent(ParticleEmitterComponent.class);
+    public void onFlagDrop(FlagDropEvent event, EntityRef entity) {
+        EntityRef player = event.player;
+        if (player.hasComponent(FlagParticleComponent.class)) {
+            EntityRef particleEntity = player.getComponent(FlagParticleComponent.class).particleEntity;
+            if (particleEntity != EntityRef.NULL) {
+                particleEntity.destroy();
+            }
+            player.removeComponent(FlagParticleComponent.class);
+        }
     }
 }

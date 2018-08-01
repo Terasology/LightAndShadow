@@ -32,6 +32,8 @@ import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.RaycastOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.components.RedFlagComponent;
+import org.terasology.ligthandshadow.componentsystem.events.FlagDropEvent;
+import org.terasology.ligthandshadow.componentsystem.events.FlagPickupEvent;
 import org.terasology.logic.characters.CharacterHeldItemComponent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
@@ -149,8 +151,7 @@ public class AttackSystem extends BaseComponentSystem {
         // Checks if player puts down flag
         item = event.getOldItem();
         if (itemIsFlag(item)) {
-            removeParticleEmitterFromPlayer(player);
-            player.removeComponent(HasFlagComponent.class);
+            handleFlagDrop(player);
         }
     }
 
@@ -161,6 +162,13 @@ public class AttackSystem extends BaseComponentSystem {
     private void handleFlagPickup(EntityRef player, String flagTeam) {
         player.addComponent(new HasFlagComponent(flagTeam));
         attachParticleEmitterToPlayer(player, flagTeam);
+        sendEventToClients(new FlagPickupEvent(player, flagTeam));
+    }
+
+    private void handleFlagDrop(EntityRef player) {
+        sendEventToClients(new FlagDropEvent(player));
+        removeParticleEmitterFromPlayer(player);
+        player.removeComponent(HasFlagComponent.class);
     }
 
     private void attachParticleEmitterToPlayer(EntityRef target, String flagTeam) {
