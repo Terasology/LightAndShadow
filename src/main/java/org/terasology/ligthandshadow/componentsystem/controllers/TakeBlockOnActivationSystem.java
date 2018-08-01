@@ -53,7 +53,6 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     private EntityManager entityManager;
 
     private BlockItemFactory blockFactory;
-    private EntityBuilder builder;
 
     @ReceiveEvent(components = {TakeBlockOnActivateComponent.class, BlockComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {

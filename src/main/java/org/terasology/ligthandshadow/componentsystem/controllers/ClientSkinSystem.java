@@ -25,7 +25,6 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.AddPlayerSkinToPlayerEvent;
-import org.terasology.ligthandshadow.componentsystem.events.AttachParticleEmitterToPlayerEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
 

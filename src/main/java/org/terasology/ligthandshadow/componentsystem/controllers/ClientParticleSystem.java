@@ -25,22 +25,16 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.FlagParticleComponent;
-import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
-import org.terasology.ligthandshadow.componentsystem.events.AttachParticleEmitterToPlayerEvent;
 import org.terasology.ligthandshadow.componentsystem.events.FlagDropEvent;
 import org.terasology.ligthandshadow.componentsystem.events.FlagPickupEvent;
-import org.terasology.ligthandshadow.componentsystem.events.RemoveParticleEmitterFromPlayerEvent;
 import org.terasology.logic.location.Location;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
 
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientParticleSystem extends BaseComponentSystem {
     @In
     private EntityManager entityManager;
-
-    private EntityBuilder builder;
 
     @ReceiveEvent
     public void onFlagPickup(FlagPickupEvent event, EntityRef entity) {

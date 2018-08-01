@@ -16,7 +16,6 @@
 
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.terasology.entitySystem.entity.EntityBuilder;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
@@ -62,8 +61,6 @@ public class AttackSystem extends BaseComponentSystem {
 
     private EntityRef flagSlot;
     private EntityRef item;
-    private EntityBuilder builder;
-    private Iterable<EntityRef> particleEntities;
 
     @ReceiveEvent(components = {FlagDropOnActivateComponent.class, PlayerCharacterComponent.class, HasFlagComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
