@@ -17,7 +17,6 @@ package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.entitySystem.entity.EntityBuilder;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -52,12 +51,8 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     @In
     private EntityManager entityManager;
 
-    private BlockItemFactory blockFactory;
-
     @ReceiveEvent(components = {TakeBlockOnActivateComponent.class, BlockComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
-        blockFactory = new BlockItemFactory(entityManager);
-        inventoryManager = new InventoryAuthoritySystem();
         EntityRef flagTaker = event.getInstigator();
 
         // If the flag being taken is a red flag and the player is on the black team, let them take the flag
@@ -75,6 +70,7 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     private void giveFlagToPlayer(EntityRef flag, EntityRef player) {
         BlockComponent blockComponent = flag.getComponent(BlockComponent.class);
         LASTeamComponent flagTeamComponent = flag.getComponent(LASTeamComponent.class);
+        BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
         inventoryManager.giveItem(player, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.getFlagURI(flagTeamComponent.team))));
         worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
         flag.destroy();

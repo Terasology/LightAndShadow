@@ -37,12 +37,9 @@ public final class LASUtils {
     public static final int BASE_EXTENT = 2;
     public static final int GOAL_SCORE = 5;
     public static final String SPADES_PARTICLE = "LightAndShadowResources:blackFlagParticleEffect";
-    public static final String  HEARTS_PARTICLE = "LightAndShadowResources:redFlagParticleEffect";
+    public static final String HEARTS_PARTICLE = "LightAndShadowResources:redFlagParticleEffect";
     public static final String BLACK_PAWN = "LightAndShadowResources:blackPawnPlayerSkin";
-    public static final String  RED_PAWN = "LightAndShadowResources:redPawnPlayerSkin";
-
-    @In
-    private BlockManager blockManager;
+    public static final String RED_PAWN = "LightAndShadowResources:redPawnPlayerSkin";
 
     public static Vector3i getFlagLocation(String flagTeam) {
         if (flagTeam.equals(RED_TEAM)) {
