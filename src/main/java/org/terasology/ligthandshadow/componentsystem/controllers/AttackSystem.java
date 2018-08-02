@@ -39,7 +39,6 @@ import org.terasology.logic.inventory.events.DropItemRequest;
 import org.terasology.logic.inventory.events.InventorySlotChangedEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerCharacterComponent;
-import org.terasology.math.TeraMath;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
@@ -117,7 +116,7 @@ public class AttackSystem extends BaseComponentSystem {
     /**
      * Checks if player picks up flag of the same team.
      * If so, moves flag back to base, otherwise adds particle emitter and HasFlagComponent to player
-     *
+     * <p>
      * Otherwise checks if player puts down flag. If so, removes particle emitter and HasFlagComponent from player
      */
     @ReceiveEvent(components = {LASTeamComponent.class})

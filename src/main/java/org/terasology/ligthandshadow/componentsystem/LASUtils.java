@@ -22,9 +22,13 @@ public final class LASUtils {
     public static final String RED_FLAG_URI = "LightAndShadowResources:redFlag";
     public static final String RED_TEAM = "red";
     public static final String BLACK_TEAM = "black";
-    /** Position of Red base */
+    /**
+     * Position of Red base
+     */
     public static final Vector3i CENTER_RED_BASE_POSITION = new Vector3i(30, 10, 0);
-    /** Position of Black base */
+    /**
+     * Position of Black base
+     */
     public static final Vector3i CENTER_BLACK_BASE_POSITION = new Vector3i(-30, 10, 0);
     public static final String BLACK_BASE_STONE = "LightAndShadowResources:blackBaseStone";
     public static final String RED_BASE_STONE = "LightAndShadowResources:redBaseStone";
