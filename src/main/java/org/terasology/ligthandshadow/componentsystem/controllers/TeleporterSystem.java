@@ -46,8 +46,6 @@ public class TeleporterSystem extends BaseComponentSystem {
     @In
     EntityManager entityManager;
 
-    private EntityBuilder builder;
-
     // The position near the team's base that player will be teleported to on choosing a team
     private static final Vector3f RED_TELEPORT_DESTINATION = new Vector3f(29, 12, 0);
     private static final Vector3f BLACK_TELEPORT_DESTINATION = new Vector3f(-29, 12, 0);
