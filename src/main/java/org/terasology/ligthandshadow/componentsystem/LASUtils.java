@@ -41,6 +41,9 @@ public final class LASUtils {
     public static final String BLACK_PAWN = "LightAndShadowResources:blackPawnPlayerSkin";
     public static final String RED_PAWN = "LightAndShadowResources:redPawnPlayerSkin";
 
+    private LASUtils() {
+    }
+
     public static Vector3i getFlagLocation(String flagTeam) {
         if (flagTeam.equals(RED_TEAM)) {
             return (new Vector3i(CENTER_RED_BASE_POSITION.x, CENTER_RED_BASE_POSITION.y + 1, CENTER_RED_BASE_POSITION.z));
