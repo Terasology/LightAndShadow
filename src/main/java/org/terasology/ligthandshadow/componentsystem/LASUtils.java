@@ -38,8 +38,8 @@ public final class LASUtils {
     public static final int GOAL_SCORE = 5;
     public static final String SPADES_PARTICLE = "LightAndShadowResources:blackFlagParticleEffect";
     public static final String HEARTS_PARTICLE = "LightAndShadowResources:redFlagParticleEffect";
-    public static final String BLACK_PAWN = "LightAndShadowResources:blackPawnPlayerSkin";
-    public static final String RED_PAWN = "LightAndShadowResources:redPawnPlayerSkin";
+    public static final String BLACK_PAWN = "LightAndShadowResources:blackPawnPlayer";
+    public static final String RED_PAWN = "LightAndShadowResources:redPawnPlayer";
 
     private LASUtils() {
     }

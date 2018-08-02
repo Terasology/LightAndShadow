@@ -54,7 +54,6 @@ public class ClientParticleSystem extends BaseComponentSystem {
         if (!player.hasComponent(HasFlagComponent.class)) {
             player.addComponent(new HasFlagComponent(team));
         }
-
     }
 
     @ReceiveEvent
