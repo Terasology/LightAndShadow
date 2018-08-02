@@ -25,6 +25,7 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.AddPlayerSkinToPlayerEvent;
+import org.terasology.logic.characters.VisualCharacterComponent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
 
@@ -39,15 +40,12 @@ public class ClientSkinSystem extends BaseComponentSystem {
     public void onAddPlayerSkinToPlayer(AddPlayerSkinToPlayerEvent event, EntityRef entity) {
         String team = event.team;
         EntityRef player = event.player;
-        if (team.equals(LASUtils.BLACK_TEAM)) {
-            builder = entityManager.newBuilder(LASUtils.BLACK_PAWN);
+        if (player.getComponent(VisualCharacterComponent.class).visualCharacter == EntityRef.NULL) {
+            builder = entityManager.newBuilder(LASUtils.getPlayerSkin(team));
             builder.saveComponent(player.getComponent(LocationComponent.class));
-            builder.build();
-        }
-        if (team.equals(LASUtils.RED_TEAM)) {
-            builder = entityManager.newBuilder(LASUtils.RED_PAWN);
-            builder.saveComponent(player.getComponent(LocationComponent.class));
-            builder.build();
+            VisualCharacterComponent visualCharacterComponent = player.getComponent(VisualCharacterComponent.class);
+            visualCharacterComponent.visualCharacter = builder.build();
+            player.saveComponent(visualCharacterComponent);
         }
     }
 }

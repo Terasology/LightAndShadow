@@ -26,15 +26,12 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.SetTeamOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.events.AddPlayerSkinToPlayerEvent;
-import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
@@ -81,20 +78,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     }
 
     private void setPlayerSkin(EntityRef player, String team) {
-        if (team.equals(LASUtils.RED_TEAM)) {
-            builder = entityManager.newBuilder(LASUtils.RED_PAWN);
-            builder.saveComponent(player.getComponent(LocationComponent.class));
-            builder.build();
-            sendEventToClients(new AddPlayerSkinToPlayerEvent(team, player));
-            return;
-        }
-        if (team.equals(LASUtils.BLACK_TEAM)) {
-            builder = entityManager.newBuilder(LASUtils.BLACK_PAWN);
-            builder.saveComponent(player.getComponent(LocationComponent.class));
-            builder.build();
-            sendEventToClients(new AddPlayerSkinToPlayerEvent(team, player));
-            return;
-        }
+        sendEventToClients(new AddPlayerSkinToPlayerEvent(player, team));
     }
 
     private void sendEventToClients(Event event) {
