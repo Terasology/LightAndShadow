@@ -27,8 +27,8 @@ public class AddPlayerSkinToPlayerEvent implements Event {
     public AddPlayerSkinToPlayerEvent() {
     }
 
-    public AddPlayerSkinToPlayerEvent(EntityRef player, String team) {
-        this.player = player;
+    public AddPlayerSkinToPlayerEvent(String team, EntityRef player) {
         this.team = team;
+        this.player = player;
     }
 }
