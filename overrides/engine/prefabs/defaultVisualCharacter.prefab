@@ -6,11 +6,11 @@
         "animation" : "lightAndShadowResources:pawnStill",
         "loop" : true
     },
-    "Stand" :{
-        "animationPool": ["lightAndShadowResources:pawnStill"]
+    "Stand" : {
+        "animationPool" : ["lightAndShadowResources:pawnStill"]
     },
-    "Walk" :{
-        "animationPool": ["lightAndShadowResources:pawnWalk"]
+    "Walk" : {
+        "animationPool" : ["lightAndShadowResources:pawnWalk"]
     },
-    "Location": {}
+    "Location" : {}
 }

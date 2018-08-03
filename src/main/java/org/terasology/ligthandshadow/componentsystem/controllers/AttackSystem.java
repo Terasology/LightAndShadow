@@ -68,7 +68,7 @@ public class AttackSystem extends BaseComponentSystem {
     /**
      * When player activates another with the magic staff, checks to see if the attacked player has a flag
      * If so, makes the player drop the flag
-     * targetPlayer is player being attacked
+     * @param targetPlayer The player being attacked
      */
     private void dropFlagOnPlayerAttack(ActivateEvent event, EntityRef targetPlayer) {
         EntityRef attackingPlayer = event.getInstigator(); // The player using the staff to attack

@@ -15,7 +15,6 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-
 import org.terasology.entitySystem.entity.EntityBuilder;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;

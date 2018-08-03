@@ -18,8 +18,8 @@ package org.terasology.ligthandshadow.componentsystem;
 import org.terasology.math.geom.Vector3i;
 
 public final class LASUtils {
-    public static final String BLACK_FLAG_URI = "LightAndShadowResources:blackFlag";
-    public static final String RED_FLAG_URI = "LightAndShadowResources:redFlag";
+    public static final String BLACK_FLAG_URI = "lightAndShadowResources:blackFlag";
+    public static final String RED_FLAG_URI = "lightAndShadowResources:redFlag";
     public static final String RED_TEAM = "red";
     public static final String BLACK_TEAM = "black";
     /**
@@ -30,18 +30,18 @@ public final class LASUtils {
      * Position of Black base
      */
     public static final Vector3i CENTER_BLACK_BASE_POSITION = new Vector3i(-30, 10, 0);
-    public static final String BLACK_BASE_STONE = "LightAndShadowResources:blackBaseStone";
-    public static final String RED_BASE_STONE = "LightAndShadowResources:redBaseStone";
+    public static final String BLACK_BASE_STONE = "lightAndShadowResources:blackBaseStone";
+    public static final String RED_BASE_STONE = "lightAndShadowResources:redBaseStone";
     /**
      * Determines size of base
      * Base is a square of side 2 * BASE_EXTENT + 1 with the flag at the center
      */
     public static final int BASE_EXTENT = 2;
     public static final int GOAL_SCORE = 5;
-    public static final String SPADES_PARTICLE = "LightAndShadowResources:blackFlagParticleEffect";
-    public static final String HEARTS_PARTICLE = "LightAndShadowResources:redFlagParticleEffect";
-    public static final String BLACK_PAWN = "LightAndShadowResources:blackPawnPlayer";
-    public static final String RED_PAWN = "LightAndShadowResources:redPawnPlayer";
+    public static final String SPADES_PARTICLE = "lightAndShadowResources:blackFlagParticleEffect";
+    public static final String HEARTS_PARTICLE = "lightAndShadowResources:redFlagParticleEffect";
+    public static final String BLACK_PAWN = "lightAndShadowResources:blackPawnPlayer";
+    public static final String RED_PAWN = "lightAndShadowResources:redPawnPlayer";
 
     private LASUtils() {
     }

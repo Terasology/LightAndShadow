@@ -23,7 +23,6 @@ import org.terasology.world.block.items.AddToBlockBasedItem;
  * flag in their inventory
  * String flag indicates the team of the flag being held
  */
-
 @AddToBlockBasedItem
 public class HasFlagComponent implements Component {
     public String flag;
