@@ -15,6 +15,7 @@
  */
 package org.terasology.ligthandshadow.componentsystem;
 
+import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.world.block.BlockManager;
@@ -44,6 +45,16 @@ public final class LASUtils {
     public static final String HEARTS_PARTICLE = "lightAndShadowResources:redFlagParticleEffect";
     public static final String BLACK_PAWN = "lightAndShadowResources:blackPawnPlayer";
     public static final String RED_PAWN = "lightAndShadowResources:redPawnPlayer";
+    public static final String WHITE_HEALTH_ICON = "lightAndShadowResources:icons#circle";
+    public static final String RED_HEALTH_ICON = "engine:icons#redHeart";
+    public static final String BLACK_HEALTH_ICON = "lightAndShadowResources:icons#spades";
+    public static final String WHITE_HEALTH_SKIN = "lightAndShadowResources:healthWhite";
+    public static final String RED_HEALTH_SKIN = "lightAndShadowResources:healthRed";
+    public static final String BLACK_HEALTH_SKIN = "lightAndShadowResources:healthBlack";
+    // The position near the team's base that player will be teleported to on choosing a team
+    public static final Vector3f RED_TELEPORT_DESTINATION = new Vector3f(29, 12, 0);
+    public static final Vector3f BLACK_TELEPORT_DESTINATION = new Vector3f(-29, 12, 0);
+
 
     private LASUtils() {
     }
@@ -77,4 +88,15 @@ public final class LASUtils {
         }
         return null;
     }
+
+    public static Vector3f getTeleportDestination (String team) {
+        if (team.equals(RED_TEAM)) {
+            return RED_TELEPORT_DESTINATION;
+        }
+        if (team.equals(BLACK_TEAM)) {
+            return BLACK_TELEPORT_DESTINATION;
+        }
+        return null;
+    }
+
 }

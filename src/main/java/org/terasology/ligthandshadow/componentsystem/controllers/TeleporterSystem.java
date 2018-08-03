@@ -55,29 +55,27 @@ public class TeleporterSystem extends BaseComponentSystem {
     private static final Vector3f RED_TELEPORT_DESTINATION = new Vector3f(29, 12, 0);
     private static final Vector3f BLACK_TELEPORT_DESTINATION = new Vector3f(-29, 12, 0);
 
+    /* Depending on which teleporter the player chooses, they are set to that team
+     * and teleported to that base */
     @ReceiveEvent(components = {SetTeamOnActivateComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
-        LASTeamComponent teleporterTeamComponent = entity.getComponent(LASTeamComponent.class);
         EntityRef player = event.getInstigator();
-        LASTeamComponent playerTeamComponent = player.getComponent(LASTeamComponent.class);
+        String team = setPlayerTeamToTeleporterTeam(player, entity);
+        handlePlayerTeleport(player, team);
+    }
 
-        /* Depending on which teleporter the player chooses, they are set to that team
-         * and teleported to that base */
-        String teleporterTeam = teleporterTeamComponent.team;
-        playerTeamComponent.team = teleporterTeam;
+    private String setPlayerTeamToTeleporterTeam(EntityRef player, EntityRef teleporter) {
+        LASTeamComponent teleporterTeamComponent = teleporter.getComponent(LASTeamComponent.class);
+        LASTeamComponent playerTeamComponent = player.getComponent(LASTeamComponent.class);
+        playerTeamComponent.team = teleporterTeamComponent.team;
         player.saveComponent(playerTeamComponent);
-        if (teleporterTeam.equals(LASUtils.RED_TEAM)) {
-            player.send(new CharacterTeleportEvent(new Vector3f(RED_TELEPORT_DESTINATION)));
-            inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(MAGIC_STAFF_URI));
-            setPlayerSkin(player, teleporterTeam);
-            return;
-        }
-        if (teleporterTeam.equals(LASUtils.BLACK_TEAM)) {
-            player.send(new CharacterTeleportEvent(new Vector3f(BLACK_TELEPORT_DESTINATION)));
-            inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(MAGIC_STAFF_URI));
-            setPlayerSkin(player, teleporterTeam);
-            return;
-        }
+        return playerTeamComponent.team;
+    }
+
+    private void handlePlayerTeleport(EntityRef player, String team) {
+        player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
+        inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(MAGIC_STAFF_URI));
+        setPlayerSkin(player, team);
     }
 
     private void setPlayerSkin(EntityRef player, String team) {
