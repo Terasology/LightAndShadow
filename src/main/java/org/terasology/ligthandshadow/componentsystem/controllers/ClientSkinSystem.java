@@ -36,8 +36,8 @@ public class ClientSkinSystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void onAddPlayerSkinToPlayer(AddPlayerSkinToPlayerEvent event, EntityRef entity) {
-        String team = event.team;
         EntityRef player = event.player;
+        String team = event.team;
         if (team.equals(LASUtils.BLACK_TEAM)) {
             builder = entityManager.newBuilder(LASUtils.BLACK_PAWN);
             builder.saveComponent(player.getComponent(LocationComponent.class));

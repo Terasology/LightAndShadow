@@ -21,14 +21,14 @@ import org.terasology.network.BroadcastEvent;
 
 @BroadcastEvent
 public class AddPlayerSkinToPlayerEvent implements Event {
-    public String team;
     public EntityRef player;
+    public String team;
 
     public AddPlayerSkinToPlayerEvent() {
     }
 
-    public AddPlayerSkinToPlayerEvent(String team, EntityRef player) {
-        this.team = team;
+    public AddPlayerSkinToPlayerEvent(EntityRef player, String team) {
         this.player = player;
+        this.team = team;
     }
 }
