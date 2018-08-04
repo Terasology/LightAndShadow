@@ -18,19 +18,6 @@ package org.terasology.ligthandshadow.componentsystem.components;
 import org.terasology.entitySystem.Component;
 import org.terasology.world.block.items.AddToBlockBasedItem;
 
-/**
- * This is attached to player entities to indicate whether or not they have a
- * flag in their inventory
- * String flag indicates the team of the flag being held
- */
 @AddToBlockBasedItem
-public class HasFlagComponent implements Component {
-    public String flag;
-
-    public HasFlagComponent() {
-    }
-
-    public HasFlagComponent(String flag) {
-        this.flag = flag;
-    }
+public class SpadesParticleComponent implements Component {
 }

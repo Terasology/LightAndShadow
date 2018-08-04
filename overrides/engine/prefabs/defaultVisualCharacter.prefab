@@ -1,0 +1,16 @@
+{
+    "SkeletalMesh" : {
+        "mesh" : "lightAndShadowResources:pawn",
+        "heightOffset" : -0.8,
+        "material" : "lightAndShadowResources:whitePawnPlayerSkin",
+        "animation" : "lightAndShadowResources:pawnStill",
+        "loop" : true
+    },
+    "Stand" : {
+        "animationPool" : ["lightAndShadowResources:pawnStill"]
+    },
+    "Walk" : {
+        "animationPool" : ["lightAndShadowResources:pawnWalk"]
+    },
+    "Location" : {}
+}

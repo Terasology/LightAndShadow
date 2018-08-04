@@ -24,11 +24,9 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.TakeBlockOnActivateComponent;
 import org.terasology.logic.common.ActivateEvent;
-import org.terasology.logic.inventory.InventoryAuthoritySystem;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.registry.In;
 import org.terasology.world.BlockEntityRegistry;
@@ -37,9 +35,10 @@ import org.terasology.world.block.BlockComponent;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
 
-
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TakeBlockOnActivationSystem extends BaseComponentSystem {
+    private static final Logger logger = LoggerFactory.getLogger(TakeBlockOnActivationSystem.class);
+
     @In
     private WorldProvider worldProvider;
     @In
@@ -51,31 +50,28 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     @In
     private EntityManager entityManager;
 
-
-    private static final Logger logger = LoggerFactory.getLogger(TakeBlockOnActivationSystem.class);
-
     @ReceiveEvent(components = {TakeBlockOnActivateComponent.class, BlockComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
-        BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
-        inventoryManager = new InventoryAuthoritySystem();
-
-        BlockComponent blockComponent = entity.getComponent(BlockComponent.class);
-        LASTeamComponent flagTeamComponent = entity.getComponent(LASTeamComponent.class);
-
         EntityRef flagTaker = event.getInstigator();
-        LASTeamComponent playerTeamComponent = flagTaker.getComponent(LASTeamComponent.class);
+
         // If the flag being taken is a red flag and the player is on the black team, let them take the flag
-        if (flagTeamComponent.team.equals(LASUtils.RED_TEAM) && playerTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
-            flagTaker.addComponent(new HasFlagComponent(LASUtils.RED_TEAM));
-            inventoryManager.giveItem(flagTaker, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.RED_FLAG_URI)));
-            worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
-            entity.destroy();
+        if (!playerTeamMatchesFlagTeam(entity, flagTaker)) {
+            giveFlagToPlayer(entity, flagTaker);
         }
-        if (flagTeamComponent.team.equals(LASUtils.BLACK_TEAM) && playerTeamComponent.team.equals(LASUtils.RED_TEAM)) {
-            flagTaker.addComponent(new HasFlagComponent(LASUtils.BLACK_TEAM));
-            inventoryManager.giveItem(flagTaker, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.BLACK_FLAG_URI)));
-            worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
-            entity.destroy();
-        }
+    }
+
+    private boolean playerTeamMatchesFlagTeam(EntityRef flag, EntityRef player) {
+        LASTeamComponent flagTeamComponent = flag.getComponent(LASTeamComponent.class);
+        LASTeamComponent playerTeamComponent = player.getComponent(LASTeamComponent.class);
+        return (flagTeamComponent.team.equals(playerTeamComponent.team));
+    }
+
+    private void giveFlagToPlayer(EntityRef flag, EntityRef player) {
+        BlockComponent blockComponent = flag.getComponent(BlockComponent.class);
+        LASTeamComponent flagTeamComponent = flag.getComponent(LASTeamComponent.class);
+        BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
+        inventoryManager.giveItem(player, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.getFlagURI(flagTeamComponent.team))));
+        worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
+        flag.destroy();
     }
 }

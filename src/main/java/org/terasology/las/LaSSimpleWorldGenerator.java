@@ -43,6 +43,7 @@ public class LaSSimpleWorldGenerator extends BaseFacetedWorldGenerator {
     public LaSSimpleWorldGenerator(SimpleUri uri) {
         super(uri);
     }
+
     private final Spawner spawner = new LaSSpawner();
     private BlockTheme theme;
 

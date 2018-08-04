@@ -15,29 +15,49 @@
  */
 package org.terasology.ligthandshadow.componentsystem;
 
+import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
 import org.terasology.world.block.BlockManager;
 
 public final class LASUtils {
-    @In
-    private BlockManager blockManager;
-
-    public static final String BLACK_FLAG_URI = "LightAndShadowResources:blackFlag";
-    public static final String RED_FLAG_URI = "LightAndShadowResources:redFlag";
+    public static final String BLACK_FLAG_URI = "lightAndShadowResources:blackFlag";
+    public static final String RED_FLAG_URI = "lightAndShadowResources:redFlag";
     public static final String RED_TEAM = "red";
     public static final String BLACK_TEAM = "black";
-    /** Position of Red base */
+    /**
+     * Position of Red base
+     */
     public static final Vector3i CENTER_RED_BASE_POSITION = new Vector3i(30, 10, 0);
-    /** Position of Black base */
+    /**
+     * Position of Black base
+     */
     public static final Vector3i CENTER_BLACK_BASE_POSITION = new Vector3i(-30, 10, 0);
-    public static final String BLACK_BASE_STONE = "LightAndShadowResources:blackBaseStone";
-    public static final String RED_BASE_STONE = "LightAndShadowResources:redBaseStone";
+    public static final String BLACK_BASE_STONE = "lightAndShadowResources:blackBaseStone";
+    public static final String RED_BASE_STONE = "lightAndShadowResources:redBaseStone";
     /**
      * Determines size of base
      * Base is a square of side 2 * BASE_EXTENT + 1 with the flag at the center
      */
     public static final int BASE_EXTENT = 2;
+    public static final int GOAL_SCORE = 5;
+    public static final String SPADES_PARTICLE = "lightAndShadowResources:blackFlagParticleEffect";
+    public static final String HEARTS_PARTICLE = "lightAndShadowResources:redFlagParticleEffect";
+    public static final String BLACK_PAWN = "lightAndShadowResources:blackPawnPlayer";
+    public static final String RED_PAWN = "lightAndShadowResources:redPawnPlayer";
+    public static final String WHITE_HEALTH_ICON = "lightAndShadowResources:icons#circle";
+    public static final String RED_HEALTH_ICON = "engine:icons#redHeart";
+    public static final String BLACK_HEALTH_ICON = "lightAndShadowResources:icons#spades";
+    public static final String WHITE_HEALTH_SKIN = "lightAndShadowResources:healthWhite";
+    public static final String RED_HEALTH_SKIN = "lightAndShadowResources:healthRed";
+    public static final String BLACK_HEALTH_SKIN = "lightAndShadowResources:healthBlack";
+    // The position near the team's base that player will be teleported to on choosing a team
+    public static final Vector3f RED_TELEPORT_DESTINATION = new Vector3f(29, 12, 0);
+    public static final Vector3f BLACK_TELEPORT_DESTINATION = new Vector3f(-29, 12, 0);
+
+
+    private LASUtils() {
+    }
 
     public static Vector3i getFlagLocation(String flagTeam) {
         if (flagTeam.equals(RED_TEAM)) {
@@ -58,4 +78,25 @@ public final class LASUtils {
         }
         return null;
     }
+
+    public static String getFlagParticle(String flagTeam) {
+        if (flagTeam.equals(RED_TEAM)) {
+            return HEARTS_PARTICLE;
+        }
+        if (flagTeam.equals(BLACK_TEAM)) {
+            return SPADES_PARTICLE;
+        }
+        return null;
+    }
+
+    public static Vector3f getTeleportDestination (String team) {
+        if (team.equals(RED_TEAM)) {
+            return RED_TELEPORT_DESTINATION;
+        }
+        if (team.equals(BLACK_TEAM)) {
+            return BLACK_TELEPORT_DESTINATION;
+        }
+        return null;
+    }
+
 }

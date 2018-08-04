@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.ligthandshadow.componentsystem.components;
+package org.terasology.ligthandshadow.componentsystem.events;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.world.block.items.AddToBlockBasedItem;
+import org.terasology.entitySystem.event.Event;
+import org.terasology.network.BroadcastEvent;
 
-/**
- * This is attached to player entities to indicate whether or not they have a
- * flag in their inventory
- * String flag indicates the team of the flag being held
- */
-@AddToBlockBasedItem
-public class HasFlagComponent implements Component {
-    public String flag;
+@BroadcastEvent
+public class ScoreUpdateFromServerEvent implements Event {
+    public String team;
+    public int score;
 
-    public HasFlagComponent() {
+    public ScoreUpdateFromServerEvent() {
     }
 
-    public HasFlagComponent(String flag) {
-        this.flag = flag;
+    public ScoreUpdateFromServerEvent(String team, int score) {
+        this.team = team;
+        this.score = score;
     }
 }

@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.las.ui;
+package org.terasology.ligthandshadow.componentsystem.events;
 
-import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.ligthandshadow.componentsystem.components.ScoreComponent;
-import org.terasology.registry.In;
-import org.terasology.rendering.nui.layers.hud.CoreHudWidget;
-import org.terasology.rendering.nui.widgets.UIText;
+import org.terasology.entitySystem.event.Event;
+import org.terasology.network.BroadcastEvent;
 
-public class ScoreHud extends CoreHudWidget {
+@BroadcastEvent
+public class AddPlayerSkinToPlayerEvent implements Event {
+    public EntityRef player;
+    public String team;
 
-    @In
-    private EntityManager entityManager;
+    public AddPlayerSkinToPlayerEvent() {
+    }
 
-    private UIText scoreArea;
-    private EntityRef scoreEntity;
-    private ScoreComponent score;
-
-    @Override
-    public void initialise() {
-
+    public AddPlayerSkinToPlayerEvent(EntityRef player, String team) {
+        this.player = player;
+        this.team = team;
     }
 }

@@ -19,18 +19,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.Event;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
+import org.terasology.ligthandshadow.componentsystem.components.BlackFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
+import org.terasology.ligthandshadow.componentsystem.components.RedFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
+import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.math.geom.Vector3i;
+import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
+import org.terasology.registry.Share;
 import org.terasology.rendering.nui.ControlWidget;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
@@ -40,9 +46,9 @@ import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemComponent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
+@Share(ScoreSystem.class)
 public class ScoreSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(ScoreSystem.class);
-    private static final int GOAL_SCORE = 5;
 
     @In
     private InventoryManager inventoryManager;
@@ -104,8 +110,8 @@ public class ScoreSystem extends BaseComponentSystem {
             EntityRef heldFlag = getHeldFlag(player);
             if (checkIfTeamScores(baseTeamComponent, heldFlag)) {
                 incrementScore(baseTeamComponent);
-                if (redScore < GOAL_SCORE && blackScore < GOAL_SCORE) {
-                    resetRound(player, baseTeamComponent, heldFlag);
+                if (redScore < LASUtils.GOAL_SCORE && blackScore < LASUtils.GOAL_SCORE) {
+                    resetRound(baseTeamComponent, heldFlag);
                 } else {
                     resetLevel(player, baseTeamComponent, heldFlag);
                 }
@@ -128,14 +134,10 @@ public class ScoreSystem extends BaseComponentSystem {
 
     private boolean checkIfTeamScores(LASTeamComponent baseTeamComponent, EntityRef heldItem) {
         // Check to see if player has other team's flag
-        if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)
-                && heldItem.hasComponent(BlockItemComponent.class)
-                && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI)) {
+        if (baseTeamComponent.team.equals(LASUtils.RED_TEAM) && heldItem.hasComponent(BlackFlagComponent.class)) {
             return true;
         }
-        if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)
-                && heldItem.hasComponent(BlockItemComponent.class)
-                && heldItem.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.RED_FLAG_URI)) {
+        if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM) && heldItem.hasComponent(RedFlagComponent.class)) {
             return true;
         }
         return false;
@@ -144,42 +146,48 @@ public class ScoreSystem extends BaseComponentSystem {
     private void incrementScore(LASTeamComponent baseTeamComponent) {
         if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)) {
             redScore++;
+            // Send event to clients to update their Score UI
+            sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.RED_TEAM, redScore));
             return;
         }
         if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
             blackScore++;
+            // Send event to clients to update their Score UI
+            sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.BLACK_TEAM, blackScore));
             return;
         }
     }
 
-    private void resetRound(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
-        if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)) {
-            basePosition = LASUtils.CENTER_BLACK_BASE_POSITION;
-            flag = LASUtils.BLACK_FLAG_URI;
-            movePlayerFlagToBase(player, heldItem);
-        }
-        if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
-            basePosition = LASUtils.CENTER_RED_BASE_POSITION;
-            flag = LASUtils.RED_FLAG_URI;
-            movePlayerFlagToBase(player, heldItem);
+    private void resetRound(LASTeamComponent baseTeamComponent, EntityRef heldItem) {
+        Iterable<EntityRef> playersWithFlag = entityManager.getEntitiesWith(HasFlagComponent.class);
+        for (EntityRef playerWithFlag : playersWithFlag) {
+            movePlayerFlagToBase(playerWithFlag, baseTeamComponent, heldItem);
         }
     }
 
+    // TODO: Handle level reset
     private void resetLevel(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
+    }
+
+    private void movePlayerFlagToBase(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
         if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)) {
             basePosition = LASUtils.CENTER_BLACK_BASE_POSITION;
             flag = LASUtils.BLACK_FLAG_URI;
-            movePlayerFlagToBase(player, heldItem);
         }
         if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
             basePosition = LASUtils.CENTER_RED_BASE_POSITION;
             flag = LASUtils.RED_FLAG_URI;
-            movePlayerFlagToBase(player, heldItem);
         }
-    }
-
-    private void movePlayerFlagToBase(EntityRef player, EntityRef heldItem) {
         inventoryManager.removeItem(player, player, heldItem, true);
         worldProvider.setBlock(new Vector3i(basePosition.x, basePosition.y + 1, basePosition.z), blockManager.getBlock(flag));
+    }
+
+    private void sendEventToClients(Event event) {
+        if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
+            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
+            for (EntityRef client : clients) {
+                client.send(event);
+            }
+        }
     }
 }

@@ -13,26 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.las.ui;
+package org.terasology.ligthandshadow.componentsystem.components;
 
-import org.terasology.entitySystem.entity.EntityManager;
+import org.terasology.entitySystem.Component;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.ligthandshadow.componentsystem.components.ScoreComponent;
-import org.terasology.registry.In;
-import org.terasology.rendering.nui.layers.hud.CoreHudWidget;
-import org.terasology.rendering.nui.widgets.UIText;
 
-public class ScoreHud extends CoreHudWidget {
+public class FlagParticleComponent implements Component {
+    public EntityRef particleEntity = EntityRef.NULL;
 
-    @In
-    private EntityManager entityManager;
+    public FlagParticleComponent() {
+    }
 
-    private UIText scoreArea;
-    private EntityRef scoreEntity;
-    private ScoreComponent score;
+    public FlagParticleComponent(EntityRef particleEntity) {
+        this.particleEntity = particleEntity;
+    }
 
-    @Override
-    public void initialise() {
-
+    public EntityRef getParticleEntity() {
+        return particleEntity;
     }
 }

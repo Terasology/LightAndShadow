@@ -41,7 +41,7 @@ public class LASSystem extends BaseComponentSystem {
     private BlockManager blockManager;
 
     /**
-     * give player inventory items on game start
+     * Gives player inventory items on game start
      */
     @ReceiveEvent
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, InventoryComponent inventory) {
