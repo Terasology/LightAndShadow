@@ -20,11 +20,17 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.ligthandshadow.componentsystem.LASUtils;
+import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.action.RemoveItemAction;
 import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.registry.In;
+import org.terasology.rendering.nui.NUIManager;
+import org.terasology.rendering.nui.layers.hud.HealthHud;
+import org.terasology.rendering.nui.widgets.UIIconBar;
+import org.terasology.utilities.Assets;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
@@ -39,6 +45,8 @@ public class LASSystem extends BaseComponentSystem {
     private WorldProvider worldProvider;
     @In
     private BlockManager blockManager;
+    @In
+    private NUIManager nuiManager;
 
     /**
      * Gives player inventory items on game start
@@ -54,6 +62,9 @@ public class LASSystem extends BaseComponentSystem {
 
     @Override
     public void initialise() {
+        HealthHud healthHud = nuiManager.getHUD().getHUDElement("core:healthHud", HealthHud.class);
+        healthHud.find("healthBar", UIIconBar.class).setIcon(Assets.getTextureRegion(LASUtils.getHealthIcon(LASUtils.WHITE_TEAM)).get());
+        healthHud.setSkin(Assets.getSkin(LASUtils.getHealthSkin(LASUtils.WHITE_TEAM)).get());
     }
 
     @Override

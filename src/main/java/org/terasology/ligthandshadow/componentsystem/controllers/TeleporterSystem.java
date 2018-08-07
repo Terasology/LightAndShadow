@@ -31,6 +31,7 @@ import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent
 import org.terasology.ligthandshadow.componentsystem.components.SetTeamOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.events.AddPlayerSkinToPlayerEvent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
+import org.terasology.ligthandshadow.componentsystem.events.SetPlayerHealthHUDEvent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
@@ -38,6 +39,10 @@ import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
+import org.terasology.rendering.nui.NUIManager;
+import org.terasology.rendering.nui.layers.hud.HealthHud;
+import org.terasology.rendering.nui.widgets.UIIconBar;
+import org.terasology.utilities.Assets;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 
@@ -48,6 +53,8 @@ public class TeleporterSystem extends BaseComponentSystem {
     InventoryManager inventoryManager;
     @In
     EntityManager entityManager;
+    @In
+    private NUIManager nuiManager;
 
     private EntityBuilder builder;
 
@@ -76,10 +83,16 @@ public class TeleporterSystem extends BaseComponentSystem {
         player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
         inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(MAGIC_STAFF_URI));
         setPlayerSkin(player, team);
+        setPlayerHud(player, team);
     }
+
 
     private void setPlayerSkin(EntityRef player, String team) {
         sendEventToClients(new AddPlayerSkinToPlayerEvent(player, team));
+    }
+
+    private void setPlayerHud(EntityRef player, String team) {
+        sendEventToClients(new SetPlayerHealthHUDEvent(player, team));
     }
 
     private void sendEventToClients(Event event) {
