@@ -16,6 +16,8 @@
 package org.terasology.ligthandshadow.componentsystem.components;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.network.Replicate;
+import org.terasology.world.block.ForceBlockActive;
 import org.terasology.world.block.items.AddToBlockBasedItem;
 
 /**
@@ -23,14 +25,8 @@ import org.terasology.world.block.items.AddToBlockBasedItem;
  * flag in their inventory
  * String flag indicates the team of the flag being held
  */
-@AddToBlockBasedItem
+
 public class HasFlagComponent implements Component {
+    @Replicate
     public String flag;
-
-    public HasFlagComponent() {
-    }
-
-    public HasFlagComponent(String flag) {
-        this.flag = flag;
-    }
 }
