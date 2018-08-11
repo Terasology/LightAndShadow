@@ -17,7 +17,6 @@ package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.entitySystem.entity.EntityBuilder;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
@@ -26,34 +25,23 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.SetTeamOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.events.AddPlayerSkinToPlayerEvent;
-import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
-
 public class TeleporterSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(TeleporterSystem.class);
-    private static final String MAGIC_STAFF_URI = "LightAndShadowResources:magicStaff";
+
     @In
     InventoryManager inventoryManager;
     @In
     EntityManager entityManager;
-
-    private EntityBuilder builder;
-
-    // The position near the team's base that player will be teleported to on choosing a team
-    private static final Vector3f RED_TELEPORT_DESTINATION = new Vector3f(29, 12, 0);
-    private static final Vector3f BLACK_TELEPORT_DESTINATION = new Vector3f(-29, 12, 0);
 
     /* Depending on which teleporter the player chooses, they are set to that team
      * and teleported to that base */
@@ -74,7 +62,7 @@ public class TeleporterSystem extends BaseComponentSystem {
 
     private void handlePlayerTeleport(EntityRef player, String team) {
         player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
-        inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(MAGIC_STAFF_URI));
+        inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(LASUtils.MAGIC_STAFF_URI));
         setPlayerSkin(player, team);
     }
 

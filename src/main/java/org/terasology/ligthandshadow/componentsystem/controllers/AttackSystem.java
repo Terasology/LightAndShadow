@@ -149,9 +149,16 @@ public class AttackSystem extends BaseComponentSystem {
 
     private void handleFlagPickup(EntityRef player, String flagTeam) {
         sendEventToClients(new FlagPickupEvent(player, flagTeam));
+        if (!player.hasComponent(HasFlagComponent.class)) {
+            player.addComponent(new HasFlagComponent());
+            player.getComponent(HasFlagComponent.class).flag = flagTeam;
+        }
     }
 
     private void handleFlagDrop(EntityRef player) {
+        if (player.hasComponent(HasFlagComponent.class)) {
+            player.removeComponent(HasFlagComponent.class);
+        }
         sendEventToClients(new FlagDropEvent(player));
     }
 
