@@ -43,8 +43,9 @@ public final class LASUtils {
     public static final int GOAL_SCORE = 5;
     public static final String SPADES_PARTICLE = "lightAndShadowResources:blackFlagParticleEffect";
     public static final String HEARTS_PARTICLE = "lightAndShadowResources:redFlagParticleEffect";
-    public static final String BLACK_PAWN = "lightAndShadowResources:blackPawnPlayer";
-    public static final String RED_PAWN = "lightAndShadowResources:redPawnPlayer";
+    public static final String BLACK_PAWN_SKIN = "lightAndShadowResources:blackPawnPlayerSkin";
+    public static final String RED_PAWN_SKIN = "lightAndShadowResources:redPawnPlayerSkin";
+    public static final String WHITE_PAWN_SKIN = "lightAndShadowResources:whitePawnPlayerSkin";
     public static final String WHITE_HEALTH_ICON = "lightAndShadowResources:icons#circle";
     public static final String RED_HEALTH_ICON = "engine:icons#redHeart";
     public static final String BLACK_HEALTH_ICON = "lightAndShadowResources:icons#spades";
