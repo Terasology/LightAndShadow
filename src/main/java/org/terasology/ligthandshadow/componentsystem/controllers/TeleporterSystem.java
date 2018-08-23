@@ -29,10 +29,13 @@ import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent
 import org.terasology.ligthandshadow.componentsystem.components.SetTeamOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.events.AddPlayerSkinToPlayerEvent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
+import org.terasology.logic.characters.VisualCharacterComponent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
+import org.terasology.rendering.logic.SkeletalMeshComponent;
+import org.terasology.utilities.Assets;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TeleporterSystem extends BaseComponentSystem {
@@ -67,7 +70,19 @@ public class TeleporterSystem extends BaseComponentSystem {
     }
 
     private void setPlayerSkin(EntityRef player, String team) {
-        sendEventToClients(new AddPlayerSkinToPlayerEvent(player, team));
+//        if (player.hasComponent(VisualCharacterComponent.class)) {
+//            VisualCharacterComponent visualCharacterComponent = player.getComponent(VisualCharacterComponent.class);
+//            if (visualCharacterComponent.visualCharacter != EntityRef.NULL && visualCharacterComponent.visualCharacter.hasComponent(SkeletalMeshComponent.class)) {
+//                SkeletalMeshComponent skeletalMeshComponent = visualCharacterComponent.visualCharacter.getComponent(SkeletalMeshComponent.class);
+//                if (team.equals(LASUtils.BLACK_TEAM)) {
+//                    skeletalMeshComponent.material = Assets.getMaterial(LASUtils.BLACK_PAWN_SKIN).get();
+//                } else if (team.equals(LASUtils.RED_TEAM)) {
+//                    skeletalMeshComponent.material = Assets.getMaterial(LASUtils.RED_PAWN_SKIN).get();
+//                }
+//            }
+//        }
+        //sendEventToClients(new AddPlayerSkinToPlayerEvent(player, team));
+        player.send(new AddPlayerSkinToPlayerEvent(player, team));
     }
 
     private void sendEventToClients(Event event) {
