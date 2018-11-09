@@ -16,38 +16,31 @@
 
 package org.terasology.las.dialog.action;
 
-import com.google.common.collect.ImmutableMap;
-import org.terasology.persistence.typeHandling.DeserializationContext;
 import org.terasology.persistence.typeHandling.PersistedData;
-import org.terasology.persistence.typeHandling.PersistedDataMap;
+import org.terasology.persistence.typeHandling.PersistedDataSerializer;
 import org.terasology.persistence.typeHandling.RegisterTypeHandler;
-import org.terasology.persistence.typeHandling.SerializationContext;
-import org.terasology.persistence.typeHandling.SimpleTypeHandler;
+import org.terasology.persistence.typeHandling.TypeHandler;
 
-import java.util.Map;
+import java.util.Optional;
 
 @RegisterTypeHandler
-public class SetTeamActionTypeHandler extends SimpleTypeHandler<SetTeamAction> {
+public class SetTeamActionTypeHandler extends TypeHandler<SetTeamAction> {
 
     public SetTeamActionTypeHandler() {
 
     }
 
     @Override
-    public PersistedData serialize(SetTeamAction action, SerializationContext context) {
-        Map<String, PersistedData> data = ImmutableMap.of(
-                "type", context.create(action.getClass().getSimpleName()),
-                "team", context.create(action.getTeam())
-        );
-
-        return context.create(data);
+    public PersistedData serializeNonNull(SetTeamAction action, PersistedDataSerializer context) {
+        return context.serialize(action.getTeam());
     }
 
     @Override
-    public SetTeamAction deserialize(PersistedData data, DeserializationContext context) {
-        PersistedDataMap root = data.getAsValueMap();
-        String team = root.get("team").getAsString();
-        return new SetTeamAction(team);
+    public Optional<SetTeamAction> deserialize(PersistedData data) {
+        if (!data.isString()) {
+            return Optional.empty();
+        }
+        String target = data.getAsString();
+        return Optional.of(new SetTeamAction(target));
     }
-
 }
