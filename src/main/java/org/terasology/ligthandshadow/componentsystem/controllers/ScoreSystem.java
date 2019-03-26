@@ -118,7 +118,7 @@ public class ScoreSystem extends BaseComponentSystem {
                 }
                 if (blackScore == LASUtils.GOAL_SCORE) {
                     logger.info("sending black won");
-                    sendEventToClients(new GameoverEvent(LASUtils.RED_TEAM));
+                    sendEventToClients(new GameoverEvent(LASUtils.BLACK_TEAM));
                 }
 //                if (redScore < LASUtils.GOAL_SCORE && blackScore < LASUtils.GOAL_SCORE) {
 //                    resetRound(baseTeamComponent, heldFlag);

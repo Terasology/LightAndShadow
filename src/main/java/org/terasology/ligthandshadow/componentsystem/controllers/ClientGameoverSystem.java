@@ -38,12 +38,12 @@ public class ClientGameoverSystem extends BaseComponentSystem {
     private LocalPlayer localPlayer;
 
     @ReceiveEvent
-    public void onGameover(GameoverEvent event, EntityRef character) {
+    public void onGameover(GameoverEvent event, EntityRef entity) {
         logger.info("Received game over event!");
-        logger.info(character.toString());
+        logger.info(localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team);
         nuiManager.removeOverlay("engine:onlinePlayersOverlay");
         nuiManager.pushScreen("lightAndShadow:gameOverScreen");
-        if (event.winningTeam == localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team) {
+        if (event.winningTeam.equals(localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team)) {
             ((GameoverScreen) nuiManager.getScreen("lightAndShadow:gameOverScreen")).setGameoverDetails("Won");
         } else {
             ((GameoverScreen) nuiManager.getScreen("lightAndShadow:gameOverScreen")).setGameoverDetails("Lost");
