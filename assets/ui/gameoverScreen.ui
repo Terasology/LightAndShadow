@@ -1,6 +1,6 @@
 {
-    "type": "GameoverScreen",
-    "skin": "GameoverScreen",
+    "type": "gameoverScreen",
+    "skin": "gameoverScreen",
     "contents": {
         "type": "relativeLayout",
         "contents": [
@@ -19,6 +19,21 @@
                     {
                         "type": "UISpace",
                         "size": [1, 16]
+                    },
+                    {
+                         "type": "UIButton",
+                         "text": "Restart",
+                         "id": "restart"
+                    },
+                    {
+                        "type": "UIButton",
+                        "text": "${engine:menu#game-settings}",
+                        "id": "settings"
+                    },
+                    {
+                        "type": "UIButton",
+                        "text": "${engine:menu#return-main-menu}",
+                        "id": "mainMenu"
                     },
                     {
                         "type": "UIButton",

@@ -35,6 +35,8 @@ public class GameoverScreen extends CoreScreenLayer {
     @Override
     public void initialise() {
         gameoverDetails = find("gameoverDetails", UILabel.class);
+        WidgetUtil.trySubscribe(this, "restart", widget -> getManager().closeScreen(GameoverScreen.this)); //TODO send restart event
+        WidgetUtil.trySubscribe(this, "settings", widget -> getManager().pushScreen("settingsMenuScreen"));
         WidgetUtil.trySubscribe(this, "exitGame", widget -> CoreRegistry.get(GameEngine.class).shutdown());
     }
 
