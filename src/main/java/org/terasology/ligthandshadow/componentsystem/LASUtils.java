@@ -40,7 +40,7 @@ public final class LASUtils {
      * Base is a square of side 2 * BASE_EXTENT + 1 with the flag at the center
      */
     public static final int BASE_EXTENT = 2;
-    public static final int GOAL_SCORE = 5;
+    public static final int GOAL_SCORE = 2;
     public static final String SPADES_PARTICLE = "lightAndShadowResources:blackFlagParticleEffect";
     public static final String HEARTS_PARTICLE = "lightAndShadowResources:redFlagParticleEffect";
     public static final String BLACK_PAWN = "lightAndShadowResources:blackPawnPlayer";
