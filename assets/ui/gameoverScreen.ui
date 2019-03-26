@@ -1,0 +1,38 @@
+{
+    "type": "GameoverScreen",
+    "skin": "GameoverScreen",
+    "contents": {
+        "type": "relativeLayout",
+        "contents": [
+            {
+                "type": "ColumnLayout",
+                "verticalSpacing": 8,
+                "contents": [
+                    {
+                        "type": "UILabel",
+                        "text": "Game Over"
+                    },
+                    {
+                        "type": "UILabel",
+                        "id": "gameoverDetails"
+                    },
+                    {
+                        "type": "UISpace",
+                        "size": [1, 16]
+                    },
+                    {
+                        "type": "UIButton",
+                        "text": "${engine:menu#exit-game}",
+                        "id": "exitGame"
+                    }
+                ],
+                "layoutInfo": {
+                    "use-content-width": true,
+                    "use-content-height": true,
+                    "position-horizontal-center": {},
+                    "position-vertical-center": {}
+                }
+            }
+        ]
+    }
+}
