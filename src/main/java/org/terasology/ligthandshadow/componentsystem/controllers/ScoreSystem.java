@@ -30,6 +30,7 @@ import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.RedFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
+import org.terasology.ligthandshadow.componentsystem.events.GameoverEvent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
@@ -110,11 +111,25 @@ public class ScoreSystem extends BaseComponentSystem {
             EntityRef heldFlag = getHeldFlag(player);
             if (checkIfTeamScores(baseTeamComponent, heldFlag)) {
                 incrementScore(baseTeamComponent);
-                if (redScore < LASUtils.GOAL_SCORE && blackScore < LASUtils.GOAL_SCORE) {
-                    resetRound(baseTeamComponent, heldFlag);
-                } else {
-                    resetLevel(player, baseTeamComponent, heldFlag);
+                resetRound(baseTeamComponent, heldFlag);
+                if (redScore == LASUtils.GOAL_SCORE) {
+                    logger.info("sending red won");
+                    sendEventToClients(new GameoverEvent(LASUtils.RED_TEAM));
                 }
+                if (blackScore == LASUtils.GOAL_SCORE) {
+                    logger.info("sending black won");
+                    sendEventToClients(new GameoverEvent(LASUtils.RED_TEAM));
+                }
+//                if (redScore < LASUtils.GOAL_SCORE && blackScore < LASUtils.GOAL_SCORE) {
+//                    resetRound(baseTeamComponent, heldFlag);
+//                } else {
+//                    resetLevel(player, baseTeamComponent, heldFlag);
+//                    if (redScore == LASUtils.GOAL_SCORE) {
+//                        sendEventToClients(new GameoverEvent(LASUtils.RED_TEAM));
+//                    } else {
+//                        sendEventToClients(new GameoverEvent(LASUtils.BLACK_TEAM));
+//                    }
+//                }
             }
         }
     }
