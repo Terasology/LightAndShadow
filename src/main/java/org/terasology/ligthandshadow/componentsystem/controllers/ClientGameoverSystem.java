@@ -15,8 +15,6 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -29,9 +27,14 @@ import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
 
+/**
+ * Displays game over screen for all clients.
+ *
+ * @author darshan3
+ */
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientGameoverSystem extends BaseComponentSystem {
-    private static final Logger logger = LoggerFactory.getLogger(ClientGameoverSystem.class);
+
     @In
     private NUIManager nuiManager;
     @In
@@ -39,8 +42,6 @@ public class ClientGameoverSystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void onGameover(GameoverEvent event, EntityRef entity) {
-        logger.info("Received game over event!");
-        logger.info(localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team);
         nuiManager.removeOverlay("engine:onlinePlayersOverlay");
         nuiManager.pushScreen("lightAndShadow:gameOverScreen");
         if (event.winningTeam.equals(localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team)) {

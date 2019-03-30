@@ -15,8 +15,6 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
@@ -49,7 +47,6 @@ import org.terasology.world.block.items.BlockItemComponent;
 @RegisterSystem(RegisterMode.AUTHORITY)
 @Share(ScoreSystem.class)
 public class ScoreSystem extends BaseComponentSystem {
-    private static final Logger logger = LoggerFactory.getLogger(ScoreSystem.class);
 
     @In
     private InventoryManager inventoryManager;
@@ -113,23 +110,11 @@ public class ScoreSystem extends BaseComponentSystem {
                 incrementScore(baseTeamComponent);
                 resetRound(baseTeamComponent, heldFlag);
                 if (redScore == LASUtils.GOAL_SCORE) {
-                    logger.info("sending red won");
                     sendEventToClients(new GameoverEvent(LASUtils.RED_TEAM));
                 }
                 if (blackScore == LASUtils.GOAL_SCORE) {
-                    logger.info("sending black won");
                     sendEventToClients(new GameoverEvent(LASUtils.BLACK_TEAM));
                 }
-//                if (redScore < LASUtils.GOAL_SCORE && blackScore < LASUtils.GOAL_SCORE) {
-//                    resetRound(baseTeamComponent, heldFlag);
-//                } else {
-//                    resetLevel(player, baseTeamComponent, heldFlag);
-//                    if (redScore == LASUtils.GOAL_SCORE) {
-//                        sendEventToClients(new GameoverEvent(LASUtils.RED_TEAM));
-//                    } else {
-//                        sendEventToClients(new GameoverEvent(LASUtils.BLACK_TEAM));
-//                    }
-//                }
             }
         }
     }
