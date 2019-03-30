@@ -37,14 +37,10 @@ public class GuidanceNpcProvider implements EntityProviderPlugin {
     @Override
     public void process(Region region, EntityBuffer buffer) {
         if (region.getRegion().encompasses(0, 64, 24)) {
-            Prefab dialog = Assets.getPrefab("LightAndShadow:TeamDialog").get();
-            DialogComponent dialogComp = dialog.getComponent(DialogComponent.class);
 
             Prefab chooseFactionNpc = Assets.getPrefab("LightAndShadow:MagicFool").get();
             EntityStore entity = new EntityStore(chooseFactionNpc);
             entity.addComponent(new LocationComponent(new Vector3f(0, 61, 24)));
-            entity.addComponent(dialogComp);
-            entity.addComponent(new NetworkComponent());
             buffer.enqueue(entity);
 
             Prefab beaconMark = Assets.getPrefab("BeaconMark").get();
