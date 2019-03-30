@@ -28,7 +28,7 @@ import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.RedFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
-import org.terasology.ligthandshadow.componentsystem.events.GameoverEvent;
+import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
@@ -110,10 +110,10 @@ public class ScoreSystem extends BaseComponentSystem {
                 incrementScore(baseTeamComponent);
                 resetRound(baseTeamComponent, heldFlag);
                 if (redScore == LASUtils.GOAL_SCORE) {
-                    sendEventToClients(new GameoverEvent(LASUtils.RED_TEAM));
+                    sendEventToClients(new GameOverEvent(LASUtils.RED_TEAM));
                 }
                 if (blackScore == LASUtils.GOAL_SCORE) {
-                    sendEventToClients(new GameoverEvent(LASUtils.BLACK_TEAM));
+                    sendEventToClients(new GameOverEvent(LASUtils.BLACK_TEAM));
                 }
             }
         }

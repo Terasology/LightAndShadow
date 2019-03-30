@@ -56,6 +56,9 @@ public final class LASUtils {
     public static final Vector3f BLACK_TELEPORT_DESTINATION = new Vector3f(-29, 12, 0);
     public static final String MAGIC_STAFF_URI = "LightAndShadowResources:magicStaff";
 
+    public static final String DEATH_SCREEN = "engine:DeathScreen";
+    public static final String ONLINE_PLAYERS_OVERLAY = "engine:onlinePlayersOverlay";
+
     private LASUtils() {
     }
 

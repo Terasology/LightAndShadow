@@ -19,13 +19,13 @@ import org.terasology.entitySystem.event.Event;
 import org.terasology.network.BroadcastEvent;
 
 @BroadcastEvent
-public class GameoverEvent implements Event {
+public class GameOverEvent implements Event {
     public String winningTeam;
 
-    public GameoverEvent() {
+    public GameOverEvent() {
     }
 
-    public GameoverEvent(String winningTeam) {
+    public GameOverEvent(String winningTeam) {
         this.winningTeam = winningTeam;
     }
 }
