@@ -42,8 +42,6 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     private NUIManager nuiManager;
     @In
     private LocalPlayer localPlayer;
-    @In
-    private Time time;
 
     @ReceiveEvent
     public void onGameOver(GameOverEvent event, EntityRef entity) {
