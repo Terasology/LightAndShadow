@@ -46,7 +46,6 @@ public class GuidanceNpcProvider implements EntityProviderPlugin {
             Prefab beaconMark = Assets.getPrefab("BeaconMark").get();
             EntityStore entityStore = new EntityStore(beaconMark);
             entityStore.addComponent(new LocationComponent(new Vector3f(0, 63, 24)));
-            entityStore.addComponent(new NetworkComponent());
             buffer.enqueue(entityStore);
         }
 
