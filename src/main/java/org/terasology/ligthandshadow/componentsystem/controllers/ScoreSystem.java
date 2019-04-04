@@ -109,10 +109,10 @@ public class ScoreSystem extends BaseComponentSystem {
             if (checkIfTeamScores(baseTeamComponent, heldFlag)) {
                 incrementScore(baseTeamComponent);
                 resetRound(baseTeamComponent, heldFlag);
-                if (redScore == LASUtils.GOAL_SCORE) {
+                if (redScore >= LASUtils.GOAL_SCORE) {
                     sendEventToClients(new GameOverEvent(LASUtils.RED_TEAM));
                 }
-                if (blackScore == LASUtils.GOAL_SCORE) {
+                if (blackScore >= LASUtils.GOAL_SCORE) {
                     sendEventToClients(new GameOverEvent(LASUtils.BLACK_TEAM));
                 }
             }
