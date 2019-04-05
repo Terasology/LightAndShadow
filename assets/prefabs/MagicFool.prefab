@@ -18,5 +18,128 @@
     "RigidBody" : {
         "kinematic" : false,
         "mass" : 0
+    },
+    "Dialog": {
+        "firstPage": "main",
+        "pages": [
+            {
+                "id": "main",
+                "title": "Welcome",
+                "paragraphText": [
+                    "Welcome to Light &amp; Shadow, ${player.name}! It is time for you to choose a side in this battle. Approach a teleporter and activate it to join that side in a fight for victory."
+                ],
+                "responses": [
+                    {
+                        "text": "Very well..",
+                        "action": {
+                            "type": "CloseDialogAction"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "blackColor",
+                "title": "Black",
+                "paragraphText": [
+                    "Then you should come to the shadow!"
+                ],
+                "responses": [
+                    {
+                        "text": "Yup, sounds great!",
+                        "action": [{
+                                "type": "SetTeamAction",
+                                "team": "shadow"
+                            },
+                            {
+                                "type": "ChangeDialogAction",
+                                "prefab": "TeleportDialog"
+                            },
+                            {
+                                "type": "CloseDialogAction"
+                            }
+                        ]
+                    },
+                    {
+                        "text": "Ah well, maybe it's not really black ..",
+                        "action": {
+                            "type": "NewDialogAction",
+                            "target": "main"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "whiteColor",
+                "title": "White",
+                "paragraphText": [
+                    "Then you should come to the light!"
+                ],
+                "responses": [
+                    {
+                        "text": "Yup, sounds great!",
+                        "action": [{
+                                "type": "SetTeamAction",
+                                "team": "light"
+                            },
+                            {
+                                "type": "ChangeDialogAction",
+                                "prefab": "TeleportDialog"
+                            },
+                            {
+                                "type": "CloseDialogAction"
+                            }
+                        ]
+                    },
+                    {
+                        "text": "Ah well, maybe it's not really white ..",
+                        "action": {
+                            "type": "NewDialogAction",
+                            "target": "main"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "myColor",
+                "title": "My Color",
+                "paragraphText": [
+                    "This is a really weird answer, young fellow!"
+                ],
+                "responses": [
+                    {
+                        "text": "That is a really weird conversation!",
+                        "action": {
+                            "type": "NewDialogAction",
+                            "target": "myColor2"
+                        }
+                    },
+                    {
+                        "text": "Ah well, maybe it's not really my favorite ..",
+                        "action": {
+                            "type": "NewDialogAction",
+                            "target": "main"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "myColor2",
+                "title": "My Color2",
+                "paragraphText": [
+                    "Erm .. maybe - let's start over again, shall we?"
+                ],
+                "responses": [
+                    {
+                        "text": "Why not ..",
+                        "action": {
+                            "type": "NewDialogAction",
+                            "target": "main"
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "Network": {
     }
 }

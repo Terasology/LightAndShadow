@@ -40,12 +40,13 @@ public class LaSSimpleWorldGenerator extends BaseFacetedWorldGenerator {
     @In
     private BlockManager blockManager;
 
+    private final Spawner spawner = new LaSSpawner();
+
+    private BlockTheme theme;
+
     public LaSSimpleWorldGenerator(SimpleUri uri) {
         super(uri);
     }
-
-    private final Spawner spawner = new LaSSpawner();
-    private BlockTheme theme;
 
     @Override
     public Vector3f getSpawnPosition(EntityRef entity) {
