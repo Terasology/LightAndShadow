@@ -15,8 +15,6 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
@@ -30,6 +28,7 @@ import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.RedFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
+import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
@@ -48,7 +47,6 @@ import org.terasology.world.block.items.BlockItemComponent;
 @RegisterSystem(RegisterMode.AUTHORITY)
 @Share(ScoreSystem.class)
 public class ScoreSystem extends BaseComponentSystem {
-    private static final Logger logger = LoggerFactory.getLogger(ScoreSystem.class);
 
     @In
     private InventoryManager inventoryManager;
@@ -110,10 +108,12 @@ public class ScoreSystem extends BaseComponentSystem {
             EntityRef heldFlag = getHeldFlag(player);
             if (checkIfTeamScores(baseTeamComponent, heldFlag)) {
                 incrementScore(baseTeamComponent);
-                if (redScore < LASUtils.GOAL_SCORE && blackScore < LASUtils.GOAL_SCORE) {
-                    resetRound(baseTeamComponent, heldFlag);
-                } else {
-                    resetLevel(player, baseTeamComponent, heldFlag);
+                resetRound(baseTeamComponent, heldFlag);
+                if (redScore >= LASUtils.GOAL_SCORE) {
+                    sendEventToClients(new GameOverEvent(LASUtils.RED_TEAM));
+                }
+                if (blackScore >= LASUtils.GOAL_SCORE) {
+                    sendEventToClients(new GameOverEvent(LASUtils.BLACK_TEAM));
                 }
             }
         }

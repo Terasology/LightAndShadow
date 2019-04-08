@@ -1,0 +1,53 @@
+{
+    "type": "deathScreen",
+    "skin": "gameoverScreen",
+    "contents": {
+        "type": "relativeLayout",
+        "contents": [
+            {
+                "type": "ColumnLayout",
+                "verticalSpacing": 8,
+                "contents": [
+                    {
+                        "type": "UILabel",
+                        "text": "Game Over"
+                    },
+                    {
+                        "type": "UILabel",
+                        "id": "gameOverDetails"
+                    },
+                    {
+                        "type": "UISpace",
+                        "size": [1, 16]
+                    },
+                    {
+                         "type": "UIButton",
+                         "text": "Restart",
+                         "id": "restart"
+                    },
+                    {
+                        "type": "UIButton",
+                        "text": "${engine:menu#game-settings}",
+                        "id": "settings"
+                    },
+                    {
+                        "type": "UIButton",
+                        "text": "${engine:menu#return-main-menu}",
+                        "id": "mainMenu"
+                    },
+                    {
+                        "type": "UIButton",
+                        "text": "${engine:menu#exit-game}",
+                        "id": "exitGame"
+                    }
+                ],
+                "layoutInfo": {
+                    "use-content-width": true,
+                    "use-content-height": true,
+                    "position-horizontal-center": {},
+                    "position-vertical-center": {}
+                }
+            }
+        ]
+    }
+}
