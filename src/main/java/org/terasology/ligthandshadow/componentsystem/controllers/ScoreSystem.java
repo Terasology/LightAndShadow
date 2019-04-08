@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2019 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,9 +59,9 @@ public class ScoreSystem extends BaseComponentSystem {
     @In
     private WorldProvider worldProvider;
 
-    private int redScore = 0;
-    private int blackScore = 0;
-    private Vector3i basePosition = null;
+    private int redScore;
+    private int blackScore;
+    private Vector3i basePosition;
     private String flag = "";
 
     @Override

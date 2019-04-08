@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 MovingBlocks
+ * Copyright 2019 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@ package org.terasology.ligthandshadow.componentsystem;
 
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.registry.In;
-import org.terasology.world.block.BlockManager;
 
 public final class LASUtils {
     public static final String BLACK_FLAG_URI = "lightAndShadowResources:blackFlag";
@@ -92,7 +90,7 @@ public final class LASUtils {
         return null;
     }
 
-    public static Vector3f getTeleportDestination (String team) {
+    public static Vector3f getTeleportDestination(String team) {
         if (team.equals(RED_TEAM)) {
             return RED_TELEPORT_DESTINATION;
         }

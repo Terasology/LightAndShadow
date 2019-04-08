@@ -15,7 +15,6 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.terasology.engine.Time;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -32,8 +31,6 @@ import org.terasology.rendering.nui.widgets.UILabel;
 
 /**
  * Displays game over screen for all clients.
- *
- * @author darshan3
  */
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientGameOverSystem extends BaseComponentSystem {
