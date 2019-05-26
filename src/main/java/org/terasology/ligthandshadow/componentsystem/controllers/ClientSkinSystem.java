@@ -24,15 +24,29 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.AddPlayerSkinToPlayerEvent;
+import org.terasology.ligthandshadow.componentsystem.events.SetPlayerHealthHUDEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
+import org.terasology.rendering.nui.NUIManager;
+import org.terasology.rendering.nui.layers.hud.HealthHud;
+import org.terasology.rendering.nui.widgets.UIIconBar;
+import org.terasology.utilities.Assets;
 
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientSkinSystem extends BaseComponentSystem {
     @In
     private EntityManager entityManager;
+    @In
+    private NUIManager nuiManager;
 
     private EntityBuilder builder;
+
+    @Override
+    public void initialise() {
+        HealthHud healthHud = nuiManager.getHUD().getHUDElement("core:healthHud", HealthHud.class);
+        healthHud.find("healthBar", UIIconBar.class).setIcon(Assets.getTextureRegion(LASUtils.getHealthIcon(LASUtils.WHITE_TEAM)).get());
+        healthHud.setSkin(Assets.getSkin(LASUtils.getHealthSkin(LASUtils.WHITE_TEAM)).get());
+    }
 
     @ReceiveEvent
     public void onAddPlayerSkinToPlayer(AddPlayerSkinToPlayerEvent event, EntityRef entity) {
@@ -48,5 +62,12 @@ public class ClientSkinSystem extends BaseComponentSystem {
             builder.saveComponent(player.getComponent(LocationComponent.class));
             builder.build();
         }
+    }
+    @ReceiveEvent
+    public void onSetPlayerHealthHUDEvent(SetPlayerHealthHUDEvent event, EntityRef entity) {
+        String team = event.team;
+        HealthHud healthHud = nuiManager.getHUD().getHUDElement("core:healthHud", HealthHud.class);
+        healthHud.find("healthBar", UIIconBar.class).setIcon(Assets.getTextureRegion(LASUtils.getHealthIcon(team)).get());
+        healthHud.setSkin(Assets.getSkin(LASUtils.getHealthSkin(team)).get());
     }
 }
