@@ -15,8 +15,6 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.terasology.entitySystem.entity.EntityBuilder;
-import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -25,12 +23,13 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.AddPlayerSkinToPlayerEvent;
 import org.terasology.ligthandshadow.componentsystem.events.SetPlayerHealthHUDEvent;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.layers.hud.HealthHud;
 import org.terasology.rendering.nui.widgets.UIIconBar;
+import org.terasology.logic.characters.VisualCharacterComponent;
+import org.terasology.rendering.logic.SkeletalMeshComponent;
 import org.terasology.utilities.Assets;
 
 /**
@@ -39,13 +38,10 @@ import org.terasology.utilities.Assets;
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientSkinSystem extends BaseComponentSystem {
     @In
-    private EntityManager entityManager;
-    @In
     private NUIManager nuiManager;
     @In
     private LocalPlayer localPlayer;
 
-    private EntityBuilder builder;
 
     @Override
     public void initialise() {
@@ -64,15 +60,16 @@ public class ClientSkinSystem extends BaseComponentSystem {
     public void onAddPlayerSkinToPlayer(AddPlayerSkinToPlayerEvent event, EntityRef entity) {
         EntityRef player = event.player;
         String team = event.team;
-        if (team.equals(LASUtils.BLACK_TEAM)) {
-            builder = entityManager.newBuilder(LASUtils.BLACK_PAWN);
-            builder.saveComponent(player.getComponent(LocationComponent.class));
-            builder.build();
-        }
-        if (team.equals(LASUtils.RED_TEAM)) {
-            builder = entityManager.newBuilder(LASUtils.RED_PAWN);
-            builder.saveComponent(player.getComponent(LocationComponent.class));
-            builder.build();
+        if (player.hasComponent(VisualCharacterComponent.class)) {
+            VisualCharacterComponent visualCharacterComponent = player.getComponent(VisualCharacterComponent.class);
+            if (visualCharacterComponent.visualCharacter != EntityRef.NULL && visualCharacterComponent.visualCharacter.hasComponent(SkeletalMeshComponent.class)) {
+                SkeletalMeshComponent skeletalMeshComponent = visualCharacterComponent.visualCharacter.getComponent(SkeletalMeshComponent.class);
+                if (team.equals(LASUtils.BLACK_TEAM)) {
+                    skeletalMeshComponent.material = Assets.getMaterial(LASUtils.BLACK_PAWN_SKIN).get();
+                } else if (team.equals(LASUtils.RED_TEAM)) {
+                    skeletalMeshComponent.material = Assets.getMaterial(LASUtils.RED_PAWN_SKIN).get();
+                }
+            }
         }
     }
 
