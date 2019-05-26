@@ -26,6 +26,7 @@ import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.AddPlayerSkinToPlayerEvent;
 import org.terasology.ligthandshadow.componentsystem.events.SetPlayerHealthHUDEvent;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.layers.hud.HealthHud;
@@ -38,6 +39,8 @@ public class ClientSkinSystem extends BaseComponentSystem {
     private EntityManager entityManager;
     @In
     private NUIManager nuiManager;
+    @In
+    private LocalPlayer localPlayer;
 
     private EntityBuilder builder;
 
@@ -65,9 +68,13 @@ public class ClientSkinSystem extends BaseComponentSystem {
     }
     @ReceiveEvent
     public void onSetPlayerHealthHUDEvent(SetPlayerHealthHUDEvent event, EntityRef entity) {
+        EntityRef player = event.player;
         String team = event.team;
-        HealthHud healthHud = nuiManager.getHUD().getHUDElement("core:healthHud", HealthHud.class);
-        healthHud.find("healthBar", UIIconBar.class).setIcon(Assets.getTextureRegion(LASUtils.getHealthIcon(team)).get());
-        healthHud.setSkin(Assets.getSkin(LASUtils.getHealthSkin(team)).get());
+
+        if (player.getId() == localPlayer.getCharacterEntity().getId()) {
+            HealthHud healthHud = nuiManager.getHUD().getHUDElement("core:healthHud", HealthHud.class);
+            healthHud.find("healthBar", UIIconBar.class).setIcon(Assets.getTextureRegion(LASUtils.getHealthIcon(team)).get());
+            healthHud.setSkin(Assets.getSkin(LASUtils.getHealthSkin(team)).get());
+        }
     }
 }

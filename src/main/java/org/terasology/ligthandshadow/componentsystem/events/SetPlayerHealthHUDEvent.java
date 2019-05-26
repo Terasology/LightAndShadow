@@ -17,7 +17,9 @@ package org.terasology.ligthandshadow.componentsystem.events;
 
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
+import org.terasology.network.BroadcastEvent;
 
+@BroadcastEvent
 public class SetPlayerHealthHUDEvent implements Event {
     public EntityRef player;
     public String team;
