@@ -51,7 +51,7 @@ public class ClientSkinSystem extends BaseComponentSystem {
     }
 
     /**
-     * Changes player skin on receiving the corresponding event.
+     * Changes a player's skin on receiving the corresponding event.
      *
      * @param event
      * @param entity
