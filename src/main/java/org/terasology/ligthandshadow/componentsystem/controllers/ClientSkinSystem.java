@@ -33,6 +33,9 @@ import org.terasology.rendering.nui.layers.hud.HealthHud;
 import org.terasology.rendering.nui.widgets.UIIconBar;
 import org.terasology.utilities.Assets;
 
+/**
+ * Handles changing players' health HUD and skin based on their teams.
+ */
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientSkinSystem extends BaseComponentSystem {
     @In
@@ -51,6 +54,12 @@ public class ClientSkinSystem extends BaseComponentSystem {
         healthHud.setSkin(Assets.getSkin(LASUtils.getHealthSkin(LASUtils.WHITE_TEAM)).get());
     }
 
+    /**
+     * Changes player skin on receiving the corresponding event.
+     *
+     * @param event
+     * @param entity
+     */
     @ReceiveEvent
     public void onAddPlayerSkinToPlayer(AddPlayerSkinToPlayerEvent event, EntityRef entity) {
         EntityRef player = event.player;
@@ -66,6 +75,13 @@ public class ClientSkinSystem extends BaseComponentSystem {
             builder.build();
         }
     }
+
+    /**
+     * Changes player health hud on receiving the corresponding event.
+     *
+     * @param event
+     * @param entity
+     */
     @ReceiveEvent
     public void onSetPlayerHealthHUDEvent(SetPlayerHealthHUDEvent event, EntityRef entity) {
         EntityRef player = event.player;

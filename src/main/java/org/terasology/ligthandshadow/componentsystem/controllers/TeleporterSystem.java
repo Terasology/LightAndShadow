@@ -35,6 +35,12 @@ import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 
+/**
+ * Teleports players to play arena once they chose their team.
+ * It also sends events to change players skins and hud based on team they have chosen.
+ *
+ * @see ClientSkinSystem
+ */
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TeleporterSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(TeleporterSystem.class);
@@ -44,8 +50,13 @@ public class TeleporterSystem extends BaseComponentSystem {
     @In
     EntityManager entityManager;
 
-    /* Depending on which teleporter the player chooses, they are set to that team
-     * and teleported to that base */
+    /**
+     * Depending on which teleporter the player chooses, they are set to that team
+     * and teleported to that base
+     *
+     * @param event
+     * @param entity
+     */
     @ReceiveEvent(components = {SetTeamOnActivateComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
         EntityRef player = event.getInstigator();

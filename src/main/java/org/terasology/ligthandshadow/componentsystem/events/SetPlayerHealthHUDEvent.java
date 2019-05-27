@@ -19,6 +19,9 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
 import org.terasology.network.BroadcastEvent;
 
+/**
+ * Event to change player health HUD.
+ */
 @BroadcastEvent
 public class SetPlayerHealthHUDEvent implements Event {
     public EntityRef player;
