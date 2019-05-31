@@ -39,10 +39,10 @@ public class PlayerDeathSystem extends BaseComponentSystem {
     @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
     public void beforeDestroy(BeforeDestroyEvent event, EntityRef player, CharacterComponent characterComponent, AliveCharacterComponent aliveCharacterComponent) {
         if (player.hasComponent(PlayerCharacterComponent.class)) {
-            // Consume the BeforeDestroyEvent so that the DoDestroy event is never sent for player entities
             event.consume();
             logger.info(player.toFullDescription());
             String team = player.getComponent(LASTeamComponent.class).team;
+            player.send(new DoHealEvent(100000, player));
             player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
         }
     }
