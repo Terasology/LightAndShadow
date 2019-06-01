@@ -33,8 +33,13 @@ import org.terasology.logic.health.BeforeDestroyEvent;
 import org.terasology.logic.health.DoHealEvent;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerCharacterComponent;
+import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.In;
+import org.terasology.world.WorldProvider;
+import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.items.BlockItemComponent;
 
 import java.util.List;
 
@@ -49,25 +54,34 @@ public class PlayerDeathSystem extends BaseComponentSystem {
     @In
     private InventoryManager inventoryManager;
 
+    @In
+    private WorldProvider worldProvider;
+
+    @In
+    private BlockManager blockManager;
+
     @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
     public void beforeDestroy(BeforeDestroyEvent event, EntityRef player, CharacterComponent characterComponent, AliveCharacterComponent aliveCharacterComponent) {
         if (player.hasComponent(PlayerCharacterComponent.class)) {
             event.consume();
             String team = player.getComponent(LASTeamComponent.class).team;
-            Prefab flagPrefab;
             List<EntityRef> itemsSlots = player.getComponent(InventoryComponent.class).itemSlots;
-            if(team == LASUtils.RED_TEAM) {
-                flagPrefab = assetManager.getAsset(LASUtils.BLACK_FLAG_URI, Prefab.class).orElse(null);
-            } else {
-                flagPrefab = assetManager.getAsset(LASUtils.RED_FLAG_URI, Prefab.class).orElse(null);
-            }
 
             Prefab staffPrefab = assetManager.getAsset(LASUtils.MAGIC_STAFF_URI, Prefab.class).orElse(null);
 
             for (EntityRef slot : itemsSlots) {
                 Prefab currentPrefab = slot.getParentPrefab();
                 if (currentPrefab != null && !currentPrefab.equals(staffPrefab)) {
-                    inventoryManager.removeItem(player, EntityRef.NULL, slot, true, 1);
+                    if (slot.hasComponent(BlockItemComponent.class) &&
+                            (slot.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.BLACK_FLAG_URI) ||
+                                    slot.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(LASUtils.RED_FLAG_URI) )) {
+                        if(team.equals(LASUtils.BLACK_TEAM)) {
+                            worldProvider.setBlock(LASUtils.getFlagLocation(LASUtils.RED_TEAM), blockManager.getBlock(LASUtils.getFlagURI(LASUtils.RED_TEAM)));
+                        } else {
+                            worldProvider.setBlock(LASUtils.getFlagLocation(LASUtils.BLACK_TEAM), blockManager.getBlock(LASUtils.getFlagURI(LASUtils.BLACK_TEAM)));
+                        }
+                    }
+                    inventoryManager.removeItem(player, EntityRef.NULL, slot, true);
                 }
             }
 
