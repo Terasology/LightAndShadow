@@ -21,6 +21,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
+import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
@@ -76,5 +77,11 @@ public class ClientScoreSystem extends BaseComponentSystem {
             blackScore = event.score;
             return;
         }
+    }
+
+    @ReceiveEvent
+    public void onGameOver(GameOverEvent event, EntityRef entityRef) {
+        redScore = 0;
+        blackScore = 0;
     }
 }
