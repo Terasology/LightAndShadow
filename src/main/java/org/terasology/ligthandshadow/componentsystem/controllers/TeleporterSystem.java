@@ -28,12 +28,19 @@ import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.SetTeamOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.events.AddPlayerSkinToPlayerEvent;
+import org.terasology.ligthandshadow.componentsystem.events.SetPlayerHealthHUDEvent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 
+/**
+ * Teleports players to play arena once they chose their team.
+ * It also sends events to change players skins and hud based on team they have chosen.
+ *
+ * @see ClientSkinSystem
+ */
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TeleporterSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(TeleporterSystem.class);
@@ -43,8 +50,13 @@ public class TeleporterSystem extends BaseComponentSystem {
     @In
     EntityManager entityManager;
 
-    /* Depending on which teleporter the player chooses, they are set to that team
-     * and teleported to that base */
+    /**
+     * Depending on which teleporter the player chooses, they are set to that team
+     * and teleported to that base
+     *
+     * @param event
+     * @param entity
+     */
     @ReceiveEvent(components = {SetTeamOnActivateComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
         EntityRef player = event.getInstigator();
@@ -64,10 +76,15 @@ public class TeleporterSystem extends BaseComponentSystem {
         player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
         inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(LASUtils.MAGIC_STAFF_URI));
         setPlayerSkin(player, team);
+        setPlayerHud(player, team);
     }
 
     private void setPlayerSkin(EntityRef player, String team) {
         sendEventToClients(new AddPlayerSkinToPlayerEvent(player, team));
+    }
+
+    private void setPlayerHud(EntityRef player, String team) {
+        sendEventToClients(new SetPlayerHealthHUDEvent(player, team));
     }
 
     private void sendEventToClients(Event event) {

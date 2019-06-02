@@ -24,16 +24,42 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.AddPlayerSkinToPlayerEvent;
+import org.terasology.ligthandshadow.componentsystem.events.SetPlayerHealthHUDEvent;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
+import org.terasology.rendering.nui.NUIManager;
+import org.terasology.rendering.nui.layers.hud.HealthHud;
+import org.terasology.rendering.nui.widgets.UIIconBar;
+import org.terasology.utilities.Assets;
 
+/**
+ * Handles changing players' health HUD and skin based on their teams.
+ */
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientSkinSystem extends BaseComponentSystem {
     @In
     private EntityManager entityManager;
+    @In
+    private NUIManager nuiManager;
+    @In
+    private LocalPlayer localPlayer;
 
     private EntityBuilder builder;
 
+    @Override
+    public void initialise() {
+        HealthHud healthHud = nuiManager.getHUD().getHUDElement("core:healthHud", HealthHud.class);
+        healthHud.find("healthBar", UIIconBar.class).setIcon(Assets.getTextureRegion(LASUtils.getHealthIcon(LASUtils.WHITE_TEAM)).get());
+        healthHud.setSkin(Assets.getSkin(LASUtils.getHealthSkin(LASUtils.WHITE_TEAM)).get());
+    }
+
+    /**
+     * Changes player skin on receiving the corresponding event.
+     *
+     * @param event
+     * @param entity
+     */
     @ReceiveEvent
     public void onAddPlayerSkinToPlayer(AddPlayerSkinToPlayerEvent event, EntityRef entity) {
         EntityRef player = event.player;
@@ -47,6 +73,24 @@ public class ClientSkinSystem extends BaseComponentSystem {
             builder = entityManager.newBuilder(LASUtils.RED_PAWN);
             builder.saveComponent(player.getComponent(LocationComponent.class));
             builder.build();
+        }
+    }
+
+    /**
+     * Changes player health hud on receiving the corresponding event.
+     *
+     * @param event
+     * @param entity
+     */
+    @ReceiveEvent
+    public void onSetPlayerHealthHUDEvent(SetPlayerHealthHUDEvent event, EntityRef entity) {
+        EntityRef player = event.player;
+        String team = event.team;
+
+        if (player.getId() == localPlayer.getCharacterEntity().getId()) {
+            HealthHud healthHud = nuiManager.getHUD().getHUDElement("core:healthHud", HealthHud.class);
+            healthHud.find("healthBar", UIIconBar.class).setIcon(Assets.getTextureRegion(LASUtils.getHealthIcon(team)).get());
+            healthHud.setSkin(Assets.getSkin(LASUtils.getHealthSkin(team)).get());
         }
     }
 }

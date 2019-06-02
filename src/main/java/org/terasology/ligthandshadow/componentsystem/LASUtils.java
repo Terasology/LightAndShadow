@@ -23,6 +23,7 @@ public final class LASUtils {
     public static final String RED_FLAG_URI = "lightAndShadowResources:redFlag";
     public static final String RED_TEAM = "red";
     public static final String BLACK_TEAM = "black";
+    public static final String WHITE_TEAM = "white";
     /**
      * Position of Red base
      */
@@ -96,6 +97,32 @@ public final class LASUtils {
         }
         if (team.equals(BLACK_TEAM)) {
             return BLACK_TELEPORT_DESTINATION;
+        }
+        return null;
+    }
+
+    public static String getHealthIcon (String team) {
+        if (team.equals(RED_TEAM)) {
+            return RED_HEALTH_ICON;
+        }
+        if (team.equals(BLACK_TEAM)) {
+            return BLACK_HEALTH_ICON;
+        }
+        if (team.equals(WHITE_TEAM)) {
+            return WHITE_HEALTH_ICON;
+        }
+        return null;
+    }
+
+    public static String getHealthSkin (String team) {
+        if (team.equals(RED_TEAM)) {
+            return RED_HEALTH_SKIN;
+        }
+        if (team.equals(BLACK_TEAM)) {
+            return BLACK_HEALTH_SKIN;
+        }
+        if (team.equals(WHITE_TEAM)) {
+            return WHITE_HEALTH_SKIN;
         }
         return null;
     }
