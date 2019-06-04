@@ -40,7 +40,6 @@ public class PlayerDeathSystem extends BaseComponentSystem {
     public void beforeDestroy(BeforeDestroyEvent event, EntityRef player, CharacterComponent characterComponent, AliveCharacterComponent aliveCharacterComponent) {
         if (player.hasComponent(PlayerCharacterComponent.class)) {
             event.consume();
-            logger.info(player.toFullDescription());
             String team = player.getComponent(LASTeamComponent.class).team;
             player.send(new DoHealEvent(100000, player));
             player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
