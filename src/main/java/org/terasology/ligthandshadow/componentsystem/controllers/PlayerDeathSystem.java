@@ -39,6 +39,9 @@ import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
 
 
+/**
+ * Handles what happens when a player dies.
+ */
 @RegisterSystem
 public class PlayerDeathSystem extends BaseComponentSystem {
     @In
@@ -53,28 +56,39 @@ public class PlayerDeathSystem extends BaseComponentSystem {
     @In
     private BlockManager blockManager;
 
+    /**
+     * Empty the inventory and send player player back to its base with refilled health.
+     * This is a high priority method, hence it receives the event first and consumes it.
+     * This prevents the destruction of player entity and prevents the deathScreen from showing up.
+     *
+     * @param event
+     * @param player
+     * @param characterComponent
+     * @param aliveCharacterComponent
+     */
     @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
     public void beforeDestroy(BeforeDestroyEvent event, EntityRef player, CharacterComponent characterComponent, AliveCharacterComponent aliveCharacterComponent) {
         if (player.hasComponent(PlayerCharacterComponent.class)) {
             event.consume();
             String team = player.getComponent(LASTeamComponent.class).team;
-
-            Prefab staffPrefab = assetManager.getAsset(LASUtils.MAGIC_STAFF_URI, Prefab.class).orElse(null);
-
-            Vector3f startPosition = new Vector3f(player.getComponent(LocationComponent.class).getLocalPosition());
-            Vector3f impulse = Vector3f.zero();
-            int inventorySize = inventoryManager.getNumSlots(player);
-            for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
-                EntityRef slot = inventoryManager.getItemInSlot(player, slotNumber);
-                Prefab currentPrefab = slot.getParentPrefab();
-                if (currentPrefab != null && !currentPrefab.equals(staffPrefab)) {
-                    int count = inventoryManager.getStackSize(slot);
-                    player.send(new DropItemRequest(slot, player, impulse, startPosition, count));
-                }
-            }
-
+            dropItemsFromInventory(player);
             player.send(new DoHealEvent(100000, player));
             player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
+        }
+    }
+
+    private void dropItemsFromInventory(EntityRef player) {
+        Prefab staffPrefab = assetManager.getAsset(LASUtils.MAGIC_STAFF_URI, Prefab.class).orElse(null);
+        Vector3f deathPosition = new Vector3f(player.getComponent(LocationComponent.class).getLocalPosition());
+        Vector3f impulse = Vector3f.zero();
+        int inventorySize = inventoryManager.getNumSlots(player);
+        for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
+            EntityRef slot = inventoryManager.getItemInSlot(player, slotNumber);
+            Prefab currentPrefab = slot.getParentPrefab();
+            if (currentPrefab != null && !currentPrefab.equals(staffPrefab)) {
+                int count = inventoryManager.getStackSize(slot);
+                player.send(new DropItemRequest(slot, player, impulse, deathPosition, count));
+            }
         }
     }
 }
