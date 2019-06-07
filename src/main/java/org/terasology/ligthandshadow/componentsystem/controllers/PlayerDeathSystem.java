@@ -24,6 +24,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
+import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
 import org.terasology.logic.characters.AliveCharacterComponent;
 import org.terasology.logic.characters.CharacterComponent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
@@ -41,8 +42,21 @@ public class PlayerDeathSystem extends BaseComponentSystem {
         if (player.hasComponent(PlayerCharacterComponent.class)) {
             event.consume();
             String team = player.getComponent(LASTeamComponent.class).team;
+            updateStatistics(event.getInstigator(), "kills");
+            updateStatistics(player, "deaths");
             player.send(new DoHealEvent(100000, player));
             player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
         }
+    }
+
+    private void updateStatistics(EntityRef player, String type) {
+        PlayerStatisticsComponent playerStatisticsComponent = player.getComponent(PlayerStatisticsComponent.class);
+        if (type.equals("kills")) {
+            playerStatisticsComponent.kills += 1;
+        }
+        if (type.equals("deaths")) {
+            playerStatisticsComponent.deaths += 1;
+        }
+        player.saveComponent(playerStatisticsComponent);
     }
 }
