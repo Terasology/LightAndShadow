@@ -2,5 +2,6 @@
     "LASTeam" : {
         "team" : "white"
     },
-    "FlagDropOnActivate" : {}
+    "FlagDropOnActivate" : {},
+    "PlayerStatistics" : {}
 }
