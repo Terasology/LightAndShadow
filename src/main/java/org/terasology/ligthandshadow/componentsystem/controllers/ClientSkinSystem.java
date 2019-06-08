@@ -15,14 +15,19 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.terasology.assets.management.AssetManager;
+import org.terasology.entitySystem.entity.EntityBuilder;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.entity.lifecycleEvents.OnChangedComponent;
 import org.terasology.entitySystem.event.ReceiveEvent;
+import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.ligthandshadow.componentsystem.events.AddPlayerSkinToPlayerEvent;
+import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.events.SetPlayerHealthHUDEvent;
+import org.terasology.logic.characters.events.CreateVisualCharacterEvent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
@@ -41,7 +46,8 @@ public class ClientSkinSystem extends BaseComponentSystem {
     private NUIManager nuiManager;
     @In
     private LocalPlayer localPlayer;
-
+    @In
+    private AssetManager assetManager;
 
     @Override
     public void initialise() {
@@ -51,24 +57,53 @@ public class ClientSkinSystem extends BaseComponentSystem {
     }
 
     /**
-     * Changes a player's skin on receiving the corresponding event.
+     * Updates the skeletal mesh of a player when its visual character is being created.
+     * Default event handler for this event has Trivial priority. Hence, this method catches the event first
+     * and consumes it.
+     * @see CreateVisualCharacterEvent
+     * @see org.terasology.logic.characters.VisualCharacterSystem
      *
      * @param event
-     * @param entity
+     * @param characterEntity
+     * @param lasTeamComponent
      */
     @ReceiveEvent
-    public void onAddPlayerSkinToPlayer(AddPlayerSkinToPlayerEvent event, EntityRef entity) {
-        EntityRef player = event.player;
-        String team = event.team;
-        if (player.hasComponent(VisualCharacterComponent.class)) {
-            VisualCharacterComponent visualCharacterComponent = player.getComponent(VisualCharacterComponent.class);
-            if (visualCharacterComponent.visualCharacter != EntityRef.NULL && visualCharacterComponent.visualCharacter.hasComponent(SkeletalMeshComponent.class)) {
-                SkeletalMeshComponent skeletalMeshComponent = visualCharacterComponent.visualCharacter.getComponent(SkeletalMeshComponent.class);
-                if (team.equals(LASUtils.BLACK_TEAM)) {
+    public void onCreateDefaultVisualCharacter(CreateVisualCharacterEvent event, EntityRef characterEntity,
+                                               LASTeamComponent lasTeamComponent) {
+        Prefab prefab = assetManager.getAsset("engine:defaultVisualCharacter", Prefab.class).get();
+        EntityBuilder entityBuilder = event.getVisualCharacterBuilder();
+        entityBuilder.addPrefab(prefab);
+        SkeletalMeshComponent skeletalMeshComponent = entityBuilder.getComponent(SkeletalMeshComponent.class);
+        if (lasTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
+            skeletalMeshComponent.material = Assets.getMaterial(LASUtils.BLACK_PAWN_SKIN).get();
+        } else if (lasTeamComponent.team.equals(LASUtils.RED_TEAM)) {
+            skeletalMeshComponent.material = Assets.getMaterial(LASUtils.RED_PAWN_SKIN).get();
+        }
+        entityBuilder.saveComponent(skeletalMeshComponent);
+        event.consume();
+    }
+
+    /**
+     * Updates the skeletal mesh of a player when its team changes.
+     * @see LASTeamComponent
+     *
+     * @param event
+     * @param characterEntity
+     * @param lasTeamComponent
+     */
+    @ReceiveEvent
+    public void onLASTeamChange(OnChangedComponent event, EntityRef characterEntity, LASTeamComponent lasTeamComponent) {
+        if (characterEntity.hasComponent(VisualCharacterComponent.class)) {
+            VisualCharacterComponent visualCharacterComponent = characterEntity.getComponent(VisualCharacterComponent.class);
+            EntityRef visualCharacter = visualCharacterComponent.visualCharacter;
+            if (visualCharacter != EntityRef.NULL && visualCharacter.hasComponent(SkeletalMeshComponent.class)) {
+                SkeletalMeshComponent skeletalMeshComponent = visualCharacter.getComponent(SkeletalMeshComponent.class);
+                if (lasTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
                     skeletalMeshComponent.material = Assets.getMaterial(LASUtils.BLACK_PAWN_SKIN).get();
-                } else if (team.equals(LASUtils.RED_TEAM)) {
+                } else if (lasTeamComponent.team.equals(LASUtils.RED_TEAM)) {
                     skeletalMeshComponent.material = Assets.getMaterial(LASUtils.RED_PAWN_SKIN).get();
                 }
+                visualCharacter.saveComponent(skeletalMeshComponent);
             }
         }
     }
