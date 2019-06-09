@@ -15,6 +15,8 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -25,12 +27,14 @@ import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
+import org.terasology.ligthandshadow.componentsystem.events.RestartEvent;
 import org.terasology.logic.characters.AliveCharacterComponent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.logic.players.PlayerUtil;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
+import org.terasology.rendering.nui.WidgetUtil;
 import org.terasology.rendering.nui.layers.ingame.DeathScreen;
 import org.terasology.rendering.nui.layouts.miglayout.MigLayout;
 import org.terasology.rendering.nui.widgets.UILabel;
@@ -41,7 +45,7 @@ import org.terasology.rendering.nui.widgets.UIText;
  */
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientGameOverSystem extends BaseComponentSystem {
-
+    Logger logger = LoggerFactory.getLogger(ClientGameOverSystem.class);
     @In
     private NUIManager nuiManager;
     @In
@@ -56,9 +60,11 @@ public class ClientGameOverSystem extends BaseComponentSystem {
 
         MigLayout migLayout = deathScreen.find("playerStatistics", MigLayout.class);
         if (migLayout != null) {
+            logger.info("game over");
+            logger.info(String.valueOf(entityManager.getCountOfEntitiesWith(ClientComponent.class)));
             Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
             for (EntityRef client : clients) {
-
+                logger.info("clients game over");
                 ClientComponent clientComponent = client.getComponent(ClientComponent.class);
                 migLayout.addWidget(new UILabel(PlayerUtil.getColoredPlayerName(clientComponent.clientInfo)), new MigLayout.CCHint());
 
@@ -71,6 +77,8 @@ public class ClientGameOverSystem extends BaseComponentSystem {
             }
         }
 
+        WidgetUtil.trySubscribe(deathScreen, "restart", widget -> triggerRestart());
+
         UILabel gameOverDetails = deathScreen.find("gameOverDetails", UILabel.class);
         if (gameOverDetails != null) {
             if (event.winningTeam.equals(localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team)) {
@@ -79,5 +87,9 @@ public class ClientGameOverSystem extends BaseComponentSystem {
                 gameOverDetails.setText("You Lose!");
             }
         }
+    }
+
+    private void triggerRestart() {
+        localPlayer.getClientEntity().send(new RestartEvent());
     }
 }
