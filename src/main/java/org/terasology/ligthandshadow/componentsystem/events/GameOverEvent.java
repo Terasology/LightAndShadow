@@ -15,11 +15,11 @@
  */
 package org.terasology.ligthandshadow.componentsystem.events;
 
-import org.terasology.network.NetworkEvent;
-import org.terasology.network.OwnerEvent;
+import org.terasology.entitySystem.event.Event;
+import org.terasology.network.BroadcastEvent;
 
-@OwnerEvent
-public class GameOverEvent extends NetworkEvent {
+@BroadcastEvent
+public class GameOverEvent implements Event {
     public String winningTeam;
 
     public GameOverEvent() {

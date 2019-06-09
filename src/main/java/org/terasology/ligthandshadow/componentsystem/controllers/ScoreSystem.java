@@ -15,6 +15,8 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
@@ -48,7 +50,7 @@ import org.terasology.world.block.items.BlockItemComponent;
 @RegisterSystem(RegisterMode.AUTHORITY)
 @Share(ScoreSystem.class)
 public class ScoreSystem extends BaseComponentSystem {
-
+    Logger logger = LoggerFactory.getLogger(ScoreSystem.class);
     @In
     private InventoryManager inventoryManager;
     @In
@@ -111,10 +113,10 @@ public class ScoreSystem extends BaseComponentSystem {
                 incrementScore(baseTeamComponent);
                 resetRound(baseTeamComponent, heldFlag);
                 if (redScore >= LASUtils.GOAL_SCORE) {
-                    sendEventToClients(new GameOverEvent(LASUtils.RED_TEAM));
+                    player.send(new GameOverEvent(LASUtils.RED_TEAM));
                 }
                 if (blackScore >= LASUtils.GOAL_SCORE) {
-                    sendEventToClients(new GameOverEvent(LASUtils.BLACK_TEAM));
+                    player.send(new GameOverEvent(LASUtils.BLACK_TEAM));
                 }
             }
         }
@@ -191,6 +193,7 @@ public class ScoreSystem extends BaseComponentSystem {
         if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
             Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
             for (EntityRef client : clients) {
+                logger.info(String.valueOf(client.getComponent(ClientComponent.class).clientInfo.getId()));
                 client.send(event);
             }
         }
