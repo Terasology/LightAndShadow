@@ -29,6 +29,7 @@ import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent
 import org.terasology.ligthandshadow.componentsystem.components.RedFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
+import org.terasology.ligthandshadow.componentsystem.events.RestartEvent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
@@ -165,8 +166,12 @@ public class ScoreSystem extends BaseComponentSystem {
         }
     }
 
-    // TODO: Handle level reset
-    private void resetLevel(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
+    @ReceiveEvent
+    public void onRestart(RestartEvent event, EntityRef entity) {
+        redScore = 0;
+        blackScore = 0;
+        sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.RED_TEAM, redScore));
+        sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.BLACK_TEAM, blackScore));
     }
 
     private void movePlayerFlagToBase(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
