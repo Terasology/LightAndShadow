@@ -34,6 +34,8 @@ import org.terasology.logic.location.LocationComponent;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
+import org.terasology.rendering.nui.layers.ingame.DeathScreen;
+import org.terasology.rendering.nui.layouts.miglayout.MigLayout;
 
 @RegisterSystem
 public class RestartSystem extends BaseComponentSystem {
@@ -59,6 +61,11 @@ public class RestartSystem extends BaseComponentSystem {
     @ReceiveEvent(netFilter = RegisterMode.CLIENT)
     public void onClientRestart(ClientRestartEvent event, EntityRef entity) {
         logger.info("client restart");
+        DeathScreen deathScreen = nuiManager.pushScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
+        MigLayout migLayout = deathScreen.find("playerStatistics", MigLayout.class);
+        if (migLayout != null) {
+            migLayout.removeAllWidgets();
+        }
         nuiManager.closeScreen(LASUtils.DEATH_SCREEN);
     }
 
