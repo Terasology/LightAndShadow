@@ -15,11 +15,11 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.terasology.assets.management.AssetManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
+import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
@@ -29,20 +29,66 @@ import org.terasology.logic.characters.CharacterComponent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.health.BeforeDestroyEvent;
 import org.terasology.logic.health.DoHealEvent;
+import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.logic.inventory.events.DropItemRequest;
+import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerCharacterComponent;
+import org.terasology.math.geom.Vector3f;
+import org.terasology.registry.In;
+import org.terasology.world.WorldProvider;
+import org.terasology.world.block.BlockManager;
 
 
+/**
+ * Handles what happens when a player dies.
+ */
 @RegisterSystem
 public class PlayerDeathSystem extends BaseComponentSystem {
-    Logger logger = LoggerFactory.getLogger(PlayerDeathSystem.class);
+    @In
+    private AssetManager assetManager;
 
+    @In
+    private InventoryManager inventoryManager;
+
+    @In
+    private WorldProvider worldProvider;
+
+    @In
+    private BlockManager blockManager;
+
+    /**
+     * Empty the inventory and send player player back to its base with refilled health.
+     * This is a high priority method, hence it receives the event first and consumes it.
+     * This prevents the destruction of player entity and prevents the deathScreen from showing up.
+     *
+     * @param event
+     * @param player
+     * @param characterComponent
+     * @param aliveCharacterComponent
+     */
     @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
     public void beforeDestroy(BeforeDestroyEvent event, EntityRef player, CharacterComponent characterComponent, AliveCharacterComponent aliveCharacterComponent) {
         if (player.hasComponent(PlayerCharacterComponent.class)) {
             event.consume();
             String team = player.getComponent(LASTeamComponent.class).team;
+            dropItemsFromInventory(player);
             player.send(new DoHealEvent(100000, player));
             player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
+        }
+    }
+
+    private void dropItemsFromInventory(EntityRef player) {
+        Prefab staffPrefab = assetManager.getAsset(LASUtils.MAGIC_STAFF_URI, Prefab.class).orElse(null);
+        Vector3f deathPosition = new Vector3f(player.getComponent(LocationComponent.class).getLocalPosition());
+        Vector3f impulse = Vector3f.zero();
+        int inventorySize = inventoryManager.getNumSlots(player);
+        for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
+            EntityRef slot = inventoryManager.getItemInSlot(player, slotNumber);
+            Prefab currentPrefab = slot.getParentPrefab();
+            if (currentPrefab != null && !currentPrefab.equals(staffPrefab)) {
+                int count = inventoryManager.getStackSize(slot);
+                player.send(new DropItemRequest(slot, player, impulse, deathPosition, count));
+            }
         }
     }
 }
