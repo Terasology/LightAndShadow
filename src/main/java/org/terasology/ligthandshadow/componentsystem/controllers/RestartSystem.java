@@ -25,9 +25,12 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
+import org.terasology.ligthandshadow.componentsystem.events.ClientRestartEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartEvent;
+import org.terasology.logic.characters.CharacterComponent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.health.DoHealEvent;
+import org.terasology.logic.location.LocationComponent;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
@@ -49,11 +52,12 @@ public class RestartSystem extends BaseComponentSystem {
             String team = player.getComponent(LASTeamComponent.class).team;
             player.send(new DoHealEvent(100000, player));
             player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
+            player.send(new ClientRestartEvent());
         }
     }
 
-    @ReceiveEvent(netFilter = RegisterMode.REMOTE_CLIENT)
-    public void onClientRestart(RestartEvent event, EntityRef entity) {
+    @ReceiveEvent(netFilter = RegisterMode.CLIENT)
+    public void onClientRestart(ClientRestartEvent event, EntityRef entity) {
         logger.info("client restart");
         nuiManager.closeScreen(LASUtils.DEATH_SCREEN);
     }
