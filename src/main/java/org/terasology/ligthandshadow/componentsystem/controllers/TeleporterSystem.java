@@ -27,7 +27,6 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.SetTeamOnActivateComponent;
-import org.terasology.ligthandshadow.componentsystem.events.AddPlayerSkinToPlayerEvent;
 import org.terasology.ligthandshadow.componentsystem.events.SetPlayerHealthHUDEvent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.common.ActivateEvent;
@@ -75,12 +74,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     private void handlePlayerTeleport(EntityRef player, String team) {
         player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
         inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(LASUtils.MAGIC_STAFF_URI));
-        setPlayerSkin(player, team);
         setPlayerHud(player, team);
-    }
-
-    private void setPlayerSkin(EntityRef player, String team) {
-        sendEventToClients(new AddPlayerSkinToPlayerEvent(player, team));
     }
 
     private void setPlayerHud(EntityRef player, String team) {

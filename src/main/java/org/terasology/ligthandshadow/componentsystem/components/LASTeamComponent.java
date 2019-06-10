@@ -16,8 +16,11 @@
 package org.terasology.ligthandshadow.componentsystem.components;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.network.FieldReplicateType;
+import org.terasology.network.Replicate;
 
 public final class LASTeamComponent implements Component {
+    @Replicate(FieldReplicateType.SERVER_TO_CLIENT)
     public String team;
 
     public LASTeamComponent() {
