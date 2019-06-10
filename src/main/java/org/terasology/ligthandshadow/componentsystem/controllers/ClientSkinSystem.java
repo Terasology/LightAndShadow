@@ -74,11 +74,7 @@ public class ClientSkinSystem extends BaseComponentSystem {
         EntityBuilder entityBuilder = event.getVisualCharacterBuilder();
         entityBuilder.addPrefab(prefab);
         SkeletalMeshComponent skeletalMeshComponent = entityBuilder.getComponent(SkeletalMeshComponent.class);
-        if (lasTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
-            skeletalMeshComponent.material = Assets.getMaterial(LASUtils.BLACK_PAWN_SKIN).get();
-        } else if (lasTeamComponent.team.equals(LASUtils.RED_TEAM)) {
-            skeletalMeshComponent.material = Assets.getMaterial(LASUtils.RED_PAWN_SKIN).get();
-        }
+        skeletalMeshComponent.material = Assets.getMaterial(LASUtils.getPlayerSkin(lasTeamComponent.team)).get();
         entityBuilder.saveComponent(skeletalMeshComponent);
         event.consume();
     }
@@ -98,11 +94,7 @@ public class ClientSkinSystem extends BaseComponentSystem {
             EntityRef visualCharacter = visualCharacterComponent.visualCharacter;
             if (visualCharacter != EntityRef.NULL && visualCharacter.hasComponent(SkeletalMeshComponent.class)) {
                 SkeletalMeshComponent skeletalMeshComponent = visualCharacter.getComponent(SkeletalMeshComponent.class);
-                if (lasTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
-                    skeletalMeshComponent.material = Assets.getMaterial(LASUtils.BLACK_PAWN_SKIN).get();
-                } else if (lasTeamComponent.team.equals(LASUtils.RED_TEAM)) {
-                    skeletalMeshComponent.material = Assets.getMaterial(LASUtils.RED_PAWN_SKIN).get();
-                }
+                skeletalMeshComponent.material = Assets.getMaterial(LASUtils.getPlayerSkin(lasTeamComponent.team)).get();
                 visualCharacter.saveComponent(skeletalMeshComponent);
             }
         }
