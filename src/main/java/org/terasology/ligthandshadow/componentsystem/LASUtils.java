@@ -59,6 +59,9 @@ public final class LASUtils {
     public static final String DEATH_SCREEN = "engine:DeathScreen";
     public static final String ONLINE_PLAYERS_OVERLAY = "engine:onlinePlayersOverlay";
 
+    public static final String DROPPED_ITEM_ON_DEATH = "dropped_item_indicator";
+    public static final long DROPPED_ITEM_DELAY = 20000;
+
     private LASUtils() {
     }
 

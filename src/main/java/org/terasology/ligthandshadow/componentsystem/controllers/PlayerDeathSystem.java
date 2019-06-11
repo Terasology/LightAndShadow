@@ -16,6 +16,7 @@
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.terasology.assets.management.AssetManager;
+import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -23,10 +24,12 @@ import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
+import org.terasology.ligthandshadow.componentsystem.components.DroppedItemComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.logic.characters.AliveCharacterComponent;
 import org.terasology.logic.characters.CharacterComponent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
+import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.health.BeforeDestroyEvent;
 import org.terasology.logic.health.DoHealEvent;
 import org.terasology.logic.inventory.InventoryManager;
@@ -56,6 +59,12 @@ public class PlayerDeathSystem extends BaseComponentSystem {
     @In
     private BlockManager blockManager;
 
+    @In
+    private EntityManager entityManager;
+
+    @In
+    private DelayManager delayManager;
+
     /**
      * Empty the inventory and send player player back to its base with refilled health.
      * This is a high priority method, hence it receives the event first and consumes it.
@@ -74,6 +83,7 @@ public class PlayerDeathSystem extends BaseComponentSystem {
             dropItemsFromInventory(player);
             player.send(new DoHealEvent(100000, player));
             player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
+            addDelayActionToDroppedItems();
         }
     }
 
@@ -86,9 +96,16 @@ public class PlayerDeathSystem extends BaseComponentSystem {
             EntityRef slot = inventoryManager.getItemInSlot(player, slotNumber);
             Prefab currentPrefab = slot.getParentPrefab();
             if (currentPrefab != null && !currentPrefab.equals(staffPrefab)) {
+                slot.addComponent(new DroppedItemComponent());
                 int count = inventoryManager.getStackSize(slot);
                 player.send(new DropItemRequest(slot, player, impulse, deathPosition, count));
             }
+        }
+    }
+
+    private void addDelayActionToDroppedItems() {
+        for (EntityRef entity: entityManager.getEntitiesWith(DroppedItemComponent.class)) {
+            delayManager.addDelayedAction(entity, LASUtils.DROPPED_ITEM_ON_DEATH, LASUtils.DROPPED_ITEM_DELAY);
         }
     }
 }
