@@ -35,6 +35,7 @@ import org.terasology.logic.health.BeforeDestroyEvent;
 import org.terasology.logic.health.DoHealEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.events.DropItemRequest;
+import org.terasology.logic.inventory.events.InventorySlotChangedEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.math.geom.Vector3f;
@@ -114,6 +115,24 @@ public class PlayerDeathSystem extends BaseComponentSystem {
                 }
             }
             entity.destroy();
+        }
+    }
+
+    /**
+     * Remove dropped item component and delay action on picking up the item.
+     * When an item is picked up, its inventory slot changes, and hence we can use this event.
+     *
+     * @param event  The event which indicates that item is picked up
+     * @param entity the character entity that picks up the item
+     */
+    @ReceiveEvent(components = {LASTeamComponent.class})
+    public void onInventorySlotChanged(InventorySlotChangedEvent event, EntityRef entity) {
+        EntityRef item = event.getNewItem();
+        if (item.hasComponent(DroppedItemComponent.class)) {
+            item.removeComponent(DroppedItemComponent.class);
+        }
+        if (delayManager.hasDelayedAction(item, LASUtils.DROPPED_ITEM_ON_DEATH)) {
+            delayManager.cancelDelayedAction(item, LASUtils.DROPPED_ITEM_ON_DEATH);
         }
     }
 
