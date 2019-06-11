@@ -60,7 +60,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     public void onActivate(ActivateEvent event, EntityRef entity) {
         EntityRef player = event.getInstigator();
         String team = setPlayerTeamToTeleporterTeam(player, entity);
-        handlePlayerTeleport(player, team);
+//        handlePlayerTeleport(player, team);
     }
 
     private String setPlayerTeamToTeleporterTeam(EntityRef player, EntityRef teleporter) {
