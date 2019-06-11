@@ -89,7 +89,7 @@ public class ClientSkinSystem extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onLASTeamChange(OnChangedComponent event, EntityRef characterEntity, LASTeamComponent lasTeamComponent) {
-        if (characterEntity.hasComponent(VisualCharacterComponent.class)) {
+        if (!localPlayer.getCharacterEntity().equals(characterEntity) && characterEntity.hasComponent(VisualCharacterComponent.class)) {
             VisualCharacterComponent visualCharacterComponent = characterEntity.getComponent(VisualCharacterComponent.class);
             EntityRef visualCharacter = visualCharacterComponent.visualCharacter;
             if (visualCharacter != EntityRef.NULL && visualCharacter.hasComponent(SkeletalMeshComponent.class)) {
