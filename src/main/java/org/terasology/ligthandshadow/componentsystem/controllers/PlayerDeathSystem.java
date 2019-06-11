@@ -30,6 +30,7 @@ import org.terasology.logic.characters.AliveCharacterComponent;
 import org.terasology.logic.characters.CharacterComponent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.delay.DelayManager;
+import org.terasology.logic.delay.DelayedActionTriggeredEvent;
 import org.terasology.logic.health.BeforeDestroyEvent;
 import org.terasology.logic.health.DoHealEvent;
 import org.terasology.logic.inventory.InventoryManager;
@@ -40,6 +41,7 @@ import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.items.BlockItemComponent;
 
 
 /**
@@ -84,6 +86,34 @@ public class PlayerDeathSystem extends BaseComponentSystem {
             player.send(new DoHealEvent(100000, player));
             player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
             addDelayActionToDroppedItems();
+        }
+    }
+
+    /**
+     * Destroy dropped items except flag after the delay set using delay manager.
+     * Flag is teleported back to the base.
+     *
+     * @param event     The event which is triggered once the delay is over
+     * @param entity    The item on which the delay was set
+     *
+     * @see DelayManager
+     * @see DelayedActionTriggeredEvent
+     */
+    @ReceiveEvent
+    public void destroyDroppedItems(DelayedActionTriggeredEvent event, EntityRef entity) {
+        if (event.getActionId().equals(LASUtils.DROPPED_ITEM_ON_DEATH)) {
+            if (entity.hasComponent(BlockItemComponent.class)) {
+                String blockFamilyURI = entity.getComponent(BlockItemComponent.class).blockFamily.getURI().toString();
+                if (blockFamilyURI.equals(LASUtils.BLACK_FLAG_URI)) {
+                    worldProvider.setBlock(LASUtils.getFlagLocation(LASUtils.BLACK_TEAM),
+                            blockManager.getBlock(LASUtils.getFlagURI(LASUtils.BLACK_TEAM)));
+                }
+                if (blockFamilyURI.equals(LASUtils.RED_FLAG_URI)) {
+                    worldProvider.setBlock(LASUtils.getFlagLocation(LASUtils.RED_TEAM),
+                            blockManager.getBlock(LASUtils.getFlagURI(LASUtils.RED_TEAM)));
+                }
+            }
+            entity.destroy();
         }
     }
 
