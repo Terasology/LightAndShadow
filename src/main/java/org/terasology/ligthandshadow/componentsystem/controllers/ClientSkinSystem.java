@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.terasology.assets.management.AssetManager;
 import org.terasology.engine.modes.loadProcesses.AwaitedLocalCharacterSpawnEvent;
 import org.terasology.entitySystem.entity.EntityBuilder;
+import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.entity.lifecycleEvents.OnChangedComponent;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -52,6 +53,8 @@ public class ClientSkinSystem extends BaseComponentSystem {
     private LocalPlayer localPlayer;
     @In
     private AssetManager assetManager;
+    @In
+    private EntityManager entityManager;
 
     /**
      * Updates the skeletal mesh of a player when its visual character is being created.
@@ -111,6 +114,19 @@ public class ClientSkinSystem extends BaseComponentSystem {
                 visualCharacter.saveComponent(skeletalMeshComponent);
             }
         }
+    }
+
+    @Command(shortDescription = "print all visual entities present currently")
+    public String printVisualEntities() {
+        StringBuilder message = new StringBuilder();
+        for (EntityRef character: entityManager.getEntitiesWith(LASTeamComponent.class)) {
+            if (character.hasComponent(VisualCharacterComponent.class)) {
+                EntityRef visualCharacter = character.getComponent(VisualCharacterComponent.class).visualCharacter;
+                message.append(visualCharacter.toFullDescription());
+                message.append("\n");
+            }
+        }
+        return message.toString();
     }
 
     private void setHealthHUD(String team) {
