@@ -16,6 +16,7 @@
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.terasology.assets.management.AssetManager;
+import org.terasology.engine.modes.loadProcesses.AwaitedLocalCharacterSpawnEvent;
 import org.terasology.entitySystem.entity.EntityBuilder;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.entity.lifecycleEvents.OnChangedComponent;
@@ -26,7 +27,6 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
-import org.terasology.ligthandshadow.componentsystem.events.SetPlayerHealthHUDEvent;
 import org.terasology.logic.characters.events.CreateVisualCharacterEvent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
@@ -49,11 +49,18 @@ public class ClientSkinSystem extends BaseComponentSystem {
     @In
     private AssetManager assetManager;
 
-    @Override
-    public void initialise() {
-        HealthHud healthHud = nuiManager.getHUD().getHUDElement("core:healthHud", HealthHud.class);
-        healthHud.find("healthBar", UIIconBar.class).setIcon(Assets.getTextureRegion(LASUtils.getHealthIcon(LASUtils.WHITE_TEAM)).get());
-        healthHud.setSkin(Assets.getSkin(LASUtils.getHealthSkin(LASUtils.WHITE_TEAM)).get());
+    /**
+     * Change the Health HUD when the local player is spawned based on their Light and Shadow Team.
+     * @see LASTeamComponent
+     *
+     * @param event            The event that is triggered when local player has been spawned
+     * @param characterEntity  The character entity belonging to local player
+     * @param lasTeamComponent The Light and Shadow team component of local player
+     */
+    @ReceiveEvent
+    public void onAwaitedLocalCharacterSpawnEvent(AwaitedLocalCharacterSpawnEvent event, EntityRef characterEntity,
+                                                  LASTeamComponent lasTeamComponent) {
+        setHealthHUD(lasTeamComponent.team);
     }
 
     /**
@@ -98,23 +105,14 @@ public class ClientSkinSystem extends BaseComponentSystem {
                 visualCharacter.saveComponent(skeletalMeshComponent);
             }
         }
+        if (characterEntity.getOwner().equals(localPlayer.getClientEntity())) {
+            setHealthHUD(lasTeamComponent.team);
+        }
     }
 
-    /**
-     * Changes player health hud on receiving the corresponding event.
-     *
-     * @param event
-     * @param entity
-     */
-    @ReceiveEvent
-    public void onSetPlayerHealthHUDEvent(SetPlayerHealthHUDEvent event, EntityRef entity) {
-        EntityRef player = event.player;
-        String team = event.team;
-
-        if (player.getId() == localPlayer.getCharacterEntity().getId()) {
-            HealthHud healthHud = nuiManager.getHUD().getHUDElement("core:healthHud", HealthHud.class);
-            healthHud.find("healthBar", UIIconBar.class).setIcon(Assets.getTextureRegion(LASUtils.getHealthIcon(team)).get());
-            healthHud.setSkin(Assets.getSkin(LASUtils.getHealthSkin(team)).get());
-        }
+    private void setHealthHUD(String team) {
+        HealthHud healthHud = nuiManager.getHUD().getHUDElement("core:healthHud", HealthHud.class);
+        healthHud.find("healthBar", UIIconBar.class).setIcon(Assets.getTextureRegion(LASUtils.getHealthIcon(team)).get());
+        healthHud.setSkin(Assets.getSkin(LASUtils.getHealthSkin(team)).get());
     }
 }
