@@ -71,6 +71,7 @@ public class ClientSkinSystem extends BaseComponentSystem {
     public void onCreateDefaultVisualCharacter(CreateVisualCharacterEvent event, EntityRef characterEntity,
                                                LASTeamComponent lasTeamComponent) {
         logger.info("create default visual character");
+        logger.info(lasTeamComponent.team);
         logger.info(characterEntity.toFullDescription());
         Prefab prefab = assetManager.getAsset("engine:defaultVisualCharacter", Prefab.class).get();
         EntityBuilder entityBuilder = event.getVisualCharacterBuilder();
@@ -88,15 +89,21 @@ public class ClientSkinSystem extends BaseComponentSystem {
         setHealthHUD(lasTeamComponent.team);
     }
 
+    @ReceiveEvent
+    public void onVisualCharacterChange(OnChangedComponent event, EntityRef characterEntity,
+                                        VisualCharacterComponent visualCharacterComponent) {
+        logger.info("someone changed my visual character");
+        logger.info(characterEntity.toFullDescription());
+    }
 
-        /**
-         * Updates the skeletal mesh of a player when its team changes.
-         * @see LASTeamComponent
-         *
-         * @param event
-         * @param characterEntity
-         * @param lasTeamComponent
-         */
+    /**
+     * Updates the skeletal mesh of a player when its team changes.
+     * @see LASTeamComponent
+     *
+     * @param event
+     * @param characterEntity
+     * @param lasTeamComponent
+     */
     @ReceiveEvent
     public void onLASTeamChange(OnChangedComponent event, EntityRef characterEntity, LASTeamComponent lasTeamComponent) {
         logger.info("change team event received");
