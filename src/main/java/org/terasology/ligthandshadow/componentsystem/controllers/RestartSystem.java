@@ -41,6 +41,13 @@ public class RestartSystem extends BaseComponentSystem {
     @In
     NUIManager nuiManager;
 
+    /**
+     * System to invoke restart. Only the host can restart the game.
+     * All players' health are restored and they are transported back to their bases.
+     *
+     * @param event
+     * @param clientEntity
+     */
     @ReceiveEvent(netFilter = RegisterMode.AUTHORITY)
     public void onRestartRequest(RestartRequestEvent event, EntityRef clientEntity) {
         if (localPlayer.getClientEntity().equals(clientEntity)) {
@@ -50,13 +57,23 @@ public class RestartSystem extends BaseComponentSystem {
                 String team = player.getComponent(LASTeamComponent.class).team;
                 player.send(new DoHealEvent(100000, player));
                 player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
-                player.send(new ClientRestartEvent());
+                client.send(new ClientRestartEvent());
             }
         }
     }
 
+    /**
+     * System to close game over screen once restart is complete.
+     *
+     * @param event
+     * @param clientEntity
+     */
     @ReceiveEvent(netFilter = RegisterMode.CLIENT)
-    public void onClientRestart(ClientRestartEvent event, EntityRef entity) {
-        nuiManager.closeScreen(LASUtils.DEATH_SCREEN);
+    public void onClientRestart(ClientRestartEvent event, EntityRef clientEntity) {
+        if (localPlayer.getClientEntity().equals(clientEntity)) {
+            if (nuiManager.isOpen(LASUtils.DEATH_SCREEN)) {
+                nuiManager.closeScreen(LASUtils.DEATH_SCREEN);
+            }
+        }
     }
 }
