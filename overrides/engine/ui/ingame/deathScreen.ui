@@ -39,6 +39,30 @@
                         "type": "UIButton",
                         "text": "${engine:menu#exit-game}",
                         "id": "exitGame"
+                    },
+                    {
+                     "type": "UILabel",
+                     "id": "deathDetails",
+                     "visible": false,
+                     "layoutInfo": {
+                       "use-content-height": false,
+                       "use-content-width": false,
+                       "position-top": {},
+                       "position-left": {}
+                     }
+                    },
+                    {
+                     "type": "UIButton",
+                     "text": "${engine:menu#respawn}",
+                     "id": "respawn",
+                     "enabled": false,
+                     "visible": false,
+                     "layoutInfo": {
+                       "use-content-height": false,
+                       "use-content-width": false,
+                       "position-top": {},
+                       "position-left": {}
+                     }
                     }
                 ],
                 "layoutInfo": {
