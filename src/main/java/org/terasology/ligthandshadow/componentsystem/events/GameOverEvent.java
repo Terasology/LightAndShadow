@@ -17,8 +17,9 @@ package org.terasology.ligthandshadow.componentsystem.events;
 
 import org.terasology.entitySystem.event.Event;
 import org.terasology.network.BroadcastEvent;
+import org.terasology.network.OwnerEvent;
 
-@BroadcastEvent
+@OwnerEvent
 public class GameOverEvent implements Event {
     public String winningTeam;
 
