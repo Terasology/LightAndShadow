@@ -19,6 +19,9 @@ import org.terasology.entitySystem.event.Event;
 import org.terasology.network.BroadcastEvent;
 import org.terasology.network.OwnerEvent;
 
+/**
+ * Event to indicate clients about GameOver.
+ */
 @OwnerEvent
 public class GameOverEvent implements Event {
     public String winningTeam;
