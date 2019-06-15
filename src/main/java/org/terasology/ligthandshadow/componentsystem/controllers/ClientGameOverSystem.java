@@ -36,7 +36,6 @@ import org.terasology.rendering.nui.widgets.UILabel;
  */
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientGameOverSystem extends BaseComponentSystem {
-
     @In
     private NUIManager nuiManager;
     @In
@@ -44,15 +43,17 @@ public class ClientGameOverSystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void onGameOver(GameOverEvent event, EntityRef entity) {
-        nuiManager.removeOverlay(LASUtils.ONLINE_PLAYERS_OVERLAY);
-        DeathScreen deathScreen = nuiManager.pushScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
-        UILabel gameOverDetails = deathScreen.find("gameOverDetails", UILabel.class);
-        WidgetUtil.trySubscribe(deathScreen, "restart", widget -> triggerRestart());
-        if (gameOverDetails != null) {
-            if (event.winningTeam.equals(localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team)) {
-                gameOverDetails.setText("You Win!");
-            } else {
-                gameOverDetails.setText("You Lose!");
+        if (localPlayer.getClientEntity().equals(entity)) {
+            nuiManager.removeOverlay(LASUtils.ONLINE_PLAYERS_OVERLAY);
+            DeathScreen deathScreen = nuiManager.pushScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
+            UILabel gameOverDetails = deathScreen.find("gameOverDetails", UILabel.class);
+            WidgetUtil.trySubscribe(deathScreen, "restart", widget -> triggerRestart());
+            if (gameOverDetails != null) {
+                if (event.winningTeam.equals(localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team)) {
+                    gameOverDetails.setText("You Win!");
+                } else {
+                    gameOverDetails.setText("You Lose!");
+                }
             }
         }
     }
