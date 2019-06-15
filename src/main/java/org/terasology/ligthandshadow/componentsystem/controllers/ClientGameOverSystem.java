@@ -41,6 +41,12 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     @In
     private LocalPlayer localPlayer;
 
+    /**
+     * System to show game over screen once a team achieves goal score.
+     *
+     * @param event  the event
+     * @param entity the entity
+     */
     @ReceiveEvent
     public void onGameOver(GameOverEvent event, EntityRef entity) {
         if (localPlayer.getClientEntity().equals(entity)) {
