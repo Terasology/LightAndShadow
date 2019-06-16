@@ -15,6 +15,7 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -22,11 +23,15 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
+import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.logic.players.LocalPlayer;
+import org.terasology.logic.players.PlayerUtil;
+import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.layers.ingame.DeathScreen;
+import org.terasology.rendering.nui.layouts.miglayout.MigLayout;
 import org.terasology.rendering.nui.widgets.UILabel;
 
 /**
@@ -39,17 +44,38 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     private NUIManager nuiManager;
     @In
     private LocalPlayer localPlayer;
+    @In
+    private EntityManager entityManager;
 
     @ReceiveEvent
     public void onGameOver(GameOverEvent event, EntityRef entity) {
         nuiManager.removeOverlay(LASUtils.ONLINE_PLAYERS_OVERLAY);
         DeathScreen deathScreen = nuiManager.pushScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
         UILabel gameOverDetails = deathScreen.find("gameOverDetails", UILabel.class);
+        addPlayerStatisticsInfo(deathScreen);
         if (gameOverDetails != null) {
             if (event.winningTeam.equals(localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team)) {
                 gameOverDetails.setText("You Win!");
             } else {
                 gameOverDetails.setText("You Lose!");
+            }
+        }
+    }
+
+    private void addPlayerStatisticsInfo(DeathScreen deathScreen) {
+        MigLayout migLayout = deathScreen.find("playerStatistics", MigLayout.class);
+        if (migLayout != null) {
+            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
+            for (EntityRef client : clients) {
+                ClientComponent clientComponent = client.getComponent(ClientComponent.class);
+                migLayout.addWidget(new UILabel(PlayerUtil.getColoredPlayerName(clientComponent.clientInfo)), new MigLayout.CCHint());
+
+                EntityRef character = client.getComponent(ClientComponent.class).character;
+                if (!character.equals(EntityRef.NULL)) {
+                    PlayerStatisticsComponent playerStatisticsComponent = character.getComponent(PlayerStatisticsComponent.class);
+                    migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.kills)), new MigLayout.CCHint());
+                    migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.deaths)), new MigLayout.CCHint("wrap"));
+                }
             }
         }
     }
