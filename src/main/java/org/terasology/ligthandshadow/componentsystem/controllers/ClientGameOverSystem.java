@@ -26,6 +26,7 @@ import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent
 import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.logic.players.LocalPlayer;
+import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.logic.players.PlayerUtil;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
@@ -65,17 +66,14 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     private void addPlayerStatisticsInfo(DeathScreen deathScreen) {
         MigLayout migLayout = deathScreen.find("playerStatistics", MigLayout.class);
         if (migLayout != null) {
-            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
-            for (EntityRef client : clients) {
+            Iterable<EntityRef> characters = entityManager.getEntitiesWith(PlayerCharacterComponent.class, LASTeamComponent.class);
+            for (EntityRef character : characters) {
+                EntityRef client = character.getOwner();
                 ClientComponent clientComponent = client.getComponent(ClientComponent.class);
                 migLayout.addWidget(new UILabel(PlayerUtil.getColoredPlayerName(clientComponent.clientInfo)), new MigLayout.CCHint());
-
-                EntityRef character = client.getComponent(ClientComponent.class).character;
-                if (!character.equals(EntityRef.NULL)) {
-                    PlayerStatisticsComponent playerStatisticsComponent = character.getComponent(PlayerStatisticsComponent.class);
-                    migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.kills)), new MigLayout.CCHint());
-                    migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.deaths)), new MigLayout.CCHint("wrap"));
-                }
+                PlayerStatisticsComponent playerStatisticsComponent = character.getComponent(PlayerStatisticsComponent.class);
+                migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.kills)), new MigLayout.CCHint());
+                migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.deaths)), new MigLayout.CCHint("wrap"));
             }
         }
     }
