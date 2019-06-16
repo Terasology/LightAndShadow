@@ -21,6 +21,40 @@
                         "size": [1, 16]
                     },
                     {
+                        "type": "migLayout",
+                        "id": "playerStatistics",
+                        "rowConstraints": "0",
+                        "colConstraints": "0",
+                        "contents": [
+                            {
+                                "type": "UILabel",
+                                "text": "Player",
+                                "layoutInfo": {
+                                    "cc": ""
+                                }
+                            },
+                            {
+                                "type": "UILabel",
+                                "text": "Kills",
+                                "layoutInfo": {
+                                    "cc": ""
+                                }
+                            },
+                            {
+                                "type": "UILabel",
+                                "text": "Deaths",
+                                "layoutInfo": {
+                                    "cc": "wrap"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "UISpace",
+                        "size": [1, 16]
+                    },
+
+                    {
                          "type": "UIButton",
                          "text": "Restart",
                          "id": "restart"
