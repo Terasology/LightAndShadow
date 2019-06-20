@@ -15,23 +15,12 @@
  */
 package org.terasology.ligthandshadow.componentsystem.events;
 
-import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
-import org.terasology.network.BroadcastEvent;
+import org.terasology.network.ServerEvent;
 
 /**
- * Event to change player health HUD.
+ * Event to request game restart by a client.
  */
-@BroadcastEvent
-public class SetPlayerHealthHUDEvent implements Event {
-    public EntityRef player;
-    public String team;
-
-    public SetPlayerHealthHUDEvent() {
-    }
-
-    public SetPlayerHealthHUDEvent(EntityRef player, String team) {
-        this.player = player;
-        this.team = team;
-    }
+@ServerEvent
+public class RestartRequestEvent implements Event {
 }

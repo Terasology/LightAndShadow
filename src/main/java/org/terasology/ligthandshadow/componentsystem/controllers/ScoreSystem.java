@@ -28,10 +28,15 @@ import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.RedFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
+import org.terasology.ligthandshadow.componentsystem.events.ClientRestartEvent;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
+import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
+import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.common.ActivateEvent;
+import org.terasology.logic.health.DoHealEvent;
 import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.logic.players.LocalPlayer;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
@@ -58,6 +63,8 @@ public class ScoreSystem extends BaseComponentSystem {
     private BlockManager blockManager;
     @In
     private WorldProvider worldProvider;
+    @In
+    private LocalPlayer localPlayer;
 
     private int redScore;
     private int blackScore;
@@ -93,6 +100,16 @@ public class ScoreSystem extends BaseComponentSystem {
     @ReceiveEvent(components = {WinConditionCheckOnActivateComponent.class, LASTeamComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
         checkAndResetGameOnScore(event, entity);
+    }
+
+    @ReceiveEvent
+    public void onRestartRequest(RestartRequestEvent event, EntityRef clientEntity) {
+        if (localPlayer.getClientEntity().equals(clientEntity)) {
+            redScore = 0;
+            blackScore = 0;
+            sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.RED_TEAM, redScore));
+            sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.BLACK_TEAM, blackScore));
+        }
     }
 
     private void checkAndResetGameOnScore(ActivateEvent event, EntityRef entity) {

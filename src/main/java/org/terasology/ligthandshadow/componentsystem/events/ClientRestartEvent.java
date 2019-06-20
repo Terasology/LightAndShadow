@@ -16,20 +16,11 @@
 package org.terasology.ligthandshadow.componentsystem.events;
 
 import org.terasology.entitySystem.event.Event;
-import org.terasology.network.BroadcastEvent;
 import org.terasology.network.OwnerEvent;
 
 /**
- * Event to indicate clients about GameOver.
+ * Event to indicate a client that restart is complete.
  */
 @OwnerEvent
-public class GameOverEvent implements Event {
-    public String winningTeam;
-
-    public GameOverEvent() {
-    }
-
-    public GameOverEvent(String winningTeam) {
-        this.winningTeam = winningTeam;
-    }
+public class ClientRestartEvent implements Event {
 }
