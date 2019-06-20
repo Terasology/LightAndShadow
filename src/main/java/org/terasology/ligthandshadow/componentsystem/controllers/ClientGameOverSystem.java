@@ -23,9 +23,11 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
+import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
+import org.terasology.rendering.nui.WidgetUtil;
 import org.terasology.rendering.nui.layers.ingame.DeathScreen;
 import org.terasology.rendering.nui.widgets.UILabel;
 
@@ -34,23 +36,35 @@ import org.terasology.rendering.nui.widgets.UILabel;
  */
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientGameOverSystem extends BaseComponentSystem {
-
     @In
     private NUIManager nuiManager;
     @In
     private LocalPlayer localPlayer;
 
+    /**
+     * System to show game over screen once a team achieves goal score.
+     *
+     * @param event  the event
+     * @param entity the entity
+     */
     @ReceiveEvent
     public void onGameOver(GameOverEvent event, EntityRef entity) {
-        nuiManager.removeOverlay(LASUtils.ONLINE_PLAYERS_OVERLAY);
-        DeathScreen deathScreen = nuiManager.pushScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
-        UILabel gameOverDetails = deathScreen.find("gameOverDetails", UILabel.class);
-        if (gameOverDetails != null) {
-            if (event.winningTeam.equals(localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team)) {
-                gameOverDetails.setText("You Win!");
-            } else {
-                gameOverDetails.setText("You Lose!");
+        if (localPlayer.getClientEntity().equals(entity)) {
+            nuiManager.removeOverlay(LASUtils.ONLINE_PLAYERS_OVERLAY);
+            DeathScreen deathScreen = nuiManager.pushScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
+            UILabel gameOverDetails = deathScreen.find("gameOverDetails", UILabel.class);
+            WidgetUtil.trySubscribe(deathScreen, "restart", widget -> triggerRestart());
+            if (gameOverDetails != null) {
+                if (event.winningTeam.equals(localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team)) {
+                    gameOverDetails.setText("You Win!");
+                } else {
+                    gameOverDetails.setText("You Lose!");
+                }
             }
         }
+    }
+
+    private void triggerRestart() {
+        localPlayer.getClientEntity().send(new RestartRequestEvent());
     }
 }
