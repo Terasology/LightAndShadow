@@ -57,10 +57,10 @@ public class ClientGameOverSystem extends BaseComponentSystem {
      */
     @ReceiveEvent
     public void onGameOver(GameOverEvent event, EntityRef entity) {
-        addPlayerStatisticsInfo(deathScreen);
         if (localPlayer.getClientEntity().equals(entity)) {
             nuiManager.removeOverlay(LASUtils.ONLINE_PLAYERS_OVERLAY);
             DeathScreen deathScreen = nuiManager.pushScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
+            addPlayerStatisticsInfo(deathScreen);
             UILabel gameOverDetails = deathScreen.find("gameOverDetails", UILabel.class);
             WidgetUtil.trySubscribe(deathScreen, "restart", widget -> triggerRestart());
             if (gameOverDetails != null) {
