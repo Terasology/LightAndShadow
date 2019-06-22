@@ -16,6 +16,7 @@
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.EventPriority;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
@@ -25,6 +26,7 @@ import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.DelayedActionTriggeredEvent;
 import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.logic.inventory.events.DropItemEvent;
+import org.terasology.logic.inventory.events.GiveItemEvent;
 import org.terasology.registry.In;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
@@ -85,6 +87,24 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
                 worldProvider.setBlock(LASUtils.getFlagLocation(LASUtils.RED_TEAM),
                         blockManager.getBlock(LASUtils.getFlagURI(LASUtils.RED_TEAM)));
             }
+        }
+    }
+
+    /**
+     * Remove delay action on flag if it is picked up.
+     * Priority is kept low because we want this handler to be triggered after the default handler of GiveItem event to
+     * be triggered first and check if the event was handled or not.
+     *
+     * @param event
+     * @param item
+     * @param itemComponent
+     * @param blockItemComponent
+     */
+    @ReceiveEvent(priority = EventPriority.PRIORITY_LOW)
+    public void onGiveItemToCharacterHoldItem(GiveItemEvent event, EntityRef item, ItemComponent itemComponent,
+                                              BlockItemComponent blockItemComponent) {
+        if (event.isHandled() && delayManager.hasDelayedAction(item, LASUtils.DROPPED_FLAG)) {
+                delayManager.cancelDelayedAction(item, LASUtils.DROPPED_FLAG);
         }
     }
 }
