@@ -116,13 +116,18 @@ public class ScoreSystem extends BaseComponentSystem {
         LASTeamComponent baseTeamComponent = entity.getComponent(LASTeamComponent.class);
         EntityRef player = event.getInstigator();
         if (player.hasComponent(HasFlagComponent.class)) {
-            if (player.getComponent(LASTeamComponent.class).team.equals(LASUtils.RED_TEAM)) {
-                flag = LASUtils.BLACK_FLAG_URI;
+            String playerTeam = player.getComponent(LASTeamComponent.class).team;
+            String oppositionTeam = LASUtils.getOppositionTeam(playerTeam);
+            if (oppositionTeam == null) {
+                return;
             }
-            if (player.getComponent(LASTeamComponent.class).team.equals(LASUtils.BLACK_TEAM)) {
-                flag = LASUtils.RED_FLAG_URI;
+
+            String flag = LASUtils.getFlagURI(oppositionTeam);
+            EntityRef heldFlag = getHeldFlag(player, flag);
+            if (heldFlag.equals(EntityRef.NULL)) {
+                return;
             }
-            EntityRef heldFlag = getHeldFlag(player);
+
             if (checkIfTeamScores(baseTeamComponent, heldFlag)) {
                 incrementScore(baseTeamComponent);
                 resetRound(baseTeamComponent, heldFlag);
@@ -136,7 +141,7 @@ public class ScoreSystem extends BaseComponentSystem {
         }
     }
 
-    private EntityRef getHeldFlag(EntityRef player) {
+    private EntityRef getHeldFlag(EntityRef player, String flag) {
         int inventorySize = inventoryManager.getNumSlots(player);
         for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
             EntityRef inventorySlot = inventoryManager.getItemInSlot(player, slotNumber);
