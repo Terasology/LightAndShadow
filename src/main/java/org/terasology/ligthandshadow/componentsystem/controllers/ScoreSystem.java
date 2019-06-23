@@ -68,8 +68,6 @@ public class ScoreSystem extends BaseComponentSystem {
 
     private int redScore;
     private int blackScore;
-    private Vector3i basePosition;
-    private String flag = "";
 
     @Override
     public void postBegin() {
@@ -183,7 +181,7 @@ public class ScoreSystem extends BaseComponentSystem {
     private void resetRound(LASTeamComponent baseTeamComponent, EntityRef heldItem) {
         Iterable<EntityRef> playersWithFlag = entityManager.getEntitiesWith(HasFlagComponent.class);
         for (EntityRef playerWithFlag : playersWithFlag) {
-            movePlayerFlagToBase(playerWithFlag, baseTeamComponent, heldItem);
+            movePlayerFlagToBase(playerWithFlag, baseTeamComponent.team, heldItem);
         }
     }
 
@@ -191,17 +189,11 @@ public class ScoreSystem extends BaseComponentSystem {
     private void resetLevel(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
     }
 
-    private void movePlayerFlagToBase(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
-        if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)) {
-            basePosition = LASUtils.CENTER_BLACK_BASE_POSITION;
-            flag = LASUtils.BLACK_FLAG_URI;
-        }
-        if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
-            basePosition = LASUtils.CENTER_RED_BASE_POSITION;
-            flag = LASUtils.RED_FLAG_URI;
-        }
-        inventoryManager.removeItem(player, player, heldItem, true);
-        worldProvider.setBlock(new Vector3i(basePosition.x, basePosition.y + 1, basePosition.z), blockManager.getBlock(flag));
+    private void movePlayerFlagToBase(EntityRef player, String oppositionTeam, EntityRef heldFlag) {
+        Vector3i basePosition = LASUtils.getFlagLocation(oppositionTeam);
+        String flag = LASUtils.getFlagURI(oppositionTeam);
+        inventoryManager.removeItem(player, player, heldFlag, true);
+        worldProvider.setBlock(basePosition, blockManager.getBlock(flag));
     }
 
     private void sendEventToClients(Event event) {
