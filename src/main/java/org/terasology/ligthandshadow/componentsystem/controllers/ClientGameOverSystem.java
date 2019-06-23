@@ -26,15 +26,18 @@ import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent
 import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
+import org.terasology.logic.permission.PermissionManager;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.logic.players.PlayerUtil;
 import org.terasology.network.ClientComponent;
+import org.terasology.registry.CoreRegistry;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.WidgetUtil;
 import org.terasology.rendering.nui.layers.ingame.DeathScreen;
 import org.terasology.rendering.nui.layouts.miglayout.MigLayout;
+import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UILabel;
 
 /**
@@ -62,6 +65,16 @@ public class ClientGameOverSystem extends BaseComponentSystem {
             DeathScreen deathScreen = nuiManager.pushScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
             addPlayerStatisticsInfo(deathScreen);
             UILabel gameOverDetails = deathScreen.find("gameOverDetails", UILabel.class);
+
+            PermissionManager permissionManager = CoreRegistry.get(PermissionManager.class);
+            if (permissionManager != null
+                    && permissionManager.hasPermission(localPlayer.getClientInfoEntity(),LASUtils.RESTART_PERMISSION)) {
+                UIButton restartButton = deathScreen.find("restart", UIButton.class);
+                if (restartButton != null) {
+                    restartButton.setVisible(true);
+                }
+            }
+
             WidgetUtil.trySubscribe(deathScreen, "restart", widget -> triggerRestart());
             if (gameOverDetails != null) {
                 if (event.winningTeam.equals(localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team)) {

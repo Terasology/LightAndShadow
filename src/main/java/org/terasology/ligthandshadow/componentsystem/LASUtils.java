@@ -59,6 +59,8 @@ public final class LASUtils {
     public static final String DEATH_SCREEN = "engine:DeathScreen";
     public static final String ONLINE_PLAYERS_OVERLAY = "engine:onlinePlayersOverlay";
 
+    public static final String RESTART_PERMISSION = "restart";
+
     private LASUtils() {
     }
 
