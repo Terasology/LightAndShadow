@@ -128,7 +128,7 @@ public class ScoreSystem extends BaseComponentSystem {
 
             if (checkIfTeamScores(baseTeamComponent, heldFlag)) {
                 incrementScore(baseTeamComponent);
-                resetRound(baseTeamComponent, heldFlag);
+                movePlayerFlagToBase(player, oppositionTeam, heldFlag);
                 if (redScore >= LASUtils.GOAL_SCORE) {
                     sendEventToClients(new GameOverEvent(LASUtils.RED_TEAM));
                 }
@@ -175,13 +175,6 @@ public class ScoreSystem extends BaseComponentSystem {
             // Send event to clients to update their Score UI
             sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.BLACK_TEAM, blackScore));
             return;
-        }
-    }
-
-    private void resetRound(LASTeamComponent baseTeamComponent, EntityRef heldItem) {
-        Iterable<EntityRef> playersWithFlag = entityManager.getEntitiesWith(HasFlagComponent.class);
-        for (EntityRef playerWithFlag : playersWithFlag) {
-            movePlayerFlagToBase(playerWithFlag, baseTeamComponent.team, heldItem);
         }
     }
 
