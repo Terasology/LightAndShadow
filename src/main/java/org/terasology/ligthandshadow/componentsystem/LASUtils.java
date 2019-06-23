@@ -17,6 +17,7 @@ package org.terasology.ligthandshadow.componentsystem;
 
 import org.terasology.math.geom.Vector3f;
 import org.terasology.math.geom.Vector3i;
+import org.terasology.world.block.Block;
 
 public final class LASUtils {
     public static final String BLACK_FLAG_URI = "lightAndShadowResources:blackFlag";
@@ -139,5 +140,15 @@ public final class LASUtils {
             return WHITE_PAWN_SKIN;
         }
         return  null;
+    }
+
+    public static String getOppositionTeam (String team) {
+        if (team.equals(RED_TEAM)) {
+            return BLACK_TEAM;
+        }
+        if (team.equals(BLACK_TEAM)) {
+            return RED_TEAM;
+        }
+        return null;
     }
 }
