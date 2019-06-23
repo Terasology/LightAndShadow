@@ -130,9 +130,11 @@ public class ScoreSystem extends BaseComponentSystem {
                 incrementScore(baseTeamComponent);
                 movePlayerFlagToBase(player, oppositionTeam, heldFlag);
                 if (redScore >= LASUtils.GOAL_SCORE) {
+                    resetLevel();
                     sendEventToClients(new GameOverEvent(LASUtils.RED_TEAM));
                 }
                 if (blackScore >= LASUtils.GOAL_SCORE) {
+                    resetLevel();
                     sendEventToClients(new GameOverEvent(LASUtils.BLACK_TEAM));
                 }
             }
@@ -178,8 +180,23 @@ public class ScoreSystem extends BaseComponentSystem {
         }
     }
 
-    // TODO: Handle level reset
-    private void resetLevel(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
+    private void resetLevel() {
+        Iterable<EntityRef> playersWithFlag = entityManager.getEntitiesWith(HasFlagComponent.class);
+        for (EntityRef playerWithFlag : playersWithFlag) {
+            String playerTeam = playerWithFlag.getComponent(LASTeamComponent.class).team;
+            String oppositionTeam = LASUtils.getOppositionTeam(playerTeam);
+            if (oppositionTeam == null) {
+                continue;
+            }
+
+            String flag = LASUtils.getFlagURI(oppositionTeam);
+            EntityRef heldFlag = getHeldFlag(playerWithFlag, flag);
+            if (heldFlag.equals(EntityRef.NULL)) {
+                continue;
+            }
+
+            movePlayerFlagToBase(playerWithFlag, oppositionTeam, heldFlag);
+        }
     }
 
     private void movePlayerFlagToBase(EntityRef player, String oppositionTeam, EntityRef heldFlag) {
