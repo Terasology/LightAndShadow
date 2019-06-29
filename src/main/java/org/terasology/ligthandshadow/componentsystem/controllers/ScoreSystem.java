@@ -28,13 +28,10 @@ import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.RedFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
-import org.terasology.ligthandshadow.componentsystem.events.ClientRestartEvent;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
-import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.common.ActivateEvent;
-import org.terasology.logic.health.DoHealEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.math.geom.Vector3i;
@@ -68,8 +65,6 @@ public class ScoreSystem extends BaseComponentSystem {
 
     private int redScore;
     private int blackScore;
-    private Vector3i basePosition;
-    private String flag = "";
 
     @Override
     public void postBegin() {
@@ -116,27 +111,34 @@ public class ScoreSystem extends BaseComponentSystem {
         LASTeamComponent baseTeamComponent = entity.getComponent(LASTeamComponent.class);
         EntityRef player = event.getInstigator();
         if (player.hasComponent(HasFlagComponent.class)) {
-            if (player.getComponent(LASTeamComponent.class).team.equals(LASUtils.RED_TEAM)) {
-                flag = LASUtils.BLACK_FLAG_URI;
+            String playerTeam = player.getComponent(LASTeamComponent.class).team;
+            String oppositionTeam = LASUtils.getOppositionTeam(playerTeam);
+            if (oppositionTeam == null) {
+                return;
             }
-            if (player.getComponent(LASTeamComponent.class).team.equals(LASUtils.BLACK_TEAM)) {
-                flag = LASUtils.RED_FLAG_URI;
+
+            String flag = LASUtils.getFlagURI(oppositionTeam);
+            EntityRef heldFlag = getHeldFlag(player, flag);
+            if (heldFlag.equals(EntityRef.NULL)) {
+                return;
             }
-            EntityRef heldFlag = getHeldFlag(player);
+
             if (checkIfTeamScores(baseTeamComponent, heldFlag)) {
                 incrementScore(baseTeamComponent);
-                resetRound(baseTeamComponent, heldFlag);
+                movePlayerFlagToBase(player, oppositionTeam, heldFlag);
                 if (redScore >= LASUtils.GOAL_SCORE) {
+                    resetLevel();
                     sendEventToClients(new GameOverEvent(LASUtils.RED_TEAM));
                 }
                 if (blackScore >= LASUtils.GOAL_SCORE) {
+                    resetLevel();
                     sendEventToClients(new GameOverEvent(LASUtils.BLACK_TEAM));
                 }
             }
         }
     }
 
-    private EntityRef getHeldFlag(EntityRef player) {
+    private EntityRef getHeldFlag(EntityRef player, String flag) {
         int inventorySize = inventoryManager.getNumSlots(player);
         for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
             EntityRef inventorySlot = inventoryManager.getItemInSlot(player, slotNumber);
@@ -175,28 +177,30 @@ public class ScoreSystem extends BaseComponentSystem {
         }
     }
 
-    private void resetRound(LASTeamComponent baseTeamComponent, EntityRef heldItem) {
+    private void resetLevel() {
         Iterable<EntityRef> playersWithFlag = entityManager.getEntitiesWith(HasFlagComponent.class);
         for (EntityRef playerWithFlag : playersWithFlag) {
-            movePlayerFlagToBase(playerWithFlag, baseTeamComponent, heldItem);
+            String playerTeam = playerWithFlag.getComponent(LASTeamComponent.class).team;
+            String oppositionTeam = LASUtils.getOppositionTeam(playerTeam);
+            if (oppositionTeam == null) {
+                continue;
+            }
+
+            String flag = LASUtils.getFlagURI(oppositionTeam);
+            EntityRef heldFlag = getHeldFlag(playerWithFlag, flag);
+            if (heldFlag.equals(EntityRef.NULL)) {
+                continue;
+            }
+
+            movePlayerFlagToBase(playerWithFlag, oppositionTeam, heldFlag);
         }
     }
 
-    // TODO: Handle level reset
-    private void resetLevel(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
-    }
-
-    private void movePlayerFlagToBase(EntityRef player, LASTeamComponent baseTeamComponent, EntityRef heldItem) {
-        if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)) {
-            basePosition = LASUtils.CENTER_BLACK_BASE_POSITION;
-            flag = LASUtils.BLACK_FLAG_URI;
-        }
-        if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
-            basePosition = LASUtils.CENTER_RED_BASE_POSITION;
-            flag = LASUtils.RED_FLAG_URI;
-        }
-        inventoryManager.removeItem(player, player, heldItem, true);
-        worldProvider.setBlock(new Vector3i(basePosition.x, basePosition.y + 1, basePosition.z), blockManager.getBlock(flag));
+    private void movePlayerFlagToBase(EntityRef player, String oppositionTeam, EntityRef heldFlag) {
+        Vector3i basePosition = LASUtils.getFlagLocation(oppositionTeam);
+        String flag = LASUtils.getFlagURI(oppositionTeam);
+        inventoryManager.removeItem(player, player, heldFlag, true);
+        worldProvider.setBlock(basePosition, blockManager.getBlock(flag));
     }
 
     private void sendEventToClients(Event event) {

@@ -102,7 +102,7 @@ public final class LASUtils {
         return null;
     }
 
-    public static String getHealthIcon (String team) {
+    public static String getHealthIcon(String team) {
         if (team.equals(RED_TEAM)) {
             return RED_HEALTH_ICON;
         }
@@ -115,7 +115,7 @@ public final class LASUtils {
         return null;
     }
 
-    public static String getHealthSkin (String team) {
+    public static String getHealthSkin(String team) {
         if (team.equals(RED_TEAM)) {
             return RED_HEALTH_SKIN;
         }
@@ -128,7 +128,7 @@ public final class LASUtils {
         return null;
     }
 
-    public static String getPlayerSkin (String team) {
+    public static String getPlayerSkin(String team) {
         if (team.equals(RED_TEAM)) {
             return RED_PAWN_SKIN;
         }
@@ -139,5 +139,15 @@ public final class LASUtils {
             return WHITE_PAWN_SKIN;
         }
         return  null;
+    }
+
+    public static String getOppositionTeam(String team) {
+        if (team.equals(RED_TEAM)) {
+            return BLACK_TEAM;
+        }
+        if (team.equals(BLACK_TEAM)) {
+            return RED_TEAM;
+        }
+        return null;
     }
 }
