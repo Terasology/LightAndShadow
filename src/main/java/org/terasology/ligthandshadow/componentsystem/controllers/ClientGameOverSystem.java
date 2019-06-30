@@ -31,7 +31,6 @@ import org.terasology.logic.players.LocalPlayer;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.logic.players.PlayerUtil;
 import org.terasology.network.ClientComponent;
-import org.terasology.registry.CoreRegistry;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.WidgetUtil;
@@ -51,6 +50,8 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     private LocalPlayer localPlayer;
     @In
     private EntityManager entityManager;
+    @In
+    private PermissionManager permissionManager;
 
     /**
      * System to show game over screen once a team achieves goal score.
@@ -66,9 +67,7 @@ public class ClientGameOverSystem extends BaseComponentSystem {
             addPlayerStatisticsInfo(deathScreen);
             UILabel gameOverDetails = deathScreen.find("gameOverDetails", UILabel.class);
 
-            PermissionManager permissionManager = CoreRegistry.get(PermissionManager.class);
-            if (permissionManager != null
-                    && permissionManager.hasPermission(localPlayer.getClientInfoEntity(),LASUtils.RESTART_PERMISSION)) {
+            if (event.hasRestartPermission) {
                 UIButton restartButton = deathScreen.find("restart", UIButton.class);
                 if (restartButton != null) {
                     restartButton.setVisible(true);
