@@ -36,9 +36,11 @@ import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.health.DoHealEvent;
 import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.logic.permission.PermissionManager;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.network.ClientComponent;
+import org.terasology.protobuf.EntityData;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.rendering.nui.ControlWidget;
@@ -65,6 +67,8 @@ public class ScoreSystem extends BaseComponentSystem {
     private WorldProvider worldProvider;
     @In
     private LocalPlayer localPlayer;
+    @In
+    private PermissionManager permissionManager;
 
     private int redScore;
     private int blackScore;
@@ -103,8 +107,8 @@ public class ScoreSystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void onRestartRequest(RestartRequestEvent event, EntityRef clientEntity) {
-        if (localPlayer.getClientEntity().equals(clientEntity)) {
+    public void onRestartRequest(RestartRequestEvent event, EntityRef clientEntity, ClientComponent clientComponent) {
+        if (permissionManager.hasPermission(clientComponent.clientInfo, LASUtils.RESTART_PERMISSION)) {
             redScore = 0;
             blackScore = 0;
             sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.RED_TEAM, redScore));
@@ -127,11 +131,22 @@ public class ScoreSystem extends BaseComponentSystem {
                 incrementScore(baseTeamComponent);
                 resetRound(baseTeamComponent, heldFlag);
                 if (redScore >= LASUtils.GOAL_SCORE) {
-                    sendEventToClients(new GameOverEvent(LASUtils.RED_TEAM));
+                    setGameOverEventToClients(LASUtils.RED_TEAM);
                 }
                 if (blackScore >= LASUtils.GOAL_SCORE) {
-                    sendEventToClients(new GameOverEvent(LASUtils.BLACK_TEAM));
+                    setGameOverEventToClients(LASUtils.BLACK_TEAM);
                 }
+            }
+        }
+    }
+
+    private void setGameOverEventToClients(String winningTeam) {
+        if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
+            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
+            for (EntityRef client : clients) {
+                EntityRef clientInfo = client.getComponent(ClientComponent.class).clientInfo;
+                Boolean hasRestartPermission = permissionManager.hasPermission(clientInfo, LASUtils.RESTART_PERMISSION);
+                client.send(new GameOverEvent(winningTeam, hasRestartPermission));
             }
         }
     }
