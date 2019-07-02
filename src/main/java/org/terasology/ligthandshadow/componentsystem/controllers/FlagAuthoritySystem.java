@@ -22,6 +22,7 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
+import org.terasology.logic.common.lifespan.LifespanComponent;
 import org.terasology.logic.delay.DelayManager;
 import org.terasology.logic.delay.DelayedActionTriggeredEvent;
 import org.terasology.logic.inventory.ItemComponent;
@@ -49,6 +50,10 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
 
     /**
      * Add a delayed action using delay manager to flags when they are dropped.
+     * Priority is kept low because we want this handler to be triggered after the default handler of DropItem event to
+     * be triggered first and let the LifespanComponent to be copied first.
+     *
+     * @see org.terasology.logic.inventory.ItemPickupAuthoritySystem
      * @see DelayManager
      *
      * @param event
@@ -56,11 +61,12 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
      * @param itemComponent
      * @param blockItemComponent
      */
-    @ReceiveEvent
+    @ReceiveEvent(priority = EventPriority.PRIORITY_LOW)
     public void onDropItemEvent(DropItemEvent event, EntityRef itemEntity, ItemComponent itemComponent,
                                 BlockItemComponent blockItemComponent) {
         String blockFamilyURI = blockItemComponent.blockFamily.getURI().toString();
         if (blockFamilyURI.equals(LASUtils.BLACK_FLAG_URI) || blockFamilyURI.equals(LASUtils.RED_FLAG_URI)) {
+            itemEntity.removeComponent(LifespanComponent.class);
             delayManager.addDelayedAction(itemEntity, LASUtils.DROPPED_FLAG, LASUtils.FLAG_TELEPORT_DELAY);
         }
     }
