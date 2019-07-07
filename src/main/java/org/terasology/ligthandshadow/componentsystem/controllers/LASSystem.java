@@ -28,6 +28,7 @@ import org.terasology.registry.In;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
+import org.terasology.world.sun.CelestialSystem;
 
 @RegisterSystem
 public class LASSystem extends BaseComponentSystem {
@@ -39,6 +40,8 @@ public class LASSystem extends BaseComponentSystem {
     private WorldProvider worldProvider;
     @In
     private BlockManager blockManager;
+    @In
+    private CelestialSystem celestialSystem;
 
     /**
      * Gives player inventory items on game start
@@ -54,6 +57,9 @@ public class LASSystem extends BaseComponentSystem {
 
     @Override
     public void initialise() {
+        if (!celestialSystem.isSunHalted()) {
+            celestialSystem.toggleSunHalting(0.5f);
+        }
     }
 
     @Override
