@@ -16,8 +16,21 @@
 package org.terasology.ligthandshadow.componentsystem.components;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.network.Replicate;
 
 public class ScoreComponent implements Component {
+    @Replicate
     public int redScore;
+    @Replicate
     public int blackScore;
+
+    public ScoreComponent() {
+        redScore = 0;
+        blackScore = 0;
+    }
+
+    public ScoreComponent(int redScore, int blackScore) {
+        this.redScore = redScore;
+        this.blackScore = blackScore;
+    }
 }
