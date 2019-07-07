@@ -23,14 +23,9 @@ import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.ligthandshadow.componentsystem.components.BlackFlagComponent;
-import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
-import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
-import org.terasology.ligthandshadow.componentsystem.components.RedFlagComponent;
-import org.terasology.ligthandshadow.componentsystem.components.WinConditionCheckOnActivateComponent;
+import org.terasology.ligthandshadow.componentsystem.components.*;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
-import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.players.LocalPlayer;
@@ -38,10 +33,7 @@ import org.terasology.math.geom.Vector3i;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
-import org.terasology.rendering.nui.ControlWidget;
 import org.terasology.rendering.nui.NUIManager;
-import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
-import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemComponent;
@@ -49,7 +41,6 @@ import org.terasology.world.block.items.BlockItemComponent;
 @RegisterSystem(RegisterMode.AUTHORITY)
 @Share(ScoreSystem.class)
 public class ScoreSystem extends BaseComponentSystem {
-
     @In
     private InventoryManager inventoryManager;
     @In
@@ -62,35 +53,8 @@ public class ScoreSystem extends BaseComponentSystem {
     private WorldProvider worldProvider;
     @In
     private LocalPlayer localPlayer;
-
-    private int redScore;
-    private int blackScore;
-
-    @Override
-    public void postBegin() {
-        // Sets score screen bindings
-        ControlWidget scoreScreen = nuiManager.getHUD().getHUDElement("LightAndShadow:ScoreHud");
-        UILabel blackScoreArea = scoreScreen.find("blackScoreArea", UILabel.class);
-        blackScoreArea.bindText(new ReadOnlyBinding<String>() {
-            @Override
-            public String get() {
-                return String.valueOf(blackScore);
-            }
-        });
-        UILabel redScoreArea = scoreScreen.find("redScoreArea", UILabel.class);
-        redScoreArea.bindText(new ReadOnlyBinding<String>() {
-            @Override
-            public String get() {
-                return String.valueOf(redScore);
-            }
-        });
-    }
-
-    @Override
-    public void initialise() {
-        // Displays score UI on game start
-        nuiManager.getHUD().addHUDElement("ScoreHud");
-    }
+    @In
+    private LASGlobalEntitySystem lasGlobalEntitySystem;
 
     @ReceiveEvent(components = {WinConditionCheckOnActivateComponent.class, LASTeamComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
@@ -99,11 +63,13 @@ public class ScoreSystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void onRestartRequest(RestartRequestEvent event, EntityRef clientEntity) {
-        if (localPlayer.getClientEntity().equals(clientEntity)) {
-            redScore = 0;
-            blackScore = 0;
-            sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.RED_TEAM, redScore));
-            sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.BLACK_TEAM, blackScore));
+        if (localPlayer.getClientEntity().equals(clientEntity) && !lasGlobalEntitySystem.getEntity().equals(EntityRef.NULL)) {
+            ScoreComponent scores = lasGlobalEntitySystem.getEntity().getComponent(ScoreComponent.class);
+            if (scores != null) {
+                scores.redScore = 0;
+                scores.blackScore = 0;
+                lasGlobalEntitySystem.getEntity().saveComponent(scores);
+            }
         }
     }
 
@@ -126,14 +92,6 @@ public class ScoreSystem extends BaseComponentSystem {
             if (checkIfTeamScores(baseTeamComponent, heldFlag)) {
                 incrementScore(baseTeamComponent);
                 movePlayerFlagToBase(player, oppositionTeam, heldFlag);
-                if (redScore >= LASUtils.GOAL_SCORE) {
-                    resetLevel();
-                    sendEventToClients(new GameOverEvent(LASUtils.RED_TEAM));
-                }
-                if (blackScore >= LASUtils.GOAL_SCORE) {
-                    resetLevel();
-                    sendEventToClients(new GameOverEvent(LASUtils.BLACK_TEAM));
-                }
             }
         }
     }
@@ -163,18 +121,34 @@ public class ScoreSystem extends BaseComponentSystem {
     }
 
     private void incrementScore(LASTeamComponent baseTeamComponent) {
-        if (baseTeamComponent.team.equals(LASUtils.RED_TEAM)) {
-            redScore++;
-            // Send event to clients to update their Score UI
-            sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.RED_TEAM, redScore));
+        if (lasGlobalEntitySystem.getEntity().equals(EntityRef.NULL)) {
             return;
         }
-        if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM)) {
-            blackScore++;
-            // Send event to clients to update their Score UI
-            sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.BLACK_TEAM, blackScore));
+
+        ScoreComponent scores = lasGlobalEntitySystem.getEntity().getComponent(ScoreComponent.class);
+        if (scores == null) {
             return;
         }
+
+        switch (baseTeamComponent.team) {
+            case  LASUtils.RED_TEAM :
+                scores.redScore++;
+                if (scores.redScore >= LASUtils.GOAL_SCORE) {
+                    resetLevel();
+                    sendEventToClients(new GameOverEvent(LASUtils.RED_TEAM));
+                }
+                break;
+            case LASUtils.BLACK_TEAM :
+                scores.blackScore++;
+                if (scores.blackScore >= LASUtils.GOAL_SCORE) {
+                    resetLevel();
+                    sendEventToClients(new GameOverEvent(LASUtils.BLACK_TEAM));
+                }
+                break;
+            default :
+                break;
+        }
+        lasGlobalEntitySystem.getEntity().saveComponent(scores);
     }
 
     private void resetLevel() {
