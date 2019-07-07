@@ -27,14 +27,18 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
+import org.terasology.ligthandshadow.componentsystem.components.ScoreComponent;
 import org.terasology.logic.characters.events.CreateVisualCharacterEvent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
+import org.terasology.rendering.nui.ControlWidget;
 import org.terasology.rendering.nui.NUIManager;
+import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
 import org.terasology.rendering.nui.layers.hud.HealthHud;
 import org.terasology.rendering.nui.widgets.UIIconBar;
 import org.terasology.logic.characters.VisualCharacterComponent;
 import org.terasology.rendering.logic.SkeletalMeshComponent;
+import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.utilities.Assets;
 
 /**
@@ -48,6 +52,8 @@ public class ClientSkinSystem extends BaseComponentSystem {
     private LocalPlayer localPlayer;
     @In
     private AssetManager assetManager;
+    @In
+    private LASGlobalEntitySystem lasGlobalEntitySystem;
 
     /**
      * Change the Health HUD when the local player is spawned based on their Light and Shadow Team.
@@ -61,6 +67,7 @@ public class ClientSkinSystem extends BaseComponentSystem {
     public void onAwaitedLocalCharacterSpawnEvent(AwaitedLocalCharacterSpawnEvent event, EntityRef characterEntity,
                                                   LASTeamComponent lasTeamComponent) {
         setHealthHUD(lasTeamComponent.team);
+        setScoreHUD();
     }
 
     /**
@@ -114,5 +121,28 @@ public class ClientSkinSystem extends BaseComponentSystem {
         HealthHud healthHud = nuiManager.getHUD().getHUDElement("core:healthHud", HealthHud.class);
         healthHud.find("healthBar", UIIconBar.class).setIcon(Assets.getTextureRegion(LASUtils.getHealthIcon(team)).get());
         healthHud.setSkin(Assets.getSkin(LASUtils.getHealthSkin(team)).get());
+    }
+
+    private void setScoreHUD() {
+        ScoreComponent scores = lasGlobalEntitySystem.getEntity().getComponent(ScoreComponent.class);
+        if (scores == null) {
+            return;
+        }
+        nuiManager.getHUD().addHUDElement("ScoreHud");
+        ControlWidget scoreScreen = nuiManager.getHUD().getHUDElement("LightAndShadow:ScoreHud");
+        UILabel blackScoreArea = scoreScreen.find("blackScoreArea", UILabel.class);
+        blackScoreArea.bindText(new ReadOnlyBinding<String>() {
+            @Override
+            public String get() {
+                return String.valueOf(scores.blackScore);
+            }
+        });
+        UILabel redScoreArea = scoreScreen.find("redScoreArea", UILabel.class);
+        redScoreArea.bindText(new ReadOnlyBinding<String>() {
+            @Override
+            public String get() {
+                return String.valueOf(scores.redScore);
+            }
+        });
     }
 }
