@@ -1,0 +1,11 @@
+{
+    "LASGlobalEntity" : {},
+    "Score" : {
+        "redScore" : 0,
+        "blackScore" : 0
+    },
+    "Network" : {
+        "replicateMode" : "ALWAYS"
+    },
+    "persisted": true
+}
