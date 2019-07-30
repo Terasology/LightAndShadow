@@ -18,7 +18,7 @@
                     {
                         "text": "I need to leave now ..",
                         "action": {
-                            "type": "CloseDialogAction"
+                            "class": "Dialogs:CloseDialogAction"
                         }
                     }
                 ]
