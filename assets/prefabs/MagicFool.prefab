@@ -47,7 +47,7 @@
                     {
                         "text": "Yup, sounds great!",
                         "action": [{
-                                "type": "SetTeamAction",
+                                "class": "SetTeamAction",
                                 "team": "shadow"
                             },
                             {
@@ -78,7 +78,7 @@
                     {
                         "text": "Yup, sounds great!",
                         "action": [{
-                                "type": "SetTeamAction",
+                                "class": "SetTeamAction",
                                 "team": "light"
                             },
                             {
