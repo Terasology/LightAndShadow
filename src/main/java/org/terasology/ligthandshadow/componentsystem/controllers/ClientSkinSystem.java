@@ -56,7 +56,8 @@ public class ClientSkinSystem extends BaseComponentSystem {
     private LASGlobalSystem lasGlobalSystem;
 
     /**
-     * Change the Health HUD when the local player is spawned based on their Light and Shadow Team.
+     * Change the Health HUD style and set the Score HUD
+     * when the local player is spawned based on their Light and Shadow Team.
      * @see LASTeamComponent
      *
      * @param event            The event that is triggered when local player has been spawned

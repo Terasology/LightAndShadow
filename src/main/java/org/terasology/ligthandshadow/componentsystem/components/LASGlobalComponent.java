@@ -18,6 +18,10 @@ package org.terasology.ligthandshadow.componentsystem.components;
 import org.terasology.entitySystem.Component;
 import org.terasology.network.Replicate;
 
+/**
+ * Place holder component to indicate an entity being the LAS Global Entity.
+ * @see org.terasology.ligthandshadow.componentsystem.controllers.LASGlobalSystem
+ */
 @Replicate
 public class LASGlobalComponent implements Component {
 }

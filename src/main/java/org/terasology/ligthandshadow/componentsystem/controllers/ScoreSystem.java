@@ -44,6 +44,9 @@ import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemComponent;
 
+/**
+ * Handles how game score updates.
+ */
 @RegisterSystem(RegisterMode.AUTHORITY)
 @Share(ScoreSystem.class)
 public class ScoreSystem extends BaseComponentSystem {

@@ -23,6 +23,9 @@ import org.terasology.ligthandshadow.componentsystem.components.LASGlobalCompone
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 
+/**
+ * Maintains the LASGlobal Entity. This entity will store global game information like scores, etc.
+ */
 @RegisterSystem
 @Share(value = LASGlobalSystem.class)
 public class LASGlobalSystem extends BaseComponentSystem {

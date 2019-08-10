@@ -18,6 +18,11 @@ package org.terasology.ligthandshadow.componentsystem.components;
 import org.terasology.entitySystem.Component;
 import org.terasology.network.Replicate;
 
+/**
+ * The component to store scores of each team. It is added to LasGlobalEntity.
+ * @see org.terasology.ligthandshadow.componentsystem.controllers.LASGlobalSystem
+ * @see org.terasology.ligthandshadow.componentsystem.controllers.ScoreSystem
+ */
 public class ScoreComponent implements Component {
     @Replicate
     public int redScore;
