@@ -26,6 +26,7 @@ import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent
 import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
+import org.terasology.logic.permission.PermissionManager;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.logic.players.PlayerUtil;
@@ -35,6 +36,7 @@ import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.WidgetUtil;
 import org.terasology.rendering.nui.layers.ingame.DeathScreen;
 import org.terasology.rendering.nui.layouts.miglayout.MigLayout;
+import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UILabel;
 
 /**
@@ -48,6 +50,8 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     private LocalPlayer localPlayer;
     @In
     private EntityManager entityManager;
+    @In
+    private PermissionManager permissionManager;
 
     /**
      * System to show game over screen once a team achieves goal score.
@@ -62,6 +66,14 @@ public class ClientGameOverSystem extends BaseComponentSystem {
             DeathScreen deathScreen = nuiManager.pushScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
             addPlayerStatisticsInfo(deathScreen);
             UILabel gameOverDetails = deathScreen.find("gameOverDetails", UILabel.class);
+
+            if (event.hasRestartPermission) {
+                UIButton restartButton = deathScreen.find("restart", UIButton.class);
+                if (restartButton != null) {
+                    restartButton.setVisible(true);
+                }
+            }
+
             WidgetUtil.trySubscribe(deathScreen, "restart", widget -> triggerRestart());
             if (gameOverDetails != null) {
                 if (event.winningTeam.equals(localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team)) {
