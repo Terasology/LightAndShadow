@@ -26,7 +26,7 @@ import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent
 import org.terasology.ligthandshadow.componentsystem.events.ClientRestartEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
-import org.terasology.logic.health.DoHealEvent;
+import org.terasology.logic.health.event.RestoreFullHealthEvent;
 import org.terasology.logic.permission.PermissionManager;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.network.ClientComponent;
@@ -60,7 +60,7 @@ public class RestartSystem extends BaseComponentSystem {
             for (EntityRef client: clients) {
                 EntityRef player = client.getComponent(ClientComponent.class).character;
                 String team = player.getComponent(LASTeamComponent.class).team;
-                player.send(new DoHealEvent(100000, player));
+                player.send(new RestoreFullHealthEvent(player));
                 player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
                 client.send(new ClientRestartEvent());
             }

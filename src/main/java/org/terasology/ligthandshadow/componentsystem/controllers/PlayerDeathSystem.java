@@ -29,7 +29,7 @@ import org.terasology.logic.characters.AliveCharacterComponent;
 import org.terasology.logic.characters.CharacterComponent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.health.BeforeDestroyEvent;
-import org.terasology.logic.health.DoHealEvent;
+import org.terasology.logic.health.event.RestoreFullHealthEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.events.DropItemRequest;
 import org.terasology.logic.location.LocationComponent;
@@ -75,7 +75,7 @@ public class PlayerDeathSystem extends BaseComponentSystem {
             updateStatistics(event.getInstigator(), "kills");
             updateStatistics(player, "deaths");
             dropItemsFromInventory(player);
-            player.send(new DoHealEvent(100000, player));
+            player.send(new RestoreFullHealthEvent(player));
             player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
         }
     }
