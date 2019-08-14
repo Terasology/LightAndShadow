@@ -32,7 +32,7 @@
                     {
                         "text": "Very well..",
                         "action": {
-                            "type": "CloseDialogAction"
+                            "class": "Dialogs:CloseDialogAction"
                         }
                     }
                 ]
@@ -47,22 +47,22 @@
                     {
                         "text": "Yup, sounds great!",
                         "action": [{
-                                "type": "SetTeamAction",
+                                "class": "SetTeamAction",
                                 "team": "shadow"
                             },
                             {
-                                "type": "ChangeDialogAction",
+                                "class": "Dialogs:ChangeDialogAction",
                                 "prefab": "TeleportDialog"
                             },
                             {
-                                "type": "CloseDialogAction"
+                                "class": "Dialogs:CloseDialogAction"
                             }
                         ]
                     },
                     {
                         "text": "Ah well, maybe it's not really black ..",
                         "action": {
-                            "type": "NewDialogAction",
+                            "class": "Dialogs:NewDialogAction",
                             "target": "main"
                         }
                     }
@@ -78,22 +78,22 @@
                     {
                         "text": "Yup, sounds great!",
                         "action": [{
-                                "type": "SetTeamAction",
+                                "class": "SetTeamAction",
                                 "team": "light"
                             },
                             {
-                                "type": "ChangeDialogAction",
+                                "class": "Dialogs:ChangeDialogAction",
                                 "prefab": "TeleportDialog"
                             },
                             {
-                                "type": "CloseDialogAction"
+                                "class": "Dialogs:CloseDialogAction"
                             }
                         ]
                     },
                     {
                         "text": "Ah well, maybe it's not really white ..",
                         "action": {
-                            "type": "NewDialogAction",
+                            "class": "Dialogs:NewDialogAction",
                             "target": "main"
                         }
                     }
@@ -109,14 +109,14 @@
                     {
                         "text": "That is a really weird conversation!",
                         "action": {
-                            "type": "NewDialogAction",
+                            "class": "Dialogs:NewDialogAction",
                             "target": "myColor2"
                         }
                     },
                     {
                         "text": "Ah well, maybe it's not really my favorite ..",
                         "action": {
-                            "type": "NewDialogAction",
+                            "class": "Dialogs:NewDialogAction",
                             "target": "main"
                         }
                     }
@@ -132,7 +132,7 @@
                     {
                         "text": "Why not ..",
                         "action": {
-                            "type": "NewDialogAction",
+                            "class": "Dialogs:NewDialogAction",
                             "target": "main"
                         }
                     }
