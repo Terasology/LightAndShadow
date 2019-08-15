@@ -111,7 +111,7 @@ public class ClientSkinSystem extends BaseComponentSystem {
     }
 
     private void setHealthHUD(String team) {
-        HealthHud healthHud = nuiManager.getHUD().getHUDElement("core:healthHud", HealthHud.class);
+        HealthHud healthHud = nuiManager.getHUD().getHUDElement("Health:healthHud", HealthHud.class);
         healthHud.find("healthBar", UIIconBar.class).setIcon(Assets.getTextureRegion(LASUtils.getHealthIcon(team)).get());
         healthHud.setSkin(Assets.getSkin(LASUtils.getHealthSkin(team)).get());
     }
