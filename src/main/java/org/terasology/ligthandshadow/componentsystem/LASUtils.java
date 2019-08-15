@@ -51,6 +51,8 @@ public final class LASUtils {
     public static final String WHITE_HEALTH_SKIN = "lightAndShadowResources:healthWhite";
     public static final String RED_HEALTH_SKIN = "lightAndShadowResources:healthRed";
     public static final String BLACK_HEALTH_SKIN = "lightAndShadowResources:healthBlack";
+    public static final String RED_MINIMAP_ICON = "lightAndShadowResources:heartsIcon";
+    public static final String BLACK_MINIMAP_ICON = "lightAndShadowResources:spadesIcon";
     // The position near the team's base that player will be teleported to on choosing a team
     public static final Vector3f RED_TELEPORT_DESTINATION = new Vector3f(29, 12, 0);
     public static final Vector3f BLACK_TELEPORT_DESTINATION = new Vector3f(-29, 12, 0);
@@ -151,6 +153,16 @@ public final class LASUtils {
         }
         if (team.equals(BLACK_TEAM)) {
             return RED_TEAM;
+        }
+        return null;
+    }
+
+    public static String getMinimapIcon(String team) {
+        if (team.equals(RED_TEAM)) {
+            return RED_MINIMAP_ICON;
+        }
+        if (team.equals(BLACK_TEAM)) {
+            return BLACK_MINIMAP_ICON;
         }
         return null;
     }
