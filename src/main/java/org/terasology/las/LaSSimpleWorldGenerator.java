@@ -17,7 +17,10 @@ package org.terasology.las;
 
 import org.terasology.cities.BlockTheme;
 import org.terasology.cities.DefaultBlockType;
-import org.terasology.core.world.generator.facetProviders.SeaLevelProvider;
+import org.terasology.core.world.generator.facetProviders.*;
+import org.terasology.core.world.generator.rasterizers.FloraRasterizer;
+import org.terasology.core.world.generator.rasterizers.SolidRasterizer;
+import org.terasology.core.world.generator.rasterizers.TreeRasterizer;
 import org.terasology.engine.SimpleUri;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.las.bases.BaseProvider;
@@ -67,12 +70,23 @@ public class LaSSimpleWorldGenerator extends BaseFacetedWorldGenerator {
 
         return new WorldBuilder(worldGeneratorPluginLibrary)
                 .addProvider(new LaSSurfaceProvider())
-                .addProvider(new SeaLevelProvider(0))
+                .addProvider(new PlayAreaProvider())
+                .addProvider(new SeaLevelProvider(seaLevel))
+                .addProvider(new SimplexHumidityProvider())
+                .addProvider(new SimplexSurfaceTemperatureProvider())
+                .addProvider(new MountainsProvider())
+                .addProvider(new BiomeProvider())
+                .addProvider(new SurfaceToDensityProvider())
+                .addProvider(new DefaultFloraProvider())
+                .addProvider(new DefaultTreeProvider())
                 .addProvider(new BaseProvider())
                 .addProvider(new FloatingPlatformProvider())
                 .addPlugins()
-                .addRasterizer(new LaSSimpleWorldRasterizer())
+                .addRasterizer(new SolidRasterizer())
+//                .addRasterizer(new LaSSimpleWorldRasterizer())
                 .addRasterizer(new FloatingPlatformRasterizer())
-                .addRasterizer(new BaseRasterizer());
+                .addRasterizer(new BaseRasterizer())
+                .addRasterizer(new LaSFloraRasterizer())
+                .addRasterizer(new TreeRasterizer());
     }
 }
