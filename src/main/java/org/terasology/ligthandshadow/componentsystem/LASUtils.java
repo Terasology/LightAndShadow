@@ -25,6 +25,14 @@ public final class LASUtils {
     public static final String BLACK_TEAM = "black";
     public static final String WHITE_TEAM = "white";
     /**
+     * Floating Platform values
+     */
+    public static final Vector3i FLOATING_PLATFORM_POSITION = new Vector3i(0, 60, 252);
+    public static final int FLOATING_PLATFORM_WIDTH = 28;
+    public static final int FLOATING_PLATFORM_LENGTH = 56;
+    public static final int TELEPORTER_OFFSET = 4;
+    public static final int NPC_OFFSET = 24;
+    /**
      * Position of Red base
      */
     public static final Vector3i CENTER_RED_BASE_POSITION = new Vector3i(30, 10, 0);

@@ -36,16 +36,16 @@ public class GuidanceNpcProvider implements EntityProviderPlugin {
 
     @Override
     public void process(Region region, EntityBuffer buffer) {
-        if (region.getRegion().encompasses(0, 64, 24)) {
+        if (region.getRegion().encompasses(0, 64, 276)) {
 
             Prefab chooseFactionNpc = Assets.getPrefab("LightAndShadow:MagicFool").get();
             EntityStore entity = new EntityStore(chooseFactionNpc);
-            entity.addComponent(new LocationComponent(new Vector3f(0, 61, 24)));
+            entity.addComponent(new LocationComponent(new Vector3f(0, 61, 276)));
             buffer.enqueue(entity);
 
             Prefab beaconMark = Assets.getPrefab("BeaconMark").get();
             EntityStore entityStore = new EntityStore(beaconMark);
-            entityStore.addComponent(new LocationComponent(new Vector3f(0, 63, 24)));
+            entityStore.addComponent(new LocationComponent(new Vector3f(0, 63, 276)));
             buffer.enqueue(entityStore);
         }
 

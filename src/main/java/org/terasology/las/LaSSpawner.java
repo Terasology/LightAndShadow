@@ -28,7 +28,7 @@ public class LaSSpawner implements Spawner {
 
     @Override
     public Vector3f getSpawnPosition(World world, EntityRef clientEntity) {
-        return new Vector3f(0, 65, 0);
+        return new Vector3f(0, 65, 252);
     }
 
 }
