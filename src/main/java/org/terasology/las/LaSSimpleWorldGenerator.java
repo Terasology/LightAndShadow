@@ -59,8 +59,8 @@ public class LaSSimpleWorldGenerator extends BaseFacetedWorldGenerator {
         int seaLevel = 0;
 
         theme = BlockTheme.builder(blockManager)
-                .register(DefaultBlockType.BUILDING_FLOOR, "Cities:stonawall1dark")
-                .register(DefaultBlockType.ROOF_FLAT, "Cities:rooftiles2")
+                .register(DefaultBlockType.BUILDING_FLOOR, "StructuralResources:StoneBlocksDark")
+                .register(DefaultBlockType.ROOF_FLAT, "StructuralResources:RoofTilesLarge")
                 // -- requires Fences module
                 .registerFamily(DefaultBlockType.FENCE, "Fences:Fence")
                 .build();
