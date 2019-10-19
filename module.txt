@@ -13,7 +13,7 @@
         {"id" : "ItemRendering", "minVersion" : "1.0.0"},
         {"id" : "Dialogs", "minVersion" : "0.1.0"},
         {"id" : "Cities", "minVersion" : "1.0.0"},
-        {"id" : "StructuralResources", "minVersion" : "1.0.2"},
+        {"id" : "StructuralResources", "minVersion" : "2.0.0"},
         {"id" : "Tasks", "minVersion" : "0.2.0"}
     ],
     "isServerSideOnly" : false,
