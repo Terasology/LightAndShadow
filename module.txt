@@ -12,7 +12,8 @@
         {"id" : "StaticCities", "minVersion" : "0.2.0"},
         {"id" : "ItemRendering", "minVersion" : "1.0.0"},
         {"id" : "Dialogs", "minVersion" : "0.1.0"},
-        {"id" : "Cities", "minVersion" : "0.6.2"},
+        {"id" : "Cities", "minVersion" : "1.0.0"},
+        {"id" : "StructuralResources", "minVersion" : "2.0.0"},
         {"id" : "Tasks", "minVersion" : "0.2.0"},
         {"id" : "Minimap", "minVersion" : "1.0.0"}
     ],
