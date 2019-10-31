@@ -69,7 +69,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     private void setPlayerMinimapIcon(EntityRef player, String team) {
         MinimapIconComponent minimapIconComponent = player.getComponent(MinimapIconComponent.class);
         if (minimapIconComponent != null) {
-            minimapIconComponent.value = LASUtils.getMinimapIcon(team);
+            minimapIconComponent.iconUri = LASUtils.getMinimapIcon(team);
             player.saveComponent(minimapIconComponent);
         }
     }
