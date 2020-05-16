@@ -30,7 +30,7 @@ public class LaSSimpleWorldRasterizer implements WorldRasterizer {
 
     @Override
     public void initialize() {
-        dirt = CoreRegistry.get(BlockManager.class).getBlock("CoreBlocks:Dirt");
+        dirt = CoreRegistry.get(BlockManager.class).getBlock("CoreAssets:Dirt");
     }
 
     @Override
