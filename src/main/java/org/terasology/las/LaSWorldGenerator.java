@@ -105,18 +105,18 @@ public class LaSWorldGenerator extends CityWorldGenerator {
         int seaLevel = 2;
 
         theme = BlockTheme.builder(blockManager)
-                .register(DefaultBlockType.ROAD_FILL, "CoreBlocks:Dirt")
-                .register(DefaultBlockType.ROAD_SURFACE, "CoreBlocks:Gravel")
-                .register(DefaultBlockType.LOT_EMPTY, "CoreBlocks:Dirt")
+                .register(DefaultBlockType.ROAD_FILL, "CoreAssets:Dirt")
+                .register(DefaultBlockType.ROAD_SURFACE, "CoreAssets:Gravel")
+                .register(DefaultBlockType.LOT_EMPTY, "CoreAssets:Dirt")
                 .register(DefaultBlockType.BUILDING_WALL, "StructuralResources:StoneBlocks")
                 .register(DefaultBlockType.BUILDING_FLOOR, "StructuralResources:StoneBlocksDark")
-                .register(DefaultBlockType.BUILDING_FOUNDATION, "CoreBlocks:Gravel")
-                .register(DefaultBlockType.TOWER_STAIRS, "CoreBlocks:CobbleStone")
+                .register(DefaultBlockType.BUILDING_FOUNDATION, "CoreAssets:Gravel")
+                .register(DefaultBlockType.TOWER_STAIRS, "CoreAssets:CobbleStone")
                 .register(DefaultBlockType.ROOF_FLAT, "StructuralResources:RoofTilesLarge")
                 .register(DefaultBlockType.ROOF_HIP, "StructuralResources:PlanksEvenDark")
                 .register(DefaultBlockType.ROOF_SADDLE, "StructuralResources:PlanksEvenDark")
-                .register(DefaultBlockType.ROOF_DOME, "CoreBlocks:Plank")
-                .register(DefaultBlockType.ROOF_GABLE, "CoreBlocks:Plank")
+                .register(DefaultBlockType.ROOF_DOME, "CoreAssets:Plank")
+                .register(DefaultBlockType.ROOF_GABLE, "CoreAssets:Plank")
                 .register(DefaultBlockType.SIMPLE_DOOR, BlockManager.AIR_ID)
                 .register(DefaultBlockType.WING_DOOR, BlockManager.AIR_ID)
                 .register(DefaultBlockType.WINDOW_GLASS, BlockManager.AIR_ID)
@@ -125,13 +125,13 @@ public class LaSWorldGenerator extends CityWorldGenerator {
                 // -- requires Fences module
                 .registerFamily(DefaultBlockType.FENCE, "Fences:Fence")
                 .registerFamily(DefaultBlockType.FENCE_GATE, BlockManager.AIR_ID)  // there is no fence gate :-(
-                .registerFamily(DefaultBlockType.TOWER_STAIRS, "CoreBlocks:CobbleStone:engine:stair")
+                .registerFamily(DefaultBlockType.TOWER_STAIRS, "CoreAssets:CobbleStone:engine:stair")
                 .registerFamily(DefaultBlockType.BARREL, "StructuralResources:Barrel")
-                .registerFamily(DefaultBlockType.LADDER, "CoreBlocks:Ladder")
-                .registerFamily(DefaultBlockType.PILLAR_BASE, "CoreBlocks:CobbleStone:StructuralResources:pillarBase")
-                .registerFamily(DefaultBlockType.PILLAR_MIDDLE, "CoreBlocks:CobbleStone:StructuralResources:pillar")
-                .registerFamily(DefaultBlockType.PILLAR_TOP, "CoreBlocks:CobbleStone:StructuralResources:pillarTop")
-                .registerFamily(DefaultBlockType.TORCH, "CoreBlocks:Torch")
+                .registerFamily(DefaultBlockType.LADDER, "CoreAssets:Ladder")
+                .registerFamily(DefaultBlockType.PILLAR_BASE, "CoreAssets:CobbleStone:StructuralResources:pillarBase")
+                .registerFamily(DefaultBlockType.PILLAR_MIDDLE, "CoreAssets:CobbleStone:StructuralResources:pillar")
+                .registerFamily(DefaultBlockType.PILLAR_TOP, "CoreAssets:CobbleStone:StructuralResources:pillarTop")
+                .registerFamily(DefaultBlockType.TORCH, "CoreAssets:Torch")
                 .build();
 
         PerlinHumidityProvider.Configuration humidityConfig = new PerlinHumidityProvider.Configuration();
