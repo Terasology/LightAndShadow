@@ -27,6 +27,7 @@ import org.terasology.ligthandshadow.componentsystem.components.SetTeamOnActivat
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.minimap.MinimapIconComponent;
 import org.terasology.registry.In;
 
 /**
@@ -53,6 +54,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     public void onActivate(ActivateEvent event, EntityRef entity) {
         EntityRef player = event.getInstigator();
         String team = setPlayerTeamToTeleporterTeam(player, entity);
+        setPlayerMinimapIcon(player, team);
         handlePlayerTeleport(player, team);
     }
 
@@ -62,6 +64,14 @@ public class TeleporterSystem extends BaseComponentSystem {
         playerTeamComponent.team = teleporterTeamComponent.team;
         player.saveComponent(playerTeamComponent);
         return playerTeamComponent.team;
+    }
+
+    private void setPlayerMinimapIcon(EntityRef player, String team) {
+        MinimapIconComponent minimapIconComponent = player.getComponent(MinimapIconComponent.class);
+        if (minimapIconComponent != null) {
+            minimapIconComponent.iconUrn = LASUtils.getMinimapIcon(team);
+            player.saveComponent(minimapIconComponent);
+        }
     }
 
     private void handlePlayerTeleport(EntityRef player, String team) {

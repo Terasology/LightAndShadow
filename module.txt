@@ -14,6 +14,7 @@
         { "id": "Inventory", "minVersion": "1.1.0" },
         { "id": "ItemRendering", "minVersion": "1.1.0" },
         { "id": "LightAndShadowResources", "minVersion": "1.0.0" },
+        { "id": "Minimap", "minVersion": "1.0.0" },
         { "id": "Pathfinding", "minVersion": "1.0.0" },
         { "id": "StaticCities", "minVersion": "1.0.0" },
         { "id": "StructuralResources", "minVersion": "2.1.0" },
