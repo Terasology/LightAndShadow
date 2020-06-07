@@ -15,6 +15,7 @@
  */
 package org.terasology.las;
 
+import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.math.geom.BaseVector2i;
 import org.terasology.math.geom.Rect2i;
 import org.terasology.math.geom.Vector2i;
@@ -30,11 +31,12 @@ public class PlayAreaProvider implements FacetProvider {
         // Create our surface height facet (we will get into borders later)
         Border3D border = region.getBorderForFacet(PlayAreaFacet.class);
         PlayAreaFacet facet = new PlayAreaFacet(region.getRegion(), border);
+        int playAreaRadiusSquared = LASUtils.PLAY_AREA_RADIUS * LASUtils.PLAY_AREA_RADIUS;
 
         // Loop through every position in our 2d array
         Rect2i processRegion = facet.getWorldRegion();
-        for (BaseVector2i position: processRegion.contents()) {
-            if (position.distanceSquared(new Vector2i(0, 0)) <= 2500) {
+        for (BaseVector2i position : processRegion.contents()) {
+            if (position.distanceSquared(new Vector2i(0, 0)) <= playAreaRadiusSquared) {
                 facet.setWorld((Vector2i) position, true);
             } else {
                 facet.setWorld((Vector2i) position, false);
