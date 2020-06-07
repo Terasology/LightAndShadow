@@ -15,10 +15,12 @@
  */
 package org.terasology.las;
 
-import org.terasology.cities.BlockTheme;
-import org.terasology.cities.DefaultBlockType;
-import org.terasology.core.world.generator.facetProviders.*;
-import org.terasology.core.world.generator.rasterizers.FloraRasterizer;
+import org.terasology.core.world.generator.facetProviders.DefaultFloraProvider;
+import org.terasology.core.world.generator.facetProviders.DefaultTreeProvider;
+import org.terasology.core.world.generator.facetProviders.SeaLevelProvider;
+import org.terasology.core.world.generator.facetProviders.SimplexHumidityProvider;
+import org.terasology.core.world.generator.facetProviders.SimplexSurfaceTemperatureProvider;
+import org.terasology.core.world.generator.facetProviders.SurfaceToDensityProvider;
 import org.terasology.core.world.generator.rasterizers.SolidRasterizer;
 import org.terasology.core.world.generator.rasterizers.TreeRasterizer;
 import org.terasology.engine.SimpleUri;
@@ -45,8 +47,6 @@ public class LaSSimpleWorldGenerator extends BaseFacetedWorldGenerator {
 
     private final Spawner spawner = new LaSSpawner();
 
-    private BlockTheme theme;
-
     public LaSSimpleWorldGenerator(SimpleUri uri) {
         super(uri);
     }
@@ -61,13 +61,6 @@ public class LaSSimpleWorldGenerator extends BaseFacetedWorldGenerator {
     protected WorldBuilder createWorld() {
         int seaLevel = 0;
 
-        theme = BlockTheme.builder(blockManager)
-                .register(DefaultBlockType.BUILDING_FLOOR, "StructuralResources:StoneBlocksDark")
-                .register(DefaultBlockType.ROOF_FLAT, "StructuralResources:RoofTilesLarge")
-                // -- requires Fences module
-                .registerFamily(DefaultBlockType.FENCE, "Fences:Fence")
-                .build();
-
         return new WorldBuilder(worldGeneratorPluginLibrary)
                 .addProvider(new LaSSurfaceProvider())
                 .addProvider(new PlayAreaProvider())
@@ -75,7 +68,7 @@ public class LaSSimpleWorldGenerator extends BaseFacetedWorldGenerator {
                 .addProvider(new SimplexHumidityProvider())
                 .addProvider(new SimplexSurfaceTemperatureProvider())
                 .addProvider(new MountainsProvider())
-                .addProvider(new BiomeProvider())
+                .addProvider(new LaSBiomeProvider())
                 .addProvider(new SurfaceToDensityProvider())
                 .addProvider(new DefaultFloraProvider())
                 .addProvider(new DefaultTreeProvider())
