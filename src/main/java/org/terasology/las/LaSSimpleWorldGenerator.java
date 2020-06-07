@@ -33,7 +33,7 @@ import org.terasology.world.generation.WorldBuilder;
 import org.terasology.world.generator.RegisterWorldGenerator;
 import org.terasology.world.generator.plugin.WorldGeneratorPluginLibrary;
 
-@RegisterWorldGenerator(id = "LaSSimpleWorld", displayName = "Light and Shadow (Simple)")
+@RegisterWorldGenerator(id = "lasWorld", displayName = "A World of Light And Shadow")
 public class LaSSimpleWorldGenerator extends BaseFacetedWorldGenerator {
     @In
     private WorldGeneratorPluginLibrary worldGeneratorPluginLibrary;
