@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.las.yingyang;
+package org.terasology.las.yinyang;
 
-import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.math.ChunkMath;
-import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
@@ -31,13 +29,15 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.util.Collections.singletonMap;
 
 @RegisterPlugin
-public class YingYangRasterizer implements WorldRasterizerPlugin {
+public class YinYangRasterizer implements WorldRasterizerPlugin {
+
+    private static final int RADIUS = 5;
+
     private Block blackStone;
     private Block redStone;
     private Block air;
@@ -51,23 +51,20 @@ public class YingYangRasterizer implements WorldRasterizerPlugin {
 
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
-        YingYangFacet yingYangFacet = chunkRegion.getFacet(YingYangFacet.class);
-        if (yingYangFacet.getYingYangs().isEmpty()) {
-            return;
-        }
-        Region3i reg = chunkRegion.getRegion();
-        for (YingYang yingYang: yingYangFacet.getYingYangs()) {
-            Vector3i yingYangPosition = yingYang.getCenterPosition();
-            if (chunkRegion.getRegion().encompasses(yingYangPosition)) {
-                int r = 5;
-                for (int i = -r; i <= r; i++) {
-                    for (int j = -2 * r; j <= 2 * r; j++) {
-                        String blockString = pixel(j, i, r);
-                        Vector3i chunkBlockPosition = new Vector3i(i, 0, j).add(yingYangPosition);
-                        if (chunk.getRegion().encompasses(chunkBlockPosition)) {
-                            chunk.setBlock(ChunkMath.calcBlockPos(chunkBlockPosition), getBlock(blockString));
-                        }
-                    }
+        YinYangFacet yinYangFacet = chunkRegion.getFacet(YinYangFacet.class);
+
+        yinYangFacet.getWorldEntries().keySet().stream()
+                .map(Vector3i::new)
+                .forEach(yinYangPosition -> placeYinYang(chunk, yinYangPosition));
+    }
+
+    private void placeYinYang(CoreChunk chunk, Vector3i yinYangPosition) {
+        for (int i = -RADIUS; i <= RADIUS; i++) {
+            for (int j = -2 * RADIUS; j <= 2 * RADIUS; j++) {
+                String blockString = pixel(j, i, RADIUS);
+                Vector3i chunkBlockPosition = new Vector3i(i, 0, j).add(yinYangPosition);
+                if (chunk.getRegion().encompasses(chunkBlockPosition)) {
+                    chunk.setBlock(ChunkMath.calcBlockPos(chunkBlockPosition), getBlock(blockString));
                 }
             }
         }

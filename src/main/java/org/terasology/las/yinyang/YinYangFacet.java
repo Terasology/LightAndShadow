@@ -13,35 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.las.yingyang;
+package org.terasology.las.yinyang;
 
 import org.terasology.math.Region3i;
 import org.terasology.world.generation.Border3D;
-import org.terasology.world.generation.facets.base.BaseFacet3D;
 import org.terasology.world.generation.facets.base.SparseObjectFacet3D;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-
-public class YingYangFacet extends BaseFacet3D {
-    private final Collection<YingYang> yingYangs = new ArrayList<>();
-
-    public YingYangFacet(Region3i targetRegion, Border3D border) {
+public class YinYangFacet extends SparseObjectFacet3D<YinYang> {
+    public YinYangFacet(Region3i targetRegion, Border3D border) {
         super(targetRegion, border);
-    }
-
-    /**
-     * @param yingYang the platform to add
-     */
-    public void add(YingYang yingYang) {
-        yingYangs.add(yingYang);
-    }
-
-    /**
-     * @return an unmodifiable view
-     */
-    public Collection<YingYang> getYingYangs() {
-        return Collections.unmodifiableCollection(yingYangs);
     }
 }

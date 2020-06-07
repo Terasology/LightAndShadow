@@ -13,18 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.las.yingyang;
+package org.terasology.las.yinyang;
 
-import org.terasology.math.geom.Vector3i;
-
-public class YingYang {
-    private Vector3i centerPosition;
-
-    public YingYang(Vector3i centerPosition) {
-        this.centerPosition = centerPosition;
-    }
-
-    public Vector3i getCenterPosition() {
-        return centerPosition;
-    }
+public class YinYang {
 }
