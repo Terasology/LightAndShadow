@@ -25,6 +25,19 @@ public final class LASUtils {
     public static final String BLACK_TEAM = "black";
     public static final String WHITE_TEAM = "white";
     /**
+     * Floating Platform values
+     */
+    public static final Vector3i FLOATING_PLATFORM_POSITION = new Vector3i(0, 60, 252);
+    public static final int FLOATING_PLATFORM_WIDTH = 28;
+    public static final int FLOATING_PLATFORM_LENGTH = 56;
+    public static final int FLOATING_PLATFORM_HEIGHT_LEVEL = 60;
+    public static final int TELEPORTER_OFFSET = 4;
+    public static final int NPC_OFFSET = 24;
+    /**
+     * Play Area values
+     */
+    public static final int PLAY_AREA_RADIUS = 50;
+    /**
      * Position of Red base
      */
     public static final Vector3i CENTER_RED_BASE_POSITION = new Vector3i(30, 10, 0);
@@ -35,8 +48,7 @@ public final class LASUtils {
     public static final String BLACK_BASE_STONE = "lightAndShadowResources:blackBaseStone";
     public static final String RED_BASE_STONE = "lightAndShadowResources:redBaseStone";
     /**
-     * Determines size of base
-     * Base is a square of side 2 * BASE_EXTENT + 1 with the flag at the center
+     * Determines size of base Base is a square of side 2 * BASE_EXTENT + 1 with the flag at the center
      */
     public static final int BASE_EXTENT = 2;
     public static final int GOAL_SCORE = 5;
@@ -70,10 +82,12 @@ public final class LASUtils {
 
     public static Vector3i getFlagLocation(String flagTeam) {
         if (flagTeam.equals(RED_TEAM)) {
-            return (new Vector3i(CENTER_RED_BASE_POSITION.x, CENTER_RED_BASE_POSITION.y + 1, CENTER_RED_BASE_POSITION.z));
+            return (new Vector3i(CENTER_RED_BASE_POSITION.x, CENTER_RED_BASE_POSITION.y + 1,
+                    CENTER_RED_BASE_POSITION.z));
         }
         if (flagTeam.equals(BLACK_TEAM)) {
-            return (new Vector3i(CENTER_BLACK_BASE_POSITION.x, CENTER_BLACK_BASE_POSITION.y + 1, CENTER_BLACK_BASE_POSITION.z));
+            return (new Vector3i(CENTER_BLACK_BASE_POSITION.x, CENTER_BLACK_BASE_POSITION.y + 1,
+                    CENTER_BLACK_BASE_POSITION.z));
         }
         return null;
     }
@@ -144,7 +158,7 @@ public final class LASUtils {
         if (team.equals(WHITE_TEAM)) {
             return WHITE_PAWN_SKIN;
         }
-        return  null;
+        return null;
     }
 
     public static String getOppositionTeam(String team) {

@@ -5,6 +5,7 @@
     "displayName": "Light & Shadow",
     "description": "Light & Shadow is an experimental game type set in a quirky Alice in Wonderland inspired setting",
     "dependencies": [
+        { "id": "BiomesAPI", "minVersion": "4.0.0" },
         { "id": "Behaviors", "minVersion": "1.0.0" },
         { "id": "Cities", "minVersion": "1.1.0" },
         { "id": "CoreAssets", "minVersion": "2.0.1" },
