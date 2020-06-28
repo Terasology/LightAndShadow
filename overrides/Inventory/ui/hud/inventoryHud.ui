@@ -52,9 +52,12 @@
                 "layoutInfo": {
                     "use-content-width": true,
                     "use-content-height": true,
-                    "position-horizontal-center": {},
+                    "orientation": "top-bottom",
                     "position-bottom": {
-                        "target": "BOTTOM"
+                        "offset": 1
+                    },
+                    "position-right": {
+                        "offset": 4
                     }
                 }
             },
