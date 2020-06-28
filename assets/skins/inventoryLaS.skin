@@ -17,7 +17,9 @@
             },
             "modes": {
                 "active": {
-                    "background": "LightAndShadowResources:boxActive"
+                    "background": "LightAndShadowResources:boxActive",
+                    "fixed-width": 70,
+                    "fixed-height": 70
                 }
             }
         },

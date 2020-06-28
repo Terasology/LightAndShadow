@@ -50,13 +50,13 @@
                     }
                 ],
                 "layoutInfo": {
-                    "width" : 50,
+                    "width" : 70,
                     "use-content-height": true,
                     "position-bottom": {
-                        "offset": 1
+                        "offset": 10
                     },
                     "position-right": {
-                        "offset": 4
+                        "offset": 10
                     }
                 }
             },
