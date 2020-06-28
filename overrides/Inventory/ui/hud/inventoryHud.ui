@@ -10,35 +10,7 @@
                 "contents": [
                     {
                         "type": "InventoryCell",
-                        "targetSlot": 0
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 1
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 2
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 3
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 4
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 5
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 6
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 7
+                        "targetSlot": 9
                     },
                     {
                         "type": "InventoryCell",
@@ -46,7 +18,35 @@
                     },
                     {
                         "type": "InventoryCell",
-                        "targetSlot": 9
+                        "targetSlot": 7
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 6
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 5
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 4
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 3
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 2
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 1
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 0
                     }
                 ],
                 "layoutInfo": {
