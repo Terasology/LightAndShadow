@@ -1,6 +1,6 @@
 {
   "type": "HealthHud",
-  "skin": "healthDefault",
+  "skin": "LightAndShadow:healthHud",
   "contents": {
     "type": "relativeLayout",
     "contents": [
@@ -10,7 +10,7 @@
         "family": "healthBar",
         "icon": "CoreAssets:icons#redHeart",
         "halfIconMode": "split",
-        "spacing": 2,
+        "spacing": 10,
         "maxIcons": 10,
         "layoutInfo": {
           "use-content-width": true,
@@ -18,7 +18,7 @@
           "position-horizontal-center": {},
           "position-bottom": {
             "target": "BOTTOM",
-            "offset": 60
+            "offset": 20
           }
         }
       }

@@ -1,0 +1,26 @@
+{
+    "inherit": "default",
+    "elements": {
+        "UIIconBar": {
+            "parts": {
+                "icon": {
+                    "fixed-width": 30,
+                    "fixed-height": 30
+                }
+            }
+        }
+    },
+    "families": {
+        "healthBar": {
+            "elements": {
+                "UIIconBar": {
+                    "parts": {
+                        "icon": {
+                            "background": "CoreAssets:icons#darkHeartOutline"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
