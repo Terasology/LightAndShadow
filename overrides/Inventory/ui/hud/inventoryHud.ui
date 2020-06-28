@@ -50,7 +50,7 @@
                     }
                 ],
                 "layoutInfo": {
-                    "use-content-width": true,
+                    "width" : 50,
                     "use-content-height": true,
                     "orientation": "top-bottom",
                     "position-bottom": {
