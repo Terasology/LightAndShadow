@@ -1,0 +1,30 @@
+{
+    "type": "QuiverHud",
+    "skin": "inventoryDefault",
+    "contents": {
+        "type": "relativeLayout",
+        "contents": [
+            {
+                "type": "flowLayout",
+                "id": "quiver",
+                "contents": [
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 0
+                    }
+                ],
+                "layoutInfo": {
+                    "use-content-width": true,
+                    "use-content-height": true,
+                    "position-right":{
+                        "target": "RIGHT",
+                        "offset": 100
+                    },
+                    "position-bottom": {
+                        "target": "BOTTOM"
+                    }
+                }
+            }
+        ]
+    }
+}
