@@ -52,7 +52,6 @@
                 "layoutInfo": {
                     "width" : 50,
                     "use-content-height": true,
-                    "orientation": "top-bottom",
                     "position-bottom": {
                         "offset": 1
                     },
