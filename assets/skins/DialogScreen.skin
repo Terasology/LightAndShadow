@@ -1,0 +1,26 @@
+{
+    "inherit": "default",
+    "elements": {
+        "UIButton": {
+            "min-height": 32,
+            "text-align-horizontal": "left",
+            "modes": {
+                "disabled": {
+                    "text-color": "AAAAAAFF"
+                },
+                "hover": {
+                    "text-color": "FFFF00FF"
+                },
+                "down": {
+                    "text-color": "AAAA00FF"
+                },
+                "warning": {
+                    "text-color": "FF4444FF"
+                },
+                "available": {
+                    "text-color": "FFFFFFFF"
+                }
+            }
+        }
+    }
+}
