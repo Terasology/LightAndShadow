@@ -1,6 +1,6 @@
 {
     "type": "InventoryHud",
-    "skin": "inventoryLaSBlue",
+    "skin": "inventoryLaS",
     "contents": {
         "type": "relativeLayout",
         "contents": [

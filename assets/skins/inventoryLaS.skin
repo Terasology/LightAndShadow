@@ -17,7 +17,7 @@
             },
             "modes": {
                 "active": {
-                    "background": "LightAndShadow:boxActive"
+                    "background": "LightAndShadowResources:boxActive"
                 }
             }
         },
