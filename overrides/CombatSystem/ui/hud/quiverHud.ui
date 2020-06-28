@@ -1,6 +1,6 @@
 {
     "type": "QuiverHud",
-    "skin": "inventoryDefault",
+    "skin": "ammoHud",
     "contents": {
         "type": "relativeLayout",
         "contents": [
