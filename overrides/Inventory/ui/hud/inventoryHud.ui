@@ -64,14 +64,14 @@
                 "type": "UICrosshair",
                 "id": "crosshair",
                 "chargeStages": [
-                    "engine:gui#crosshairCharge1",
-                    "engine:gui#crosshairCharge2",
-                    "engine:gui#crosshairCharge3",
-                    "engine:gui#crosshairCharge4",
-                    "engine:gui#crosshairCharge5",
-                    "engine:gui#crosshairCharge6",
+                    "engine:gui#crosshairCharge8",
                     "engine:gui#crosshairCharge7",
-                    "engine:gui#crosshairCharge8"
+                    "engine:gui#crosshairCharge6",
+                    "engine:gui#crosshairCharge5",
+                    "engine:gui#crosshairCharge4",
+                    "engine:gui#crosshairCharge3",
+                    "engine:gui#crosshairCharge2",
+                    "engine:gui#crosshairCharge1"
                 ],
                 "layoutInfo": {
                     "use-content-width": true,
