@@ -18,7 +18,7 @@
                             "width": 600,
                             "height": 200,
                             "position-bottom": {
-                                "offset": 50
+                                "offset": 10
                             },
                             "position-left": {
                                 "offset": 10
@@ -31,17 +31,14 @@
                         "layoutInfo": {
                             "use-content-height": true,
                             "position-top": {
-                                "target": "BOTTOM",
+                                "target": "TOP",
                                 "widget": "mainContent"
                             },
                             "position-left": {
-                                "target": "LEFT",
-                                "widget": "mainContent"
-                            },
-                            "position-right": {
                                 "target": "RIGHT",
                                 "widget": "mainContent"
-                            }
+                            },
+                            "use-content-width": true
                         }
                     }
                 ]
