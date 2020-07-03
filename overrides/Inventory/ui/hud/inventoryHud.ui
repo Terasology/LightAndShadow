@@ -10,35 +10,7 @@
                 "contents": [
                     {
                         "type": "InventoryCell",
-                        "targetSlot": 9
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 8
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 7
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 6
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 5
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 4
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 3
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 2
+                        "targetSlot": 0
                     },
                     {
                         "type": "InventoryCell",
@@ -46,7 +18,35 @@
                     },
                     {
                         "type": "InventoryCell",
-                        "targetSlot": 0
+                        "targetSlot": 2
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 3
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 4
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 5
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 6
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 7
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 8
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 9
                     }
                 ],
                 "layoutInfo": {
@@ -64,14 +64,14 @@
                 "type": "UICrosshair",
                 "id": "crosshair",
                 "chargeStages": [
-                    "engine:gui#crosshairCharge8",
-                    "engine:gui#crosshairCharge7",
-                    "engine:gui#crosshairCharge6",
-                    "engine:gui#crosshairCharge5",
-                    "engine:gui#crosshairCharge4",
-                    "engine:gui#crosshairCharge3",
+                    "engine:gui#crosshairCharge1",
                     "engine:gui#crosshairCharge2",
-                    "engine:gui#crosshairCharge1"
+                    "engine:gui#crosshairCharge3",
+                    "engine:gui#crosshairCharge4",
+                    "engine:gui#crosshairCharge5",
+                    "engine:gui#crosshairCharge6",
+                    "engine:gui#crosshairCharge7",
+                    "engine:gui#crosshairCharge8"
                 ],
                 "layoutInfo": {
                     "use-content-width": true,
