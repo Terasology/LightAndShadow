@@ -52,18 +52,18 @@ public class BaseRasterizer implements WorldRasterizer {
             //place blocks for each of the bases and flags
             for (Vector3i baseBlockPosition : baseRegion) {
                 if (chunkRegion.getRegion().encompasses(baseBlockPosition) && baseBlockPosition.x > 0) {
-                    chunk.setBlock(ChunkMath.calcBlockPos(baseBlockPosition), redBaseStone);
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(baseBlockPosition), redBaseStone);
                 } else if (chunkRegion.getRegion().encompasses(baseBlockPosition)) {
-                    chunk.setBlock(ChunkMath.calcBlockPos(baseBlockPosition), blackBaseStone);
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(baseBlockPosition), blackBaseStone);
                 }
             }
 
             for (Vector3i flagPosition : flagRegion) {
                 //flag type depends on the x position of the flag to determine which base it's at
                 if (chunkRegion.getRegion().encompasses(flagPosition) && flagPosition.x > 0) {
-                    chunk.setBlock(ChunkMath.calcBlockPos(flagPosition), redFlag);
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(flagPosition), redFlag);
                 } else if (chunkRegion.getRegion().encompasses(flagPosition)) {
-                    chunk.setBlock(ChunkMath.calcBlockPos(flagPosition), blackFlag);
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(flagPosition), blackFlag);
                 }
             }
         }
