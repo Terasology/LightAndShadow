@@ -10,7 +10,8 @@
                 "contents": [
                     {
                         "type": "InventoryCell",
-                        "targetSlot": 0
+                        "targetSlot": 0,
+                        "selected": true
                     },
                     {
                         "type": "InventoryCell",
