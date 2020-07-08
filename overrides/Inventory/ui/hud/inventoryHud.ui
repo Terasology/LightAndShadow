@@ -10,11 +10,6 @@
                 "contents": [
                     {
                         "type": "InventoryCell",
-                        "targetSlot": 0,
-                        "selected": true
-                    },
-                    {
-                        "type": "InventoryCell",
                         "targetSlot": 1
                     },
                     {
@@ -48,6 +43,11 @@
                     {
                         "type": "InventoryCell",
                         "targetSlot": 9
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 0,
+                        "selected": true
                     }
                 ],
                 "layoutInfo": {
