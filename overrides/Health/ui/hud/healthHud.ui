@@ -1,6 +1,6 @@
 {
   "type": "HealthHud",
-  "skin": "LightAndShadowResources:healthHud",
+  "skin": "LightAndShadowResources:healthBase",
   "contents": {
     "type": "relativeLayout",
     "contents": [
