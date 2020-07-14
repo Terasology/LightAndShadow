@@ -1,6 +1,7 @@
 {
     "type": "InventoryHud",
     "skin": "inventoryLaS",
+    "rotateItems": true,
     "contents": {
         "type": "relativeLayout",
         "contents": [
