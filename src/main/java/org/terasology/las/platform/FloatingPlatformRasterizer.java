@@ -108,14 +108,14 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
             for (Vector3i blackTeleporterPosition : blackTeleporterRegion) {
                 //set down the teleporter at every square in the designated region
                 if (chunkRegion.getRegion().encompasses(blackTeleporterPosition)) {
-                    chunk.setBlock(ChunkMath.calcBlockPos(blackTeleporterPosition), BLACK_DICE);
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(blackTeleporterPosition), BLACK_DICE);
                 }
             }
 
             for (Vector3i redTeleporterPosition : redTeleporterRegion) {
                 //set down the teleporter at every square in the designated region
                 if (chunkRegion.getRegion().encompasses(redTeleporterPosition)) {
-                    chunk.setBlock(ChunkMath.calcBlockPos(redTeleporterPosition), RED_DICE);
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(redTeleporterPosition), RED_DICE);
                 }
             }
         }
