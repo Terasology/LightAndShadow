@@ -17,7 +17,7 @@
             },
             "modes": {
                 "active": {
-                    "background": "LightAndShadowResources:boxActive",
+                    "background": "engine:boxActive",
                     "fixed-width": 70,
                     "fixed-height": 70
                 }
