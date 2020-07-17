@@ -1,0 +1,27 @@
+{
+  "type": "HealthHud",
+  "skin": "LightAndShadowResources:healthBase",
+  "contents": {
+    "type": "relativeLayout",
+    "contents": [
+      {
+        "type": "UIIconBar",
+        "id": "healthBar",
+        "family": "healthBar",
+        "icon": "CoreAssets:icons#redHeart",
+        "halfIconMode": "split",
+        "spacing": 10,
+        "maxIcons": 10,
+        "layoutInfo": {
+          "use-content-width": true,
+          "use-content-height": true,
+          "position-horizontal-center": {},
+          "position-bottom": {
+            "target": "BOTTOM",
+            "offset": 20
+          }
+        }
+      }
+    ]
+  }
+}
