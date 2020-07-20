@@ -1,12 +1,14 @@
 {
     "type": "InventoryHud",
     "skin": "LightAndShadowResources:inventoryLaS",
+    "rotateItems": true,
     "contents": {
         "type": "relativeLayout",
         "contents": [
             {
                 "type": "flowLayout",
                 "id": "toolbar",
+                "verticalSpacing": 10,
                 "contents": [
                     {
                         "type": "InventoryCell",
