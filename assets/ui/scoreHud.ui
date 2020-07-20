@@ -1,6 +1,6 @@
 {
     "type": "ScoreHud",
-    "skin": "ScoreSkin",
+    "skin": "LightAndShadowResources:scoreHUD",
     "contents": {
         "type": "relativeLayout",
         "contents": [
