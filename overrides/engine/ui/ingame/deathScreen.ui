@@ -1,6 +1,6 @@
 {
     "type": "deathScreen",
-    "skin": "gameoverScreen",
+    "skin": "LightAndShadowResources:gameoverScreen",
     "contents": {
         "type": "relativeLayout",
         "contents": [
