@@ -1,6 +1,6 @@
 {
     "type": "InventoryHud",
-    "skin": "inventoryLaS",
+    "skin": "LightAndShadowResources:inventoryLaS",
     "contents": {
         "type": "relativeLayout",
         "contents": [

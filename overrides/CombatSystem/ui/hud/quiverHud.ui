@@ -1,6 +1,6 @@
 {
     "type": "QuiverHud",
-    "skin": "ammoHud",
+    "skin": "LightAndShadowResources:ammoHud",
     "contents": {
         "type": "relativeLayout",
         "contents": [
