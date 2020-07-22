@@ -1,0 +1,48 @@
+{
+    "type": "Dialogs:DialogScreen",
+    "skin": "LightAndShadowResources:DialogScreen",
+    "contents": {
+        "type": "RowLayout",
+        "contents": [
+            {
+                "type": "RelativeLayout",
+                "contents": [
+                    {
+                        "type": "ScrollableArea",
+                        "id": "mainContent",
+                        "content": {
+                            "type": "BrowserWidget",
+                            "id": "browser"
+                        },
+                        "layoutInfo": {
+                            "width": 600,
+                            "height": 200,
+                            "position-bottom": {
+                                "offset": 10
+                            },
+                            "position-left": {
+                                "offset": 10
+                            }
+                        }
+                    },
+                    {
+                        "type": "ColumnLayout",
+                        "id": "responseButtons",
+                        "layoutInfo": {
+                            "use-content-height": true,
+                            "position-top": {
+                                "target": "TOP",
+                                "widget": "mainContent"
+                            },
+                            "position-left": {
+                                "target": "RIGHT",
+                                "widget": "mainContent"
+                            },
+                            "use-content-width": true
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
