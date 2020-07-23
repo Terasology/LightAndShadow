@@ -8,12 +8,21 @@
                 "type": "RelativeLayout",
                 "contents": [
                     {
-                        "type": "ScrollableArea",
-                        "id": "mainContent",
-                        "content": {
-                            "type": "BrowserWidget",
-                            "id": "browser"
-                        },
+                        "type": "UIBox",
+                        "content":
+                            {
+                                "type": "ScrollableArea",
+                                "id": "mainContent",
+                                "content": {
+                                    "type": "BrowserWidget",
+                                    "id": "browser",
+                                    "layoutInfo": {
+                                        "fixed-width": 100,
+                                        "fixed-height": 200,
+                                        "position-horizontal-right": { }
+                                    }
+                                }
+                            },
                         "layoutInfo": {
                             "width": 600,
                             "height": 200,
