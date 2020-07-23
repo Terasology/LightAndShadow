@@ -13,7 +13,7 @@
                         "text": "Game Over"
                     },
                     {
-                        "type": "UILabel",
+                        "type": "UILabel", // "You Win!" "You Lose!" labels
                         "id": "gameOverDetails"
                     },
                     {
