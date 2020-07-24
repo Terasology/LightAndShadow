@@ -56,6 +56,40 @@
                             }
                         },
                         {
+                            "type": "UILabel",
+                            "text": "/",
+                            "id": "blackSlash",
+                            "family": "goalScoreText",
+                            "layoutInfo": {
+                                "use-content-width": true,
+                                "height": 30,
+                                "position-top": {
+                                    "offset": 20
+                                },
+                                "position-left": {
+                                    "widget": "blackScoreArea",
+                                    "target": "RIGHT"
+                                }
+                            }
+                        },
+                        {
+                            "type": "UILabel",
+                            "text": "0",
+                            "id": "blackGoalScore",
+                            "family": "goalScoreText",
+                            "layoutInfo": {
+                                "use-content-width": true,
+                                "height": 30,
+                                "position-top": {
+                                    "offset": 20
+                                },
+                                "position-left": {
+                                    "widget": "blackSlash",
+                                    "target": "RIGHT"
+                                }
+                            }
+                        },
+                        {
                             "type": "UIImage",
                             "image": "LightAndShadowResources:heartsIcon", // ToDo: set new asset when that is committed at LASR
                             "id": "flagsImage",
@@ -63,7 +97,7 @@
                                 "use-content-width": true,
                                 "use-content-height": true,
                                 "position-left": {
-                                    "widget": "blackScoreArea",
+                                    "widget": "blackGoalScore",
                                     "target": "RIGHT",
                                     "offset": 45
                                 }
@@ -98,6 +132,40 @@
                             }
                         },
                         {
+                            "type": "UILabel",
+                            "text": "/",
+                            "id": "redSlash",
+                            "family": "goalScoreText",
+                            "layoutInfo": {
+                                "use-content-width": true,
+                                "height": 30,
+                                "position-top": {
+                                    "offset": 20
+                                },
+                                "position-left": {
+                                    "widget": "redScoreArea",
+                                    "target": "RIGHT"
+                                }
+                            }
+                        },
+                        {
+                            "type": "UILabel",
+                            "text": "0",
+                            "id": "redGoalScore",
+                            "family": "goalScoreText",
+                            "layoutInfo": {
+                                "use-content-width": true,
+                                "height": 30,
+                                "position-top": {
+                                    "offset": 20
+                                },
+                                "position-left": {
+                                    "widget": "redSlash",
+                                    "target": "RIGHT"
+                                }
+                            }
+                        },
+                        {
                             "type": "UIImage",
                             "image": "LightAndShadowResources:heartsIcon",
                             "id": "redTeamIcon",
@@ -108,7 +176,7 @@
                                     "offset": 12
                                 },
                                 "position-left": {
-                                    "widget": "redScoreArea",
+                                    "widget": "redGoalScore",
                                     "target": "RIGHT",
                                     "offset": 5
                                 }
