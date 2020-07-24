@@ -99,22 +99,7 @@
                                 "position-left": {
                                     "widget": "blackGoalScore",
                                     "target": "RIGHT",
-                                    "offset": 45
-                                }
-                            }
-                        },
-                        {
-                            "type": "UILabel",
-                            "id": "redScoreLabel",
-                            "family": "redText",
-                            "text": "Red ",
-                            "layoutInfo": {
-                                "use-content-width": true,
-                                "height": 60,
-                                "position-left": {
-                                    "widget": "flagsImage",
-                                    "target": "RIGHT",
-                                    "offset": 45
+                                    "offset": 20
                                 }
                             }
                         },
@@ -126,8 +111,9 @@
                                 "use-content-width": true,
                                 "height": 60,
                                 "position-left": {
-                                    "widget": "redScoreLabel",
-                                    "target": "RIGHT"
+                                    "widget": "flagsImage",
+                                    "target": "RIGHT",
+                                    "offset": 20
                                 }
                             }
                         },
@@ -166,6 +152,20 @@
                             }
                         },
                         {
+                            "type": "UILabel",
+                            "id": "redScoreLabel",
+                            "family": "redText",
+                            "text": " Red",
+                            "layoutInfo": {
+                                "use-content-width": true,
+                                "height": 60,
+                                "position-left": {
+                                    "widget": "redGoalScore",
+                                    "target": "RIGHT"
+                                }
+                            }
+                        },
+                        {
                             "type": "UIImage",
                             "image": "LightAndShadowResources:heartsIcon",
                             "id": "redTeamIcon",
@@ -176,7 +176,7 @@
                                     "offset": 12
                                 },
                                 "position-left": {
-                                    "widget": "redGoalScore",
+                                    "widget": "redScoreLabel",
                                     "target": "RIGHT",
                                     "offset": 5
                                 }
