@@ -7,7 +7,7 @@
             {
                 "type": "UIBox",
                 "layoutInfo": {
-                    "width": 400,
+                    "width": 700,
                     "height": 100,
                     "position-horizontal-center": {},
                     "offset": 20
@@ -16,13 +16,30 @@
                     "type": "relativeLayout",
                     "contents": [
                         {
+                            "type": "UIImage",
+                            "image": "LightAndShadowResources:spadesIcon",
+                            "id": "blackTeamIcon",
+                            "layoutInfo": {
+                                "width": 25,
+                                "height": 25,
+                                "position-top": {
+                                    "offset": 12
+                                }
+                            }
+                        },
+                        {
                             "type": "UILabel",
                             "id": "blackScoreLabel",
                             "family": "blackText",
                             "text": "Black Score: ",
                             "layoutInfo": {
                                 "use-content-width": true,
-                                "height": 60
+                                "height": 60,
+                                "position-left": {
+                                    "widget": "blackTeamIcon",
+                                    "target": "RIGHT",
+                                    "offset": 5
+                                }
                             }
                         },
                         {
@@ -77,6 +94,23 @@
                                 "position-left": {
                                     "widget": "redScoreLabel",
                                     "target": "RIGHT"
+                                }
+                            }
+                        },
+                        {
+                            "type": "UIImage",
+                            "image": "LightAndShadowResources:heartsIcon",
+                            "id": "redTeamIcon",
+                            "layoutInfo": {
+                                "width": 25,
+                                "height": 25,
+                                "position-top": {
+                                    "offset": 12
+                                },
+                                "position-left": {
+                                    "widget": "redScoreArea",
+                                    "target": "RIGHT",
+                                    "offset": 5
                                 }
                             }
                         }
