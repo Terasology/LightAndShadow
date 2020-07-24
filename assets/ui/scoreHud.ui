@@ -7,7 +7,7 @@
             {
                 "type": "UIBox",
                 "layoutInfo": {
-                    "width": 300,
+                    "width": 400,
                     "height": 100,
                     "position-horizontal-center": {},
                     "offset": 20
@@ -39,6 +39,20 @@
                             }
                         },
                         {
+                            "type": "UIImage",
+                            "image": "LightAndShadowResources:heartsIcon", // ToDo: set new asset when that is committed at LASR
+                            "id": "flagsImage",
+                            "layoutInfo": {
+                                "use-content-width": true,
+                                "use-content-height": true,
+                                "position-left": {
+                                    "widget": "blackScoreArea",
+                                    "target": "RIGHT",
+                                    "offset": 45
+                                }
+                            }
+                        },
+                        {
                             "type": "UILabel",
                             "id": "redScoreLabel",
                             "family": "redText",
@@ -47,7 +61,7 @@
                                 "use-content-width": true,
                                 "height": 60,
                                 "position-left": {
-                                    "widget": "blackScoreArea",
+                                    "widget": "flagsImage",
                                     "target": "RIGHT",
                                     "offset": 45
                                 }
