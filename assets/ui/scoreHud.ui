@@ -91,11 +91,11 @@
                         },
                         {
                             "type": "UIImage",
-                            "image": "LightAndShadowResources:heartsIcon", // ToDo: set new asset when that is committed at LASR
+                            "image": "LightAndShadowResources:flags",
                             "id": "flagsImage",
                             "layoutInfo": {
-                                "use-content-width": true,
-                                "use-content-height": true,
+                                "width": 110,
+                                "height": 70,
                                 "position-left": {
                                     "widget": "blackGoalScore",
                                     "target": "RIGHT",
