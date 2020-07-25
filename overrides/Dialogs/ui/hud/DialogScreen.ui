@@ -9,20 +9,7 @@
                 "contents": [
                     {
                         "type": "UIBox",
-                        "content":
-                            {
-                                "type": "ScrollableArea",
-                                "id": "mainContent",
-                                "content": {
-                                    "type": "BrowserWidget",
-                                    "id": "browser",
-                                    "layoutInfo": {
-                                        "fixed-width": 100,
-                                        "fixed-height": 200,
-                                        "position-horizontal-right": { }
-                                    }
-                                }
-                            },
+                        "id": "box",
                         "layoutInfo": {
                             "width": 600,
                             "height": 200,
@@ -32,6 +19,37 @@
                             "position-left": {
                                 "offset": 10
                             }
+                        },
+                        "content": {
+                            "type": "RowLayout",
+                            "contents": [
+                                {
+                                    "type": "UIImage",
+                                    "image": "LightAndShadowResources:fool-mini-image",
+                                    "id": "dialogueImage",
+                                    "layoutInfo": {
+                                        "fixed-width": 100,
+                                        "fixed-height": 200,
+                                        "position-horizontal-left": {}
+                                    }
+                                },
+                                {
+                                    "type": "ScrollableArea",
+                                    "id": "mainContent",
+                                    "content": {
+                                        "type": "BrowserWidget",
+                                        "id": "browser",
+                                        "layoutInfo": {
+                                            "fixed-width": 500,
+                                            "fixed-height": 200,
+                                            "position-right": {
+                                                "target": "RIGHT",
+                                                "widget": "dialogueImage"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     },
                     {
@@ -41,11 +59,11 @@
                             "use-content-height": true,
                             "position-top": {
                                 "target": "TOP",
-                                "widget": "mainContent"
+                                "widget": "box"
                             },
                             "position-left": {
                                 "target": "RIGHT",
-                                "widget": "mainContent"
+                                "widget": "box"
                             },
                             "use-content-width": true
                         }
