@@ -21,33 +21,28 @@
                             }
                         },
                         "content": {
-                            "type": "FlowLayout",
+                            "type": "ColumnLayout",
+                            "columns": 2,
+                            "column-widths": [0.24, 0.76],
+                            "layoutInfo": {
+                                "use-content-height": true,
+                                "position-top": {
+                                    "target": "TOP",
+                                    "widget": "box"
+                                }
+                            },
                             "contents": [
                                 {
                                     "type": "UIImage",
                                     "image": "LightAndShadowResources:fool-mini-image",
-                                    "id": "dialogueImage",
-                                    "layoutInfo": {
-                                        "fixed-width": 100,
-                                        "fixed-height": 200
-
-                                    }
+                                    "id": "dialogueImage"
                                 },
                                 {
                                     "type": "ScrollableArea",
                                     "id": "mainContent",
                                     "content": {
                                         "type": "BrowserWidget",
-                                        "id": "browser",
-                                        "layoutInfo": {
-                                            "fixed-width": 500,
-                                            "fixed-height": 200
-
-                                        }
-                                    },
-                                    "layoutInfo": {
-                                        "fixed-width": 500,
-                                        "fixed-height": 200
+                                        "id": "browser"
                                     }
                                 }
                             ]
