@@ -21,7 +21,7 @@
                             }
                         },
                         "content": {
-                            "type": "RowLayout",
+                            "type": "FlowLayout",
                             "contents": [
                                 {
                                     "type": "UIImage",
@@ -29,8 +29,8 @@
                                     "id": "dialogueImage",
                                     "layoutInfo": {
                                         "fixed-width": 100,
-                                        "fixed-height": 200,
-                                        "position-horizontal-left": {}
+                                        "fixed-height": 200
+
                                     }
                                 },
                                 {
@@ -41,12 +41,13 @@
                                         "id": "browser",
                                         "layoutInfo": {
                                             "fixed-width": 500,
-                                            "fixed-height": 200,
-                                            "position-right": {
-                                                "target": "RIGHT",
-                                                "widget": "dialogueImage"
-                                            }
+                                            "fixed-height": 200
+
                                         }
+                                    },
+                                    "layoutInfo": {
+                                        "fixed-width": 500,
+                                        "fixed-height": 200
                                     }
                                 }
                             ]
