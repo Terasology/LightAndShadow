@@ -31,9 +31,9 @@
                             "type": "UILabel",
                             "id": "blackScoreLabel",
                             "family": "blackText",
-                            "text": "Black  ",
+                            "text": "Spades  ",
                             "layoutInfo": {
-                                "use-content-width": true,
+                                "width": 80,
                                 "height": 60,
                                 "position-left": {
                                     "widget": "blackTeamIcon",
@@ -155,9 +155,9 @@
                             "type": "UILabel",
                             "id": "redScoreLabel",
                             "family": "redText",
-                            "text": "  Red",
+                            "text": "  Hearts",
                             "layoutInfo": {
-                                "use-content-width": true,
+                                "width": 80,
                                 "height": 60,
                                 "position-left": {
                                     "widget": "redGoalScore",
