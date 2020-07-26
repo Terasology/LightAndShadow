@@ -31,7 +31,7 @@
                             "type": "UILabel",
                             "id": "blackScoreLabel",
                             "family": "blackText",
-                            "text": "Black ",
+                            "text": "Black  ",
                             "layoutInfo": {
                                 "use-content-width": true,
                                 "height": 60,
@@ -155,7 +155,7 @@
                             "type": "UILabel",
                             "id": "redScoreLabel",
                             "family": "redText",
-                            "text": " Red",
+                            "text": "  Red",
                             "layoutInfo": {
                                 "use-content-width": true,
                                 "height": 60,
