@@ -8,12 +8,8 @@
                 "type": "RelativeLayout",
                 "contents": [
                     {
-                        "type": "ScrollableArea",
-                        "id": "mainContent",
-                        "content": {
-                            "type": "BrowserWidget",
-                            "id": "browser"
-                        },
+                        "type": "UIBox",
+                        "id": "box",
                         "layoutInfo": {
                             "width": 600,
                             "height": 200,
@@ -23,6 +19,33 @@
                             "position-left": {
                                 "offset": 10
                             }
+                        },
+                        "content": {
+                            "type": "ColumnLayout",
+                            "columns": 2,
+                            "column-widths": [0.24, 0.76],
+                            "layoutInfo": {
+                                "use-content-height": true,
+                                "position-top": {
+                                    "target": "TOP",
+                                    "widget": "box"
+                                }
+                            },
+                            "contents": [
+                                {
+                                    "type": "UIImage",
+                                    "image": "LightAndShadowResources:fool-mini-image",
+                                    "id": "dialogueImage"
+                                },
+                                {
+                                    "type": "ScrollableArea",
+                                    "id": "mainContent",
+                                    "content": {
+                                        "type": "BrowserWidget",
+                                        "id": "browser"
+                                    }
+                                }
+                            ]
                         }
                     },
                     {
@@ -32,11 +55,11 @@
                             "use-content-height": true,
                             "position-top": {
                                 "target": "TOP",
-                                "widget": "mainContent"
+                                "widget": "box"
                             },
                             "position-left": {
                                 "target": "RIGHT",
-                                "widget": "mainContent"
+                                "widget": "box"
                             },
                             "use-content-width": true
                         }
