@@ -31,7 +31,7 @@
                             "type": "UILabel",
                             "id": "blackScoreLabel",
                             "family": "blackText",
-                            "text": "Spades  ",
+                            "text": "Spades",
                             "layoutInfo": {
                                 "width": 80,
                                 "height": 60,
@@ -52,7 +52,8 @@
                                 "height": 60,
                                 "position-left": {
                                     "widget": "blackScoreLabel",
-                                    "target": "RIGHT"
+                                    "target": "RIGHT",
+                                    "offset": 6
                                 }
                             }
                         },
@@ -157,13 +158,14 @@
                             "type": "UILabel",
                             "id": "redScoreLabel",
                             "family": "redText",
-                            "text": "  Hearts",
+                            "text": "Hearts",
                             "layoutInfo": {
                                 "width": 80,
                                 "height": 60,
                                 "position-left": {
                                     "widget": "redGoalScore",
-                                    "target": "RIGHT"
+                                    "target": "RIGHT",
+                                    "offset": 6
                                 }
                             }
                         },
