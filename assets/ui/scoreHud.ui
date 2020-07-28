@@ -46,6 +46,7 @@
                             "type": "UILabel",
                             "text": "0",
                             "id": "blackScoreArea",
+                            "family": "goalScoreText",
                             "layoutInfo": {
                                 "use-content-width": true,
                                 "height": 60,
@@ -107,6 +108,7 @@
                             "type": "UILabel",
                             "text": "0",
                             "id": "redScoreArea",
+                            "family": "goalScoreText",
                             "layoutInfo": {
                                 "use-content-width": true,
                                 "height": 60,
