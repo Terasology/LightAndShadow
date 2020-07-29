@@ -57,6 +57,10 @@ public class ClientScoreSystem extends BaseComponentSystem {
                 return String.valueOf(redScore);
             }
         });
+        UILabel blackGoalScore = scoreScreen.find("blackGoalScore", UILabel.class);
+        blackGoalScore.setText(Integer.toString(LASUtils.GOAL_SCORE));
+        UILabel redGoalScore = scoreScreen.find("redGoalScore", UILabel.class);
+        redGoalScore.setText(Integer.toString(LASUtils.GOAL_SCORE));
     }
 
     @Override
