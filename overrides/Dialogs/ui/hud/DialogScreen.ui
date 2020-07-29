@@ -50,6 +50,22 @@
                     },
                     {
                         "type": "ColumnLayout",
+                        "id": "responseImage",
+                        "layoutInfo": {
+                            "height": 60,
+                            "position-top": {
+                                "target": "TOP",
+                                "widget": "box"
+                            },
+                            "position-left": {
+                                "target": "RIGHT",
+                                "widget": "box"
+                            },
+                            "width": 50
+                        }
+                    },
+                    {
+                        "type": "ColumnLayout",
                         "id": "responseButtons",
                         "layoutInfo": {
                             "use-content-height": true,
@@ -59,7 +75,8 @@
                             },
                             "position-left": {
                                 "target": "RIGHT",
-                                "widget": "box"
+                                "widget": "box",
+                                "offset": 50
                             },
                             "use-content-width": true
                         }
