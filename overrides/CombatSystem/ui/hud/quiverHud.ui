@@ -10,7 +10,7 @@
                 "contents": [
                     {
                         "type": "UILabel",
-                        "text": " AMMO"
+                        "text": "AMMO"
                     },
                     {
                         "type": "InventoryCell",
@@ -22,11 +22,11 @@
                     "use-content-height": true,
                     "position-right":{
                         "target": "RIGHT",
-                        "offset": 95
+                        "offset": 90
                     },
                     "position-bottom": {
                         "target": "BOTTOM",
-                        "offset": 10
+                        "offset": 12
                     }
                 }
             }
