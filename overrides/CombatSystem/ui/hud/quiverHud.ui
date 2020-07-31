@@ -22,7 +22,7 @@
                     "use-content-height": true,
                     "position-right":{
                         "target": "RIGHT",
-                        "offset": 150
+                        "offset": 95
                     },
                     "position-bottom": {
                         "target": "BOTTOM",
