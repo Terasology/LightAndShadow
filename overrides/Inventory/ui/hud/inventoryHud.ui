@@ -8,6 +8,7 @@
             {
                 "type": "flowLayout",
                 "id": "toolbar",
+                "rightToLeftAlign": true,
                 "verticalSpacing": 10,
                 "contents": [
                     {
