@@ -54,7 +54,7 @@
                     }
                 ],
                 "layoutInfo": {
-                    "width" : 70,
+                    "width" : 90,
                     "use-content-height": true,
                     "position-bottom": {
                         "offset": 10
