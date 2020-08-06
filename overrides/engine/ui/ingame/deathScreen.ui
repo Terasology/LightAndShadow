@@ -36,7 +36,7 @@
                 },
                 "position-left": {},
                 "use-content-height": true,
-                "width": 200
+                "width": 260
               }
             },
             {
@@ -87,8 +87,7 @@
                 ],
                 "layoutInfo": {
                   "position-top": {
-                    "target": "TOP",
-                    "widget": "gameDetails"
+                    "offset": 20
                   }
                 }
               },
@@ -112,10 +111,11 @@
                 "width": 15,
                 "position-top": {
                   "target": "BOTTOM",
-                  "widget": "gameDetails"
+                  "widget": "gameDetails",
+                  "offset": 10
                 },
                 "position-left": {
-                  "offset": 550
+                  "offset": 580
                 }
               }
             },
@@ -159,12 +159,42 @@
                 }
               ],
               "layoutInfo": {
+                "position-left": {
+                  "offset": 400
+                },
                 "position-bottom": {
                   "offset": 10
                 },
-                "position-horizontal-center": {},
                 "use-content-height": true,
-                "use-content-width": true
+                "width": 800
+              }
+            },
+            {
+              "type": "UIImage",
+              "image": "LightAndShadowResources:spadesParticle",
+              "layoutInfo": {
+                "width": 100,
+                "height": 100,
+                "position-left": {
+                  "offset": 50
+                },
+                "position-bottom": {
+                  "offset": 50
+                }
+              }
+            },
+            {
+              "type": "UIImage",
+              "image": "LightAndShadowResources:heartsParticle",
+              "layoutInfo": {
+                "width": 100,
+                "height": 100,
+                "position-right": {
+                  "offset": 50
+                },
+                "position-bottom": {
+                  "offset": 50
+                }
               }
             }
           ]
