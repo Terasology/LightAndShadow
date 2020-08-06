@@ -40,7 +40,23 @@
               }
             },
             {
+              "type": "UIButton",
+              "text": "${engine:menu#game-settings}",
+              "id": "settings",
+              "layoutInfo": {
+                "position-right": {
+                  "offset": 50
+                },
+                "position-top": {
+                  "offset": 10
+                },
+                "width": 50,
+                "height": 30
+              }
+            },
+            {
               "type": "ScrollableArea",
+              "id": "gameDetails",
               "content": {
                 "type": "migLayout",
                 "id": "playerStatistics",
@@ -70,7 +86,10 @@
                   }
                 ],
                 "layoutInfo": {
-                  "position-top": {}
+                  "position-top": {
+                    "target": "TOP",
+                    "widget": "gameDetails"
+                  }
                 }
               },
               "layoutInfo": {
@@ -84,20 +103,26 @@
               }
             },
             {
+              "type": "UIButton",
+              "text": "Restart",
+              "id": "restart",
+              "visible": false,
+              "layoutInfo": {
+                "height": 30,
+                "width": 15,
+                "position-top": {
+                  "target": "BOTTOM",
+                  "widget": "gameDetails"
+                },
+                "position-left": {
+                  "offset": 550
+                }
+              }
+            },
+            {
               "type": "RowLayout",
               "horizontalSpacing": 15,
               "contents": [
-                {
-                  "type": "UIButton",
-                  "text": "Restart",
-                  "id": "restart",
-                  "visible": false
-                },
-                {
-                  "type": "UIButton",
-                  "text": "${engine:menu#game-settings}",
-                  "id": "settings"
-                },
                 {
                   "type": "UIButton",
                   "text": "${engine:menu#return-main-menu}",
