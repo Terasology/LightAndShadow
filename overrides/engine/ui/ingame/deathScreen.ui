@@ -1,112 +1,151 @@
 {
-    "type": "deathScreen",
-    "skin": "LightAndShadowResources:gameoverScreen",
-    "contents": {
-        "type": "relativeLayout",
-        "contents": [
+  "type": "deathScreen",
+  "skin": "LightAndShadowResources:gameoverScreen",
+  "contents": {
+    "type": "relativeLayout",
+    "contents": [
+      {
+        "type": "UIBox",
+        "layoutInfo": {
+          "width": 1200,
+          "height": 780,
+          "position-horizontal-center": {
+          },
+          "position-vertical-center": {
+          }
+        },
+        "content": {
+          "type": "relativeLayout",
+          "contents": [
             {
-                "type": "ColumnLayout",
-                "verticalSpacing": 8,
+              "type": "RowLayout",
+              "horizontalSpacing": 15,
+              "contents": [
+                {
+                  "type": "UILabel",
+                  "text": "Game Over"
+                },
+                {
+                  "type": "UILabel",        // "You Win!" "You Lose!" labels
+                  "id": "gameOverDetails"
+                }
+              ],
+              "layoutInfo": {
+                "position-top": {
+                  "offset": 36
+                },
+                "position-left": {},
+                "use-content-height": true,
+                "width": 200
+              }
+            },
+            {
+              "type": "ScrollableArea",
+              "content": {
+                "type": "migLayout",
+                "id": "playerStatistics",
+                "rowConstraints": "0",
+                "colConstraints": "0",
                 "contents": [
-                    {
-                        "type": "UILabel",
-                        "text": "Game Over"
-                    },
-                    {
-                        "type": "UILabel", // "You Win!" "You Lose!" labels
-                        "id": "gameOverDetails"
-                    },
-                    {
-                        "type": "UISpace",
-                        "size": [1, 16]
-                    },
-                    {
-                        "type": "migLayout",
-                        "id": "playerStatistics",
-                        "rowConstraints": "0",
-                        "colConstraints": "0",
-                        "contents": [
-                            {
-                                "type": "UILabel",
-                                "text": "Player",
-                                "layoutInfo": {
-                                    "cc": ""
-                                }
-                            },
-                            {
-                                "type": "UILabel",
-                                "text": "Kills",
-                                "layoutInfo": {
-                                    "cc": ""
-                                }
-                            },
-                            {
-                                "type": "UILabel",
-                                "text": "Deaths",
-                                "layoutInfo": {
-                                    "cc": "wrap"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "type": "UISpace",
-                        "size": [1, 16]
-                    },
-
-                    {
-                         "type": "UIButton",
-                         "text": "Restart",
-                         "id": "restart",
-                         "visible": false
-                    },
-                    {
-                        "type": "UIButton",
-                        "text": "${engine:menu#game-settings}",
-                        "id": "settings"
-                    },
-                    {
-                        "type": "UIButton",
-                        "text": "${engine:menu#return-main-menu}",
-                        "id": "mainMenu"
-                    },
-                    {
-                        "type": "UIButton",
-                        "text": "${engine:menu#exit-game}",
-                        "id": "exitGame"
-                    },
-                    {
-                     "type": "UILabel",
-                     "id": "deathDetails",
-                     "visible": false,
-                     "layoutInfo": {
-                       "use-content-height": false,
-                       "use-content-width": false,
-                       "position-top": {},
-                       "position-left": {}
-                     }
-                    },
-                    {
-                     "type": "UIButton",
-                     "text": "${engine:menu#respawn}",
-                     "id": "respawn",
-                     "enabled": false,
-                     "visible": false,
-                     "layoutInfo": {
-                       "use-content-height": false,
-                       "use-content-width": false,
-                       "position-top": {},
-                       "position-left": {}
-                     }
+                  {
+                    "type": "UILabel",
+                    "text": "Player",
+                    "layoutInfo": {
+                      "cc": ""
                     }
+                  },
+                  {
+                    "type": "UILabel",
+                    "text": "Kills",
+                    "layoutInfo": {
+                      "cc": ""
+                    }
+                  },
+                  {
+                    "type": "UILabel",
+                    "text": "Deaths",
+                    "layoutInfo": {
+                      "cc": "wrap"
+                    }
+                  }
                 ],
                 "layoutInfo": {
-                    "use-content-width": true,
-                    "use-content-height": true,
-                    "position-horizontal-center": {},
-                    "position-vertical-center": {}
+                  "position-top": {}
                 }
+              },
+              "layoutInfo": {
+                "height": 500,
+                "width": 600,
+                "position-horizontal-center": {
+                },
+                "position-top": {
+                  "offset": 100
+                }
+              }
+            },
+            {
+              "type": "RowLayout",
+              "horizontalSpacing": 15,
+              "contents": [
+                {
+                  "type": "UIButton",
+                  "text": "Restart",
+                  "id": "restart",
+                  "visible": false
+                },
+                {
+                  "type": "UIButton",
+                  "text": "${engine:menu#game-settings}",
+                  "id": "settings"
+                },
+                {
+                  "type": "UIButton",
+                  "text": "${engine:menu#return-main-menu}",
+                  "id": "mainMenu"
+                },
+                {
+                  "type": "UIButton",
+                  "text": "${engine:menu#exit-game}",
+                  "id": "exitGame"
+                },
+                {
+                  "type": "UILabel",
+                  "id": "deathDetails",
+                  "visible": false,
+                  "layoutInfo": {
+                    "use-content-height": false,
+                    "use-content-width": false,
+                    "position-top": {},
+                    "position-left": {}
+                  }
+                },
+                {
+                  "type": "UIButton",
+                  "text": "${engine:menu#respawn}",
+                  "id": "respawn",
+                  "enabled": false,
+                  "visible": false,
+                  "layoutInfo": {
+                    "use-content-height": false,
+                    "use-content-width": false,
+                    "position-top": {},
+                    "position-left": {}
+                  }
+                }
+              ],
+              "layoutInfo": {
+                "position-bottom": {
+                  "offset": 10
+                },
+                "position-horizontal-center": {},
+                "use-content-height": true,
+                "use-content-width": true
+              }
             }
-        ]
-    }
+          ]
+        }
+      }
+    ]
+  }
 }
+
