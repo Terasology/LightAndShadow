@@ -26,7 +26,8 @@
                   "text": "Game Over"
                 },
                 {
-                  "type": "UILabel",        // "You Win!" "You Lose!" labels
+                  "type": "UILabel",
+                  // "You Win!" "You Lose!" labels
                   "id": "gameOverDetails"
                 }
               ],
@@ -55,42 +56,8 @@
               }
             },
             {
-              "type": "ScrollableArea",
-              "id": "gameDetails",
-              "content": {
-                "type": "migLayout",
-                "id": "playerStatistics",
-                "rowConstraints": "0",
-                "colConstraints": "0",
-                "contents": [
-                  {
-                    "type": "UILabel",
-                    "text": "Player",
-                    "layoutInfo": {
-                      "cc": ""
-                    }
-                  },
-                  {
-                    "type": "UILabel",
-                    "text": "Kills",
-                    "layoutInfo": {
-                      "cc": ""
-                    }
-                  },
-                  {
-                    "type": "UILabel",
-                    "text": "Deaths",
-                    "layoutInfo": {
-                      "cc": "wrap"
-                    }
-                  }
-                ],
-                "layoutInfo": {
-                  "position-top": {
-                    "offset": 20
-                  }
-                }
-              },
+              "type": "UIBox",
+              "id": "detailsUIBox",
               "layoutInfo": {
                 "height": 500,
                 "width": 600,
@@ -98,6 +65,51 @@
                 },
                 "position-top": {
                   "offset": 100
+                }
+              },
+              "content": {
+                "type": "ScrollableArea",
+                "id": "gameDetailsScrollableArea",
+                "content": {
+                  "type": "migLayout",
+                  "id": "playerStatistics",
+                  "rowConstraints": "0",
+                  "colConstraints": "0",
+                  "contents": [
+                    {
+                      "type": "UILabel",
+                      "text": "Player",
+                      "layoutInfo": {
+                        "cc": ""
+                      }
+                    },
+                    {
+                      "type": "UILabel",
+                      "text": "Kills",
+                      "layoutInfo": {
+                        "cc": ""
+                      }
+                    },
+                    {
+                      "type": "UILabel",
+                      "text": "Deaths",
+                      "layoutInfo": {
+                        "cc": "wrap"
+                      }
+                    }
+                  ],
+                  "layoutInfo": {
+                    "position-top": {
+                      "offset": 20
+                    }
+                  }
+                },
+                "layoutInfo": {
+                  "use-content-height": true,
+                  "position-top": {
+                    "target": "TOP",
+                    "widget": "detailsUIBox"
+                  }
                 }
               }
             },
