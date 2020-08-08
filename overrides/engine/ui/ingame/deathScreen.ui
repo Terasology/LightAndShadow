@@ -68,7 +68,7 @@
                 }
               },
               "content": {
-                "type": "ColumnLayout",
+                "type": "MigLayout",
                 "layoutInfo": {
                   "width": 600,
                   "position-top": {
@@ -116,11 +116,14 @@
                       }
                     },
                     "layoutInfo": {
-                      "height": 250,
-                      "position-top": {
-                        "target": "TOP",
-                        "widget": "detailsUIBox"
-                      }
+                      "cc": ""
+                    }
+                  },
+                  {
+                    "type": "UILabel",
+                    "text": "This is the Spades Label",
+                    "layoutInfo": {
+                      "cc": "wrap"
                     }
                   },
                   {
@@ -161,11 +164,14 @@
                       }
                     },
                     "layoutInfo": {
-                      "height": 250,
-                      "position-TOP": {
-                        "target": "BOTTOM",
-                        "widget": "gameDetailsScrollableArea"
-                      }
+                      "cc": ""
+                    }
+                  },
+                  {
+                    "type": "UILabel",
+                    "text": "This is the Hearts Label",
+                    "layoutInfo": {
+                      "cc": "wrap"
                     }
                   }
                 ]
