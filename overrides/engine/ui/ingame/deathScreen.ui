@@ -128,7 +128,7 @@
                     "id": "gameDetailsScrollableArea2",
                     "content": {
                       "type": "migLayout",
-                      "id": "heartsTeamPlayerStatistics2", // TODO: Place only Team Hearts score
+                      "id": "heartsTeamPlayerStatistics", // TODO: Place only Team Hearts score
                       "rowConstraints": "0",
                       "colConstraints": "0",
                       "contents": [
