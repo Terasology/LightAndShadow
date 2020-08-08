@@ -90,6 +90,8 @@
                           "type": "UILabel",
                           "text": "Player",
                           "layoutInfo": {
+                            "position-horizontal-center": {},
+                            "position-vertical-center": {},
                             "cc": ""
                           }
                         },
@@ -109,10 +111,7 @@
                         }
                       ],
                       "layoutInfo": {
-                        "width": 250,
-                        "position-top": {
-                          "offset": 20
-                        }
+
                       }
                     },
                     "layoutInfo": {
@@ -121,6 +120,7 @@
                   },
                   {
                     "type": "UILabel",
+                    "id": "spadesTeamScore",
                     "text": "This is the Spades Label",
                     "layoutInfo": {
                       "cc": "wrap"
@@ -169,6 +169,7 @@
                   },
                   {
                     "type": "UILabel",
+                    "id": "heartsTeamScore",
                     "text": "This is the Hearts Label",
                     "layoutInfo": {
                       "cc": "wrap"
