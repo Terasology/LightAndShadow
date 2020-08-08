@@ -82,7 +82,7 @@
                     "id": "gameDetailsScrollableArea",
                     "content": {
                       "type": "migLayout",
-                      "id": "playerStatistics", // TODO: Place only Team Spades score
+                      "id": "spadesTeamPlayerStatistics", // TODO: Place only Team Spades score
                       "rowConstraints": "0",
                       "colConstraints": "0",
                       "contents": [
@@ -109,13 +109,14 @@
                         }
                       ],
                       "layoutInfo": {
+                        "width": 250,
                         "position-top": {
                           "offset": 20
                         }
                       }
                     },
                     "layoutInfo": {
-                      "height": 100,
+                      "height": 250,
                       "position-top": {
                         "target": "TOP",
                         "widget": "detailsUIBox"
@@ -127,7 +128,7 @@
                     "id": "gameDetailsScrollableArea2",
                     "content": {
                       "type": "migLayout",
-                      "id": "playerStatistics2", // TODO: Place only Team Hearts score
+                      "id": "heartsTeamPlayerStatistics2", // TODO: Place only Team Hearts score
                       "rowConstraints": "0",
                       "colConstraints": "0",
                       "contents": [
@@ -160,7 +161,7 @@
                       }
                     },
                     "layoutInfo": {
-                      "height": 100,
+                      "height": 250,
                       "position-TOP": {
                         "target": "BOTTOM",
                         "widget": "gameDetailsScrollableArea"
