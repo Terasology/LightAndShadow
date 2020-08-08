@@ -89,7 +89,6 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     private void addPlayerStatisticsInfo(DeathScreen deathScreen) {
         MigLayout spadesTeamMigLayout = deathScreen.find("spadesTeamPlayerStatistics", MigLayout.class);
         MigLayout heartsTeamMigLayout = deathScreen.find("heartsTeamPlayerStatistics", MigLayout.class);
-        MigLayout migLayout;
         if (spadesTeamMigLayout != null && heartsTeamMigLayout != null) {
             Iterable<EntityRef> characters = entityManager.getEntitiesWith(PlayerCharacterComponent.class, LASTeamComponent.class);
             for (EntityRef character : characters) {
@@ -97,7 +96,7 @@ public class ClientGameOverSystem extends BaseComponentSystem {
                 ClientComponent clientComponent = client.getComponent(ClientComponent.class);
                 String playerTeam = localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team;
                 PlayerStatisticsComponent playerStatisticsComponent = character.getComponent(PlayerStatisticsComponent.class);
-                migLayout = (playerTeam.equals("black") ? spadesTeamMigLayout : heartsTeamMigLayout);
+                MigLayout migLayout = (playerTeam.equals("black") ? spadesTeamMigLayout : heartsTeamMigLayout);
                 addInfoToTeamMigLayout(migLayout,clientComponent,playerStatisticsComponent);
             }
         }
