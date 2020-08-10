@@ -26,6 +26,7 @@ import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent
 import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
+import org.terasology.logic.characters.AliveCharacterComponent;
 import org.terasology.logic.permission.PermissionManager;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.logic.players.PlayerCharacterComponent;
@@ -91,10 +92,11 @@ public class ClientGameOverSystem extends BaseComponentSystem {
         MigLayout heartsTeamMigLayout = deathScreen.find("heartsTeamPlayerStatistics", MigLayout.class);
         if (spadesTeamMigLayout != null && heartsTeamMigLayout != null) {
             Iterable<EntityRef> characters = entityManager.getEntitiesWith(PlayerCharacterComponent.class, LASTeamComponent.class);
+
             for (EntityRef character : characters) {
                 EntityRef client = character.getOwner();
                 ClientComponent clientComponent = client.getComponent(ClientComponent.class);
-                String playerTeam = localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team;
+                String playerTeam = character.getComponent(LASTeamComponent.class).team;
                 PlayerStatisticsComponent playerStatisticsComponent = character.getComponent(PlayerStatisticsComponent.class);
                 MigLayout migLayout = (playerTeam.equals("black") ? spadesTeamMigLayout : heartsTeamMigLayout);
                 addInfoToTeamMigLayout(migLayout,clientComponent,playerStatisticsComponent);

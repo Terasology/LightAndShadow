@@ -37,7 +37,6 @@ import org.terasology.logic.permission.PermissionManager;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.network.ClientComponent;
-import org.terasology.protobuf.EntityData;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
 import org.terasology.rendering.nui.ControlWidget;
@@ -131,18 +130,18 @@ public class ScoreSystem extends BaseComponentSystem {
                 incrementScore(baseTeamComponent);
                 movePlayerFlagToBase(player, oppositionTeam, heldFlag);
                 if (redScore >= LASUtils.GOAL_SCORE) {
+                    sendGameOverEventToClients(LASUtils.RED_TEAM);
                     resetLevel();
-                    setGameOverEventToClients(LASUtils.RED_TEAM);
                 }
                 if (blackScore >= LASUtils.GOAL_SCORE) {
+                    sendGameOverEventToClients(LASUtils.BLACK_TEAM);
                     resetLevel();
-                    setGameOverEventToClients(LASUtils.BLACK_TEAM);
                 }
             }
         }
     }
 
-    private void setGameOverEventToClients(String winningTeam) {
+    private void sendGameOverEventToClients(String winningTeam) {
         if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
             Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
             for (EntityRef client : clients) {
