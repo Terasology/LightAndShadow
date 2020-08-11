@@ -67,6 +67,7 @@ public class ClientGameOverSystem extends BaseComponentSystem {
             nuiManager.removeOverlay(LASUtils.ONLINE_PLAYERS_OVERLAY);
             DeathScreen deathScreen = nuiManager.pushScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
             addPlayerStatisticsInfo(deathScreen, event);
+            addTeamInfo(deathScreen, event);
             UILabel gameOverDetails = deathScreen.find("gameOverDetails", UILabel.class);
 
             if (event.hasRestartPermission) {
@@ -102,24 +103,12 @@ public class ClientGameOverSystem extends BaseComponentSystem {
                 addInfoToTeamMigLayout(migLayout,clientComponent,playerStatisticsComponent);
             }
         }
-        // TODO: keep either `addTeamInfo` & `addTeamScore` OR `addTeamScores`
-        addTeamInfo(deathScreen, event);
-        //addTeamScores(deathScreen, event);
     }
 
     private void addInfoToTeamMigLayout(MigLayout migLayout, ClientComponent clientComponent,PlayerStatisticsComponent playerStatisticsComponent){
         migLayout.addWidget(new UILabel(PlayerUtil.getColoredPlayerName(clientComponent.clientInfo)), new MigLayout.CCHint());
         migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.kills)), new MigLayout.CCHint());
         migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.deaths)), new MigLayout.CCHint("wrap"));
-    }
-
-    private void addTeamScores(DeathScreen deathScreen, GameOverEvent event){
-        UILabel spadesTeamScore = deathScreen.find("spadesTeamScore", UILabel.class);
-        UILabel heartsTeamScore = deathScreen.find("heartsTeamScore", UILabel.class);
-        String blackScore = String.valueOf(event.blackTeamScore);
-        String redScore = String.valueOf(event.redTeamScore);
-        spadesTeamScore.setText(blackScore);
-        heartsTeamScore.setText(redScore);
     }
 
     private void addTeamInfo(DeathScreen deathScreen, GameOverEvent event){
