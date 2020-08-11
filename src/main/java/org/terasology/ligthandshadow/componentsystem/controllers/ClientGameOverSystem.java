@@ -66,7 +66,7 @@ public class ClientGameOverSystem extends BaseComponentSystem {
         if (localPlayer.getClientEntity().equals(entity)) {
             nuiManager.removeOverlay(LASUtils.ONLINE_PLAYERS_OVERLAY);
             DeathScreen deathScreen = nuiManager.pushScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
-            addPlayerStatisticsInfo(deathScreen);
+            addPlayerStatisticsInfo(deathScreen, event);
             UILabel gameOverDetails = deathScreen.find("gameOverDetails", UILabel.class);
 
             if (event.hasRestartPermission) {
@@ -87,7 +87,7 @@ public class ClientGameOverSystem extends BaseComponentSystem {
         }
     }
 
-    private void addPlayerStatisticsInfo(DeathScreen deathScreen) {
+    private void addPlayerStatisticsInfo(DeathScreen deathScreen, GameOverEvent event) {
         MigLayout spadesTeamMigLayout = deathScreen.find("spadesTeamPlayerStatistics", MigLayout.class);
         MigLayout heartsTeamMigLayout = deathScreen.find("heartsTeamPlayerStatistics", MigLayout.class);
         if (spadesTeamMigLayout != null && heartsTeamMigLayout != null) {
@@ -102,7 +102,7 @@ public class ClientGameOverSystem extends BaseComponentSystem {
                 addInfoToTeamMigLayout(migLayout,clientComponent,playerStatisticsComponent);
             }
         }
-        addTeamScore(deathScreen);
+        addTeamScore(deathScreen, event);
     }
 
     private void addInfoToTeamMigLayout(MigLayout migLayout, ClientComponent clientComponent,PlayerStatisticsComponent playerStatisticsComponent){
@@ -111,12 +111,11 @@ public class ClientGameOverSystem extends BaseComponentSystem {
         migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.deaths)), new MigLayout.CCHint("wrap"));
     }
 
-    private void addTeamScore(DeathScreen deathScreen){
+    private void addTeamScore(DeathScreen deathScreen, GameOverEvent event){
         UILabel spadesTeamScore = deathScreen.find("spadesTeamScore", UILabel.class);
         UILabel heartsTeamScore = deathScreen.find("heartsTeamScore", UILabel.class);
-        ClientScoreSystem clientScoreSystem = new ClientScoreSystem();
-        String blackScore = clientScoreSystem.getBlackScore();
-        String redScore = clientScoreSystem.getRedScore();
+        String blackScore = String.valueOf(event.blackTeamScore);
+        String redScore = String.valueOf(event.redTeamScore);
         spadesTeamScore.setText(blackScore);
         heartsTeamScore.setText(redScore);
     }

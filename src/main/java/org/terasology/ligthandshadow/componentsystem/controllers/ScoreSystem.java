@@ -147,7 +147,7 @@ public class ScoreSystem extends BaseComponentSystem {
             for (EntityRef client : clients) {
                 EntityRef clientInfo = client.getComponent(ClientComponent.class).clientInfo;
                 Boolean hasRestartPermission = permissionManager.hasPermission(clientInfo, LASUtils.RESTART_PERMISSION);
-                client.send(new GameOverEvent(winningTeam, hasRestartPermission));
+                client.send(new GameOverEvent(winningTeam, hasRestartPermission, blackScore, redScore));
             }
         }
     }
