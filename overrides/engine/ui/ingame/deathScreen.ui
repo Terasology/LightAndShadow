@@ -69,9 +69,9 @@
               },
               "content": {
                 "type": "MigLayout",
-                "layoutConstraints": "", // Layout constraints
-                "colConstraints": "[600][200]", // Column constraints
-                "rowConstraints": "[30][200][200]", // Row constraints
+                "layoutConstraints": "",
+                "colConstraints": "[500][350]",
+                "rowConstraints": "[30][200][200]",
                 "layoutInfo": {
                   "width": 850,
                   "position-top": {
@@ -81,23 +81,31 @@
                 },
                 "contents": [
                   {
-                    "type": "rowLayout",
+                    "type": "MigLayout",
                     "id": "titles",
+                    "colConstraints": "[320][125][125][300]",
                     "layoutInfo": {
                       "cc": "cell 0 0 2 1"
                     },
                     "contents": [
                       {
-                        "type": "UILabel",
-                        "text": "first (1) label"
+                        "type": "UISpace",
+                        "cc": ""
                       },
                       {
                         "type": "UILabel",
-                        "text": "second (2) label"
+                        "text": "Kills",
+                        "cc": ""
                       },
                       {
                         "type": "UILabel",
-                        "text": "third (3) label"
+                        "text": "Deaths",
+                        "cc": ""
+                      },
+                      {
+                        "type": "UILabel",
+                        "text": "Enemy Flags Captured",
+                        "cc": ""
                       }
                     ]
                   },
@@ -106,30 +114,16 @@
                     "id": "gameDetailsScrollableArea",
                     "content": {
                       "type": "migLayout",
-                      "id": "spadesTeamPlayerStatistics", // TODO: Place only Team Spades score
+                      "id": "spadesTeamPlayerStatistics",
                       "rowConstraints": "0",
-                      "colConstraints": "0",
+                      "colConstraints": "[300][100][100]",
                       "contents": [
                         {
                           "type": "UILabel",
-                          "text": "Player",
+                          "text": "Spades Team",
                           "layoutInfo": {
                             "position-horizontal-center": {},
                             "position-vertical-center": {},
-                            "cc": ""
-                          }
-                        },
-                        {
-                          "type": "UILabel",
-                          "text": "Kills",
-                          "layoutInfo": {
-                            "cc": ""
-                          }
-                        },
-                        {
-                          "type": "UILabel",
-                          "text": "Deaths",
-                          "layoutInfo": {
                             "cc": "wrap"
                           }
                         }
@@ -143,39 +137,48 @@
                     }
                   },
                   {
-                    "type": "UILabel",
-                    "id": "spadesTeamScore",
-                    "text": "This is the Spades Label",
-                    "layoutInfo": {
-                      "cc": "cell 1 1"
-                    }
+                    "type": "MigLayout",
+                    "rowConstraints": "0",
+                    "contents": [
+                      {
+                        "type": "UILabel",
+                        "id": "spadesTeamScore",
+                        "text": "Spades Score",
+                        "layoutInfo": {
+                          "width": 30,
+                          "cc": "align right"
+                        }
+                      },
+                      {
+                        "type": "UILabel",
+                        "text": "/",
+                        "layoutInfo": {
+                          "cc": "width ::30"
+                        }
+                      },
+                      {
+                        "type": "UILabel",
+                        "id": "spadesGoalScore",
+                        "text": "6",
+                        "layoutInfo": {
+                          "width": 30,
+                          "cc": "align left"
+                        }
+                      }
+                    ]
                   },
                   {
                     "type": "ScrollableArea",
                     "id": "gameDetailsScrollableArea2",
                     "content": {
                       "type": "migLayout",
-                      "id": "heartsTeamPlayerStatistics", // TODO: Place only Team Hearts score
+                      "id": "heartsTeamPlayerStatistics",
                       "rowConstraints": "0",
-                      "colConstraints": "0",
+                      "colConstraints": "[300][100][100]",
                       "contents": [
                         {
                           "type": "UILabel",
-                          "text": "Player",
-                          "layoutInfo": {
-                            "cc": ""
-                          }
-                        },
-                        {
-                          "type": "UILabel",
-                          "text": "Kills",
-                          "layoutInfo": {
-                            "cc": ""
-                          }
-                        },
-                        {
-                          "type": "UILabel",
-                          "text": "Deaths",
+                          "text": "Hearts Team",
                           "layoutInfo": {
                             "cc": "wrap"
                           }
@@ -192,12 +195,35 @@
                     }
                   },
                   {
-                    "type": "UILabel",
-                    "id": "heartsTeamScore",
-                    "text": "This is the Hearts Label",
-                    "layoutInfo": {
-                      "cc": "cell 1 2"
-                    }
+                    "type": "MigLayout",
+                    "rowConstraints": "0",
+                    "contents": [
+                      {
+                        "type": "UILabel",
+                        "id": "heartsTeamScore",
+                        "text": "This is the Hearts Label",
+                        "layoutInfo": {
+                          "width": 30,
+                          "cc": "align right"
+                        }
+                      },
+                      {
+                        "type": "UILabel",
+                        "text": "/",
+                        "layoutInfo": {
+                          "cc": "width ::30"
+                        }
+                      },
+                      {
+                        "type": "UILabel",
+                        "id": "heartsGoalScore",
+                        "text": "6",
+                        "layoutInfo": {
+                          "width": 30,
+                          "cc": "align left"
+                        }
+                      }
+                    ]
                   }
                 ]
               }
@@ -212,7 +238,7 @@
                 "width": 15,
                 "position-top": {
                   "target": "BOTTOM",
-                  "widget": "gameDetails",
+                  "widget": "detailsUIBox",
                   "offset": 10
                 },
                 "position-left": {

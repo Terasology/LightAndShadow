@@ -85,7 +85,15 @@ public class ClientGameOverSystem extends BaseComponentSystem {
                     gameOverDetails.setText("You Lose!");
                 }
             }
+
+            addGoalScore(deathScreen, "spadesGoalScore");
+            addGoalScore(deathScreen, "heartsGoalScore");
         }
+    }
+
+    private void addGoalScore(DeathScreen deathScreen, String teamUILabelID){
+        UILabel goalScore = deathScreen.find(teamUILabelID, UILabel.class);
+        goalScore.setText(Integer.toString(LASUtils.GOAL_SCORE));
     }
 
     private void addPlayerStatisticsInfo(DeathScreen deathScreen, GameOverEvent event) {
