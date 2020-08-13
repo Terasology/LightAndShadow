@@ -130,12 +130,12 @@ public class ScoreSystem extends BaseComponentSystem {
                 incrementScore(baseTeamComponent);
                 movePlayerFlagToBase(player, oppositionTeam, heldFlag);
                 if (redScore >= LASUtils.GOAL_SCORE) {
-                    sendGameOverEventToClients(LASUtils.RED_TEAM);
                     resetLevel();
+                    sendGameOverEventToClients(LASUtils.RED_TEAM);
                 }
                 if (blackScore >= LASUtils.GOAL_SCORE) {
-                    sendGameOverEventToClients(LASUtils.BLACK_TEAM);
                     resetLevel();
+                    sendGameOverEventToClients(LASUtils.BLACK_TEAM);
                 }
             }
         }
