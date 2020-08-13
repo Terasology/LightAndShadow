@@ -24,7 +24,8 @@
                   "text": "Game Over"
                 },
                 {
-                  "type": "UILabel", // "You Win!" "You Lose!" label
+                  "type": "UILabel",
+                  // "You Win!" "You Lose!" label
                   "id": "gameOverResult"
                 }
               ],
@@ -100,26 +101,35 @@
                     ]
                   },
                   {
-                    "type": "ScrollableArea",
-                    "id": "gameDetailsScrollableArea",
+                    "type": "MigLayout",
+                    "rowConstraints": "[30][150]",
                     "layoutInfo": {
                       "cc": "cell 0 1"
                     },
-                    "content": {
-                      "type": "migLayout",
-                      "id": "spadesTeamPlayerStatistics",
-                      "rowConstraints": "0",
-                      "colConstraints": "[300][100][100]",
-                      "contents": [
-                        {
-                          "type": "UILabel",
-                          "text": "Spades Team",
-                          "layoutInfo": {
-                            "cc": "wrap"
-                          }
+                    "contents": [
+                      {
+                        "type": "UILabel",
+                        "text": "Spades Team",
+                        "cc": ""
+                      },
+                      {
+                        "type": "UISpace",
+                        "cc": ""
+                      },
+                      {
+                        "type": "ScrollableArea",
+                        "id": "gameDetailsScrollableArea",
+                        "layoutInfo": {
+                          "cc": "dock south"
+                        },
+                        "content": {
+                          "type": "migLayout",
+                          "id": "spadesTeamPlayerStatistics",
+                          "rowConstraints": "0",
+                          "colConstraints": "[300][100][100]"
                         }
-                      ]
-                    }
+                      }
+                    ]
                   },
                   {
                     "type": "MigLayout",
@@ -151,26 +161,35 @@
                     ]
                   },
                   {
-                    "type": "ScrollableArea",
-                    "id": "gameDetailsScrollableArea2",
+                    "type": "MigLayout",
+                    "rowConstraints": "[30][150]",
                     "layoutInfo": {
                       "cc": "cell 0 2"
                     },
-                    "content": {
-                      "type": "migLayout",
-                      "id": "heartsTeamPlayerStatistics",
-                      "rowConstraints": "0",
-                      "colConstraints": "[300][100][100]",
-                      "contents": [
-                        {
-                          "type": "UILabel",
-                          "text": "Hearts Team",
-                          "layoutInfo": {
-                            "cc": "wrap"
-                          }
+                    "contents": [
+                      {
+                        "type": "UILabel",
+                        "text": "Hearts Team",
+                        "cc": ""
+                      },
+                      {
+                        "type": "UISpace",
+                        "cc": ""
+                      },
+                      {
+                        "type": "ScrollableArea",
+                        "id": "gameDetailsScrollableArea2",
+                        "layoutInfo": {
+                          "cc": "dock south"
+                        },
+                        "content": {
+                          "type": "migLayout",
+                          "id": "heartsTeamPlayerStatistics",
+                          "rowConstraints": "0",
+                          "colConstraints": "[300][100][100]"
                         }
-                      ]
-                    }
+                      }
+                    ]
                   },
                   {
                     "type": "MigLayout",
