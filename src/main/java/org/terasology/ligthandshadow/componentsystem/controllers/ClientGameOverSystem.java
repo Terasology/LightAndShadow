@@ -121,8 +121,7 @@ public class ClientGameOverSystem extends BaseComponentSystem {
 
     private void addTeamScore(DeathScreen deathScreen, String teamUILabelId, int finalScore) {
         UILabel teamScore = deathScreen.find(teamUILabelId, UILabel.class);
-        String score = String.valueOf(finalScore);
-        teamScore.setText(score);
+        teamScore.setText(String.valueOf(finalScore));
     }
 
     private void addGoalScore(DeathScreen deathScreen, String teamUILabelID) {
