@@ -68,7 +68,7 @@ public class ClientGameOverSystem extends BaseComponentSystem {
             DeathScreen deathScreen = nuiManager.pushScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
             addPlayerStatisticsInfo(deathScreen, event);
             addTeamInfo(deathScreen, event);
-            UILabel gameOverDetails = deathScreen.find("gameOverDetails", UILabel.class);
+            UILabel gameOverResult = deathScreen.find("gameOverResult", UILabel.class);
 
             if (event.hasRestartPermission) {
                 UIButton restartButton = deathScreen.find("restart", UIButton.class);
@@ -78,11 +78,11 @@ public class ClientGameOverSystem extends BaseComponentSystem {
             }
 
             WidgetUtil.trySubscribe(deathScreen, "restart", widget -> triggerRestart());
-            if (gameOverDetails != null) {
+            if (gameOverResult != null) {
                 if (event.winningTeam.equals(localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team)) {
-                    gameOverDetails.setText("You Win!");
+                    gameOverResult.setText("Victory");
                 } else {
-                    gameOverDetails.setText("You Lose!");
+                    gameOverResult.setText("Defeat");
                 }
             }
 

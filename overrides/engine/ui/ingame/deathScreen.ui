@@ -9,10 +9,8 @@
         "layoutInfo": {
           "width": 1200,
           "height": 780,
-          "position-horizontal-center": {
-          },
-          "position-vertical-center": {
-          }
+          "position-horizontal-center": {},
+          "position-vertical-center": {}
         },
         "content": {
           "type": "relativeLayout",
@@ -26,9 +24,8 @@
                   "text": "Game Over"
                 },
                 {
-                  "type": "UILabel",
-                  // "You Win!" "You Lose!" labels
-                  "id": "gameOverDetails"
+                  "type": "UILabel", // "You Win!" "You Lose!" label
+                  "id": "gameOverResult"
                 }
               ],
               "layoutInfo": {
@@ -72,13 +69,6 @@
                 "layoutConstraints": "",
                 "colConstraints": "[500][350]",
                 "rowConstraints": "[30][200][200]",
-                "layoutInfo": {
-                  "width": 850,
-                  "position-top": {
-                    "target": "TOP",
-                    "widget": "detailsUIBox"
-                  }
-                },
                 "contents": [
                   {
                     "type": "MigLayout",
@@ -112,6 +102,9 @@
                   {
                     "type": "ScrollableArea",
                     "id": "gameDetailsScrollableArea",
+                    "layoutInfo": {
+                      "cc": "cell 0 1"
+                    },
                     "content": {
                       "type": "migLayout",
                       "id": "spadesTeamPlayerStatistics",
@@ -122,18 +115,10 @@
                           "type": "UILabel",
                           "text": "Spades Team",
                           "layoutInfo": {
-                            "position-horizontal-center": {},
-                            "position-vertical-center": {},
                             "cc": "wrap"
                           }
                         }
-                      ],
-                      "layoutInfo": {
-
-                      }
-                    },
-                    "layoutInfo": {
-                      "cc": "cell 0 1"
+                      ]
                     }
                   },
                   {
@@ -145,24 +130,22 @@
                         "id": "spadesTeamScore",
                         "text": "Spades Score",
                         "layoutInfo": {
-                          "width": 30,
-                          "cc": "align right"
+                          "cc": ""
                         }
                       },
                       {
                         "type": "UILabel",
                         "text": "/",
                         "layoutInfo": {
-                          "cc": "width ::30"
+                          "cc": ""
                         }
                       },
                       {
                         "type": "UILabel",
                         "id": "spadesGoalScore",
-                        "text": "6",
+                        "text": "0",
                         "layoutInfo": {
-                          "width": 30,
-                          "cc": "align left"
+                          "cc": ""
                         }
                       }
                     ]
@@ -170,6 +153,9 @@
                   {
                     "type": "ScrollableArea",
                     "id": "gameDetailsScrollableArea2",
+                    "layoutInfo": {
+                      "cc": "cell 0 2"
+                    },
                     "content": {
                       "type": "migLayout",
                       "id": "heartsTeamPlayerStatistics",
@@ -183,15 +169,7 @@
                             "cc": "wrap"
                           }
                         }
-                      ],
-                      "layoutInfo": {
-                        "position-top": {
-                          "offset": 20
-                        }
-                      }
-                    },
-                    "layoutInfo": {
-                      "cc": "cell 0 2"
+                      ]
                     }
                   },
                   {
@@ -203,15 +181,14 @@
                         "id": "heartsTeamScore",
                         "text": "This is the Hearts Label",
                         "layoutInfo": {
-                          "width": 30,
-                          "cc": "align right"
+                          "cc": ""
                         }
                       },
                       {
                         "type": "UILabel",
                         "text": "/",
                         "layoutInfo": {
-                          "cc": "width ::30"
+                          "cc": ""
                         }
                       },
                       {
@@ -219,8 +196,7 @@
                         "id": "heartsGoalScore",
                         "text": "6",
                         "layoutInfo": {
-                          "width": 30,
-                          "cc": "align left"
+                          "cc": ""
                         }
                       }
                     ]
