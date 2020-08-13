@@ -63,14 +63,6 @@ public class ClientScoreSystem extends BaseComponentSystem {
         redGoalScore.setText(Integer.toString(LASUtils.GOAL_SCORE));
     }
 
-    public String getBlackScore() {
-        return String.valueOf(blackScore);
-    }
-
-    public String getRedScore() {
-        return String.valueOf(redScore);
-    }
-
     @Override
     public void initialise() {
         // Displays score UI to client on game start
