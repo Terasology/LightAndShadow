@@ -83,15 +83,7 @@ public class ClientGameOverSystem extends BaseComponentSystem {
                     gameOverResult.setText("Defeat");
                 }
             }
-
-            addGoalScore(deathScreen, "spadesGoalScore");
-            addGoalScore(deathScreen, "heartsGoalScore");
         }
-    }
-
-    private void addGoalScore(DeathScreen deathScreen, String teamUILabelID) {
-        UILabel goalScore = deathScreen.find(teamUILabelID, UILabel.class);
-        goalScore.setText(Integer.toString(LASUtils.GOAL_SCORE));
     }
 
     private void addPlayerStatisticsInfo(DeathScreen deathScreen, GameOverEvent event) {
@@ -123,12 +115,19 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     private void addTeamInfo(DeathScreen deathScreen, GameOverEvent event) {
         addTeamScore(deathScreen, "spadesTeamScore", event.blackTeamScore);
         addTeamScore(deathScreen, "heartsTeamScore", event.redTeamScore);
+        addGoalScore(deathScreen, "spadesGoalScore");
+        addGoalScore(deathScreen, "heartsGoalScore");
     }
 
     private void addTeamScore(DeathScreen deathScreen, String teamUILabelId, int finalScore) {
         UILabel teamScore = deathScreen.find(teamUILabelId, UILabel.class);
         String score = String.valueOf(finalScore);
         teamScore.setText(score);
+    }
+
+    private void addGoalScore(DeathScreen deathScreen, String teamUILabelID) {
+        UILabel goalScore = deathScreen.find(teamUILabelID, UILabel.class);
+        goalScore.setText(Integer.toString(LASUtils.GOAL_SCORE));
     }
 
     private void triggerRestart() {
