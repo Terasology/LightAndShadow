@@ -63,11 +63,11 @@ public class ClientScoreSystem extends BaseComponentSystem {
         redGoalScore.setText(Integer.toString(LASUtils.GOAL_SCORE));
     }
 
-    public String getBlackScore(){
+    public String getBlackScore() {
         return String.valueOf(blackScore);
     }
 
-    public String getRedScore(){
+    public String getRedScore() {
         return String.valueOf(redScore);
     }
 

@@ -26,13 +26,11 @@ import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent
 import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
-import org.terasology.logic.characters.AliveCharacterComponent;
 import org.terasology.logic.permission.PermissionManager;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.logic.players.PlayerUtil;
 import org.terasology.network.ClientComponent;
-import org.terasology.protobuf.EntityData;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.WidgetUtil;
@@ -58,7 +56,7 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     /**
      * System to show game over screen once a team achieves goal score.
      *
-     * @param event  the event
+     * @param event the event
      * @param entity the entity
      */
     @ReceiveEvent
@@ -91,7 +89,7 @@ public class ClientGameOverSystem extends BaseComponentSystem {
         }
     }
 
-    private void addGoalScore(DeathScreen deathScreen, String teamUILabelID){
+    private void addGoalScore(DeathScreen deathScreen, String teamUILabelID) {
         UILabel goalScore = deathScreen.find(teamUILabelID, UILabel.class);
         goalScore.setText(Integer.toString(LASUtils.GOAL_SCORE));
     }
@@ -100,31 +98,34 @@ public class ClientGameOverSystem extends BaseComponentSystem {
         MigLayout spadesTeamMigLayout = deathScreen.find("spadesTeamPlayerStatistics", MigLayout.class);
         MigLayout heartsTeamMigLayout = deathScreen.find("heartsTeamPlayerStatistics", MigLayout.class);
         if (spadesTeamMigLayout != null && heartsTeamMigLayout != null) {
-            Iterable<EntityRef> characters = entityManager.getEntitiesWith(PlayerCharacterComponent.class, LASTeamComponent.class);
+            Iterable<EntityRef> characters = entityManager.getEntitiesWith(PlayerCharacterComponent.class,
+                    LASTeamComponent.class);
 
             for (EntityRef character : characters) {
                 EntityRef client = character.getOwner();
                 ClientComponent clientComponent = client.getComponent(ClientComponent.class);
                 String playerTeam = character.getComponent(LASTeamComponent.class).team;
-                PlayerStatisticsComponent playerStatisticsComponent = character.getComponent(PlayerStatisticsComponent.class);
+                PlayerStatisticsComponent playerStatisticsComponent =
+                        character.getComponent(PlayerStatisticsComponent.class);
                 MigLayout migLayout = (playerTeam.equals("black") ? spadesTeamMigLayout : heartsTeamMigLayout);
-                addInfoToTeamMigLayout(migLayout,clientComponent,playerStatisticsComponent);
+                addInfoToTeamMigLayout(migLayout, clientComponent, playerStatisticsComponent);
             }
         }
     }
 
-    private void addInfoToTeamMigLayout(MigLayout migLayout, ClientComponent clientComponent,PlayerStatisticsComponent playerStatisticsComponent){
+    private void addInfoToTeamMigLayout(MigLayout migLayout, ClientComponent clientComponent,
+                                        PlayerStatisticsComponent playerStatisticsComponent) {
         migLayout.addWidget(new UILabel(PlayerUtil.getColoredPlayerName(clientComponent.clientInfo)), new MigLayout.CCHint());
         migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.kills)), new MigLayout.CCHint());
         migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.deaths)), new MigLayout.CCHint("wrap"));
     }
 
-    private void addTeamInfo(DeathScreen deathScreen, GameOverEvent event){
+    private void addTeamInfo(DeathScreen deathScreen, GameOverEvent event) {
         addTeamScore(deathScreen, "spadesTeamScore", event.blackTeamScore);
         addTeamScore(deathScreen, "heartsTeamScore", event.redTeamScore);
     }
 
-    private void addTeamScore(DeathScreen deathScreen, String teamUILabelId, int finalScore){
+    private void addTeamScore(DeathScreen deathScreen, String teamUILabelId, int finalScore) {
         UILabel teamScore = deathScreen.find(teamUILabelId, UILabel.class);
         String score = String.valueOf(finalScore);
         teamScore.setText(score);
