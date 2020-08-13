@@ -65,7 +65,7 @@ public class ClientGameOverSystem extends BaseComponentSystem {
             nuiManager.removeOverlay(LASUtils.ONLINE_PLAYERS_OVERLAY);
             DeathScreen deathScreen = nuiManager.pushScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
             addPlayerStatisticsInfo(deathScreen, event);
-            addTeamInfo(deathScreen, event);
+            addFlagInfo(deathScreen, event);
             UILabel gameOverResult = deathScreen.find("gameOverResult", UILabel.class);
 
             if (event.hasRestartPermission) {
@@ -112,7 +112,7 @@ public class ClientGameOverSystem extends BaseComponentSystem {
         migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.deaths)), new MigLayout.CCHint("wrap"));
     }
 
-    private void addTeamInfo(DeathScreen deathScreen, GameOverEvent event) {
+    private void addFlagInfo(DeathScreen deathScreen, GameOverEvent event) {
         addTeamScore(deathScreen, "spadesTeamScore", event.blackTeamScore);
         addTeamScore(deathScreen, "heartsTeamScore", event.redTeamScore);
         addGoalScore(deathScreen, "spadesGoalScore");
