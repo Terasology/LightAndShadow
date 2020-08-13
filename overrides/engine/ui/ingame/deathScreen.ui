@@ -60,7 +60,7 @@
               "id": "detailsUIBox",
               "layoutInfo": {
                 "height": 500,
-                "width": 600,
+                "width": 850,
                 "position-horizontal-center": {
                 },
                 "position-top": {
@@ -69,14 +69,38 @@
               },
               "content": {
                 "type": "MigLayout",
+                "layoutConstraints": "", // Layout constraints
+                "colConstraints": "[600][200]", // Column constraints
+                "rowConstraints": "[30][200][200]", // Row constraints
                 "layoutInfo": {
-                  "width": 600,
+                  "width": 850,
                   "position-top": {
                     "target": "TOP",
                     "widget": "detailsUIBox"
                   }
                 },
                 "contents": [
+                  {
+                    "type": "rowLayout",
+                    "id": "titles",
+                    "layoutInfo": {
+                      "cc": "cell 0 0 2 1"
+                    },
+                    "contents": [
+                      {
+                        "type": "UILabel",
+                        "text": "first (1) label"
+                      },
+                      {
+                        "type": "UILabel",
+                        "text": "second (2) label"
+                      },
+                      {
+                        "type": "UILabel",
+                        "text": "third (3) label"
+                      }
+                    ]
+                  },
                   {
                     "type": "ScrollableArea",
                     "id": "gameDetailsScrollableArea",
@@ -115,7 +139,7 @@
                       }
                     },
                     "layoutInfo": {
-                      "cc": ""
+                      "cc": "cell 0 1"
                     }
                   },
                   {
@@ -123,7 +147,7 @@
                     "id": "spadesTeamScore",
                     "text": "This is the Spades Label",
                     "layoutInfo": {
-                      "cc": "wrap"
+                      "cc": "cell 1 1"
                     }
                   },
                   {
@@ -164,7 +188,7 @@
                       }
                     },
                     "layoutInfo": {
-                      "cc": ""
+                      "cc": "cell 0 2"
                     }
                   },
                   {
@@ -172,7 +196,7 @@
                     "id": "heartsTeamScore",
                     "text": "This is the Hearts Label",
                     "layoutInfo": {
-                      "cc": "wrap"
+                      "cc": "cell 1 2"
                     }
                   }
                 ]
