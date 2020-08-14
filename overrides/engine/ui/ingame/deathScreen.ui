@@ -25,7 +25,6 @@
                 },
                 {
                   "type": "UILabel",
-                  // "You Win!" "You Lose!" label
                   "id": "gameOverResult"
                 }
               ],
