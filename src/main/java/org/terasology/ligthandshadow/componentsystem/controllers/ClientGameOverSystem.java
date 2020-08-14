@@ -56,7 +56,8 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     /**
      * System to show game over screen once a team achieves goal score.
      *
-     * @param event the event
+     * @param event the GameOverEvent event which stores the winning team, if the user has permission for
+     *         restarting the game, and the final scores of both teams.
      * @param entity the entity
      */
     @ReceiveEvent
@@ -107,9 +108,11 @@ public class ClientGameOverSystem extends BaseComponentSystem {
 
     private void addInfoToTeamMigLayout(MigLayout migLayout, ClientComponent clientComponent,
                                         PlayerStatisticsComponent playerStatisticsComponent) {
-        migLayout.addWidget(new UILabel(PlayerUtil.getColoredPlayerName(clientComponent.clientInfo)), new MigLayout.CCHint());
+        migLayout.addWidget(new UILabel(PlayerUtil.getColoredPlayerName(clientComponent.clientInfo)),
+                new MigLayout.CCHint());
         migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.kills)), new MigLayout.CCHint());
-        migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.deaths)), new MigLayout.CCHint("wrap"));
+        migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.deaths)), new MigLayout.CCHint("wrap"
+        ));
     }
 
     private void addFlagInfo(DeathScreen deathScreen, GameOverEvent event) {
