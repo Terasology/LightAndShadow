@@ -58,7 +58,7 @@ public class ClientGameOverSystem extends BaseComponentSystem {
      *
      * @param event the GameOverEvent event which stores the winning team, if the user has permission for
      *         restarting the game, and the final scores of both teams.
-     * @param entity the entity
+     * @param entity the entity about each player connected to the game. TODO: needs more details/clarification
      */
     @ReceiveEvent
     public void onGameOver(GameOverEvent event, EntityRef entity) {
