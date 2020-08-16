@@ -56,16 +56,18 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     /**
      * System to show game over screen once a team achieves goal score.
      *
-     * @param event  the event
-     * @param entity the entity
+     * @param event the GameOverEvent event which stores the winning team, if the user has permission for
+     *         restarting the game, and the final scores of both teams.
+     * @param entity the entity about each player connected to the game. TODO: needs more details/clarification
      */
     @ReceiveEvent
     public void onGameOver(GameOverEvent event, EntityRef entity) {
         if (localPlayer.getClientEntity().equals(entity)) {
             nuiManager.removeOverlay(LASUtils.ONLINE_PLAYERS_OVERLAY);
             DeathScreen deathScreen = nuiManager.pushScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
-            addPlayerStatisticsInfo(deathScreen);
-            UILabel gameOverDetails = deathScreen.find("gameOverDetails", UILabel.class);
+            addPlayerStatisticsInfo(deathScreen, event);
+            addFlagInfo(deathScreen, event);
+            UILabel gameOverResult = deathScreen.find("gameOverResult", UILabel.class);
 
             if (event.hasRestartPermission) {
                 UIButton restartButton = deathScreen.find("restart", UIButton.class);
@@ -75,31 +77,61 @@ public class ClientGameOverSystem extends BaseComponentSystem {
             }
 
             WidgetUtil.trySubscribe(deathScreen, "restart", widget -> triggerRestart());
-            if (gameOverDetails != null) {
+            if (gameOverResult != null) {
                 if (event.winningTeam.equals(localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team)) {
-                    gameOverDetails.setText("You Win!");
+                    gameOverResult.setText("Victory");
                 } else {
-                    gameOverDetails.setText("You Lose!");
+                    gameOverResult.setText("Defeat");
                 }
             }
         }
     }
 
-    private void addPlayerStatisticsInfo(DeathScreen deathScreen) {
-        MigLayout migLayout = deathScreen.find("playerStatistics", MigLayout.class);
-        if (migLayout != null) {
-            Iterable<EntityRef> characters = entityManager.getEntitiesWith(PlayerCharacterComponent.class, LASTeamComponent.class);
+    private void addPlayerStatisticsInfo(DeathScreen deathScreen, GameOverEvent event) {
+        MigLayout spadesTeamMigLayout = deathScreen.find("spadesTeamPlayerStatistics", MigLayout.class);
+        MigLayout heartsTeamMigLayout = deathScreen.find("heartsTeamPlayerStatistics", MigLayout.class);
+        if (spadesTeamMigLayout != null && heartsTeamMigLayout != null) {
+            Iterable<EntityRef> characters = entityManager.getEntitiesWith(PlayerCharacterComponent.class,
+                    LASTeamComponent.class);
+
             for (EntityRef character : characters) {
                 EntityRef client = character.getOwner();
                 ClientComponent clientComponent = client.getComponent(ClientComponent.class);
-                migLayout.addWidget(new UILabel(PlayerUtil.getColoredPlayerName(clientComponent.clientInfo)), new MigLayout.CCHint());
-                PlayerStatisticsComponent playerStatisticsComponent = character.getComponent(PlayerStatisticsComponent.class);
-                migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.kills)), new MigLayout.CCHint());
-                migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.deaths)), new MigLayout.CCHint("wrap"));
+                String playerTeam = character.getComponent(LASTeamComponent.class).team;
+                PlayerStatisticsComponent playerStatisticsComponent =
+                        character.getComponent(PlayerStatisticsComponent.class);
+                MigLayout migLayout = (playerTeam.equals("black") ? spadesTeamMigLayout : heartsTeamMigLayout);
+                addInfoToTeamMigLayout(migLayout, clientComponent, playerStatisticsComponent);
             }
         }
     }
-    
+
+    private void addInfoToTeamMigLayout(MigLayout migLayout, ClientComponent clientComponent,
+                                        PlayerStatisticsComponent playerStatisticsComponent) {
+        migLayout.addWidget(new UILabel(PlayerUtil.getColoredPlayerName(clientComponent.clientInfo)),
+                new MigLayout.CCHint());
+        migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.kills)), new MigLayout.CCHint());
+        migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.deaths)), new MigLayout.CCHint("wrap"
+        ));
+    }
+
+    private void addFlagInfo(DeathScreen deathScreen, GameOverEvent event) {
+        addTeamScore(deathScreen, "spadesTeamScore", event.blackTeamScore);
+        addTeamScore(deathScreen, "heartsTeamScore", event.redTeamScore);
+        addGoalScore(deathScreen, "spadesGoalScore");
+        addGoalScore(deathScreen, "heartsGoalScore");
+    }
+
+    private void addTeamScore(DeathScreen deathScreen, String teamUILabelId, int finalScore) {
+        UILabel teamScore = deathScreen.find(teamUILabelId, UILabel.class);
+        teamScore.setText(String.valueOf(finalScore));
+    }
+
+    private void addGoalScore(DeathScreen deathScreen, String teamUILabelID) {
+        UILabel goalScore = deathScreen.find(teamUILabelID, UILabel.class);
+        goalScore.setText(Integer.toString(LASUtils.GOAL_SCORE));
+    }
+
     private void triggerRestart() {
         localPlayer.getClientEntity().send(new RestartRequestEvent());
     }
