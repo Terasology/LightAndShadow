@@ -34,7 +34,8 @@
                             "contents": [
                                 {
                                     "type": "UIImage",
-                                    "id": "dialogueImage"
+                                    "id": "dialogueImage",
+                                    "image": "LightAndShadowResources:fool-mini-image"
                                 },
                                 {
                                     "type": "ScrollableArea",
@@ -52,22 +53,7 @@
                         "id": "responseImage",
                         "layoutInfo": {
                             "height": 60,
-                            "position-top": {
-                                "target": "TOP",
-                                "widget": "box"
-                            },
-                            "position-left": {
-                                "target": "RIGHT",
-                                "widget": "box"
-                            },
-                            "width": 50
-                        }
-                    },
-                    {
-                        "type": "ColumnLayout",
-                        "id": "responseButtons",
-                        "layoutInfo": {
-                            "use-content-height": true,
+                            "use-content-width": true,
                             "position-top": {
                                 "target": "TOP",
                                 "widget": "box"
@@ -75,9 +61,25 @@
                             "position-left": {
                                 "target": "RIGHT",
                                 "widget": "box",
-                                "offset": 50
+                                "offset": 5
+                            }
+                        }
+                    },
+                    {
+                        "type": "ColumnLayout",
+                        "id": "responseButtons",
+                        "layoutInfo": {
+                            "height": 60,
+                            "use-content-width": true,
+                            "position-top": {
+                                "target": "TOP",
+                                "widget": "box"
                             },
-                            "use-content-width": true
+                            "position-left": {
+                                "target": "RIGHT",
+                                "widget": "responseImage",
+                                "offset": 5
+                            }
                         }
                     }
                 ]
