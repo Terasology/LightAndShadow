@@ -51,6 +51,7 @@
                     {
                         "type": "ColumnLayout",
                         "id": "responseImage",
+                        "family": "imageColumn",
                         "layoutInfo": {
                             "height": 60,
                             "use-content-width": true,
