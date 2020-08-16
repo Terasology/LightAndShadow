@@ -34,8 +34,8 @@
                             "contents": [
                                 {
                                     "type": "UIImage",
-                                    "id": "dialogueImage",
-                                    "image": "LightAndShadowResources:fool-mini-image"
+                                    "image": "LightAndShadowResources:fool-mini-image",
+                                    "id": "dialogueImage"
                                 },
                                 {
                                     "type": "ScrollableArea",
