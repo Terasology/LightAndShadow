@@ -53,7 +53,7 @@
                         "id": "responseImage",
                         "family": "imageColumn",
                         "layoutInfo": {
-                            "height": 60,
+                            "use-content-height": true,
                             "use-content-width": true,
                             "position-top": {
                                 "target": "TOP",
@@ -70,7 +70,7 @@
                         "type": "ColumnLayout",
                         "id": "responseButtons",
                         "layoutInfo": {
-                            "height": 60,
+                            "use-content-height": true,
                             "use-content-width": true,
                             "position-top": {
                                 "target": "TOP",
