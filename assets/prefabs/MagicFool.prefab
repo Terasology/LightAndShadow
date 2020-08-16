@@ -31,7 +31,7 @@
                 "responses": [
                     {
                         "text": "Very well..",
-                        "responseImage": "LightAndShadowResources:heartsIcon",
+                        "responseImage": "LightAndShadowResources:answerArrow",
                         "action": {
                             "class": "Dialogs:CloseDialogAction"
                         }
