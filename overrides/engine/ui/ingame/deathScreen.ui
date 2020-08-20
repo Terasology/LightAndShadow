@@ -6,6 +6,7 @@
     "contents": [
       {
         "type": "UIBox",
+        "family": "outsideUIBox",
         "layoutInfo": {
           "width": 1200,
           "height": 780,
@@ -14,10 +15,11 @@
         },
         "content": {
           "type": "relativeLayout",
+          "family": "insideOutsideUIBox",
           "contents": [
             {
               "type": "RowLayout",
-              "horizontalSpacing": 15,
+              "family": "overOutsideUIBox",
               "contents": [
                 {
                   "type": "UILabel",
@@ -40,6 +42,7 @@
             {
               "type": "UIButton",
               "text": "${engine:menu#game-settings}",
+              "family": "UIButtons",
               "id": "settings",
               "layoutInfo": {
                 "position-right": {
@@ -55,6 +58,7 @@
             {
               "type": "UIBox",
               "id": "detailsUIBox",
+              "family": "detailsUIBox",
               "layoutInfo": {
                 "height": 500,
                 "width": 850,
@@ -66,6 +70,7 @@
               },
               "content": {
                 "type": "MigLayout",
+                "family": "noBackground",
                 "layoutConstraints": "",
                 "colConstraints": "[500][350]",
                 "rowConstraints": "[30][200][200]",
@@ -109,10 +114,12 @@
                       {
                         "type": "UILabel",
                         "text": "Spades Team",
+                        "family": "spadesTeamLabel",
                         "cc": ""
                       },
                       {
                         "type": "UISpace",
+                        "family": "noBackground",
                         "cc": ""
                       },
                       {
@@ -124,6 +131,7 @@
                         "content": {
                           "type": "migLayout",
                           "id": "spadesTeamPlayerStatistics",
+                          "family": "playerNames",
                           "rowConstraints": "0",
                           "colConstraints": "[300][100][100]"
                         }
@@ -169,6 +177,7 @@
                       {
                         "type": "UILabel",
                         "text": "Hearts Team",
+                        "family": "heartsTeamLabel",
                         "cc": ""
                       },
                       {
@@ -184,6 +193,7 @@
                         "content": {
                           "type": "migLayout",
                           "id": "heartsTeamPlayerStatistics",
+                          "family": "playerNames",
                           "rowConstraints": "0",
                           "colConstraints": "[300][100][100]"
                         }
@@ -226,6 +236,7 @@
               "type": "UIButton",
               "text": "Restart",
               "id": "restart",
+              "family": "UIButtons",
               "visible": false,
               "layoutInfo": {
                 "height": 30,
@@ -246,12 +257,14 @@
               "contents": [
                 {
                   "type": "UIButton",
+                  "family": "UIButtons",
                   "text": "${engine:menu#return-main-menu}",
                   "id": "mainMenu"
                 },
                 {
                   "type": "UIButton",
                   "text": "${engine:menu#exit-game}",
+                  "family": "UIButtons",
                   "id": "exitGame"
                 },
                 {
@@ -292,6 +305,7 @@
             },
             {
               "type": "UIImage",
+              "family": "overOutsideUIBox",
               "image": "LightAndShadowResources:spadesParticle",
               "layoutInfo": {
                 "width": 100,
@@ -306,6 +320,7 @@
             },
             {
               "type": "UIImage",
+              "family": "overOutsideUIBox",
               "image": "LightAndShadowResources:heartsParticle",
               "layoutInfo": {
                 "width": 100,
