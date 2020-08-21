@@ -32,11 +32,11 @@
               ],
               "layoutInfo": {
                 "position-top": {
-                  "offset": 36
+                  "offset": 20
                 },
                 "position-left": {},
                 "use-content-height": true,
-                "width": 260
+                "width": 450
               }
             },
             {
@@ -78,6 +78,7 @@
                   {
                     "type": "MigLayout",
                     "id": "titles",
+                    "family": "darkerInnerBoxElement",
                     "colConstraints": "[320][125][125][300]",
                     "layoutInfo": {
                       "cc": "cell 0 0 2 1"
@@ -85,21 +86,25 @@
                     "contents": [
                       {
                         "type": "UISpace",
+                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UILabel",
                         "text": "Kills",
+                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UILabel",
                         "text": "Deaths",
+                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UILabel",
                         "text": "Enemy Flags Captured",
+                        "family": "noBackground",
                         "cc": ""
                       }
                     ]
@@ -112,6 +117,11 @@
                     },
                     "contents": [
                       {
+                        "type": "UIImage",
+                        "image": "LightAndShadowResources:spadesIcon",
+                        "cc": "width ::5!"
+                      },
+                      {
                         "type": "UILabel",
                         "text": "Spades Team",
                         "family": "spadesTeamLabel",
@@ -123,18 +133,59 @@
                         "cc": ""
                       },
                       {
-                        "type": "ScrollableArea",
-                        "id": "gameDetailsScrollableArea",
+                        "type": "UISpace",
+                        "family": "noBackground",
+                        "cc": ""
+                      },
+                      {
+                        "type": "UISpace",
+                        "family": "noBackground",
+                        "cc": ""
+                      },
+                      {
+                        "type": "UISpace",
+                        "family": "noBackground",
+                        "cc": ""
+                      },
+                      {
+                        "type": "UISpace",
+                        "family": "noBackground",
+                        "cc": ""
+                      },
+                      {
+                        "type": "UISpace",
+                        "family": "noBackground",
+                        "cc": ""
+                      },
+                      {
+                        "type": "UISpace",
+                        "family": "noBackground",
+                        "cc": ""
+                      },
+                      {
+                        "type": "UISpace",
+                        "family": "noBackground",
+                        "cc": ""
+                      },
+                      {
+                        "type": "MigLayout",
+                        "family": "darkerInnerBoxElement",
                         "layoutInfo": {
                           "cc": "dock south"
                         },
-                        "content": {
-                          "type": "migLayout",
-                          "id": "spadesTeamPlayerStatistics",
-                          "family": "playerNames",
-                          "rowConstraints": "0",
-                          "colConstraints": "[300][100][100]"
-                        }
+                        "contents": [
+                          {
+                            "type": "ScrollableArea",
+                            "id": "gameDetailsScrollableArea",
+                            "content": {
+                              "type": "migLayout",
+                              "id": "spadesTeamPlayerStatistics",
+                              "family": "playerNames",
+                              "rowConstraints": "0",
+                              "colConstraints": "[300][100][100]"
+                            }
+                          }
+                        ]
                       }
                     ]
                   },
@@ -175,6 +226,11 @@
                     },
                     "contents": [
                       {
+                        "type": "UIImage",
+                        "image": "LightAndShadowResources:heartsIcon",
+                        "cc": "width ::5!"
+                      },
+                      {
                         "type": "UILabel",
                         "text": "Hearts Team",
                         "family": "heartsTeamLabel",
@@ -185,18 +241,65 @@
                         "cc": ""
                       },
                       {
-                        "type": "ScrollableArea",
-                        "id": "gameDetailsScrollableArea2",
+                        "type": "UISpace",
+                        "family": "noBackground",
+                        "cc": ""
+                      },
+                      {
+                        "type": "UISpace",
+                        "family": "noBackground",
+                        "cc": ""
+                      },
+                      {
+                        "type": "UISpace",
+                        "family": "noBackground",
+                        "cc": ""
+                      },
+                      {
+                        "type": "UISpace",
+                        "family": "noBackground",
+                        "cc": ""
+                      },
+                      {
+                        "type": "UISpace",
+                        "family": "noBackground",
+                        "cc": ""
+                      },
+                      {
+                        "type": "UISpace",
+                        "family": "noBackground",
+                        "cc": ""
+                      },
+                      {
+                        "type": "UISpace",
+                        "family": "noBackground",
+                        "cc": ""
+                      },
+                      {
+                        "type": "UISpace",
+                        "family": "noBackground",
+                        "cc": ""
+                      },
+                      {
+                        "type": "MigLayout",
+                        "family": "darkerInnerBoxElement",
                         "layoutInfo": {
                           "cc": "dock south"
                         },
-                        "content": {
-                          "type": "migLayout",
-                          "id": "heartsTeamPlayerStatistics",
-                          "family": "playerNames",
-                          "rowConstraints": "0",
-                          "colConstraints": "[300][100][100]"
-                        }
+                        "contents": [
+                          {
+                            "type": "ScrollableArea",
+                            "family": "darkerInnerBoxElement",
+                            "id": "gameDetailsScrollableArea2",
+                            "content": {
+                              "type": "migLayout",
+                              "id": "heartsTeamPlayerStatistics",
+                              "family": "playerNames",
+                              "rowConstraints": "0",
+                              "colConstraints": "[300][100][100]"
+                            }
+                          }
+                        ]
                       }
                     ]
                   },
