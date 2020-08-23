@@ -23,7 +23,7 @@
               "contents": [
                 {
                   "type": "UILabel",
-                  "text": "Game Over"
+                  "text": "Game Over:"
                 },
                 {
                   "type": "UILabel",
@@ -129,42 +129,34 @@
                       },
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
                         "cc": ""
                       },
                       {
@@ -408,7 +400,7 @@
             },
             {
               "type": "UIImage",
-              "family": "overOutsideUIBox",
+              "family": "noBackground",
               "image": "LightAndShadowResources:spadesParticle",
               "layoutInfo": {
                 "width": 100,
@@ -423,7 +415,7 @@
             },
             {
               "type": "UIImage",
-              "family": "overOutsideUIBox",
+              "family": "noBackground",
               "image": "LightAndShadowResources:heartsParticle",
               "layoutInfo": {
                 "width": 100,
