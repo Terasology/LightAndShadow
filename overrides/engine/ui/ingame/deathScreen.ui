@@ -6,7 +6,7 @@
     "contents": [
       {
         "type": "UIBox",
-        "family": "outsideUIBox",
+        "family": "outerUIBox",
         "layoutInfo": {
           "width": 1200,
           "height": 780,
@@ -35,7 +35,7 @@
                   "offset": 20
                 },
                 "position-left": {
-                  "offset": 10
+                  "offset": 20
                 },
                 "use-content-height": true,
                 "width": 450
@@ -44,7 +44,6 @@
             {
               "type": "UIButton",
               "text": "${engine:menu#game-settings}",
-              "family": "UIButtons",
               "id": "settings",
               "layoutInfo": {
                 "position-right": {
@@ -80,7 +79,7 @@
                   {
                     "type": "MigLayout",
                     "id": "titles",
-                    "family": "darkerInnerBoxElement",
+                    "family": "darkerBoxElement",
                     "colConstraints": "[320][125][125][300]",
                     "layoutInfo": {
                       "cc": "cell 0 0 2 1"
@@ -163,7 +162,7 @@
                       },
                       {
                         "type": "MigLayout",
-                        "family": "darkerInnerBoxElement",
+                        "family": "darkerBoxElement",
                         "layoutInfo": {
                           "cc": "dock south"
                         },
@@ -213,7 +212,6 @@
                   },
                   {
                     "type": "MigLayout",
-                    "family": "noBackground",
                     "rowConstraints": "[30][150]",
                     "layoutInfo": {
                       "cc": "cell 0 2"
@@ -268,7 +266,7 @@
                       },
                       {
                         "type": "MigLayout",
-                        "family": "darkerInnerBoxElement",
+                        "family": "darkerBoxElement",
                         "layoutInfo": {
                           "cc": "dock south"
                         },
@@ -323,7 +321,6 @@
               "type": "UIButton",
               "text": "Restart",
               "id": "restart",
-              "family": "UIButtons",
               "visible": false,
               "layoutInfo": {
                 "height": 30,
@@ -340,19 +337,16 @@
             },
             {
               "type": "RowLayout",
-              "family": "noBackground",
               "horizontalSpacing": 15,
               "contents": [
                 {
                   "type": "UIButton",
-                  "family": "UIButtons",
                   "text": "${engine:menu#return-main-menu}",
                   "id": "mainMenu"
                 },
                 {
                   "type": "UIButton",
                   "text": "${engine:menu#exit-game}",
-                  "family": "UIButtons",
                   "id": "exitGame"
                 },
                 {
