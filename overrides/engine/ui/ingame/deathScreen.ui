@@ -168,7 +168,6 @@
                         "contents": [
                           {
                             "type": "ScrollableArea",
-                            "id": "gameDetailsScrollableArea",
                             "content": {
                               "type": "migLayout",
                               "id": "spadesTeamPlayerStatistics",
@@ -212,6 +211,7 @@
                   },
                   {
                     "type": "MigLayout",
+                    "family": "noBackground",
                     "rowConstraints": "[30][150]",
                     "layoutInfo": {
                       "cc": "cell 0 2"
@@ -234,42 +234,34 @@
                       },
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
                         "cc": ""
                       },
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
                         "cc": ""
                       },
                       {
@@ -281,8 +273,6 @@
                         "contents": [
                           {
                             "type": "ScrollableArea",
-                            "family": "darkerInnerBoxElement",
-                            "id": "gameDetailsScrollableArea2",
                             "content": {
                               "type": "migLayout",
                               "id": "heartsTeamPlayerStatistics",
@@ -348,6 +338,7 @@
             },
             {
               "type": "RowLayout",
+              "family": "noBackground",
               "horizontalSpacing": 15,
               "contents": [
                 {
