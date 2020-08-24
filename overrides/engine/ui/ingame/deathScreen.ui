@@ -15,11 +15,11 @@
         },
         "content": {
           "type": "relativeLayout",
-          "family": "insideOutsideUIBox",
+          "family": "noBackground",
           "contents": [
             {
               "type": "RowLayout",
-              "family": "overOutsideUIBox",
+              "family": "gameOverInfo",
               "contents": [
                 {
                   "type": "UILabel",
@@ -34,7 +34,9 @@
                 "position-top": {
                   "offset": 20
                 },
-                "position-left": {},
+                "position-left": {
+                  "offset": 10
+                },
                 "use-content-height": true,
                 "width": 450
               }
@@ -119,7 +121,7 @@
                       {
                         "type": "UIImage",
                         "image": "LightAndShadowResources:spadesIcon",
-                        "cc": "width ::5!"
+                        "cc": ""
                       },
                       {
                         "type": "UILabel",
@@ -220,7 +222,7 @@
                       {
                         "type": "UIImage",
                         "image": "LightAndShadowResources:heartsIcon",
-                        "cc": "width ::5!"
+                        "cc": ""
                       },
                       {
                         "type": "UILabel",
@@ -292,7 +294,7 @@
                       {
                         "type": "UILabel",
                         "id": "heartsTeamScore",
-                        "text": "This is the Hearts Label",
+                        "text": "Hearts Score",
                         "layoutInfo": {
                           "cc": ""
                         }
@@ -307,7 +309,7 @@
                       {
                         "type": "UILabel",
                         "id": "heartsGoalScore",
-                        "text": "6",
+                        "text": "0",
                         "layoutInfo": {
                           "cc": ""
                         }
@@ -391,7 +393,6 @@
             },
             {
               "type": "UIImage",
-              "family": "noBackground",
               "image": "LightAndShadowResources:spadesParticle",
               "layoutInfo": {
                 "width": 100,
@@ -406,7 +407,6 @@
             },
             {
               "type": "UIImage",
-              "family": "noBackground",
               "image": "LightAndShadowResources:heartsParticle",
               "layoutInfo": {
                 "width": 100,
