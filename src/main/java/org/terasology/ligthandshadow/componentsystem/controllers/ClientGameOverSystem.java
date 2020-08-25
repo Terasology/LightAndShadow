@@ -80,8 +80,10 @@ public class ClientGameOverSystem extends BaseComponentSystem {
             if (gameOverResult != null) {
                 if (event.winningTeam.equals(localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team)) {
                     gameOverResult.setText("Victory");
+                    gameOverResult.setFamily("win");
                 } else {
                     gameOverResult.setText("Defeat");
+                    gameOverResult.setFamily("lose");
                 }
             }
         }
