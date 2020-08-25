@@ -6,7 +6,7 @@
     "contents": [
       {
         "type": "UIBox",
-        "family": "outerUIBox",
+        "family": "detailsUIBox",
         "layoutInfo": {
           "width": 1200,
           "height": 780,
@@ -15,7 +15,7 @@
         },
         "content": {
           "type": "relativeLayout",
-          "family": "noBackground",
+          "family": "outerUIBox",
           "contents": [
             {
               "type": "RowLayout",
