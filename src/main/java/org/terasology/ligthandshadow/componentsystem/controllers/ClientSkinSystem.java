@@ -32,7 +32,7 @@ import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.layers.hud.HealthHud;
-import org.terasology.rendering.nui.widgets.UIIconBar;
+import org.terasology.nui.widgets.UIIconBar;
 import org.terasology.logic.characters.VisualCharacterComponent;
 import org.terasology.rendering.logic.SkeletalMeshComponent;
 import org.terasology.utilities.Assets;

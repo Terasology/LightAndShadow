@@ -33,11 +33,11 @@ import org.terasology.logic.players.PlayerUtil;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
-import org.terasology.rendering.nui.WidgetUtil;
+import org.terasology.nui.WidgetUtil;
 import org.terasology.rendering.nui.layers.ingame.DeathScreen;
-import org.terasology.rendering.nui.layouts.miglayout.MigLayout;
-import org.terasology.rendering.nui.widgets.UIButton;
-import org.terasology.rendering.nui.widgets.UILabel;
+import org.terasology.nui.layouts.miglayout.MigLayout;
+import org.terasology.nui.widgets.UIButton;
+import org.terasology.nui.widgets.UILabel;
 
 /**
  * Displays game over screen for all clients.

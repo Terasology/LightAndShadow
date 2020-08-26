@@ -20,7 +20,7 @@ import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.ligthandshadow.componentsystem.components.ScoreComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.layers.hud.CoreHudWidget;
-import org.terasology.rendering.nui.widgets.UIText;
+import org.terasology.nui.widgets.UIText;
 
 public class ScoreHud extends CoreHudWidget {
 

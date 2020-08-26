@@ -24,10 +24,10 @@ import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
-import org.terasology.rendering.nui.ControlWidget;
+import org.terasology.nui.ControlWidget;
 import org.terasology.rendering.nui.NUIManager;
-import org.terasology.rendering.nui.databinding.ReadOnlyBinding;
-import org.terasology.rendering.nui.widgets.UILabel;
+import org.terasology.nui.databinding.ReadOnlyBinding;
+import org.terasology.nui.widgets.UILabel;
 
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientScoreSystem extends BaseComponentSystem {
