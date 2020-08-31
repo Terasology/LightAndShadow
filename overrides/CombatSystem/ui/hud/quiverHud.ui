@@ -10,7 +10,7 @@
                 "contents": [
                     {
                         "type": "UILabel",
-                        "text": "AMMO"
+                        "text": "  AMMO"
                     },
                     {
                         "type": "InventoryCell",
