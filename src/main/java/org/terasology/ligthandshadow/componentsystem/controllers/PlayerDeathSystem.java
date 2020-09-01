@@ -72,7 +72,9 @@ public class PlayerDeathSystem extends BaseComponentSystem {
         if (player.hasComponent(PlayerCharacterComponent.class)) {
             event.consume();
             String team = player.getComponent(LASTeamComponent.class).team;
-            updateStatistics(event.getInstigator(), "kills");
+            if(event.getInstigator().getComponent(PlayerStatisticsComponent.class)!=null) {
+                updateStatistics(event.getInstigator(), "kills");
+            }
             updateStatistics(player, "deaths");
             dropItemsFromInventory(player);
             player.send(new RestoreFullHealthEvent(player));
