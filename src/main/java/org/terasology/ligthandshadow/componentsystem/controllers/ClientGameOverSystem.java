@@ -92,6 +92,8 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     private void addPlayerStatisticsInfo(DeathScreen deathScreen, GameOverEvent event) {
         MigLayout spadesTeamMigLayout = deathScreen.find("spadesTeamPlayerStatistics", MigLayout.class);
         MigLayout heartsTeamMigLayout = deathScreen.find("heartsTeamPlayerStatistics", MigLayout.class);
+	spadesTeamMigLayout.removeAllWidgets();
+        heartsTeamMigLayout.removeAllWidgets();
         if (spadesTeamMigLayout != null && heartsTeamMigLayout != null) {
             Iterable<EntityRef> characters = entityManager.getEntitiesWith(PlayerCharacterComponent.class,
                     LASTeamComponent.class);
