@@ -42,5 +42,4 @@ public class PlayerStatisticsComponent implements Component {
     public void setDeaths(int deaths) {
         this.deaths = deaths;
     }
-
 }
