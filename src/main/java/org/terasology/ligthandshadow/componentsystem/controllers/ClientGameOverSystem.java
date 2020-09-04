@@ -117,8 +117,8 @@ public class ClientGameOverSystem extends BaseComponentSystem {
         migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.kills)), new MigLayout.CCHint());
         migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.deaths)), new MigLayout.CCHint("wrap"
         ));
-	playerStatisticsComponent.setKills(0);
-        playerStatisticsComponent.setDeaths(0);
+        playerStatisticsComponent.kills=0;
+        playerStatisticsComponent.deaths=0;
     }
 
     private void addFlagInfo(DeathScreen deathScreen, GameOverEvent event) {

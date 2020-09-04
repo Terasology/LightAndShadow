@@ -34,12 +34,4 @@ public class PlayerStatisticsComponent implements Component {
         this.kills = 0;
         this.deaths = 0;
     }
-
-    public void setKills(int kills) {
-        this.kills = kills;
-    }
-
-    public void setDeaths(int deaths) {
-        this.deaths = deaths;
-    }
 }
