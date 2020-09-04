@@ -15,6 +15,10 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -26,7 +30,6 @@ import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent
 import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
-import org.terasology.logic.permission.PermissionManager;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.logic.players.PlayerUtil;
@@ -50,14 +53,17 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     private LocalPlayer localPlayer;
     @In
     private EntityManager entityManager;
-    @In
-    private PermissionManager permissionManager;
+
+    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor(runnable -> {
+        Thread thread = Executors.defaultThreadFactory().newThread(runnable);
+        thread.setDaemon(true);
+        return thread;
+    });
 
     /**
      * System to show game over screen once a team achieves goal score.
      *
-     * @param event the GameOverEvent event which stores the winning team, if the user has permission for
-     *         restarting the game, and the final scores of both teams.
+     * @param event the GameOverEvent event which stores the winning team and the final scores of both teams.
      * @param entity the entity about each player connected to the game. TODO: needs more details/clarification
      */
     @ReceiveEvent
@@ -69,11 +75,10 @@ public class ClientGameOverSystem extends BaseComponentSystem {
             addFlagInfo(deathScreen, event);
             UILabel gameOverResult = deathScreen.find("gameOverResult", UILabel.class);
 
-            if (event.hasRestartPermission) {
-                UIButton restartButton = deathScreen.find("restart", UIButton.class);
-                if (restartButton != null) {
-                    restartButton.setVisible(true);
-                }
+            UIButton restartButton = deathScreen.find("restart", UIButton.class);
+            if (restartButton != null) {
+                restartButton.setVisible(false);
+                executorService.schedule(() -> restartButton.setVisible(true), 10, TimeUnit.SECONDS);
             }
 
             WidgetUtil.trySubscribe(deathScreen, "restart", widget -> triggerRestart());
