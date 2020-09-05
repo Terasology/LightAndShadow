@@ -92,6 +92,8 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     private void addPlayerStatisticsInfo(DeathScreen deathScreen, GameOverEvent event) {
         MigLayout spadesTeamMigLayout = deathScreen.find("spadesTeamPlayerStatistics", MigLayout.class);
         MigLayout heartsTeamMigLayout = deathScreen.find("heartsTeamPlayerStatistics", MigLayout.class);
+	spadesTeamMigLayout.removeAllWidgets();
+        heartsTeamMigLayout.removeAllWidgets();
         if (spadesTeamMigLayout != null && heartsTeamMigLayout != null) {
             Iterable<EntityRef> characters = entityManager.getEntitiesWith(PlayerCharacterComponent.class,
                     LASTeamComponent.class);
@@ -115,6 +117,8 @@ public class ClientGameOverSystem extends BaseComponentSystem {
         migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.kills)), new MigLayout.CCHint());
         migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.deaths)), new MigLayout.CCHint("wrap"
         ));
+        playerStatisticsComponent.kills=0;
+        playerStatisticsComponent.deaths=0;
     }
 
     private void addFlagInfo(DeathScreen deathScreen, GameOverEvent event) {
