@@ -102,12 +102,10 @@ public class ScoreSystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void onRestartRequest(RestartRequestEvent event, EntityRef clientEntity, ClientComponent clientComponent) {
-        if (permissionManager.hasPermission(clientComponent.clientInfo, LASUtils.RESTART_PERMISSION)) {
-            redScore = 0;
-            blackScore = 0;
-            sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.RED_TEAM, redScore));
-            sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.BLACK_TEAM, blackScore));
-        }
+        redScore = 0;
+        blackScore = 0;
+        sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.RED_TEAM, redScore));
+        sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.BLACK_TEAM, blackScore));
     }
 
     private void checkAndResetGameOnScore(ActivateEvent event, EntityRef entity) {
