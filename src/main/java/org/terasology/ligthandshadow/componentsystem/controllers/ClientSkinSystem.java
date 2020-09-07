@@ -15,7 +15,6 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.terasology.assets.management.AssetManager;
 import org.terasology.engine.modes.loadProcesses.AwaitedLocalCharacterSpawnEvent;
 import org.terasology.entitySystem.entity.EntityBuilder;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -25,16 +24,17 @@ import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
+import org.terasology.logic.characters.VisualCharacterComponent;
 import org.terasology.logic.characters.events.CreateVisualCharacterEvent;
 import org.terasology.logic.players.LocalPlayer;
+import org.terasology.nui.widgets.UIIconBar;
 import org.terasology.registry.In;
+import org.terasology.rendering.logic.SkeletalMeshComponent;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.layers.hud.HealthHud;
-import org.terasology.nui.widgets.UIIconBar;
-import org.terasology.logic.characters.VisualCharacterComponent;
-import org.terasology.rendering.logic.SkeletalMeshComponent;
 import org.terasology.utilities.Assets;
 
 /**
