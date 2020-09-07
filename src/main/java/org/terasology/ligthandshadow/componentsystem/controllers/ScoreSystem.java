@@ -143,9 +143,7 @@ public class ScoreSystem extends BaseComponentSystem {
         if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
             Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
             for (EntityRef client : clients) {
-                EntityRef clientInfo = client.getComponent(ClientComponent.class).clientInfo;
-                Boolean hasRestartPermission = permissionManager.hasPermission(clientInfo, LASUtils.RESTART_PERMISSION);
-                client.send(new GameOverEvent(winningTeam, hasRestartPermission, blackScore, redScore));
+                client.send(new GameOverEvent(winningTeam, blackScore, redScore));
             }
         }
     }

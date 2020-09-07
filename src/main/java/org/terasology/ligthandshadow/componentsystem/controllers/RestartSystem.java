@@ -44,7 +44,7 @@ public class RestartSystem extends BaseComponentSystem {
     NUIManager nuiManager;
 
     /**
-     * System to invoke restart. Only the host can restart the game.
+     * System to invoke restart of a game round.
      * All players' health are restored and they are transported back to their bases.
      *
      * @param event
