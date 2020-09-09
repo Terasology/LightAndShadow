@@ -1,35 +1,35 @@
 {
-    "type": "QuiverHud",
-    "skin": "LightAndShadowResources:ammoHud",
-    "contents": {
-        "type": "relativeLayout",
+  "type": "QuiverHud",
+  "skin": "LightAndShadowResources:ammoHud",
+  "contents": {
+    "type": "relativeLayout",
+    "contents": [
+      {
+        "type": "flowLayout",
+        "id": "quiver",
         "contents": [
-            {
-                "type": "flowLayout",
-                "id": "quiver",
-                "contents": [
-                    {
-                        "type": "UILabel",
-                        "text": "  AMMO"
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 0
-                    }
-                ],
-                "layoutInfo": {
-                    "width": 50,
-                    "use-content-height": true,
-                    "position-right":{
-                        "target": "RIGHT",
-                        "offset": 115
-                    },
-                    "position-bottom": {
-                        "target": "BOTTOM",
-                        "offset": 17
-                    }
-                }
-            }
-        ]
-    }
+          {
+            "type": "UILabel",
+            "text": "  AMMO"
+          },
+          {
+            "type": "InventoryCell",
+            "targetSlot": 0
+          }
+        ],
+        "layoutInfo": {
+          "width": 50,
+          "use-content-height": true,
+          "position-right": {
+            "target": "RIGHT",
+            "offset": 115
+          },
+          "position-bottom": {
+            "target": "BOTTOM",
+            "offset": 17
+          }
+        }
+      }
+    ]
+  }
 }

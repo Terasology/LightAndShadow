@@ -1,41 +1,28 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.terasology.engine.modes.loadProcesses.AwaitedLocalCharacterSpawnEvent;
-import org.terasology.entitySystem.entity.EntityBuilder;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.entity.lifecycleEvents.OnChangedComponent;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.core.modes.loadProcesses.AwaitedLocalCharacterSpawnEvent;
+import org.terasology.engine.entitySystem.entity.EntityBuilder;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.lifecycleEvents.OnChangedComponent;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.characters.VisualCharacterComponent;
+import org.terasology.engine.logic.characters.events.CreateVisualCharacterEvent;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.logic.SkeletalMeshComponent;
+import org.terasology.engine.rendering.nui.NUIManager;
+import org.terasology.engine.utilities.Assets;
 import org.terasology.gestalt.assets.management.AssetManager;
+import org.terasology.health.rendering.nui.layers.hud.HealthHud;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
-import org.terasology.logic.characters.VisualCharacterComponent;
-import org.terasology.logic.characters.events.CreateVisualCharacterEvent;
-import org.terasology.logic.players.LocalPlayer;
 import org.terasology.nui.widgets.UIIconBar;
-import org.terasology.registry.In;
-import org.terasology.rendering.logic.SkeletalMeshComponent;
-import org.terasology.rendering.nui.NUIManager;
-import org.terasology.rendering.nui.layers.hud.HealthHud;
-import org.terasology.utilities.Assets;
 
 /**
  * Handles changing players' health HUD and skin based on their teams.
@@ -51,11 +38,11 @@ public class ClientSkinSystem extends BaseComponentSystem {
 
     /**
      * Change the Health HUD when the local player is spawned based on their Light and Shadow Team.
-     * @see LASTeamComponent
      *
-     * @param event            The event that is triggered when local player has been spawned
-     * @param characterEntity  The character entity belonging to local player
+     * @param event The event that is triggered when local player has been spawned
+     * @param characterEntity The character entity belonging to local player
      * @param lasTeamComponent The Light and Shadow team component of local player
+     * @see LASTeamComponent
      */
     @ReceiveEvent
     public void onAwaitedLocalCharacterSpawnEvent(AwaitedLocalCharacterSpawnEvent event, EntityRef characterEntity,
@@ -64,15 +51,14 @@ public class ClientSkinSystem extends BaseComponentSystem {
     }
 
     /**
-     * Updates the skeletal mesh of a player when its visual character is being created.
-     * Default event handler for this event has Trivial priority. Hence, this method catches the event first
-     * and consumes it.
-     * @see CreateVisualCharacterEvent
-     * @see org.terasology.logic.characters.VisualCharacterSystem
+     * Updates the skeletal mesh of a player when its visual character is being created. Default event handler for this
+     * event has Trivial priority. Hence, this method catches the event first and consumes it.
      *
      * @param event
      * @param characterEntity
      * @param lasTeamComponent
+     * @see CreateVisualCharacterEvent
+     * @see org.terasology.logic.characters.VisualCharacterSystem
      */
     @ReceiveEvent
     public void onCreateDefaultVisualCharacter(CreateVisualCharacterEvent event, EntityRef characterEntity,
@@ -88,20 +74,23 @@ public class ClientSkinSystem extends BaseComponentSystem {
 
     /**
      * Updates the skeletal mesh of a player when its team changes.
-     * @see LASTeamComponent
      *
      * @param event
      * @param characterEntity
      * @param lasTeamComponent
+     * @see LASTeamComponent
      */
     @ReceiveEvent
-    public void onLASTeamChange(OnChangedComponent event, EntityRef characterEntity, LASTeamComponent lasTeamComponent) {
+    public void onLASTeamChange(OnChangedComponent event, EntityRef characterEntity,
+                                LASTeamComponent lasTeamComponent) {
         if (characterEntity.hasComponent(VisualCharacterComponent.class)) {
-            VisualCharacterComponent visualCharacterComponent = characterEntity.getComponent(VisualCharacterComponent.class);
+            VisualCharacterComponent visualCharacterComponent =
+                    characterEntity.getComponent(VisualCharacterComponent.class);
             EntityRef visualCharacter = visualCharacterComponent.visualCharacter;
             if (visualCharacter != EntityRef.NULL && visualCharacter.hasComponent(SkeletalMeshComponent.class)) {
                 SkeletalMeshComponent skeletalMeshComponent = visualCharacter.getComponent(SkeletalMeshComponent.class);
-                skeletalMeshComponent.material = Assets.getMaterial(LASUtils.getPlayerSkin(lasTeamComponent.team)).get();
+                skeletalMeshComponent.material =
+                        Assets.getMaterial(LASUtils.getPlayerSkin(lasTeamComponent.team)).get();
                 visualCharacter.saveComponent(skeletalMeshComponent);
             }
         }

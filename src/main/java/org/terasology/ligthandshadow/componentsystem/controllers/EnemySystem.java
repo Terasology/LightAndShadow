@@ -1,35 +1,22 @@
-/*
- * Copyright 2015 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.entity.lifecycleEvents.BeforeRemoveComponent;
-import org.terasology.entitySystem.entity.lifecycleEvents.OnActivatedComponent;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.lifecycleEvents.BeforeRemoveComponent;
+import org.terasology.engine.entitySystem.entity.lifecycleEvents.OnActivatedComponent;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.logic.characters.events.OnEnterBlockEvent;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.registry.CoreRegistry;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
-import org.terasology.logic.characters.events.OnEnterBlockEvent;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.minion.work.WorkTargetComponent;
-import org.terasology.registry.CoreRegistry;
 
 import java.util.Map;
 import java.util.Set;
@@ -40,9 +27,9 @@ import java.util.Set;
 //@RegisterSystem
 public class EnemySystem extends BaseComponentSystem {
     public static final Logger logger = LoggerFactory.getLogger(EnemySystem.class);
-    private Map<String, Set<EntityRef>> teams = Maps.newHashMap();
-    private Set<EntityRef> entities = Sets.newHashSet();
-    private Map<EntityRef, Set<Distance>> distances = Maps.newHashMap();
+    private final Map<String, Set<EntityRef>> teams = Maps.newHashMap();
+    private final Set<EntityRef> entities = Sets.newHashSet();
+    private final Map<EntityRef, Set<Distance>> distances = Maps.newHashMap();
 
     public EnemySystem() {
         CoreRegistry.put(EnemySystem.class, this);
@@ -53,7 +40,8 @@ public class EnemySystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void onActivated(OnActivatedComponent event, EntityRef entityRef, LASTeamComponent team, LocationComponent locationComponent) {
+    public void onActivated(OnActivatedComponent event, EntityRef entityRef, LASTeamComponent team,
+                            LocationComponent locationComponent) {
         Set<EntityRef> teamEntities = teams.get(team.team);
         if (teamEntities == null) {
             teamEntities = Sets.newHashSet();
@@ -68,7 +56,8 @@ public class EnemySystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void onRemoved(BeforeRemoveComponent event, EntityRef entityRef, LASTeamComponent team, LocationComponent locationComponent, WorkTargetComponent jobTargetComponent) {
+    public void onRemoved(BeforeRemoveComponent event, EntityRef entityRef, LASTeamComponent team,
+                          LocationComponent locationComponent, WorkTargetComponent jobTargetComponent) {
         entities.remove(entityRef);
         Set<EntityRef> map = teams.get(team.team);
         map.remove(entityRef);

@@ -5,16 +5,16 @@ package org.terasology.las;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
-import org.terasology.core.world.generator.facets.FloraFacet;
-import org.terasology.core.world.generator.rasterizers.FloraRasterizer;
-import org.terasology.core.world.generator.rasterizers.FloraType;
+import org.terasology.coreworlds.generator.facets.FloraFacet;
+import org.terasology.coreworlds.generator.rasterizers.FloraRasterizer;
+import org.terasology.coreworlds.generator.rasterizers.FloraType;
+import org.terasology.engine.registry.CoreRegistry;
+import org.terasology.engine.utilities.procedural.WhiteNoise;
+import org.terasology.engine.world.block.Block;
+import org.terasology.engine.world.block.BlockManager;
+import org.terasology.engine.world.chunks.CoreChunk;
+import org.terasology.engine.world.generation.Region;
 import org.terasology.math.geom.BaseVector3i;
-import org.terasology.registry.CoreRegistry;
-import org.terasology.utilities.procedural.WhiteNoise;
-import org.terasology.world.block.Block;
-import org.terasology.world.block.BlockManager;
-import org.terasology.world.chunks.CoreChunk;
-import org.terasology.world.generation.Region;
 
 import java.util.List;
 import java.util.Map;
@@ -28,12 +28,12 @@ public class LaSFloraRasterizer extends FloraRasterizer {
         BlockManager blockManager = CoreRegistry.get(BlockManager.class);
         air = blockManager.getBlock(BlockManager.AIR_ID);
 
-        flora.put(FloraType.GRASS, ImmutableList.<Block>of(
+        flora.put(FloraType.GRASS, ImmutableList.of(
                 blockManager.getBlock("core:TallGrass1"),
                 blockManager.getBlock("core:TallGrass2"),
                 blockManager.getBlock("core:TallGrass3")));
 
-        flora.put(FloraType.FLOWER, ImmutableList.<Block>of(
+        flora.put(FloraType.FLOWER, ImmutableList.of(
                 blockManager.getBlock("lightAndShadowResources:spadesCropSapling"),
                 blockManager.getBlock("lightAndShadowResources:heartsCropSapling"),
                 blockManager.getBlock("lightAndShadowResources:diamondsCropSapling"),
@@ -41,7 +41,7 @@ public class LaSFloraRasterizer extends FloraRasterizer {
                 blockManager.getBlock("lightAndShadowResources:unclaimedCropSapling")));
 
 
-        flora.put(FloraType.MUSHROOM, ImmutableList.<Block>of(
+        flora.put(FloraType.MUSHROOM, ImmutableList.of(
                 blockManager.getBlock("core:BigBrownShroom"),
                 blockManager.getBlock("core:BrownShroom"),
                 blockManager.getBlock("core:RedShroom")));

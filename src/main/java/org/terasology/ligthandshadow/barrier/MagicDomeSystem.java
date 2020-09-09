@@ -1,39 +1,26 @@
-/*
- * Copyright 2016 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.barrier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.audio.events.PlaySoundEvent;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.engine.audio.events.PlaySoundEvent;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.engine.logic.characters.CharacterImpulseEvent;
+import org.terasology.engine.logic.characters.CharacterMoveInputEvent;
+import org.terasology.engine.logic.console.commandSystem.annotations.Command;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.utilities.random.FastRandom;
+import org.terasology.engine.world.RelevanceRegionComponent;
 import org.terasology.itemRendering.components.AnimateRotationComponent;
-import org.terasology.logic.characters.CharacterImpulseEvent;
-import org.terasology.logic.characters.CharacterMoveInputEvent;
-import org.terasology.logic.console.commandSystem.annotations.Command;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.TeraMath;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.registry.In;
-import org.terasology.utilities.random.FastRandom;
-import org.terasology.world.RelevanceRegionComponent;
 
 @RegisterSystem
 public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscriberSystem {
@@ -41,21 +28,20 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
     private static final Logger logger = LoggerFactory.getLogger(MagicDomeSystem.class);
 
     private static final int WORLD_RADIUS = 500;
-
+    private final Vector3f lastPos = Vector3f.zero();
+    private final FastRandom random = new FastRandom();
     @In
     private EntityManager entityManager;
-
-    private Vector3f lastPos = Vector3f.zero();
     private EntityRef magicDomeEntity = EntityRef.NULL;
     private float updateDelta;
-    private FastRandom random = new FastRandom();
 
     @Override
     public void postBegin() {
         //toggleDome();
     }
 
-    @Command(shortDescription = "Activate/Deactivate dome barrier", helpText = "Activates or deactivates the dome barrier around the world", runOnServer = true)
+    @Command(shortDescription = "Activate/Deactivate dome barrier", helpText = "Activates or deactivates the dome " +
+            "barrier around the world", runOnServer = true)
     public String dome() {
         toggleDome();
         return "Toggled dome.";
@@ -98,7 +84,8 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
             MagicDome dome = domeEntity.getComponent(MagicDome.class);
 
             if (deltaDistance > 0.2f) {
-//                logger.info("CharacerMoveInputEvent: position: {} - distance from O: {}, delta: {}", pos, distance, deltaDistance);
+//                logger.info("CharacerMoveInputEvent: position: {} - distance from O: {}, delta: {}", pos, distance,
+//                deltaDistance);
 
                 if (lastPos.length() < WORLD_RADIUS && lastPos.length() < pos.length() && distance > WORLD_RADIUS) {
 //                    logger.info("Sending player back inside!");
@@ -113,7 +100,8 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
                 if (lastPos.length() > WORLD_RADIUS && lastPos.length() > pos.length() && distance < WORLD_RADIUS) {
 //                    logger.info("Sending player back outside");
                     Vector3f impulse = pos.normalize();
-                    float verticalDiff = TeraMath.sqrt(TeraMath.fastAbs(TeraMath.sqr(lastPos.getY()) - TeraMath.sqr(domeVerticalTop.getY())));
+                    float verticalDiff =
+                            TeraMath.sqrt(TeraMath.fastAbs(TeraMath.sqr(lastPos.getY()) - TeraMath.sqr(domeVerticalTop.getY())));
                     float impulseY = (TeraMath.fastAbs(verticalDiff) / (float) WORLD_RADIUS) * 3f;
 
                     impulse.set(impulse.scale(64)).addY(impulseY);
@@ -134,9 +122,12 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
             for (EntityRef entity : entityManager.getEntitiesWith(MagicDome.class, AnimateRotationComponent.class)) {
                 AnimateRotationComponent rotationComponent = entity.getComponent(AnimateRotationComponent.class);
 
-                rotationComponent.yawSpeed = TeraMath.clamp(rotationComponent.yawSpeed + random.nextFloat(-0.01f, 0.01f), -0.01f, 0.01f);
-                rotationComponent.pitchSpeed = TeraMath.clamp(rotationComponent.pitchSpeed + random.nextFloat(-0.01f, 0.01f), -0.01f, 0.01f);
-                rotationComponent.rollSpeed = TeraMath.clamp(rotationComponent.rollSpeed + random.nextFloat(-0.01f, 0.01f), -0.01f, 0.01f);
+                rotationComponent.yawSpeed = TeraMath.clamp(rotationComponent.yawSpeed + random.nextFloat(-0.01f,
+                        0.01f), -0.01f, 0.01f);
+                rotationComponent.pitchSpeed = TeraMath.clamp(rotationComponent.pitchSpeed + random.nextFloat(-0.01f,
+                        0.01f), -0.01f, 0.01f);
+                rotationComponent.rollSpeed = TeraMath.clamp(rotationComponent.rollSpeed + random.nextFloat(-0.01f,
+                        0.01f), -0.01f, 0.01f);
 
                 entity.saveComponent(rotationComponent);
             }

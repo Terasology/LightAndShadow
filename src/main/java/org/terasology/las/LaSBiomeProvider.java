@@ -3,13 +3,13 @@
 
 package org.terasology.las;
 
-import org.terasology.core.world.CoreBiome;
-import org.terasology.core.world.generator.facets.BiomeFacet;
+import org.terasology.coreworlds.CoreBiome;
+import org.terasology.coreworlds.generator.facets.BiomeFacet;
+import org.terasology.engine.world.generation.Border3D;
+import org.terasology.engine.world.generation.FacetProvider;
+import org.terasology.engine.world.generation.GeneratingRegion;
+import org.terasology.engine.world.generation.Produces;
 import org.terasology.math.geom.BaseVector2i;
-import org.terasology.world.generation.Border3D;
-import org.terasology.world.generation.FacetProvider;
-import org.terasology.world.generation.GeneratingRegion;
-import org.terasology.world.generation.Produces;
 
 @Produces(BiomeFacet.class)
 public class LaSBiomeProvider implements FacetProvider {

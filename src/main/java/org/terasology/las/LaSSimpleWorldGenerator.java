@@ -2,37 +2,36 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.las;
 
-import org.terasology.core.world.generator.facetProviders.DefaultFloraProvider;
-import org.terasology.core.world.generator.facetProviders.DefaultTreeProvider;
-import org.terasology.core.world.generator.facetProviders.SeaLevelProvider;
-import org.terasology.core.world.generator.facetProviders.SimplexHumidityProvider;
-import org.terasology.core.world.generator.facetProviders.SimplexSurfaceTemperatureProvider;
-import org.terasology.core.world.generator.facetProviders.SurfaceToDensityProvider;
-import org.terasology.core.world.generator.rasterizers.SolidRasterizer;
-import org.terasology.core.world.generator.rasterizers.TreeRasterizer;
-import org.terasology.engine.SimpleUri;
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.coreworlds.generator.facetProviders.DefaultFloraProvider;
+import org.terasology.coreworlds.generator.facetProviders.DefaultTreeProvider;
+import org.terasology.coreworlds.generator.facetProviders.SeaLevelProvider;
+import org.terasology.coreworlds.generator.facetProviders.SimplexHumidityProvider;
+import org.terasology.coreworlds.generator.facetProviders.SimplexSurfaceTemperatureProvider;
+import org.terasology.coreworlds.generator.facetProviders.SurfaceToDensityProvider;
+import org.terasology.coreworlds.generator.rasterizers.SolidRasterizer;
+import org.terasology.coreworlds.generator.rasterizers.TreeRasterizer;
+import org.terasology.engine.core.SimpleUri;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.logic.spawner.Spawner;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.world.block.BlockManager;
+import org.terasology.engine.world.generation.BaseFacetedWorldGenerator;
+import org.terasology.engine.world.generation.WorldBuilder;
+import org.terasology.engine.world.generator.RegisterWorldGenerator;
+import org.terasology.engine.world.generator.plugin.WorldGeneratorPluginLibrary;
 import org.terasology.las.bases.BaseProvider;
 import org.terasology.las.bases.BaseRasterizer;
 import org.terasology.las.platform.FloatingPlatformProvider;
 import org.terasology.las.platform.FloatingPlatformRasterizer;
-import org.terasology.logic.spawner.Spawner;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.registry.In;
-import org.terasology.world.block.BlockManager;
-import org.terasology.world.generation.BaseFacetedWorldGenerator;
-import org.terasology.world.generation.WorldBuilder;
-import org.terasology.world.generator.RegisterWorldGenerator;
-import org.terasology.world.generator.plugin.WorldGeneratorPluginLibrary;
 
 @RegisterWorldGenerator(id = "lasWorld", displayName = "A World of Light And Shadow")
 public class LaSSimpleWorldGenerator extends BaseFacetedWorldGenerator {
+    private final Spawner spawner = new LaSSpawner();
     @In
     private WorldGeneratorPluginLibrary worldGeneratorPluginLibrary;
     @In
     private BlockManager blockManager;
-
-    private final Spawner spawner = new LaSSpawner();
 
     public LaSSimpleWorldGenerator(SimpleUri uri) {
         super(uri);

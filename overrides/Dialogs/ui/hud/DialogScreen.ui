@@ -1,88 +1,91 @@
 {
-    "type": "Dialogs:DialogScreen",
-    "skin": "LightAndShadowResources:DialogScreen",
-    "contents": {
-        "type": "RowLayout",
+  "type": "Dialogs:DialogScreen",
+  "skin": "LightAndShadowResources:DialogScreen",
+  "contents": {
+    "type": "RowLayout",
+    "contents": [
+      {
+        "type": "RelativeLayout",
         "contents": [
-            {
-                "type": "RelativeLayout",
-                "contents": [
-                    {
-                        "type": "UIBox",
-                        "id": "box",
-                        "layoutInfo": {
-                            "width": 600,
-                            "height": 200,
-                            "position-bottom": {
-                                "offset": 50
-                            },
-                            "position-left": {
-                                "offset": 10
-                            }
-                        },
-                        "content": {
-                            "type": "ColumnLayout",
-                            "columns": 2,
-                            "column-widths": [0.24, 0.76],
-                            "layoutInfo": {
-                                "use-content-height": true,
-                                "position-top": {
-                                    "target": "TOP",
-                                    "widget": "box"
-                                }
-                            },
-                            "contents": [
-                                {
-                                    "type": "UIImage",
-                                    "image": "LightAndShadowResources:fool-mini-image",
-                                    "id": "dialogueImage"
-                                },
-                                {
-                                    "type": "ScrollableArea",
-                                    "id": "mainContent",
-                                    "content": {
-                                        "type": "BrowserWidget",
-                                        "id": "browser"
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        "type": "ColumnLayout",
-                        "id": "responseImage",
-                        "layoutInfo": {
-                            "use-content-width": true,
-                            "use-content-height": true,
-                            "position-top": {
-                                "target": "TOP",
-                                "widget": "box"
-                            },
-                            "position-left": {
-                                "target": "RIGHT",
-                                "widget": "box",
-                                "offset": 5
-                            }
-                        }
-                    },
-                    {
-                        "type": "ColumnLayout",
-                        "id": "responseButtons",
-                        "layoutInfo": {
-                            "use-content-width": true,
-                            "position-top": {
-                                "target": "TOP",
-                                "widget": "box"
-                            },
-                            "position-left": {
-                                "target": "RIGHT",
-                                "widget": "responseImage",
-                                "offset": 5
-                            }
-                        }
-                    }
-                ]
+          {
+            "type": "UIBox",
+            "id": "box",
+            "layoutInfo": {
+              "width": 600,
+              "height": 200,
+              "position-bottom": {
+                "offset": 50
+              },
+              "position-left": {
+                "offset": 10
+              }
+            },
+            "content": {
+              "type": "ColumnLayout",
+              "columns": 2,
+              "column-widths": [
+                0.24,
+                0.76
+              ],
+              "layoutInfo": {
+                "use-content-height": true,
+                "position-top": {
+                  "target": "TOP",
+                  "widget": "box"
+                }
+              },
+              "contents": [
+                {
+                  "type": "UIImage",
+                  "image": "LightAndShadowResources:fool-mini-image",
+                  "id": "dialogueImage"
+                },
+                {
+                  "type": "ScrollableArea",
+                  "id": "mainContent",
+                  "content": {
+                    "type": "BrowserWidget",
+                    "id": "browser"
+                  }
+                }
+              ]
             }
+          },
+          {
+            "type": "ColumnLayout",
+            "id": "responseImage",
+            "layoutInfo": {
+              "use-content-width": true,
+              "use-content-height": true,
+              "position-top": {
+                "target": "TOP",
+                "widget": "box"
+              },
+              "position-left": {
+                "target": "RIGHT",
+                "widget": "box",
+                "offset": 5
+              }
+            }
+          },
+          {
+            "type": "ColumnLayout",
+            "id": "responseButtons",
+            "layoutInfo": {
+              "use-content-width": true,
+              "position-top": {
+                "target": "TOP",
+                "widget": "box"
+              },
+              "position-left": {
+                "target": "RIGHT",
+                "widget": "responseImage",
+                "offset": 5
+              }
+            }
+          }
         ]
-    }
+      }
+    ]
+  }
 }

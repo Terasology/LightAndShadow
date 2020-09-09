@@ -2,15 +2,15 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.las.yinyang;
 
-import org.terasology.math.ChunkMath;
+import org.terasology.engine.math.ChunkMath;
+import org.terasology.engine.registry.CoreRegistry;
+import org.terasology.engine.world.block.Block;
+import org.terasology.engine.world.block.BlockManager;
+import org.terasology.engine.world.chunks.CoreChunk;
+import org.terasology.engine.world.generation.Region;
+import org.terasology.engine.world.generation.WorldRasterizerPlugin;
+import org.terasology.engine.world.generator.plugin.RegisterPlugin;
 import org.terasology.math.geom.Vector3i;
-import org.terasology.registry.CoreRegistry;
-import org.terasology.world.block.Block;
-import org.terasology.world.block.BlockManager;
-import org.terasology.world.chunks.CoreChunk;
-import org.terasology.world.generation.Region;
-import org.terasology.world.generation.WorldRasterizerPlugin;
-import org.terasology.world.generator.plugin.RegisterPlugin;
 
 import java.util.Collection;
 import java.util.Map;
@@ -28,6 +28,50 @@ public class YinYangRasterizer implements WorldRasterizerPlugin {
     private Block blackStone;
     private Block redStone;
     private Block air;
+
+    public static boolean circle(
+            int x,
+            int y,
+            int c,
+            int r
+    ) {
+        return
+                (r * r) >= ((x / 2) * x) + ((y - c) * y);
+    }
+
+    public static String pixel(int x, int y, int r) {
+        return Stream.<Map<BooleanSupplier, Supplier<String>>>of(
+                singletonMap(
+                        () -> circle(x, y, -r / 2, r / 6),
+                        () -> "LightAndShadowResources:blackfloorblock"
+                ),
+                singletonMap(
+                        () -> circle(x, y, r / 2, r / 6),
+                        () -> "LightAndShadowResources:redfloorblock"
+                ),
+                singletonMap(
+                        () -> circle(x, y, -r / 2, r / 2),
+                        () -> "LightAndShadowResources:redfloorblock"
+                ),
+                singletonMap(
+                        () -> circle(x, y, r / 2, r / 2),
+                        () -> "LightAndShadowResources:blackfloorblock"
+                ),
+                singletonMap(
+                        () -> circle(x, y, 0, r),
+                        () -> x < 0 ? "LightAndShadowResources:redfloorblock" : "LightAndShadowResources" +
+                                ":blackfloorblock"
+                )
+        )
+                .sequential()
+                .map(Map::entrySet)
+                .flatMap(Collection::stream)
+                .filter(e -> e.getKey().getAsBoolean())
+                .map(Map.Entry::getValue)
+                .map(Supplier::get)
+                .findAny()
+                .orElse("engine:air");
+    }
 
     @Override
     public void initialize() {
@@ -65,48 +109,5 @@ public class YinYangRasterizer implements WorldRasterizerPlugin {
             return redStone;
         }
         return air;
-    }
-
-    public static boolean circle(
-            int x,
-            int y,
-            int c,
-            int r
-    ) {
-        return
-                (r * r) >= ((x / 2) * x) + ((y - c) * y);
-    }
-
-    public static String pixel(int x, int y, int r) {
-        return Stream.<Map<BooleanSupplier, Supplier<String>>>of(
-                singletonMap(
-                        () -> circle(x, y, -r / 2, r / 6),
-                        () -> "LightAndShadowResources:blackfloorblock"
-                ),
-                singletonMap(
-                        () -> circle(x, y, r / 2, r / 6),
-                        () -> "LightAndShadowResources:redfloorblock"
-                ),
-                singletonMap(
-                        () -> circle(x, y, -r / 2, r / 2),
-                        () -> "LightAndShadowResources:redfloorblock"
-                ),
-                singletonMap(
-                        () -> circle(x, y, r / 2, r / 2),
-                        () -> "LightAndShadowResources:blackfloorblock"
-                ),
-                singletonMap(
-                        () -> circle(x, y, 0, r),
-                        () -> x < 0 ? "LightAndShadowResources:redfloorblock" : "LightAndShadowResources:blackfloorblock"
-                )
-        )
-                .sequential()
-                .map(Map::entrySet)
-                .flatMap(Collection::stream)
-                .filter(e -> e.getKey().getAsBoolean())
-                .map(Map.Entry::getValue)
-                .map(Supplier::get)
-                .findAny()
-                .orElse("engine:air");
     }
 }

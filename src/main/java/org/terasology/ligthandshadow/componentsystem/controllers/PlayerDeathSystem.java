@@ -1,43 +1,30 @@
-/*
- * Copyright 2019 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.EventPriority;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.characters.AliveCharacterComponent;
+import org.terasology.engine.logic.characters.CharacterComponent;
+import org.terasology.engine.logic.characters.CharacterTeleportEvent;
+import org.terasology.engine.logic.destruction.BeforeDestroyEvent;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.logic.players.PlayerCharacterComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.world.WorldProvider;
+import org.terasology.engine.world.block.BlockManager;
 import org.terasology.gestalt.assets.management.AssetManager;
+import org.terasology.health.logic.event.RestoreFullHealthEvent;
+import org.terasology.inventory.logic.InventoryManager;
+import org.terasology.inventory.logic.events.DropItemRequest;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
-import org.terasology.logic.characters.AliveCharacterComponent;
-import org.terasology.logic.characters.CharacterComponent;
-import org.terasology.logic.characters.CharacterTeleportEvent;
-import org.terasology.logic.health.BeforeDestroyEvent;
-import org.terasology.logic.health.event.RestoreFullHealthEvent;
-import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.logic.inventory.events.DropItemRequest;
-import org.terasology.logic.location.LocationComponent;
-import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.registry.In;
-import org.terasology.world.WorldProvider;
-import org.terasology.world.block.BlockManager;
 
 
 /**
@@ -58,9 +45,9 @@ public class PlayerDeathSystem extends BaseComponentSystem {
     private BlockManager blockManager;
 
     /**
-     * Empty the inventory and send player player back to its base with refilled health.
-     * This is a high priority method, hence it receives the event first and consumes it.
-     * This prevents the destruction of player entity and prevents the deathScreen from showing up.
+     * Empty the inventory and send player player back to its base with refilled health. This is a high priority method,
+     * hence it receives the event first and consumes it. This prevents the destruction of player entity and prevents
+     * the deathScreen from showing up.
      *
      * @param event
      * @param player
@@ -68,7 +55,8 @@ public class PlayerDeathSystem extends BaseComponentSystem {
      * @param aliveCharacterComponent
      */
     @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
-    public void beforeDestroy(BeforeDestroyEvent event, EntityRef player, CharacterComponent characterComponent, AliveCharacterComponent aliveCharacterComponent) {
+    public void beforeDestroy(BeforeDestroyEvent event, EntityRef player, CharacterComponent characterComponent,
+                              AliveCharacterComponent aliveCharacterComponent) {
         if (player.hasComponent(PlayerCharacterComponent.class)) {
             event.consume();
             String team = player.getComponent(LASTeamComponent.class).team;

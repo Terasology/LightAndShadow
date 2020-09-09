@@ -1,3 +1,6 @@
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
+
 /*
  * Copyright 2012 Benjamin Glatzel <benjamin.glatzel@me.com>
  *
@@ -16,9 +19,9 @@
 
 package org.terasology.ligthandshadow.logic;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.world.block.family.BlockFamily;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.world.block.family.BlockFamily;
 
 /**
  * This is the component class for playing cards, which are constructed of a top and a bottom block.
