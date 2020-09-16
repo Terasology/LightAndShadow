@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.behaviors.minion.work.WorkTargetComponent;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.entity.lifecycleEvents.BeforeRemoveComponent;
 import org.terasology.engine.entitySystem.entity.lifecycleEvents.OnActivatedComponent;
@@ -16,7 +17,6 @@ import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.registry.CoreRegistry;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.math.geom.Vector3f;
-import org.terasology.minion.work.WorkTargetComponent;
 
 import java.util.Map;
 import java.util.Set;

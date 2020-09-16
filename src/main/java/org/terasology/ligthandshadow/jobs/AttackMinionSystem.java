@@ -3,15 +3,15 @@
 package org.terasology.ligthandshadow.jobs;
 
 import com.google.common.collect.Lists;
+import org.terasology.behaviors.minion.work.Work;
+import org.terasology.behaviors.minion.work.WorkFactory;
 import org.terasology.engine.core.SimpleUri;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.registry.In;
-import org.terasology.minion.work.Work;
-import org.terasology.minion.work.WorkFactory;
-import org.terasology.navgraph.WalkableBlock;
 import org.terasology.pathfinding.componentSystem.PathfinderSystem;
+import org.terasology.pathfinding.navgraph.WalkableBlock;
 
 import java.util.List;
 
