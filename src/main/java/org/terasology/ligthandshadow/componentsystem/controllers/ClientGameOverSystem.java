@@ -87,8 +87,10 @@ public class ClientGameOverSystem extends BaseComponentSystem {
                     int timePeriod = 10;
                     public void run() {
                         countDown.setText(Integer.toString(timePeriod--));
-                        if (timePeriod < 0)
+                        if (timePeriod < 0) {
+                            countDown.setText(" ");
                             timer.cancel();
+                        }
                     }
                 }, 0, 1000);
                 restartButton.setVisible(true);
