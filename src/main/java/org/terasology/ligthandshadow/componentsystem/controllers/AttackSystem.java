@@ -39,6 +39,7 @@ import org.terasology.logic.inventory.events.DropItemRequest;
 import org.terasology.logic.inventory.events.InventorySlotChangedEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerCharacterComponent;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
@@ -102,7 +103,7 @@ public class AttackSystem extends BaseComponentSystem {
         Vector3f newPosition = new Vector3f((startPosition.x + endPosition.x) / 2,
                 (startPosition.y + endPosition.y) / 2,
                 (startPosition.z + endPosition.z) / 2);
-        targetPlayer.send(new DropItemRequest(flagSlot, targetPlayer, newPosition, startPosition));
+        targetPlayer.send(new DropItemRequest(flagSlot, targetPlayer, JomlUtil.from(newPosition), JomlUtil.from(startPosition)));
     }
 
     private boolean canPlayerAttack(EntityRef attackingPlayer) {
