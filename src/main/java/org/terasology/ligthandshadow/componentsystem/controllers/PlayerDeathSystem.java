@@ -34,6 +34,7 @@ import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.inventory.events.DropItemRequest;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerCharacterComponent;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 import org.terasology.world.WorldProvider;
@@ -90,7 +91,7 @@ public class PlayerDeathSystem extends BaseComponentSystem {
             Prefab currentPrefab = slot.getParentPrefab();
             if (currentPrefab != null && !currentPrefab.equals(staffPrefab)) {
                 int count = inventoryManager.getStackSize(slot);
-                player.send(new DropItemRequest(slot, player, impulse, deathPosition, count));
+                player.send(new DropItemRequest(slot, player, JomlUtil.from(impulse), JomlUtil.from(deathPosition), count));
             }
         }
     }

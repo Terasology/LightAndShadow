@@ -16,6 +16,8 @@
 
 package org.terasology.las.platform;
 
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
 import org.terasology.entitySystem.entity.EntityStore;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
@@ -42,10 +44,13 @@ public class GuidanceNpcProvider implements EntityProviderPlugin {
 
             Prefab chooseFactionNpc = Assets.getPrefab("LightAndShadow:MagicFool").get();
             EntityStore entity = new EntityStore(chooseFactionNpc);
-            entity.addComponent(new LocationComponent(new Vector3f(
-                    0,
-                    LASUtils.FLOATING_PLATFORM_HEIGHT_LEVEL + 1,
-                    LASUtils.FLOATING_PLATFORM_POSITION.z + LASUtils.NPC_OFFSET)));
+
+            LocationComponent locationComponent = new LocationComponent(new Vector3f(
+                0,
+                LASUtils.FLOATING_PLATFORM_HEIGHT_LEVEL + 1,
+                LASUtils.FLOATING_PLATFORM_POSITION.z + LASUtils.NPC_OFFSET));
+            locationComponent.setLocalRotation(new Quaternionf(new AxisAngle4f((float) (Math.PI),0,1,0)));
+            entity.addComponent(locationComponent);
             buffer.enqueue(entity);
 
             Prefab beaconMark = Assets.getPrefab("BeaconMark").get();
