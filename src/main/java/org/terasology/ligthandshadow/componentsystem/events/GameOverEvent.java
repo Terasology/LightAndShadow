@@ -24,16 +24,14 @@ import org.terasology.network.OwnerEvent;
 @OwnerEvent
 public class GameOverEvent implements Event {
     public String winningTeam;
-    public Boolean hasRestartPermission;
     public int blackTeamScore;
     public int redTeamScore;
 
     public GameOverEvent() {
     }
 
-    public GameOverEvent(String winningTeam, Boolean hasRestartPermission, int blackTeamScore, int redTeamScore) {
+    public GameOverEvent(String winningTeam, int blackTeamScore, int redTeamScore) {
         this.winningTeam = winningTeam;
-        this.hasRestartPermission = hasRestartPermission;
         this.blackTeamScore = blackTeamScore;
         this.redTeamScore = redTeamScore;
     }

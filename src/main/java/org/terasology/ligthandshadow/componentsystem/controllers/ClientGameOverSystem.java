@@ -15,6 +15,12 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -26,7 +32,6 @@ import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent
 import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
-import org.terasology.logic.permission.PermissionManager;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.logic.players.PlayerUtil;
@@ -50,14 +55,19 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     private LocalPlayer localPlayer;
     @In
     private EntityManager entityManager;
-    @In
-    private PermissionManager permissionManager;
+
+    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor(runnable -> {
+        Thread thread = Executors.defaultThreadFactory().newThread(runnable);
+        thread.setDaemon(true);
+        return thread;
+    });
+
+    private static Timer timer;
 
     /**
      * System to show game over screen once a team achieves goal score.
      *
-     * @param event the GameOverEvent event which stores the winning team, if the user has permission for
-     *         restarting the game, and the final scores of both teams.
+     * @param event the GameOverEvent event which stores the winning team and the final scores of both teams.
      * @param entity the entity about each player connected to the game. TODO: needs more details/clarification
      */
     @ReceiveEvent
@@ -69,11 +79,23 @@ public class ClientGameOverSystem extends BaseComponentSystem {
             addFlagInfo(deathScreen, event);
             UILabel gameOverResult = deathScreen.find("gameOverResult", UILabel.class);
 
-            if (event.hasRestartPermission) {
-                UIButton restartButton = deathScreen.find("restart", UIButton.class);
-                if (restartButton != null) {
-                    restartButton.setVisible(true);
-                }
+            UIButton restartButton = deathScreen.find("restart", UIButton.class);
+            UILabel countDown = deathScreen.find("timer", UILabel.class);
+            if (restartButton != null && countDown != null) {
+                timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    int timePeriod = 10;
+                    public void run() {
+                        countDown.setText(Integer.toString(timePeriod--));
+                        if (timePeriod < 0) {
+                            countDown.setText(" ");
+                            timer.cancel();
+                        }
+                    }
+                }, 0, 1000);
+                restartButton.setVisible(true);
+                restartButton.setEnabled(false);
+                executorService.schedule(() -> restartButton.setEnabled(true), 10, TimeUnit.SECONDS);
             }
 
             WidgetUtil.trySubscribe(deathScreen, "restart", widget -> triggerRestart());
@@ -92,6 +114,8 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     private void addPlayerStatisticsInfo(DeathScreen deathScreen, GameOverEvent event) {
         MigLayout spadesTeamMigLayout = deathScreen.find("spadesTeamPlayerStatistics", MigLayout.class);
         MigLayout heartsTeamMigLayout = deathScreen.find("heartsTeamPlayerStatistics", MigLayout.class);
+        spadesTeamMigLayout.removeAllWidgets();
+        heartsTeamMigLayout.removeAllWidgets();
         if (spadesTeamMigLayout != null && heartsTeamMigLayout != null) {
             Iterable<EntityRef> characters = entityManager.getEntitiesWith(PlayerCharacterComponent.class,
                     LASTeamComponent.class);
@@ -115,6 +139,8 @@ public class ClientGameOverSystem extends BaseComponentSystem {
         migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.kills)), new MigLayout.CCHint());
         migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.deaths)), new MigLayout.CCHint("wrap"
         ));
+        playerStatisticsComponent.kills = 0;
+        playerStatisticsComponent.deaths = 0;
     }
 
     private void addFlagInfo(DeathScreen deathScreen, GameOverEvent event) {

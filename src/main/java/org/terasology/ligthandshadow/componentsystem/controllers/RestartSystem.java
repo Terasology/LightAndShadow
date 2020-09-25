@@ -27,7 +27,6 @@ import org.terasology.ligthandshadow.componentsystem.events.ClientRestartEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.health.event.RestoreFullHealthEvent;
-import org.terasology.logic.permission.PermissionManager;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
@@ -43,11 +42,9 @@ public class RestartSystem extends BaseComponentSystem {
     EntityManager entityManager;
     @In
     NUIManager nuiManager;
-    @In
-    PermissionManager permissionManager;
 
     /**
-     * System to invoke restart. Only the host can restart the game.
+     * System to invoke restart of a game round.
      * All players' health are restored and they are transported back to their bases.
      *
      * @param event
@@ -55,7 +52,6 @@ public class RestartSystem extends BaseComponentSystem {
      */
     @ReceiveEvent(netFilter = RegisterMode.AUTHORITY)
     public void onRestartRequest(RestartRequestEvent event, EntityRef clientEntity, ClientComponent clientComponent) {
-        if (permissionManager.hasPermission(clientComponent.clientInfo, LASUtils.RESTART_PERMISSION)) {
             Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
             for (EntityRef client: clients) {
                 EntityRef player = client.getComponent(ClientComponent.class).character;
@@ -64,7 +60,6 @@ public class RestartSystem extends BaseComponentSystem {
                 player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
                 client.send(new ClientRestartEvent());
             }
-        }
     }
 
     /**

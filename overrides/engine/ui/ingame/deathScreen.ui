@@ -336,6 +336,26 @@
               }
             },
             {
+              "type": "UILabel",
+              "text": "Timer",
+              "family": "noBackground",
+              "id": "timer",
+              "layoutInfo": {
+                "height": 30,
+                "width": 45,
+                "position-top": {
+                  "target": "BOTTOM",
+                  "widget": "detailsUIBox",
+                  "offset": 10
+                },
+                "position-left": {
+                  "target": "LEFT",
+                  "widget": "restart",
+                  "offset": 90
+                }
+              }
+            },
+            {
               "type": "RowLayout",
               "horizontalSpacing": 15,
               "contents": [
