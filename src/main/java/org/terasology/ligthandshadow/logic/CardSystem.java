@@ -30,6 +30,7 @@ import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.health.event.OnDamagedEvent;
 import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.Region3i;
 import org.terasology.math.Side;
 import org.terasology.math.geom.Vector3f;
@@ -79,7 +80,7 @@ public class CardSystem extends BaseComponentSystem {
             return;
         }
 
-        Vector3f horizontalDir = new Vector3f(event.getDirection());
+        Vector3f horizontalDir = new Vector3f(JomlUtil.from(event.getDirection()));
         horizontalDir.y = 0;
         Side facingDir = Side.inDirection(horizontalDir);
         if (!facingDir.isHorizontal()) {
@@ -87,7 +88,7 @@ public class CardSystem extends BaseComponentSystem {
             return;
         }
 
-        Vector3f offset = new Vector3f(event.getHitPosition());
+        Vector3f offset = new Vector3f(JomlUtil.from(event.getHitPosition()));
         offset.sub(targetBlockComponent.getPosition().toVector3f());
         Side offsetDir = Side.inDirection(offset);
 
