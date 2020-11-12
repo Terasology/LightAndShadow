@@ -5,13 +5,9 @@ package org.terasology.las.yinyang;
 import org.terasology.math.Region3i;
 import org.terasology.math.geom.Vector3i;
 import org.terasology.world.generation.Border3D;
-import org.terasology.world.generation.Facet;
-import org.terasology.world.generation.FacetBorder;
 import org.terasology.world.generation.FacetProviderPlugin;
 import org.terasology.world.generation.GeneratingRegion;
 import org.terasology.world.generation.Produces;
-import org.terasology.world.generation.Requires;
-import org.terasology.world.generation.facets.SurfaceHeightFacet;
 import org.terasology.world.generator.plugin.RegisterPlugin;
 
 import java.util.Collections;
@@ -19,7 +15,6 @@ import java.util.List;
 
 @RegisterPlugin
 @Produces(YinYangFacet.class)
-@Requires(@Facet(value = SurfaceHeightFacet.class, border = @FacetBorder(sides = 10)))
 public class YinYangProvider implements FacetProviderPlugin {
 
     private List<Vector3i> yinYangPositions = Collections.singletonList(new Vector3i(0, 10, 0));
