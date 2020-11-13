@@ -16,10 +16,10 @@ import org.terasology.world.generation.FacetProvider;
 import org.terasology.world.generation.GeneratingRegion;
 import org.terasology.world.generation.Requires;
 import org.terasology.world.generation.Updates;
-import org.terasology.world.generation.facets.SurfaceHeightFacet;
+import org.terasology.world.generation.facets.ElevationFacet;
 
 @Requires(@Facet(PlayAreaFacet.class))
-@Updates(@Facet(SurfaceHeightFacet.class))
+@Updates(@Facet(ElevationFacet.class))
 public class MountainsProvider implements FacetProvider {
     private Noise mountainNoise;
 
@@ -31,7 +31,7 @@ public class MountainsProvider implements FacetProvider {
 
     @Override
     public void process(GeneratingRegion region) {
-        SurfaceHeightFacet facet = region.getRegionFacet(SurfaceHeightFacet.class);
+        ElevationFacet facet = region.getRegionFacet(ElevationFacet.class);
         PlayAreaFacet playAreaFacet = region.getRegionFacet(PlayAreaFacet.class);
         float mountainHeight = 40;
 
