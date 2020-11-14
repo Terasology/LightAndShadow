@@ -16,6 +16,8 @@
 
 package org.terasology.ligthandshadow.logic;
 
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.audio.AudioManager;
@@ -33,8 +35,6 @@ import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.JomlUtil;
 import org.terasology.math.Region3i;
 import org.terasology.math.Side;
-import org.terasology.math.geom.Vector3f;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
 import org.terasology.rendering.logic.MeshComponent;
@@ -44,6 +44,7 @@ import org.terasology.world.WorldProvider;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockComponent;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.family.BlockPlacementData;
 import org.terasology.world.block.regions.BlockRegionComponent;
 
 @RegisterSystem
@@ -80,7 +81,7 @@ public class CardSystem extends BaseComponentSystem {
             return;
         }
 
-        Vector3f horizontalDir = new Vector3f(JomlUtil.from(event.getDirection()));
+        Vector3f horizontalDir = new Vector3f(event.getDirection());
         horizontalDir.y = 0;
         Side facingDir = Side.inDirection(horizontalDir);
         if (!facingDir.isHorizontal()) {
@@ -88,12 +89,12 @@ public class CardSystem extends BaseComponentSystem {
             return;
         }
 
-        Vector3f offset = new Vector3f(JomlUtil.from(event.getHitPosition()));
-        offset.sub(targetBlockComponent.getPosition().toVector3f());
+        Vector3f offset = new Vector3f(event.getHitPosition());
+        offset.sub(new Vector3f(JomlUtil.from(targetBlockComponent.position)));
         Side offsetDir = Side.inDirection(offset);
 
-        Vector3i primePos = new Vector3i(targetBlockComponent.getPosition());
-        primePos.add(offsetDir.getVector3i());
+        Vector3i primePos = new Vector3i(JomlUtil.from(targetBlockComponent.position));
+        primePos.add(offsetDir.direction());
 
         Block primeBlock = worldProvider.getBlock(primePos);
         if (!primeBlock.isReplacementAllowed()) {
@@ -124,15 +125,15 @@ public class CardSystem extends BaseComponentSystem {
             return;
         }
 
-        worldProvider.setBlock(bottomBlockPos, card.bottomBlockFamily.getBlockForPlacement(bottomBlockPos, facingDir, Side.TOP));
-        worldProvider.setBlock(topBlockPos, card.topBlockFamily.getBlockForPlacement(topBlockPos, facingDir, Side.TOP));
+        worldProvider.setBlock(bottomBlockPos, card.bottomBlockFamily.getBlockForPlacement(new BlockPlacementData(bottomBlockPos, Side.TOP, new Vector3f(facingDir.direction()))));
+        worldProvider.setBlock(topBlockPos, card.topBlockFamily.getBlockForPlacement(new BlockPlacementData(topBlockPos, Side.TOP, new Vector3f(facingDir.direction()))));
 
         EntityRef cardEntity = entityManager.create(card.cardBlockPrefab);
         entity.removeComponent(MeshComponent.class);
-        cardEntity.addComponent(new BlockRegionComponent(Region3i.createBounded(bottomBlockPos, topBlockPos)));
-        Vector3f cardCenter = bottomBlockPos.toVector3f();
+        cardEntity.addComponent(new BlockRegionComponent(Region3i.createBounded(JomlUtil.from(bottomBlockPos), JomlUtil.from(topBlockPos))));
+        Vector3f cardCenter = new Vector3f(bottomBlockPos);
         cardCenter.y += 0.5f;
-        cardEntity.saveComponent(new LocationComponent(cardCenter));
+        cardEntity.saveComponent(new LocationComponent(JomlUtil.from(cardCenter)));
         CardComponent newCardComponent = cardEntity.getComponent(CardComponent.class);
         cardEntity.saveComponent(newCardComponent);
         cardEntity.removeComponent(ItemComponent.class);
