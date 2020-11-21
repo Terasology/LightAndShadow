@@ -29,9 +29,9 @@ public class LaSFloraRasterizer extends FloraRasterizer {
         air = blockManager.getBlock(BlockManager.AIR_ID);
 
         flora.put(FloraType.GRASS, ImmutableList.<Block>of(
-                blockManager.getBlock("core:TallGrass1"),
-                blockManager.getBlock("core:TallGrass2"),
-                blockManager.getBlock("core:TallGrass3")));
+                blockManager.getBlock("CoreAssets:TallGrass1"),
+                blockManager.getBlock("CoreAssets:TallGrass2"),
+                blockManager.getBlock("CoreAssets:TallGrass3")));
 
         flora.put(FloraType.FLOWER, ImmutableList.<Block>of(
                 blockManager.getBlock("lightAndShadowResources:spadesCropSapling"),
@@ -42,9 +42,9 @@ public class LaSFloraRasterizer extends FloraRasterizer {
 
 
         flora.put(FloraType.MUSHROOM, ImmutableList.<Block>of(
-                blockManager.getBlock("core:BigBrownShroom"),
-                blockManager.getBlock("core:BrownShroom"),
-                blockManager.getBlock("core:RedShroom")));
+                blockManager.getBlock("CoreAssets:BigBrownShroom"),
+                blockManager.getBlock("CoreAssets:BrownShroom"),
+                blockManager.getBlock("CoreAssets:RedShroom")));
     }
 
 
