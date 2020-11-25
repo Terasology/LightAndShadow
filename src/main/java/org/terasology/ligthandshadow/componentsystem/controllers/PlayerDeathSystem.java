@@ -77,7 +77,7 @@ public class PlayerDeathSystem extends BaseComponentSystem {
             updateStatistics(player, "deaths");
             dropItemsFromInventory(player);
             player.send(new RestoreFullHealthEvent(player));
-            player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
+            player.send(new CharacterTeleportEvent(JomlUtil.from(LASUtils.getTeleportDestination(team))));
         }
     }
 
