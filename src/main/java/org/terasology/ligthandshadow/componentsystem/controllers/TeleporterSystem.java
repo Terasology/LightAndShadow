@@ -27,6 +27,7 @@ import org.terasology.ligthandshadow.componentsystem.components.SetTeamOnActivat
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.math.JomlUtil;
 import org.terasology.registry.In;
 
 /**
@@ -65,7 +66,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     }
 
     private void handlePlayerTeleport(EntityRef player, String team) {
-        player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
+        player.send(new CharacterTeleportEvent(JomlUtil.from(LASUtils.getTeleportDestination(team))));
         inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(LASUtils.MAGIC_STAFF_URI));
     }
 }
