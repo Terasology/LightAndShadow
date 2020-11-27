@@ -17,6 +17,7 @@ import org.terasology.las.bases.BaseRasterizer;
 import org.terasology.las.platform.FloatingPlatformProvider;
 import org.terasology.las.platform.FloatingPlatformRasterizer;
 import org.terasology.logic.spawner.Spawner;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 import org.terasology.world.block.BlockManager;
@@ -40,7 +41,7 @@ public class LaSSimpleWorldGenerator extends BaseFacetedWorldGenerator {
 
     @Override
     public Vector3f getSpawnPosition(EntityRef entity) {
-        Vector3f pos = spawner.getSpawnPosition(getWorld(), entity);
+        Vector3f pos = JomlUtil.from(spawner.getSpawnPosition(getWorld(), entity));
         return pos != null ? pos : super.getSpawnPosition(entity);
     }
 
