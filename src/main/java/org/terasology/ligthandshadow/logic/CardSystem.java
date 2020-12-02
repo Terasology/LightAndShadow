@@ -44,6 +44,8 @@ import org.terasology.world.WorldProvider;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockComponent;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.BlockRegion;
+import org.terasology.world.block.BlockRegions;
 import org.terasology.world.block.family.BlockPlacementData;
 import org.terasology.world.block.regions.BlockRegionComponent;
 
@@ -130,7 +132,7 @@ public class CardSystem extends BaseComponentSystem {
 
         EntityRef cardEntity = entityManager.create(card.cardBlockPrefab);
         entity.removeComponent(MeshComponent.class);
-        cardEntity.addComponent(new BlockRegionComponent(Region3i.createBounded(JomlUtil.from(bottomBlockPos), JomlUtil.from(topBlockPos))));
+        cardEntity.addComponent(new BlockRegionComponent(new BlockRegion().union(bottomBlockPos).union(topBlockPos)));
         Vector3f cardCenter = new Vector3f(bottomBlockPos);
         cardCenter.y += 0.5f;
         cardEntity.saveComponent(new LocationComponent(JomlUtil.from(cardCenter)));
