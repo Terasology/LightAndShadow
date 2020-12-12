@@ -29,6 +29,7 @@ import org.terasology.logic.characters.CharacterImpulseEvent;
 import org.terasology.logic.characters.CharacterMoveInputEvent;
 import org.terasology.logic.console.commandSystem.annotations.Command;
 import org.terasology.logic.location.LocationComponent;
+import org.terasology.math.JomlUtil;
 import org.terasology.math.TeraMath;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
@@ -105,7 +106,7 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
                     Vector3f impulse = pos.normalize().invert();
 
                     impulse.set(impulse.scale(64).setY(6));
-                    player.send(new CharacterImpulseEvent(impulse));
+                    player.send(new CharacterImpulseEvent(JomlUtil.from(impulse)));
 
                     player.send(new PlaySoundEvent(magicDomeEntity.getComponent(MagicDome.class).hitSound, 2f));
                 }
@@ -117,7 +118,7 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
                     float impulseY = (TeraMath.fastAbs(verticalDiff) / (float) WORLD_RADIUS) * 3f;
 
                     impulse.set(impulse.scale(64)).addY(impulseY);
-                    player.send(new CharacterImpulseEvent(impulse));
+                    player.send(new CharacterImpulseEvent(JomlUtil.from(impulse)));
 
                     player.send(new PlaySoundEvent(magicDomeEntity.getComponent(MagicDome.class).hitSound, 2f));
 
