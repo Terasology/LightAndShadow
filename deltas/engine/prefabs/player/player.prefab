@@ -1,4 +1,7 @@
 {
+    "Character": {
+        "nameTagOffset": 1.7
+    },
     "LASTeam" : {
         "team" : "white"
     },
