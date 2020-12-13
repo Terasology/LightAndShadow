@@ -33,7 +33,6 @@ import org.terasology.logic.health.event.OnDamagedEvent;
 import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.JomlUtil;
-import org.terasology.math.Region3i;
 import org.terasology.math.Side;
 import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
@@ -44,6 +43,7 @@ import org.terasology.world.WorldProvider;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockComponent;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.BlockRegions;
 import org.terasology.world.block.family.BlockPlacementData;
 import org.terasology.world.block.regions.BlockRegionComponent;
 
@@ -106,33 +106,30 @@ public class CardSystem extends BaseComponentSystem {
         Block aboveBlock = worldProvider.getBlock(primePos.x, primePos.y + 1, primePos.z);
 
         // Determine top and bottom blocks
-        Vector3i bottomBlockPos;
-        Block bottomBlock;
-        Vector3i topBlockPos;
-        Block topBlock;
+        Vector3i bottomBlockPos = new Vector3i();
+        Vector3i topBlockPos = new Vector3i();
         if (belowBlock.isReplacementAllowed()) {
-            bottomBlockPos = new Vector3i(primePos.x, primePos.y - 1, primePos.z);
-            bottomBlock = belowBlock;
-            topBlockPos = primePos;
-            topBlock = primeBlock;
+            bottomBlockPos.set(primePos.x, primePos.y - 1, primePos.z);
+            topBlockPos.set(primePos);
         } else if (aboveBlock.isReplacementAllowed()) {
-            bottomBlockPos = primePos;
-            bottomBlock = primeBlock;
-            topBlockPos = new Vector3i(primePos.x, primePos.y + 1, primePos.z);
-            topBlock = aboveBlock;
+            bottomBlockPos.set(primePos);
+            topBlockPos.set(primePos.x, primePos.y + 1, primePos.z);
         } else {
             event.consume();
             return;
         }
 
-        worldProvider.setBlock(bottomBlockPos, card.bottomBlockFamily.getBlockForPlacement(new BlockPlacementData(bottomBlockPos, Side.TOP, new Vector3f(facingDir.direction()))));
-        worldProvider.setBlock(topBlockPos, card.topBlockFamily.getBlockForPlacement(new BlockPlacementData(topBlockPos, Side.TOP, new Vector3f(facingDir.direction()))));
+        final Vector3f viewingDir = new Vector3f(facingDir.direction());
+        worldProvider.setBlock(bottomBlockPos,
+                card.bottomBlockFamily.getBlockForPlacement(new BlockPlacementData(bottomBlockPos, Side.TOP, viewingDir)));
+        worldProvider.setBlock(topBlockPos,
+                card.topBlockFamily.getBlockForPlacement(new BlockPlacementData(topBlockPos, Side.TOP, viewingDir)));
 
         EntityRef cardEntity = entityManager.create(card.cardBlockPrefab);
         entity.removeComponent(MeshComponent.class);
-        cardEntity.addComponent(new BlockRegionComponent(Region3i.createBounded(JomlUtil.from(bottomBlockPos), JomlUtil.from(topBlockPos))));
-        Vector3f cardCenter = new Vector3f(bottomBlockPos);
-        cardCenter.y += 0.5f;
+        cardEntity.addComponent(new BlockRegionComponent(BlockRegions.encompassing(bottomBlockPos, topBlockPos)));
+
+        Vector3f cardCenter = new Vector3f(bottomBlockPos).add(0, 0.5f, 0);
         cardEntity.saveComponent(new LocationComponent(JomlUtil.from(cardCenter)));
         CardComponent newCardComponent = cardEntity.getComponent(CardComponent.class);
         cardEntity.saveComponent(newCardComponent);
