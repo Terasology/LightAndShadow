@@ -16,6 +16,8 @@
 
 package org.terasology.las.platform;
 
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
 import org.terasology.cities.BlockTheme;
 import org.terasology.cities.BlockType;
 import org.terasology.cities.DefaultBlockType;
@@ -24,11 +26,11 @@ import org.terasology.cities.raster.ChunkRasterTarget;
 import org.terasology.cities.raster.Pen;
 import org.terasology.cities.raster.RasterUtil;
 import org.terasology.math.ChunkMath;
-import org.terasology.math.Region3i;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.BlockRegion;
+import org.terasology.world.block.BlockRegions;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizerPlugin;
@@ -65,12 +67,12 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
 
         ChunkRasterTarget target = new ChunkRasterTarget(chunk, theme);
 
-        Region3i reg = chunkRegion.getRegion();
+        BlockRegion reg = chunkRegion.getRegion();
 
         int wallHeight = 5;
         for (FloatingPlatform platform : platformFacet.getPlatforms()) {
             int base = platform.getBaseHeight();
-            if (reg.minY() <= base && reg.maxY() >= base) {
+            if (reg.getMinY() <= base && reg.getMaxY() >= base) {
                 Pen floorPen = new AbstractPen(target.getAffectedArea()) {
 
                     @Override
@@ -84,7 +86,7 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
                 RasterUtil.fillRect(floorPen, platform.getArea());
             }
 
-            if (reg.minY() <= base + wallHeight && reg.maxY() >= base) {
+            if (reg.getMinY() <= base + wallHeight && reg.getMaxY() >= base) {
 
                 Pen wallPen = new AbstractPen(target.getAffectedArea()) {
                     int bot = Math.max(target.getMinHeight(), base + 1);
@@ -102,20 +104,20 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
                 };
                 RasterUtil.drawRect(wallPen, platform.getArea());
             }
-            Region3i blackTeleporterRegion = platform.getBlackTeleporterRegion();
-            Region3i redTeleporterRegion = platform.getRedTeleporterRegion();
+            BlockRegion blackTeleporterRegion = platform.getBlackTeleporterRegion();
+            BlockRegion redTeleporterRegion = platform.getRedTeleporterRegion();
 
-            for (Vector3i blackTeleporterPosition : blackTeleporterRegion) {
+            for (Vector3ic blackTeleporterPosition : BlockRegions.iterableInPlace(blackTeleporterRegion)) {
                 //set down the teleporter at every square in the designated region
-                if (chunkRegion.getRegion().encompasses(blackTeleporterPosition)) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(blackTeleporterPosition), BLACK_DICE);
+                if (chunkRegion.getRegion().containsBlock(blackTeleporterPosition)) {
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(blackTeleporterPosition, new Vector3i()), BLACK_DICE);
                 }
             }
 
-            for (Vector3i redTeleporterPosition : redTeleporterRegion) {
+            for (Vector3ic redTeleporterPosition : BlockRegions.iterableInPlace(redTeleporterRegion)) {
                 //set down the teleporter at every square in the designated region
-                if (chunkRegion.getRegion().encompasses(redTeleporterPosition)) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(redTeleporterPosition), RED_DICE);
+                if (chunkRegion.getRegion().containsBlock(redTeleporterPosition)) {
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(redTeleporterPosition, new Vector3i()), RED_DICE);
                 }
             }
         }

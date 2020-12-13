@@ -16,7 +16,7 @@
 
 package org.terasology.las.platform;
 
-import org.terasology.math.Region3i;
+import org.terasology.world.block.BlockRegion;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.facets.base.BaseFacet2D;
 
@@ -31,7 +31,7 @@ public class FloatingPlatformFacet extends BaseFacet2D {
 
     private final Collection<FloatingPlatform> platforms = new ArrayList<>();
 
-    public FloatingPlatformFacet(Region3i targetRegion, Border3D border) {
+    public FloatingPlatformFacet(BlockRegion targetRegion, Border3D border) {
         super(targetRegion, border);
     }
 

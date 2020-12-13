@@ -15,8 +15,8 @@
  */
 package org.terasology.ligthandshadow.componentsystem;
 
-import org.terasology.math.geom.Vector3f;
-import org.terasology.math.geom.Vector3i;
+import org.joml.Vector3f;
+import org.joml.Vector3i;
 
 public final class LASUtils {
     public static final String BLACK_FLAG_URI = "lightAndShadowResources:blackFlag";

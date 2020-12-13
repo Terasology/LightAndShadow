@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.las.yinyang;
 
-import org.terasology.math.Region3i;
-import org.terasology.math.geom.Vector3i;
+import org.joml.Vector3i;
+import org.terasology.world.block.BlockRegion;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.FacetProviderPlugin;
 import org.terasology.world.generation.GeneratingRegion;
@@ -27,10 +27,10 @@ public class YinYangProvider implements FacetProviderPlugin {
 
         YinYangFacet yinYangFacet = new YinYangFacet(region.getRegion(), border);
 
-        Region3i worldRect = yinYangFacet.getWorldRegion();
+        BlockRegion worldRect = yinYangFacet.getWorldRegion();
 
         yinYangPositions.stream()
-                .filter(worldRect::encompasses)
+                .filter(worldRect::containsBlock)
                 .forEach(pos -> yinYangFacet.setWorld(pos, new YinYang()));
 
         region.setRegionFacet(YinYangFacet.class, yinYangFacet);

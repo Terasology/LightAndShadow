@@ -37,7 +37,7 @@ public class GuidanceNpcProvider implements EntityProviderPlugin {
 
     @Override
     public void process(Region region, EntityBuffer buffer) {
-        if (region.getRegion().encompasses(
+        if (region.getRegion().containsBlock(
                 0,
                 LASUtils.FLOATING_PLATFORM_HEIGHT_LEVEL + 4,
                 LASUtils.FLOATING_PLATFORM_POSITION.z + LASUtils.NPC_OFFSET)) {

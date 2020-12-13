@@ -15,13 +15,15 @@
  */
 package org.terasology.las.bases;
 
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.math.ChunkMath;
-import org.terasology.math.Region3i;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.block.BlockRegion;
+import org.terasology.world.block.BlockRegions;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
@@ -46,24 +48,24 @@ public class BaseRasterizer implements WorldRasterizer {
         BaseFacet baseFacet = chunkRegion.getFacet(BaseFacet.class);
 
         for (Base base : baseFacet.getBases()) {
-            Region3i baseRegion = base.getArea();
-            Region3i flagRegion = base.getFlagArea();
+            BlockRegion baseRegion = base.getArea();
+            BlockRegion flagRegion = base.getFlagArea();
 
             //place blocks for each of the bases and flags
-            for (Vector3i baseBlockPosition : baseRegion) {
-                if (chunkRegion.getRegion().encompasses(baseBlockPosition) && baseBlockPosition.x > 0) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(baseBlockPosition), redBaseStone);
-                } else if (chunkRegion.getRegion().encompasses(baseBlockPosition)) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(baseBlockPosition), blackBaseStone);
+            for (Vector3ic baseBlockPosition : BlockRegions.iterableInPlace(baseRegion)) {
+                if (chunkRegion.getRegion().containsBlock(baseBlockPosition) && baseBlockPosition.x() > 0) {
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(baseBlockPosition, new Vector3i()), redBaseStone);
+                } else if (chunkRegion.getRegion().containsBlock(baseBlockPosition)) {
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(baseBlockPosition, new Vector3i()), blackBaseStone);
                 }
             }
 
-            for (Vector3i flagPosition : flagRegion) {
+            for (Vector3ic flagPosition : BlockRegions.iterableInPlace(flagRegion)) {
                 //flag type depends on the x position of the flag to determine which base it's at
-                if (chunkRegion.getRegion().encompasses(flagPosition) && flagPosition.x > 0) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(flagPosition), redFlag);
-                } else if (chunkRegion.getRegion().encompasses(flagPosition)) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(flagPosition), blackFlag);
+                if (chunkRegion.getRegion().containsBlock(flagPosition) && flagPosition.x() > 0) {
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(flagPosition, new Vector3i()), redFlag);
+                } else if (chunkRegion.getRegion().containsBlock(flagPosition)) {
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(flagPosition, new Vector3i()), blackFlag);
                 }
             }
         }

@@ -15,22 +15,22 @@
  */
 package org.terasology.las.bases;
 
-import org.terasology.math.Region3i;
+import org.terasology.world.block.BlockRegion;
 
 public class Base {
-    private Region3i area;
-    private Region3i flagArea;
+    private BlockRegion area;
+    private BlockRegion flagArea;
 
-    public Base(Region3i baseRegion, Region3i flagRegion) {
+    public Base(BlockRegion baseRegion, BlockRegion flagRegion) {
         this.area = baseRegion;
         this.flagArea = flagRegion;
     }
 
-    public Region3i getArea() {
+    public BlockRegion getArea() {
         return area;
     }
 
-    public Region3i getFlagArea() {
+    public BlockRegion getFlagArea() {
         return flagArea;
     }
 }

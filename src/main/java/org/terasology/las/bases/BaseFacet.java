@@ -15,7 +15,7 @@
  */
 package org.terasology.las.bases;
 
-import org.terasology.math.Region3i;
+import org.terasology.world.block.BlockRegion;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.facets.base.SparseObjectFacet3D;
 
@@ -26,7 +26,7 @@ import java.util.Collections;
 public class BaseFacet extends SparseObjectFacet3D<Base> {
     private final Collection<Base> bases = new ArrayList<>();
 
-    public BaseFacet(Region3i targetRegion, Border3D border) {
+    public BaseFacet(BlockRegion targetRegion, Border3D border) {
         super(targetRegion, border);
     }
 

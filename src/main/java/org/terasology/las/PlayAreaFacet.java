@@ -15,12 +15,12 @@
  */
 package org.terasology.las;
 
-import org.terasology.math.Region3i;
+import org.terasology.world.block.BlockRegion;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.facets.base.BaseBooleanFieldFacet2D;
 
 public class PlayAreaFacet extends BaseBooleanFieldFacet2D {
-    public PlayAreaFacet(Region3i targetRegion, Border3D border) {
+    public PlayAreaFacet(BlockRegion targetRegion, Border3D border) {
         super(targetRegion, border);
     }
 }

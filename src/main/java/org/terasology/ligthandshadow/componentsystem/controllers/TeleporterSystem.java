@@ -66,7 +66,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     }
 
     private void handlePlayerTeleport(EntityRef player, String team) {
-        player.send(new CharacterTeleportEvent(JomlUtil.from(LASUtils.getTeleportDestination(team))));
+        player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
         inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(LASUtils.MAGIC_STAFF_URI));
     }
 }
