@@ -23,7 +23,6 @@ import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.BlockRegion;
-import org.terasology.world.block.BlockRegions;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
@@ -52,19 +51,19 @@ public class BaseRasterizer implements WorldRasterizer {
             BlockRegion flagRegion = base.getFlagArea();
 
             //place blocks for each of the bases and flags
-            for (Vector3ic baseBlockPosition : BlockRegions.iterableInPlace(baseRegion)) {
-                if (chunkRegion.getRegion().containsBlock(baseBlockPosition) && baseBlockPosition.x() > 0) {
+            for (Vector3ic baseBlockPosition : baseRegion) {
+                if (chunkRegion.getRegion().contains(baseBlockPosition) && baseBlockPosition.x() > 0) {
                     chunk.setBlock(ChunkMath.calcRelativeBlockPos(baseBlockPosition, new Vector3i()), redBaseStone);
-                } else if (chunkRegion.getRegion().containsBlock(baseBlockPosition)) {
+                } else if (chunkRegion.getRegion().contains(baseBlockPosition)) {
                     chunk.setBlock(ChunkMath.calcRelativeBlockPos(baseBlockPosition, new Vector3i()), blackBaseStone);
                 }
             }
 
-            for (Vector3ic flagPosition : BlockRegions.iterableInPlace(flagRegion)) {
+            for (Vector3ic flagPosition : flagRegion) {
                 //flag type depends on the x position of the flag to determine which base it's at
-                if (chunkRegion.getRegion().containsBlock(flagPosition) && flagPosition.x() > 0) {
+                if (chunkRegion.getRegion().contains(flagPosition) && flagPosition.x() > 0) {
                     chunk.setBlock(ChunkMath.calcRelativeBlockPos(flagPosition, new Vector3i()), redFlag);
-                } else if (chunkRegion.getRegion().containsBlock(flagPosition)) {
+                } else if (chunkRegion.getRegion().contains(flagPosition)) {
                     chunk.setBlock(ChunkMath.calcRelativeBlockPos(flagPosition, new Vector3i()), blackFlag);
                 }
             }

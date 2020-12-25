@@ -50,7 +50,7 @@ public class YinYangRasterizer implements WorldRasterizerPlugin {
             for (int j = -2 * RADIUS; j <= 2 * RADIUS; j++) {
                 String blockString = pixel(j, i, RADIUS);
                 Vector3i chunkBlockPosition = new Vector3i(i, 0, j).add(yinYangPosition);
-                if (chunk.getRegion().containsBlock(chunkBlockPosition)) {
+                if (chunk.getRegion().contains(chunkBlockPosition)) {
                     chunk.setBlock(ChunkMath.calcRelativeBlockPos(chunkBlockPosition, new Vector3i()), getBlock(blockString));
                 }
             }

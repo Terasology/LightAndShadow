@@ -37,7 +37,7 @@ public class GuidanceNpcProvider implements EntityProviderPlugin {
 
     @Override
     public void process(Region region, EntityBuffer buffer) {
-        if (region.getRegion().containsBlock(
+        if (region.getRegion().contains(
                 0,
                 LASUtils.FLOATING_PLATFORM_HEIGHT_LEVEL + 4,
                 LASUtils.FLOATING_PLATFORM_POSITION.z + LASUtils.NPC_OFFSET)) {
@@ -46,10 +46,10 @@ public class GuidanceNpcProvider implements EntityProviderPlugin {
             EntityStore entity = new EntityStore(chooseFactionNpc);
 
             LocationComponent locationComponent = new LocationComponent(new Vector3f(
-                0,
-                LASUtils.FLOATING_PLATFORM_HEIGHT_LEVEL + 1,
-                LASUtils.FLOATING_PLATFORM_POSITION.z + LASUtils.NPC_OFFSET));
-            locationComponent.setLocalRotation(new Quaternionf(new AxisAngle4f((float) (Math.PI),0,1,0)));
+                    0,
+                    LASUtils.FLOATING_PLATFORM_HEIGHT_LEVEL + 1,
+                    LASUtils.FLOATING_PLATFORM_POSITION.z + LASUtils.NPC_OFFSET));
+            locationComponent.setLocalRotation(new Quaternionf(new AxisAngle4f((float) (Math.PI), 0, 1, 0)));
             entity.addComponent(locationComponent);
             buffer.enqueue(entity);
 

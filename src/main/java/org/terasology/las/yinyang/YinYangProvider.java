@@ -30,7 +30,7 @@ public class YinYangProvider implements FacetProviderPlugin {
         BlockRegion worldRect = yinYangFacet.getWorldRegion();
 
         yinYangPositions.stream()
-                .filter(worldRect::containsBlock)
+                .filter(worldRect::contains)
                 .forEach(pos -> yinYangFacet.setWorld(pos, new YinYang()));
 
         region.setRegionFacet(YinYangFacet.class, yinYangFacet);

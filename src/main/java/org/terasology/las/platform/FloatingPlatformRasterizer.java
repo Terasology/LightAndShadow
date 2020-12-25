@@ -30,7 +30,6 @@ import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.BlockRegion;
-import org.terasology.world.block.BlockRegions;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizerPlugin;
@@ -72,7 +71,7 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
         int wallHeight = 5;
         for (FloatingPlatform platform : platformFacet.getPlatforms()) {
             int base = platform.getBaseHeight();
-            if (reg.getMinY() <= base && reg.getMaxY() >= base) {
+            if (reg.minY() <= base && reg.maxY() >= base) {
                 Pen floorPen = new AbstractPen(target.getAffectedArea()) {
 
                     @Override
@@ -86,7 +85,7 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
                 RasterUtil.fillRect(floorPen, platform.getArea());
             }
 
-            if (reg.getMinY() <= base + wallHeight && reg.getMaxY() >= base) {
+            if (reg.minY() <= base + wallHeight && reg.maxY() >= base) {
 
                 Pen wallPen = new AbstractPen(target.getAffectedArea()) {
                     int bot = Math.max(target.getMinHeight(), base + 1);
@@ -107,16 +106,16 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
             BlockRegion blackTeleporterRegion = platform.getBlackTeleporterRegion();
             BlockRegion redTeleporterRegion = platform.getRedTeleporterRegion();
 
-            for (Vector3ic blackTeleporterPosition : BlockRegions.iterableInPlace(blackTeleporterRegion)) {
+            for (Vector3ic blackTeleporterPosition : blackTeleporterRegion) {
                 //set down the teleporter at every square in the designated region
-                if (chunkRegion.getRegion().containsBlock(blackTeleporterPosition)) {
+                if (chunkRegion.getRegion().contains(blackTeleporterPosition)) {
                     chunk.setBlock(ChunkMath.calcRelativeBlockPos(blackTeleporterPosition, new Vector3i()), BLACK_DICE);
                 }
             }
 
-            for (Vector3ic redTeleporterPosition : BlockRegions.iterableInPlace(redTeleporterRegion)) {
+            for (Vector3ic redTeleporterPosition : redTeleporterRegion) {
                 //set down the teleporter at every square in the designated region
-                if (chunkRegion.getRegion().containsBlock(redTeleporterPosition)) {
+                if (chunkRegion.getRegion().contains(redTeleporterPosition)) {
                     chunk.setBlock(ChunkMath.calcRelativeBlockPos(redTeleporterPosition, new Vector3i()), RED_DICE);
                 }
             }

@@ -19,7 +19,6 @@ import com.google.common.collect.ImmutableSet;
 import org.joml.Vector3i;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.world.block.BlockRegion;
-import org.terasology.world.block.BlockRegions;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.FacetProvider;
 import org.terasology.world.generation.GeneratingRegion;
@@ -55,10 +54,14 @@ public class BaseProvider implements FacetProvider {
     }
 
     private BlockRegion CreateBaseRegionFromVector(Vector3i centerBasePosition) {
-        return BlockRegions.createFromMinAndMax(new Vector3i(centerBasePosition.x() - LASUtils.BASE_EXTENT, centerBasePosition.y(), centerBasePosition.z() - LASUtils.BASE_EXTENT), new Vector3i(centerBasePosition.x() + LASUtils.BASE_EXTENT, centerBasePosition.y(), centerBasePosition.z() + LASUtils.BASE_EXTENT));
+        return new BlockRegion(centerBasePosition.x() - LASUtils.BASE_EXTENT, centerBasePosition.y(),
+                centerBasePosition.z() - LASUtils.BASE_EXTENT, centerBasePosition.x() + LASUtils.BASE_EXTENT,
+                centerBasePosition.y(), centerBasePosition.z() + LASUtils.BASE_EXTENT);
     }
 
     private BlockRegion CreateFlagRegionFromVector(Vector3i centerBasePosition) {
-        return BlockRegions.createFromMinAndMax(new Vector3i(centerBasePosition.x(), centerBasePosition.y() + 1, centerBasePosition.z()), new Vector3i(centerBasePosition.x(), centerBasePosition.y() + 1, centerBasePosition.z()));
+        return new BlockRegion(centerBasePosition.x(), centerBasePosition.y() + 1,
+                centerBasePosition.z(), centerBasePosition.x(), centerBasePosition.y() + 1,
+                centerBasePosition.z());
     }
 }
