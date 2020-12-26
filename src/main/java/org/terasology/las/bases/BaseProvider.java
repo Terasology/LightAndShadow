@@ -17,7 +17,6 @@ package org.terasology.las.bases;
 
 import com.google.common.collect.ImmutableSet;
 import org.joml.Vector3ic;
-import org.lwjgl.system.CallbackI;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.world.block.BlockRegion;
 import org.terasology.world.generation.Border3D;
