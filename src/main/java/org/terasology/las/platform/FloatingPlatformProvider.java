@@ -20,6 +20,7 @@ import org.terasology.entitySystem.Component;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.math.geom.Rect2i;
 import org.terasology.world.block.BlockRegion;
+import org.terasology.world.block.BlockRegionc;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.ConfigurableFacetProvider;
 import org.terasology.world.generation.FacetProviderPlugin;
@@ -42,14 +43,14 @@ public class FloatingPlatformProvider implements ConfigurableFacetProvider, Face
                     LASUtils.FLOATING_PLATFORM_POSITION.x() + LASUtils.FLOATING_PLATFORM_WIDTH / 2,
                     LASUtils.FLOATING_PLATFORM_POSITION.z() + LASUtils.FLOATING_PLATFORM_LENGTH / 2);
 
-    private static final BlockRegion RED_TELEPORTER_REGION =
+    private static final BlockRegionc RED_TELEPORTER_REGION =
             new BlockRegion(LASUtils.FLOATING_PLATFORM_POSITION.x() + LASUtils.TELEPORTER_OFFSET,
                     LASUtils.FLOATING_PLATFORM_POSITION.y() + 1,
                     LASUtils.FLOATING_PLATFORM_POSITION.z() + LASUtils.NPC_OFFSET,
                     LASUtils.FLOATING_PLATFORM_POSITION.x() + LASUtils.TELEPORTER_OFFSET,
                     LASUtils.FLOATING_PLATFORM_POSITION.y() + 1,
                     LASUtils.FLOATING_PLATFORM_POSITION.z() + LASUtils.NPC_OFFSET);
-    private static final BlockRegion BLACK_TELEPORTER_REGION =
+    private static final BlockRegionc BLACK_TELEPORTER_REGION =
             new BlockRegion(LASUtils.FLOATING_PLATFORM_POSITION.x() - LASUtils.TELEPORTER_OFFSET,
                     LASUtils.FLOATING_PLATFORM_POSITION.y() + 1,
                     LASUtils.FLOATING_PLATFORM_POSITION.z() + LASUtils.NPC_OFFSET,

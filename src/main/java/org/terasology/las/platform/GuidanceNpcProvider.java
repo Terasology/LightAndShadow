@@ -40,7 +40,7 @@ public class GuidanceNpcProvider implements EntityProviderPlugin {
         if (region.getRegion().contains(
                 0,
                 LASUtils.FLOATING_PLATFORM_HEIGHT_LEVEL + 4,
-                LASUtils.FLOATING_PLATFORM_POSITION.z + LASUtils.NPC_OFFSET)) {
+                LASUtils.FLOATING_PLATFORM_POSITION.z() + LASUtils.NPC_OFFSET)) {
 
             Prefab chooseFactionNpc = Assets.getPrefab("LightAndShadow:MagicFool").get();
             EntityStore entity = new EntityStore(chooseFactionNpc);
@@ -48,7 +48,7 @@ public class GuidanceNpcProvider implements EntityProviderPlugin {
             LocationComponent locationComponent = new LocationComponent(new Vector3f(
                     0,
                     LASUtils.FLOATING_PLATFORM_HEIGHT_LEVEL + 1,
-                    LASUtils.FLOATING_PLATFORM_POSITION.z + LASUtils.NPC_OFFSET));
+                    LASUtils.FLOATING_PLATFORM_POSITION.z() + LASUtils.NPC_OFFSET));
             locationComponent.setLocalRotation(new Quaternionf(new AxisAngle4f((float) (Math.PI), 0, 1, 0)));
             entity.addComponent(locationComponent);
             buffer.enqueue(entity);
@@ -58,7 +58,7 @@ public class GuidanceNpcProvider implements EntityProviderPlugin {
             entityStore.addComponent(new LocationComponent(new Vector3f(
                     0,
                     LASUtils.FLOATING_PLATFORM_HEIGHT_LEVEL + 3,
-                    LASUtils.FLOATING_PLATFORM_POSITION.z + LASUtils.NPC_OFFSET)));
+                    LASUtils.FLOATING_PLATFORM_POSITION.z() + LASUtils.NPC_OFFSET)));
             buffer.enqueue(entityStore);
         }
 

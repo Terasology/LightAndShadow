@@ -15,8 +15,8 @@ public class LaSSpawner implements Spawner {
 
     @Override
     public Vector3f getSpawnPosition(World world, EntityRef clientEntity) {
-        return new Vector3f(new Vector3i(LASUtils.FLOATING_PLATFORM_POSITION)
-                .add(0, 5, 0));
+        return new Vector3f(LASUtils.FLOATING_PLATFORM_POSITION)
+                .add(0.0f, 5.0f, 0.0f);
     }
 
 }

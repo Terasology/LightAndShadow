@@ -18,14 +18,15 @@ package org.terasology.las.platform;
 
 import org.terasology.math.geom.Rect2i;
 import org.terasology.world.block.BlockRegion;
+import org.terasology.world.block.BlockRegionc;
 
 public class FloatingPlatform {
     private Rect2i area;
     private int baseHeight;
-    private BlockRegion redTeleporterRegion;
-    private BlockRegion blackTeleporterRegion;
+    private BlockRegionc redTeleporterRegion;
+    private BlockRegionc blackTeleporterRegion;
 
-    public FloatingPlatform(Rect2i area, int baseHeight, BlockRegion redTeleporterRegion, BlockRegion blackTeleporterRegion) {
+    public FloatingPlatform(Rect2i area, int baseHeight, BlockRegionc redTeleporterRegion, BlockRegionc blackTeleporterRegion) {
         this.area = area;
         this.redTeleporterRegion = redTeleporterRegion;
         this.blackTeleporterRegion = blackTeleporterRegion;
@@ -40,11 +41,11 @@ public class FloatingPlatform {
         return baseHeight;
     }
 
-    public BlockRegion getRedTeleporterRegion() {
+    public BlockRegionc getRedTeleporterRegion() {
         return redTeleporterRegion;
     }
 
-    public BlockRegion getBlackTeleporterRegion() {
+    public BlockRegionc getBlackTeleporterRegion() {
         return blackTeleporterRegion;
     }
 }

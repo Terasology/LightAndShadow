@@ -46,6 +46,7 @@ public class BaseRasterizer implements WorldRasterizer {
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
         BaseFacet baseFacet = chunkRegion.getFacet(BaseFacet.class);
 
+        Vector3i tempPos = new Vector3i();
         for (Base base : baseFacet.getBases()) {
             BlockRegion baseRegion = base.getArea();
             BlockRegion flagRegion = base.getFlagArea();
@@ -53,18 +54,18 @@ public class BaseRasterizer implements WorldRasterizer {
             //place blocks for each of the bases and flags
             for (Vector3ic baseBlockPosition : baseRegion) {
                 if (chunkRegion.getRegion().contains(baseBlockPosition) && baseBlockPosition.x() > 0) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(baseBlockPosition, new Vector3i()), redBaseStone);
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(baseBlockPosition, tempPos), redBaseStone);
                 } else if (chunkRegion.getRegion().contains(baseBlockPosition)) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(baseBlockPosition, new Vector3i()), blackBaseStone);
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(baseBlockPosition, tempPos), blackBaseStone);
                 }
             }
 
             for (Vector3ic flagPosition : flagRegion) {
                 //flag type depends on the x position of the flag to determine which base it's at
                 if (chunkRegion.getRegion().contains(flagPosition) && flagPosition.x() > 0) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(flagPosition, new Vector3i()), redFlag);
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(flagPosition, tempPos), redFlag);
                 } else if (chunkRegion.getRegion().contains(flagPosition)) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(flagPosition, new Vector3i()), blackFlag);
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(flagPosition, tempPos), blackFlag);
                 }
             }
         }

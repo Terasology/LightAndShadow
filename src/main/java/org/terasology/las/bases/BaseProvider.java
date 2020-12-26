@@ -16,7 +16,8 @@
 package org.terasology.las.bases;
 
 import com.google.common.collect.ImmutableSet;
-import org.joml.Vector3i;
+import org.joml.Vector3ic;
+import org.lwjgl.system.CallbackI;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.world.block.BlockRegion;
 import org.terasology.world.generation.Border3D;
@@ -28,11 +29,11 @@ import java.util.Collection;
 
 @Produces(BaseFacet.class)
 public class BaseProvider implements FacetProvider {
-    BlockRegion redBaseRegion = CreateBaseRegionFromVector(LASUtils.CENTER_RED_BASE_POSITION);
-    BlockRegion blackBaseRegion = CreateBaseRegionFromVector(LASUtils.CENTER_BLACK_BASE_POSITION);
+    BlockRegion redBaseRegion = new BlockRegion(LASUtils.CENTER_RED_BASE_POSITION).expand(LASUtils.BASE_EXTENT, 0, LASUtils.BASE_EXTENT);
+    BlockRegion blackBaseRegion = new BlockRegion(LASUtils.CENTER_BLACK_BASE_POSITION).expand(LASUtils.BASE_EXTENT, 0, LASUtils.BASE_EXTENT);
 
-    BlockRegion redFlagRegion = CreateFlagRegionFromVector(LASUtils.CENTER_RED_BASE_POSITION);
-    BlockRegion blackFlagRegion = CreateFlagRegionFromVector(LASUtils.CENTER_BLACK_BASE_POSITION);
+    BlockRegion redFlagRegion = new BlockRegion(LASUtils.CENTER_RED_BASE_POSITION).translate(0,1,0);
+    BlockRegion blackFlagRegion = new BlockRegion(LASUtils.CENTER_BLACK_BASE_POSITION).translate(0,1,0);
 
     private Collection<Base> fixedBases = ImmutableSet.of(
             new Base(redBaseRegion, redFlagRegion),
@@ -51,17 +52,5 @@ public class BaseProvider implements FacetProvider {
             facet.add(base);
         }
         region.setRegionFacet(BaseFacet.class, facet);
-    }
-
-    private BlockRegion CreateBaseRegionFromVector(Vector3i centerBasePosition) {
-        return new BlockRegion(centerBasePosition.x() - LASUtils.BASE_EXTENT, centerBasePosition.y(),
-                centerBasePosition.z() - LASUtils.BASE_EXTENT, centerBasePosition.x() + LASUtils.BASE_EXTENT,
-                centerBasePosition.y(), centerBasePosition.z() + LASUtils.BASE_EXTENT);
-    }
-
-    private BlockRegion CreateFlagRegionFromVector(Vector3i centerBasePosition) {
-        return new BlockRegion(centerBasePosition.x(), centerBasePosition.y() + 1,
-                centerBasePosition.z(), centerBasePosition.x(), centerBasePosition.y() + 1,
-                centerBasePosition.z());
     }
 }
