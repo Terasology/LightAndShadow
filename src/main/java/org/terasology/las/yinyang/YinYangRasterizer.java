@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.las.yinyang;
 
+import org.joml.Vector3i;
 import org.terasology.math.ChunkMath;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
@@ -46,12 +46,13 @@ public class YinYangRasterizer implements WorldRasterizerPlugin {
     }
 
     private void placeYinYang(CoreChunk chunk, Vector3i yinYangPosition) {
+        Vector3i tempPos = new Vector3i();
         for (int i = -RADIUS; i <= RADIUS; i++) {
             for (int j = -2 * RADIUS; j <= 2 * RADIUS; j++) {
                 String blockString = pixel(j, i, RADIUS);
                 Vector3i chunkBlockPosition = new Vector3i(i, 0, j).add(yinYangPosition);
-                if (chunk.getRegion().encompasses(chunkBlockPosition)) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(chunkBlockPosition), getBlock(blockString));
+                if (chunk.getRegion().contains(chunkBlockPosition)) {
+                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(chunkBlockPosition, tempPos), getBlock(blockString));
                 }
             }
         }

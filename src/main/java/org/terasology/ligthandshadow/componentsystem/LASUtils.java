@@ -15,8 +15,10 @@
  */
 package org.terasology.ligthandshadow.componentsystem;
 
-import org.terasology.math.geom.Vector3f;
-import org.terasology.math.geom.Vector3i;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
 
 public final class LASUtils {
     public static final String BLACK_FLAG_URI = "lightAndShadowResources:blackFlag";
@@ -27,7 +29,7 @@ public final class LASUtils {
     /**
      * Floating Platform values
      */
-    public static final Vector3i FLOATING_PLATFORM_POSITION = new Vector3i(0, 60, 252);
+    public static final Vector3ic FLOATING_PLATFORM_POSITION = new Vector3i(0, 60, 252);
     public static final int FLOATING_PLATFORM_WIDTH = 28;
     public static final int FLOATING_PLATFORM_LENGTH = 56;
     public static final int FLOATING_PLATFORM_HEIGHT_LEVEL = 60;
@@ -40,11 +42,11 @@ public final class LASUtils {
     /**
      * Position of Red base
      */
-    public static final Vector3i CENTER_RED_BASE_POSITION = new Vector3i(30, 10, 0);
+    public static final Vector3ic CENTER_RED_BASE_POSITION = new Vector3i(30, 10, 0);
     /**
      * Position of Black base
      */
-    public static final Vector3i CENTER_BLACK_BASE_POSITION = new Vector3i(-30, 10, 0);
+    public static final Vector3ic CENTER_BLACK_BASE_POSITION = new Vector3i(-30, 10, 0);
     public static final String BLACK_BASE_STONE = "lightAndShadowResources:blackBaseStone";
     public static final String RED_BASE_STONE = "lightAndShadowResources:redBaseStone";
     /**
@@ -64,8 +66,8 @@ public final class LASUtils {
     public static final String RED_HEALTH_SKIN = "lightAndShadowResources:healthRed";
     public static final String BLACK_HEALTH_SKIN = "lightAndShadowResources:healthBlack";
     // The position near the team's base that player will be teleported to on choosing a team
-    public static final Vector3f RED_TELEPORT_DESTINATION = new Vector3f(29, 12, 0);
-    public static final Vector3f BLACK_TELEPORT_DESTINATION = new Vector3f(-29, 12, 0);
+    public static final Vector3fc RED_TELEPORT_DESTINATION = new Vector3f(29, 12, 0);
+    public static final Vector3fc BLACK_TELEPORT_DESTINATION = new Vector3f(-29, 12, 0);
     public static final String MAGIC_STAFF_URI = "LightAndShadowResources:magicStaff";
 
     public static final String DEATH_SCREEN = "engine:DeathScreen";
@@ -79,12 +81,12 @@ public final class LASUtils {
 
     public static Vector3i getFlagLocation(String flagTeam) {
         if (flagTeam.equals(RED_TEAM)) {
-            return (new Vector3i(CENTER_RED_BASE_POSITION.x, CENTER_RED_BASE_POSITION.y + 1,
-                    CENTER_RED_BASE_POSITION.z));
+            return (new Vector3i(CENTER_RED_BASE_POSITION.x(), CENTER_RED_BASE_POSITION.y() + 1,
+                    CENTER_RED_BASE_POSITION.z()));
         }
         if (flagTeam.equals(BLACK_TEAM)) {
-            return (new Vector3i(CENTER_BLACK_BASE_POSITION.x, CENTER_BLACK_BASE_POSITION.y + 1,
-                    CENTER_BLACK_BASE_POSITION.z));
+            return (new Vector3i(CENTER_BLACK_BASE_POSITION.x(), CENTER_BLACK_BASE_POSITION.y() + 1,
+                    CENTER_BLACK_BASE_POSITION.z()));
         }
         return null;
     }
@@ -109,7 +111,7 @@ public final class LASUtils {
         return null;
     }
 
-    public static Vector3f getTeleportDestination(String team) {
+    public static Vector3fc getTeleportDestination(String team) {
         if (team.equals(RED_TEAM)) {
             return RED_TELEPORT_DESTINATION;
         }

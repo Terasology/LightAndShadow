@@ -58,7 +58,7 @@ public class RestartSystem extends BaseComponentSystem {
                 EntityRef player = client.getComponent(ClientComponent.class).character;
                 String team = player.getComponent(LASTeamComponent.class).team;
                 player.send(new RestoreFullHealthEvent(player));
-                player.send(new CharacterTeleportEvent(JomlUtil.from(LASUtils.getTeleportDestination(team))));
+                player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
                 client.send(new ClientRestartEvent());
             }
     }

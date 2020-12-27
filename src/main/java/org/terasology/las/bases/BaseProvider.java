@@ -16,9 +16,9 @@
 package org.terasology.las.bases;
 
 import com.google.common.collect.ImmutableSet;
+import org.joml.Vector3ic;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.math.Region3i;
-import org.terasology.math.geom.Vector3i;
+import org.terasology.world.block.BlockRegion;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.FacetProvider;
 import org.terasology.world.generation.GeneratingRegion;
@@ -28,11 +28,11 @@ import java.util.Collection;
 
 @Produces(BaseFacet.class)
 public class BaseProvider implements FacetProvider {
-    Region3i redBaseRegion = CreateBaseRegionFromVector(LASUtils.CENTER_RED_BASE_POSITION);
-    Region3i blackBaseRegion = CreateBaseRegionFromVector(LASUtils.CENTER_BLACK_BASE_POSITION);
+    BlockRegion redBaseRegion = new BlockRegion(LASUtils.CENTER_RED_BASE_POSITION).expand(LASUtils.BASE_EXTENT, 0, LASUtils.BASE_EXTENT);
+    BlockRegion blackBaseRegion = new BlockRegion(LASUtils.CENTER_BLACK_BASE_POSITION).expand(LASUtils.BASE_EXTENT, 0, LASUtils.BASE_EXTENT);
 
-    Region3i redFlagRegion = CreateFlagRegionFromVector(LASUtils.CENTER_RED_BASE_POSITION);
-    Region3i blackFlagRegion = CreateFlagRegionFromVector(LASUtils.CENTER_BLACK_BASE_POSITION);
+    BlockRegion redFlagRegion = new BlockRegion(LASUtils.CENTER_RED_BASE_POSITION).translate(0,1,0);
+    BlockRegion blackFlagRegion = new BlockRegion(LASUtils.CENTER_BLACK_BASE_POSITION).translate(0,1,0);
 
     private Collection<Base> fixedBases = ImmutableSet.of(
             new Base(redBaseRegion, redFlagRegion),
@@ -51,13 +51,5 @@ public class BaseProvider implements FacetProvider {
             facet.add(base);
         }
         region.setRegionFacet(BaseFacet.class, facet);
-    }
-
-    private Region3i CreateBaseRegionFromVector(Vector3i centerBasePosition) {
-        return Region3i.createFromMinMax(new Vector3i(centerBasePosition.x() - LASUtils.BASE_EXTENT, centerBasePosition.y(), centerBasePosition.z() - LASUtils.BASE_EXTENT), new Vector3i(centerBasePosition.x() + LASUtils.BASE_EXTENT, centerBasePosition.y(), centerBasePosition.z() + LASUtils.BASE_EXTENT));
-    }
-
-    private Region3i CreateFlagRegionFromVector(Vector3i centerBasePosition) {
-        return Region3i.createFromMinMax(new Vector3i(centerBasePosition.x(), centerBasePosition.y() + 1, centerBasePosition.z()), new Vector3i(centerBasePosition.x(), centerBasePosition.y() + 1, centerBasePosition.z()));
     }
 }

@@ -18,10 +18,9 @@ package org.terasology.las.platform;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.math.Region3i;
-import org.terasology.math.TeraMath;
 import org.terasology.math.geom.Rect2i;
-import org.terasology.math.geom.Vector3i;
+import org.terasology.world.block.BlockRegion;
+import org.terasology.world.block.BlockRegionc;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.ConfigurableFacetProvider;
 import org.terasology.world.generation.FacetProviderPlugin;
@@ -38,28 +37,32 @@ import java.util.Collections;
 @RegisterPlugin
 @Produces(FloatingPlatformFacet.class)
 public class FloatingPlatformProvider implements ConfigurableFacetProvider, FacetProviderPlugin {
-    private static final Rect2i FLOATING_PLATFORM_REGION = Rect2i.createFromMinAndMax(LASUtils.FLOATING_PLATFORM_POSITION.getX() - LASUtils.FLOATING_PLATFORM_WIDTH / 2,
-            LASUtils.FLOATING_PLATFORM_POSITION.getZ() - LASUtils.FLOATING_PLATFORM_LENGTH / 2,
-            LASUtils.FLOATING_PLATFORM_POSITION.getX() + LASUtils.FLOATING_PLATFORM_WIDTH / 2,
-            LASUtils.FLOATING_PLATFORM_POSITION.getZ() + LASUtils.FLOATING_PLATFORM_LENGTH /2);
+    private static final Rect2i FLOATING_PLATFORM_REGION =
+            Rect2i.createFromMinAndMax(LASUtils.FLOATING_PLATFORM_POSITION.x() - LASUtils.FLOATING_PLATFORM_WIDTH / 2,
+                    LASUtils.FLOATING_PLATFORM_POSITION.z() - LASUtils.FLOATING_PLATFORM_LENGTH / 2,
+                    LASUtils.FLOATING_PLATFORM_POSITION.x() + LASUtils.FLOATING_PLATFORM_WIDTH / 2,
+                    LASUtils.FLOATING_PLATFORM_POSITION.z() + LASUtils.FLOATING_PLATFORM_LENGTH / 2);
 
-    private static final Region3i RED_TELEPORTER_REGION = Region3i.createFromMinMax(new Vector3i(LASUtils.FLOATING_PLATFORM_POSITION.getX() + LASUtils.TELEPORTER_OFFSET,
-                                                                                            LASUtils.FLOATING_PLATFORM_POSITION.getY() + 1,
-                                                                                            LASUtils.FLOATING_PLATFORM_POSITION.getZ() + LASUtils.NPC_OFFSET),
-                                                                                    new Vector3i(LASUtils.FLOATING_PLATFORM_POSITION.getX() + LASUtils.TELEPORTER_OFFSET,
-                                                                                            LASUtils.FLOATING_PLATFORM_POSITION.getY() + 1,
-                                                                                            LASUtils.FLOATING_PLATFORM_POSITION.getZ() + LASUtils.NPC_OFFSET));
-    private static final Region3i BLACK_TELEPORTER_REGION = Region3i.createFromMinMax(new Vector3i(LASUtils.FLOATING_PLATFORM_POSITION.getX() - LASUtils.TELEPORTER_OFFSET,
-                                                                                            LASUtils.FLOATING_PLATFORM_POSITION.getY() + 1,
-                                                                                            LASUtils.FLOATING_PLATFORM_POSITION.getZ() + LASUtils.NPC_OFFSET),
-                                                                                        new Vector3i(LASUtils.FLOATING_PLATFORM_POSITION.getX() - LASUtils.TELEPORTER_OFFSET,
-                                                                                                LASUtils.FLOATING_PLATFORM_POSITION.getY() + 1,
-                                                                                                LASUtils.FLOATING_PLATFORM_POSITION.getZ() + LASUtils.NPC_OFFSET));
+    private static final BlockRegionc RED_TELEPORTER_REGION =
+            new BlockRegion(LASUtils.FLOATING_PLATFORM_POSITION.x() + LASUtils.TELEPORTER_OFFSET,
+                    LASUtils.FLOATING_PLATFORM_POSITION.y() + 1,
+                    LASUtils.FLOATING_PLATFORM_POSITION.z() + LASUtils.NPC_OFFSET,
+                    LASUtils.FLOATING_PLATFORM_POSITION.x() + LASUtils.TELEPORTER_OFFSET,
+                    LASUtils.FLOATING_PLATFORM_POSITION.y() + 1,
+                    LASUtils.FLOATING_PLATFORM_POSITION.z() + LASUtils.NPC_OFFSET);
+    private static final BlockRegionc BLACK_TELEPORTER_REGION =
+            new BlockRegion(LASUtils.FLOATING_PLATFORM_POSITION.x() - LASUtils.TELEPORTER_OFFSET,
+                    LASUtils.FLOATING_PLATFORM_POSITION.y() + 1,
+                    LASUtils.FLOATING_PLATFORM_POSITION.z() + LASUtils.NPC_OFFSET,
+                    LASUtils.FLOATING_PLATFORM_POSITION.x() - LASUtils.TELEPORTER_OFFSET,
+                    LASUtils.FLOATING_PLATFORM_POSITION.y() + 1,
+                    LASUtils.FLOATING_PLATFORM_POSITION.z() + LASUtils.NPC_OFFSET);
 
     private Config configuration = new Config();
 
     private Collection<FloatingPlatform> fixedPlatforms = Collections.singleton(
-            new FloatingPlatform(FLOATING_PLATFORM_REGION, LASUtils.FLOATING_PLATFORM_POSITION.getY(), RED_TELEPORTER_REGION, BLACK_TELEPORTER_REGION));
+            new FloatingPlatform(FLOATING_PLATFORM_REGION, LASUtils.FLOATING_PLATFORM_POSITION.y(),
+                    RED_TELEPORTER_REGION, BLACK_TELEPORTER_REGION));
 
     @Override
     public void process(GeneratingRegion region) {

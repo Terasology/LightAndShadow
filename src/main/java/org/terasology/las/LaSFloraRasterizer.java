@@ -5,6 +5,7 @@ package org.terasology.las;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+import org.joml.Vector3ic;
 import org.terasology.core.world.generator.facets.FloraFacet;
 import org.terasology.core.world.generator.rasterizers.FloraRasterizer;
 import org.terasology.core.world.generator.rasterizers.FloraType;
@@ -56,7 +57,7 @@ public class LaSFloraRasterizer extends FloraRasterizer {
 
         WhiteNoise noise = new WhiteNoise(chunk.getPosition().hashCode());
 
-        Map<BaseVector3i, FloraType> entries = facet.getRelativeEntries();
+        Map<Vector3ic, FloraType> entries = facet.getRelativeEntries();
         // check if some other rasterizer has already placed something here
         entries.keySet().stream().filter(pos -> chunk.getBlock(pos).equals(air)).forEach(pos -> {
 
