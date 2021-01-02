@@ -62,7 +62,7 @@ public class FloatingPlatformProvider implements ConfigurableFacetProvider, Face
 
     private Config configuration = new Config();
 
-    private Collection<FloatingPlatform> fixedPlatforms = Collections.singleton(
+    private final Collection<FloatingPlatform> fixedPlatforms = Collections.singleton(
             new FloatingPlatform(FLOATING_PLATFORM_REGION, LASUtils.FLOATING_PLATFORM_POSITION.y(),
                     RED_TELEPORTER_REGION, BLACK_TELEPORTER_REGION));
 
