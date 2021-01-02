@@ -73,7 +73,7 @@ public class FloatingPlatformProvider implements ConfigurableFacetProvider, Face
         BlockAreac worldRect = platformFacet.getWorldArea();
 
         for (FloatingPlatform platform : fixedPlatforms) {
-            if (platform.getArea().contains(worldRect)) {
+            if (platform.getArea().intersectsBlockArea(worldRect)) {
                 // TODO: consider checking height as well
                 platformFacet.add(platform);
             }
