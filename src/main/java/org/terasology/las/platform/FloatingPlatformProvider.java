@@ -19,6 +19,8 @@ package org.terasology.las.platform;
 import org.terasology.entitySystem.Component;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.math.geom.Rect2i;
+import org.terasology.world.block.BlockArea;
+import org.terasology.world.block.BlockAreac;
 import org.terasology.world.block.BlockRegion;
 import org.terasology.world.block.BlockRegionc;
 import org.terasology.world.generation.Border3D;
@@ -37,8 +39,8 @@ import java.util.Collections;
 @RegisterPlugin
 @Produces(FloatingPlatformFacet.class)
 public class FloatingPlatformProvider implements ConfigurableFacetProvider, FacetProviderPlugin {
-    private static final Rect2i FLOATING_PLATFORM_REGION =
-            Rect2i.createFromMinAndMax(LASUtils.FLOATING_PLATFORM_POSITION.x() - LASUtils.FLOATING_PLATFORM_WIDTH / 2,
+    private static final BlockAreac FLOATING_PLATFORM_REGION =
+            new BlockArea(LASUtils.FLOATING_PLATFORM_POSITION.x() - LASUtils.FLOATING_PLATFORM_WIDTH / 2,
                     LASUtils.FLOATING_PLATFORM_POSITION.z() - LASUtils.FLOATING_PLATFORM_LENGTH / 2,
                     LASUtils.FLOATING_PLATFORM_POSITION.x() + LASUtils.FLOATING_PLATFORM_WIDTH / 2,
                     LASUtils.FLOATING_PLATFORM_POSITION.z() + LASUtils.FLOATING_PLATFORM_LENGTH / 2);
@@ -68,10 +70,10 @@ public class FloatingPlatformProvider implements ConfigurableFacetProvider, Face
     public void process(GeneratingRegion region) {
         Border3D border = region.getBorderForFacet(FloatingPlatformFacet.class);
         FloatingPlatformFacet platformFacet = new FloatingPlatformFacet(region.getRegion(), border);
-        Rect2i worldRect = platformFacet.getWorldRegion();
+        BlockAreac worldRect = platformFacet.getWorldArea();
 
         for (FloatingPlatform platform : fixedPlatforms) {
-            if (platform.getArea().overlaps(worldRect)) {
+            if (platform.getArea().contains(worldRect)) {
                 // TODO: consider checking height as well
                 platformFacet.add(platform);
             }
