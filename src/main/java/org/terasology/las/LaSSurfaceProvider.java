@@ -15,6 +15,7 @@
  */
 package org.terasology.las;
 
+import org.joml.Vector2ic;
 import org.terasology.math.geom.BaseVector2i;
 import org.terasology.math.geom.Rect2i;
 import org.terasology.world.generation.Border3D;
@@ -37,8 +38,7 @@ public class LaSSurfaceProvider implements FacetProvider {
         ElevationFacet facet = new ElevationFacet(region.getRegion(), border);
 
         // Loop through every position in our 2d array
-        Rect2i processRegion = facet.getWorldRegion();
-        for (BaseVector2i position : processRegion.contents()) {
+        for (Vector2ic position : facet.getWorldArea()) {
             facet.setWorld(position, 9.5f);
         }
 

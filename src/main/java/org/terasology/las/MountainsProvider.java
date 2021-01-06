@@ -3,6 +3,7 @@
 package org.terasology.las;
 
 import org.joml.Vector2f;
+import org.joml.Vector2ic;
 import org.terasology.math.TeraMath;
 import org.terasology.math.geom.BaseVector2i;
 import org.terasology.math.geom.Rect2i;
@@ -35,13 +36,12 @@ public class MountainsProvider implements FacetProvider {
         PlayAreaFacet playAreaFacet = region.getRegionFacet(PlayAreaFacet.class);
         float mountainHeight = 40;
 
-        Rect2i processRegion = facet.getWorldRegion();
-        for (BaseVector2i position : processRegion.contents()) {
+        for (Vector2ic position : facet.getWorldArea()) {
             // scale our max mountain height to noise (between -1 and 1)
             float additiveMountainHeight = mountainNoise.noise(position.x(), position.y()) * mountainHeight;
             // don't bother subtracting mountain height, that will allow unaffected regions
             additiveMountainHeight = TeraMath.clamp(additiveMountainHeight, 0, mountainHeight);
-            if (!playAreaFacet.getWorld((Vector2i) position)) {
+            if (!playAreaFacet.getWorld(position)) {
                 facet.setWorld(position, facet.getWorld(position) + additiveMountainHeight + 10);
             }
         }

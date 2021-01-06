@@ -3,9 +3,9 @@
 
 package org.terasology.las;
 
+import org.joml.Vector2ic;
 import org.terasology.core.world.CoreBiome;
 import org.terasology.core.world.generator.facets.BiomeFacet;
-import org.terasology.math.geom.BaseVector2i;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.FacetProvider;
 import org.terasology.world.generation.GeneratingRegion;
@@ -18,7 +18,7 @@ public class LaSBiomeProvider implements FacetProvider {
         Border3D border = region.getBorderForFacet(BiomeFacet.class);
         BiomeFacet biomeFacet = new BiomeFacet(region.getRegion(), border);
 
-        for (BaseVector2i pos : biomeFacet.getRelativeRegion().contents()) {
+        for (Vector2ic pos : biomeFacet.getRelativeArea()) {
             biomeFacet.set(pos, CoreBiome.PLAINS);
         }
         region.setRegionFacet(BiomeFacet.class, biomeFacet);
