@@ -17,6 +17,7 @@ package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import org.joml.Vector3f;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -24,12 +25,12 @@ import org.terasology.entitySystem.entity.lifecycleEvents.BeforeRemoveComponent;
 import org.terasology.entitySystem.entity.lifecycleEvents.OnActivatedComponent;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
+import org.terasology.entitySystem.systems.RegisterMode;
+import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.logic.characters.events.OnEnterBlockEvent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.minion.work.WorkTargetComponent;
-import org.terasology.registry.CoreRegistry;
 
 import java.util.Map;
 import java.util.Set;
@@ -37,7 +38,7 @@ import java.util.Set;
 /**
  * Created by synopia on 01.02.14.
  */
-//@RegisterSystem
+@RegisterSystem(RegisterMode.AUTHORITY)
 public class EnemySystem extends BaseComponentSystem {
     public static final Logger logger = LoggerFactory.getLogger(EnemySystem.class);
     private Map<String, Set<EntityRef>> teams = Maps.newHashMap();
@@ -45,7 +46,6 @@ public class EnemySystem extends BaseComponentSystem {
     private Map<EntityRef, Set<Distance>> distances = Maps.newHashMap();
 
     public EnemySystem() {
-        CoreRegistry.put(EnemySystem.class, this);
     }
 
     @Override
@@ -54,11 +54,7 @@ public class EnemySystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void onActivated(OnActivatedComponent event, EntityRef entityRef, LASTeamComponent team, LocationComponent locationComponent) {
-        Set<EntityRef> teamEntities = teams.get(team.team);
-        if (teamEntities == null) {
-            teamEntities = Sets.newHashSet();
-            teams.put(team.team, teamEntities);
-        }
+        Set<EntityRef> teamEntities = teams.computeIfAbsent(team.team, k -> Sets.newHashSet());
         teamEntities.add(entityRef);
         entities.add(entityRef);
 //        recalculateDistances();
@@ -88,8 +84,8 @@ public class EnemySystem extends BaseComponentSystem {
             others.removeAll(entry.getValue());
             for (EntityRef one : entry.getValue()) {
                 for (EntityRef two : others) {
-                    Vector3f dist = one.getComponent(LocationComponent.class).getWorldPosition();
-                    dist.sub(two.getComponent(LocationComponent.class).getWorldPosition());
+                    Vector3f dist = one.getComponent(LocationComponent.class).getWorldPosition(new Vector3f());
+                    dist.sub(two.getComponent(LocationComponent.class).getWorldPosition(new Vector3f()));
                     float length = dist.length();
                     addDistance(one, two, length);
                     addDistance(two, one, length);
@@ -99,11 +95,7 @@ public class EnemySystem extends BaseComponentSystem {
     }
 
     private void addDistance(EntityRef one, EntityRef two, float dist) {
-        Set<Distance> map = distances.get(one);
-        if (map == null) {
-            map = Sets.newTreeSet();
-            distances.put(one, map);
-        }
+        Set<Distance> map = distances.computeIfAbsent(one, k -> Sets.newTreeSet());
         map.add(new Distance(two, dist));
     }
 
