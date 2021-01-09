@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.las;
 
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import org.terasology.core.world.generator.facetProviders.DefaultFloraProvider;
 import org.terasology.core.world.generator.facetProviders.DefaultTreeProvider;
 import org.terasology.core.world.generator.facetProviders.SeaLevelProvider;
@@ -17,8 +19,6 @@ import org.terasology.las.bases.BaseRasterizer;
 import org.terasology.las.platform.FloatingPlatformProvider;
 import org.terasology.las.platform.FloatingPlatformRasterizer;
 import org.terasology.logic.spawner.Spawner;
-import org.terasology.math.JomlUtil;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.generation.BaseFacetedWorldGenerator;
@@ -40,8 +40,8 @@ public class LaSSimpleWorldGenerator extends BaseFacetedWorldGenerator {
     }
 
     @Override
-    public Vector3f getSpawnPosition(EntityRef entity) {
-        Vector3f pos = JomlUtil.from(spawner.getSpawnPosition(getWorld(), entity));
+    public Vector3fc getSpawnPosition(EntityRef entity) {
+        Vector3f pos = spawner.getSpawnPosition(getWorld(), entity);
         return pos != null ? pos : super.getSpawnPosition(entity);
     }
 
