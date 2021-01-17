@@ -15,6 +15,7 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.joml.Vector3f;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
@@ -43,7 +44,7 @@ public class ClientParticleSystem extends BaseComponentSystem {
             EntityRef particleEntity = entityManager.create(LASUtils.getFlagParticle(team));
             LocationComponent targetLoc = player.getComponent(LocationComponent.class);
             LocationComponent childLoc = particleEntity.getComponent(LocationComponent.class);
-            childLoc.setWorldPosition(targetLoc.getWorldPosition());
+            childLoc.setWorldPosition(targetLoc.getWorldPosition(new Vector3f()));
             Location.attachChild(player, particleEntity);
             particleEntity.setOwner(player);
             player.addComponent(new FlagParticleComponent());
