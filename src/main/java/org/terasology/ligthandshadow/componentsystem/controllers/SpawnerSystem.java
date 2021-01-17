@@ -15,6 +15,7 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.joml.Vector3f;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.prefab.Prefab;
@@ -23,7 +24,6 @@ import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.ligthandshadow.componentsystem.components.SpawnerComponent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 import org.terasology.world.WorldProvider;
 
@@ -60,7 +60,7 @@ public class SpawnerSystem extends BaseComponentSystem implements UpdateSubscrib
                 spawnerBlock.cooldown = spawnerBlock.each;
                 if (spawnerBlock.currentlyAlive < spawnerBlock.max) {
                     LocationComponent location = block.getComponent(LocationComponent.class);
-                    Vector3f worldPosition = location.getWorldPosition();
+                    Vector3f worldPosition = location.getWorldPosition(new Vector3f());
                     List<Prefab> spawn = spawnerBlock.spawn(block);
                     for (Prefab prefab : spawn) {
                         float x = worldPosition.x + random.nextInt(3) - 1;
