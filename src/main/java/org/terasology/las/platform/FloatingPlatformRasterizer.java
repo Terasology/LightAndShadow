@@ -31,6 +31,7 @@ import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.BlockRegion;
 import org.terasology.world.block.BlockRegionc;
+import org.terasology.world.chunks.Chunks;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizerPlugin;
@@ -111,14 +112,14 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
             for (Vector3ic blackTeleporterPosition : blackTeleporterRegion) {
                 //set down the teleporter at every square in the designated region
                 if (chunkRegion.getRegion().contains(blackTeleporterPosition)) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(blackTeleporterPosition, tempPos), BLACK_DICE);
+                    chunk.setBlock(Chunks.toRelative(blackTeleporterPosition, tempPos), BLACK_DICE);
                 }
             }
 
             for (Vector3ic redTeleporterPosition : redTeleporterRegion) {
                 //set down the teleporter at every square in the designated region
                 if (chunkRegion.getRegion().contains(redTeleporterPosition)) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(redTeleporterPosition, tempPos), RED_DICE);
+                    chunk.setBlock(Chunks.toRelative(redTeleporterPosition, tempPos), RED_DICE);
                 }
             }
         }

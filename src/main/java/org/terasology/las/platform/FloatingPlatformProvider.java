@@ -18,7 +18,6 @@ package org.terasology.las.platform;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.math.geom.Rect2i;
 import org.terasology.world.block.BlockArea;
 import org.terasology.world.block.BlockAreac;
 import org.terasology.world.block.BlockRegion;

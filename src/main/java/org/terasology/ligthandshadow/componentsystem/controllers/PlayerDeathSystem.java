@@ -15,6 +15,7 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.joml.Vector3f;
 import org.terasology.assets.management.AssetManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
@@ -35,7 +36,6 @@ import org.terasology.logic.inventory.events.DropItemRequest;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.math.JomlUtil;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.registry.In;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
@@ -83,15 +83,15 @@ public class PlayerDeathSystem extends BaseComponentSystem {
 
     private void dropItemsFromInventory(EntityRef player) {
         Prefab staffPrefab = assetManager.getAsset(LASUtils.MAGIC_STAFF_URI, Prefab.class).orElse(null);
-        Vector3f deathPosition = new Vector3f(player.getComponent(LocationComponent.class).getLocalPosition());
-        Vector3f impulse = Vector3f.zero();
+        Vector3f deathPosition = new Vector3f(JomlUtil.from(player.getComponent(LocationComponent.class).getLocalPosition()));
+        Vector3f impulse = new Vector3f();
         int inventorySize = inventoryManager.getNumSlots(player);
         for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
             EntityRef slot = inventoryManager.getItemInSlot(player, slotNumber);
             Prefab currentPrefab = slot.getParentPrefab();
             if (currentPrefab != null && !currentPrefab.equals(staffPrefab)) {
                 int count = inventoryManager.getStackSize(slot);
-                player.send(new DropItemRequest(slot, player, JomlUtil.from(impulse), JomlUtil.from(deathPosition), count));
+                player.send(new DropItemRequest(slot, player, impulse, deathPosition, count));
             }
         }
     }

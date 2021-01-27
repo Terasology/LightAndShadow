@@ -9,7 +9,6 @@ import org.joml.Vector3ic;
 import org.terasology.core.world.generator.facets.FloraFacet;
 import org.terasology.core.world.generator.rasterizers.FloraRasterizer;
 import org.terasology.core.world.generator.rasterizers.FloraType;
-import org.terasology.math.geom.BaseVector3i;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.utilities.procedural.WhiteNoise;
 import org.terasology.world.block.Block;

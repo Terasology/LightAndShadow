@@ -16,6 +16,7 @@
 
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.joml.Vector3f;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
@@ -40,7 +41,6 @@ import org.terasology.logic.inventory.events.InventorySlotChangedEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.math.JomlUtil;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 import org.terasology.world.WorldProvider;
@@ -98,12 +98,12 @@ public class AttackSystem extends BaseComponentSystem {
                 }
             }
         }
-        Vector3f startPosition = new Vector3f(targetPlayer.getComponent(LocationComponent.class).getLocalPosition());
-        Vector3f endPosition = new Vector3f(attackingPlayer.getComponent(LocationComponent.class).getLocalPosition());
+        Vector3f startPosition = new Vector3f(JomlUtil.from(targetPlayer.getComponent(LocationComponent.class).getLocalPosition()));
+        Vector3f endPosition = new Vector3f(JomlUtil.from(attackingPlayer.getComponent(LocationComponent.class).getLocalPosition()));
         Vector3f newPosition = new Vector3f((startPosition.x + endPosition.x) / 2,
                 (startPosition.y + endPosition.y) / 2,
                 (startPosition.z + endPosition.z) / 2);
-        targetPlayer.send(new DropItemRequest(flagSlot, targetPlayer, JomlUtil.from(newPosition), JomlUtil.from(startPosition)));
+        targetPlayer.send(new DropItemRequest(flagSlot, targetPlayer, newPosition, startPosition));
     }
 
     private boolean canPlayerAttack(EntityRef attackingPlayer) {

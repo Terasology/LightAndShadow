@@ -23,6 +23,7 @@ import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.BlockRegion;
+import org.terasology.world.chunks.Chunks;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizer;
@@ -54,18 +55,18 @@ public class BaseRasterizer implements WorldRasterizer {
             //place blocks for each of the bases and flags
             for (Vector3ic baseBlockPosition : baseRegion) {
                 if (chunkRegion.getRegion().contains(baseBlockPosition) && baseBlockPosition.x() > 0) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(baseBlockPosition, tempPos), redBaseStone);
+                    chunk.setBlock(Chunks.toRelative(baseBlockPosition, tempPos), redBaseStone);
                 } else if (chunkRegion.getRegion().contains(baseBlockPosition)) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(baseBlockPosition, tempPos), blackBaseStone);
+                    chunk.setBlock(Chunks.toRelative(baseBlockPosition, tempPos), blackBaseStone);
                 }
             }
 
             for (Vector3ic flagPosition : flagRegion) {
                 //flag type depends on the x position of the flag to determine which base it's at
                 if (chunkRegion.getRegion().contains(flagPosition) && flagPosition.x() > 0) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(flagPosition, tempPos), redFlag);
+                    chunk.setBlock(Chunks.toRelative(flagPosition, tempPos), redFlag);
                 } else if (chunkRegion.getRegion().contains(flagPosition)) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(flagPosition, tempPos), blackFlag);
+                    chunk.setBlock(Chunks.toRelative(flagPosition, tempPos), blackFlag);
                 }
             }
         }

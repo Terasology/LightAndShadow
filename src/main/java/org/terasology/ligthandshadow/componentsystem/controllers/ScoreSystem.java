@@ -15,6 +15,7 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.joml.Vector3i;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
@@ -35,8 +36,6 @@ import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.permission.PermissionManager;
 import org.terasology.logic.players.LocalPlayer;
-import org.terasology.math.JomlUtil;
-import org.terasology.math.geom.Vector3i;
 import org.terasology.network.ClientComponent;
 import org.terasology.registry.In;
 import org.terasology.registry.Share;
@@ -209,7 +208,7 @@ public class ScoreSystem extends BaseComponentSystem {
     }
 
     private void movePlayerFlagToBase(EntityRef player, String oppositionTeam, EntityRef heldFlag) {
-        Vector3i basePosition = JomlUtil.from(LASUtils.getFlagLocation(oppositionTeam));
+        Vector3i basePosition = LASUtils.getFlagLocation(oppositionTeam);
         String flag = LASUtils.getFlagURI(oppositionTeam);
         inventoryManager.removeItem(player, player, heldFlag, true);
         worldProvider.setBlock(basePosition, blockManager.getBlock(flag));
