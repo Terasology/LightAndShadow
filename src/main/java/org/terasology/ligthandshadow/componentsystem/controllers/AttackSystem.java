@@ -98,12 +98,9 @@ public class AttackSystem extends BaseComponentSystem {
                 }
             }
         }
-        Vector3f startPosition = new Vector3f(JomlUtil.from(targetPlayer.getComponent(LocationComponent.class).getLocalPosition()));
-        Vector3f endPosition = new Vector3f(JomlUtil.from(attackingPlayer.getComponent(LocationComponent.class).getLocalPosition()));
-        Vector3f newPosition = new Vector3f((startPosition.x + endPosition.x) / 2,
-                (startPosition.y + endPosition.y) / 2,
-                (startPosition.z + endPosition.z) / 2);
-        targetPlayer.send(new DropItemRequest(flagSlot, targetPlayer, newPosition, startPosition));
+        Vector3f startPosition = JomlUtil.from(targetPlayer.getComponent(LocationComponent.class).getLocalPosition());
+        Vector3f impulse = JomlUtil.from(attackingPlayer.getComponent(LocationComponent.class).getLocalPosition()).add(startPosition).div(2f);
+        targetPlayer.send(new DropItemRequest(flagSlot, targetPlayer, impulse, startPosition));
     }
 
     private boolean canPlayerAttack(EntityRef attackingPlayer) {

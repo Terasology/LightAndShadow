@@ -83,7 +83,7 @@ public class PlayerDeathSystem extends BaseComponentSystem {
 
     private void dropItemsFromInventory(EntityRef player) {
         Prefab staffPrefab = assetManager.getAsset(LASUtils.MAGIC_STAFF_URI, Prefab.class).orElse(null);
-        Vector3f deathPosition = new Vector3f(JomlUtil.from(player.getComponent(LocationComponent.class).getLocalPosition()));
+        Vector3f deathPosition = JomlUtil.from(player.getComponent(LocationComponent.class).getLocalPosition());
         Vector3f impulse = new Vector3f();
         int inventorySize = inventoryManager.getNumSlots(player);
         for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
