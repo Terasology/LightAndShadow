@@ -32,7 +32,6 @@ import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.health.event.OnDamagedEvent;
 import org.terasology.logic.inventory.ItemComponent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.JomlUtil;
 import org.terasology.math.Side;
 import org.terasology.particles.components.ParticleEmitterComponent;
 import org.terasology.registry.In;
@@ -90,10 +89,10 @@ public class CardSystem extends BaseComponentSystem {
         }
 
         Vector3f offset = new Vector3f(event.getHitPosition());
-        offset.sub(new Vector3f(JomlUtil.from(targetBlockComponent.position)));
+        offset.sub(new Vector3f(targetBlockComponent.getPosition(new Vector3i())));
         Side offsetDir = Side.inDirection(offset);
 
-        Vector3i primePos = new Vector3i(JomlUtil.from(targetBlockComponent.position));
+        Vector3i primePos = new Vector3i(targetBlockComponent.getPosition(new Vector3i()));
         primePos.add(offsetDir.direction());
 
         Block primeBlock = worldProvider.getBlock(primePos);
@@ -130,7 +129,7 @@ public class CardSystem extends BaseComponentSystem {
         cardEntity.addComponent(new BlockRegionComponent(new BlockRegion(bottomBlockPos).union(topBlockPos)));
 
         Vector3f cardCenter = new Vector3f(bottomBlockPos).add(0, 0.5f, 0);
-        cardEntity.saveComponent(new LocationComponent(JomlUtil.from(cardCenter)));
+        cardEntity.saveComponent(new LocationComponent(cardCenter));
         CardComponent newCardComponent = cardEntity.getComponent(CardComponent.class);
         cardEntity.saveComponent(newCardComponent);
         cardEntity.removeComponent(ItemComponent.class);
