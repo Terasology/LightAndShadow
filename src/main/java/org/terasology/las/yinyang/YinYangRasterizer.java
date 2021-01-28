@@ -3,10 +3,10 @@
 package org.terasology.las.yinyang;
 
 import org.joml.Vector3i;
-import org.terasology.math.ChunkMath;
 import org.terasology.registry.CoreRegistry;
 import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
+import org.terasology.world.chunks.Chunks;
 import org.terasology.world.chunks.CoreChunk;
 import org.terasology.world.generation.Region;
 import org.terasology.world.generation.WorldRasterizerPlugin;
@@ -52,7 +52,7 @@ public class YinYangRasterizer implements WorldRasterizerPlugin {
                 String blockString = pixel(j, i, RADIUS);
                 Vector3i chunkBlockPosition = new Vector3i(i, 0, j).add(yinYangPosition);
                 if (chunk.getRegion().contains(chunkBlockPosition)) {
-                    chunk.setBlock(ChunkMath.calcRelativeBlockPos(chunkBlockPosition, tempPos), getBlock(blockString));
+                    chunk.setBlock(Chunks.toRelative(chunkBlockPosition, tempPos), getBlock(blockString));
                 }
             }
         }

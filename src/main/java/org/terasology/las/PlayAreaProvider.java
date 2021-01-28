@@ -15,12 +15,9 @@
  */
 package org.terasology.las;
 
+import org.joml.Vector2i;
 import org.joml.Vector2ic;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.math.JomlUtil;
-import org.terasology.math.geom.BaseVector2i;
-import org.terasology.math.geom.Rect2i;
-import org.terasology.math.geom.Vector2i;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.FacetProvider;
 import org.terasology.world.generation.GeneratingRegion;
@@ -37,7 +34,7 @@ public class PlayAreaProvider implements FacetProvider {
 
         // Loop through every position in our 2d array
         for (Vector2ic position : facet.getWorldArea()) {
-            if (position.distanceSquared(JomlUtil.from(new Vector2i(0, 0))) <= playAreaRadiusSquared) {
+            if (position.distanceSquared(new Vector2i(0, 0)) <= playAreaRadiusSquared) {
                 facet.setWorld(position, true);
             } else {
                 facet.setWorld(position, false);
