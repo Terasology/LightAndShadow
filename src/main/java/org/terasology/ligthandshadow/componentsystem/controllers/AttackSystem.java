@@ -17,6 +17,7 @@
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.Event;
@@ -98,8 +99,9 @@ public class AttackSystem extends BaseComponentSystem {
                 }
             }
         }
-        Vector3f startPosition = JomlUtil.from(targetPlayer.getComponent(LocationComponent.class).getLocalPosition());
-        Vector3f impulse = JomlUtil.from(attackingPlayer.getComponent(LocationComponent.class).getLocalPosition()).add(startPosition).div(2f);
+        Vector3fc startPosition = targetPlayer.getComponent(LocationComponent.class).getLocalPosition();
+        Vector3f impulse = attackingPlayer.getComponent(LocationComponent.class).getLocalPosition()
+                .add(startPosition, new Vector3f()).div(2f);
         targetPlayer.send(new DropItemRequest(flagSlot, targetPlayer, impulse, startPosition));
     }
 

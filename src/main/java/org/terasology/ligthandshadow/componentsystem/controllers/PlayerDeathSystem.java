@@ -16,6 +16,7 @@
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import org.terasology.assets.management.AssetManager;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.EventPriority;
@@ -83,7 +84,7 @@ public class PlayerDeathSystem extends BaseComponentSystem {
 
     private void dropItemsFromInventory(EntityRef player) {
         Prefab staffPrefab = assetManager.getAsset(LASUtils.MAGIC_STAFF_URI, Prefab.class).orElse(null);
-        Vector3f deathPosition = JomlUtil.from(player.getComponent(LocationComponent.class).getLocalPosition());
+        Vector3fc deathPosition = player.getComponent(LocationComponent.class).getLocalPosition();
         Vector3f impulse = new Vector3f();
         int inventorySize = inventoryManager.getNumSlots(player);
         for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
