@@ -28,12 +28,11 @@ import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.health.event.RestoreFullHealthEvent;
 import org.terasology.logic.players.LocalPlayer;
-import org.terasology.math.JomlUtil;
 import org.terasology.network.ClientComponent;
+import org.terasology.nui.layouts.miglayout.MigLayout;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.layers.ingame.DeathScreen;
-import org.terasology.nui.layouts.miglayout.MigLayout;
 
 @RegisterSystem
 public class RestartSystem extends BaseComponentSystem {
