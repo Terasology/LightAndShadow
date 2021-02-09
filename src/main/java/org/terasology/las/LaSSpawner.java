@@ -4,11 +4,9 @@
 package org.terasology.las;
 
 import org.joml.Vector3f;
-import org.joml.Vector3i;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.logic.spawner.Spawner;
-import org.terasology.math.JomlUtil;
 import org.terasology.world.generation.World;
 
 public class LaSSpawner implements Spawner {

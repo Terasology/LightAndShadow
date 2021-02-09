@@ -27,7 +27,6 @@ import org.terasology.ligthandshadow.componentsystem.components.SetTeamOnActivat
 import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.math.JomlUtil;
 import org.terasology.registry.In;
 
 /**
