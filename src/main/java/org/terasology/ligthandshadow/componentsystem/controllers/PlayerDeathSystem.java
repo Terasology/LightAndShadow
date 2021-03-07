@@ -33,7 +33,6 @@ import org.terasology.logic.characters.CharacterTeleportEvent;
 import org.terasology.logic.health.BeforeDestroyEvent;
 import org.terasology.logic.health.event.RestoreFullHealthEvent;
 import org.terasology.logic.inventory.InventoryManager;
-import org.terasology.logic.inventory.events.DropItemRequest;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.logic.players.PlayerCharacterComponent;
 import org.terasology.registry.In;
@@ -75,24 +74,8 @@ public class PlayerDeathSystem extends BaseComponentSystem {
             String team = player.getComponent(LASTeamComponent.class).team;
             updateStatistics(event.getInstigator(), "kills");
             updateStatistics(player, "deaths");
-            dropItemsFromInventory(player);
             player.send(new RestoreFullHealthEvent(player));
             player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
-        }
-    }
-
-    private void dropItemsFromInventory(EntityRef player) {
-        Prefab staffPrefab = assetManager.getAsset(LASUtils.MAGIC_STAFF_URI, Prefab.class).orElse(null);
-        Vector3fc deathPosition = player.getComponent(LocationComponent.class).getLocalPosition();
-        Vector3f impulse = new Vector3f();
-        int inventorySize = inventoryManager.getNumSlots(player);
-        for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
-            EntityRef slot = inventoryManager.getItemInSlot(player, slotNumber);
-            Prefab currentPrefab = slot.getParentPrefab();
-            if (currentPrefab != null && !currentPrefab.equals(staffPrefab)) {
-                int count = inventoryManager.getStackSize(slot);
-                player.send(new DropItemRequest(slot, player, impulse, deathPosition, count));
-            }
         }
     }
 
