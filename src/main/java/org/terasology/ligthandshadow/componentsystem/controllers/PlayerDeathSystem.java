@@ -28,6 +28,7 @@ import org.terasology.engine.logic.characters.AliveCharacterComponent;
 import org.terasology.engine.logic.characters.CharacterComponent;
 import org.terasology.engine.logic.characters.CharacterTeleportEvent;
 import org.terasology.engine.logic.health.BeforeDestroyEvent;
+import org.terasology.engine.logic.health.event.RestoreFullHealthEvent;
 import org.terasology.engine.logic.inventory.InventoryManager;
 import org.terasology.engine.logic.inventory.events.DropItemRequest;
 import org.terasology.engine.logic.location.LocationComponent;
@@ -38,7 +39,6 @@ import org.terasology.engine.world.block.BlockManager;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
-import org.terasology.logic.health.event.RestoreFullHealthEvent;
 
 
 /**
