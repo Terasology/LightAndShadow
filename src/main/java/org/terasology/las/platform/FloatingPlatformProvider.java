@@ -16,18 +16,18 @@
 
 package org.terasology.las.platform;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.world.block.BlockArea;
+import org.terasology.engine.world.block.BlockAreac;
+import org.terasology.engine.world.block.BlockRegion;
+import org.terasology.engine.world.block.BlockRegionc;
+import org.terasology.engine.world.generation.Border3D;
+import org.terasology.engine.world.generation.ConfigurableFacetProvider;
+import org.terasology.engine.world.generation.FacetProviderPlugin;
+import org.terasology.engine.world.generation.GeneratingRegion;
+import org.terasology.engine.world.generation.Produces;
+import org.terasology.engine.world.generator.plugin.RegisterPlugin;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.world.block.BlockArea;
-import org.terasology.world.block.BlockAreac;
-import org.terasology.world.block.BlockRegion;
-import org.terasology.world.block.BlockRegionc;
-import org.terasology.world.generation.Border3D;
-import org.terasology.world.generation.ConfigurableFacetProvider;
-import org.terasology.world.generation.FacetProviderPlugin;
-import org.terasology.world.generation.GeneratingRegion;
-import org.terasology.world.generation.Produces;
-import org.terasology.world.generator.plugin.RegisterPlugin;
 
 import java.util.Collection;
 import java.util.Collections;

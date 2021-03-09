@@ -15,9 +15,9 @@
  */
 package org.terasology.ligthandshadow.componentsystem.events;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.Event;
-import org.terasology.network.BroadcastEvent;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.Event;
+import org.terasology.engine.network.BroadcastEvent;
 
 @BroadcastEvent
 public class FlagDropEvent implements Event {

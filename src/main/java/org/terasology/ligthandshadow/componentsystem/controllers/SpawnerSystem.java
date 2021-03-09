@@ -16,16 +16,16 @@
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.joml.Vector3f;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.world.WorldProvider;
 import org.terasology.ligthandshadow.componentsystem.components.SpawnerComponent;
-import org.terasology.logic.location.LocationComponent;
-import org.terasology.registry.In;
-import org.terasology.world.WorldProvider;
 
 import java.util.List;
 import java.util.Random;

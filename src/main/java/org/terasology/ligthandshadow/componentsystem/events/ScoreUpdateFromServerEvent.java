@@ -15,8 +15,8 @@
  */
 package org.terasology.ligthandshadow.componentsystem.events;
 
-import org.terasology.entitySystem.event.Event;
-import org.terasology.network.BroadcastEvent;
+import org.terasology.engine.entitySystem.event.Event;
+import org.terasology.engine.network.BroadcastEvent;
 
 @BroadcastEvent
 public class ScoreUpdateFromServerEvent implements Event {

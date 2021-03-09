@@ -15,11 +15,11 @@
  */
 package org.terasology.las.ui;
 
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.nui.layers.hud.CoreHudWidget;
 import org.terasology.ligthandshadow.componentsystem.components.ScoreComponent;
-import org.terasology.registry.In;
-import org.terasology.rendering.nui.layers.hud.CoreHudWidget;
 import org.terasology.nui.widgets.UIText;
 
 public class ScoreHud extends CoreHudWidget {

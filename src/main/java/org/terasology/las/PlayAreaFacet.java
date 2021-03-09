@@ -15,9 +15,9 @@
  */
 package org.terasology.las;
 
-import org.terasology.world.block.BlockRegion;
-import org.terasology.world.generation.Border3D;
-import org.terasology.world.generation.facets.base.BaseBooleanFieldFacet2D;
+import org.terasology.engine.world.block.BlockRegion;
+import org.terasology.engine.world.generation.Border3D;
+import org.terasology.engine.world.generation.facets.base.BaseBooleanFieldFacet2D;
 
 public class PlayAreaFacet extends BaseBooleanFieldFacet2D {
     public PlayAreaFacet(BlockRegion targetRegion, Border3D border) {

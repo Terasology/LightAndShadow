@@ -15,7 +15,7 @@
  */
 package org.terasology.ligthandshadow.componentsystem.components;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 public class ScoreComponent implements Component {
     public int redScore;

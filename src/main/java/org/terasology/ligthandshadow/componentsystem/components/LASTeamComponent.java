@@ -15,9 +15,9 @@
  */
 package org.terasology.ligthandshadow.componentsystem.components;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.network.FieldReplicateType;
-import org.terasology.network.Replicate;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.network.FieldReplicateType;
+import org.terasology.engine.network.Replicate;
 
 public final class LASTeamComponent implements Component {
     @Replicate(FieldReplicateType.SERVER_TO_CLIENT)

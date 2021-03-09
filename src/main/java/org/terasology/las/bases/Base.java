@@ -15,7 +15,7 @@
  */
 package org.terasology.las.bases;
 
-import org.terasology.world.block.BlockRegion;
+import org.terasology.engine.world.block.BlockRegion;
 
 public class Base {
     private BlockRegion area;

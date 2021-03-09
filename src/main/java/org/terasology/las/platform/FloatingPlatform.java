@@ -16,9 +16,9 @@
 
 package org.terasology.las.platform;
 
-import org.terasology.world.block.BlockArea;
-import org.terasology.world.block.BlockAreac;
-import org.terasology.world.block.BlockRegionc;
+import org.terasology.engine.world.block.BlockArea;
+import org.terasology.engine.world.block.BlockAreac;
+import org.terasology.engine.world.block.BlockRegionc;
 
 public class FloatingPlatform {
     private final BlockAreac area;

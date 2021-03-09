@@ -19,21 +19,21 @@ import org.joml.Math;
 import org.joml.Vector3f;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.terasology.audio.events.PlaySoundEvent;
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.engine.audio.events.PlaySoundEvent;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.systems.UpdateSubscriberSystem;
+import org.terasology.engine.logic.characters.CharacterImpulseEvent;
+import org.terasology.engine.logic.characters.CharacterMoveInputEvent;
+import org.terasology.engine.logic.console.commandSystem.annotations.Command;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.utilities.random.FastRandom;
+import org.terasology.engine.world.RelevanceRegionComponent;
 import org.terasology.itemRendering.components.AnimateRotationComponent;
-import org.terasology.logic.characters.CharacterImpulseEvent;
-import org.terasology.logic.characters.CharacterMoveInputEvent;
-import org.terasology.logic.console.commandSystem.annotations.Command;
-import org.terasology.logic.location.LocationComponent;
-import org.terasology.registry.In;
-import org.terasology.utilities.random.FastRandom;
-import org.terasology.world.RelevanceRegionComponent;
 
 @RegisterSystem
 public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscriberSystem {

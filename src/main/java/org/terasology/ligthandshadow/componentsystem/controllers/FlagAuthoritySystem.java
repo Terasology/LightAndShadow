@@ -15,23 +15,23 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.EventPriority;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.common.lifespan.LifespanComponent;
+import org.terasology.engine.logic.delay.DelayManager;
+import org.terasology.engine.logic.delay.DelayedActionTriggeredEvent;
+import org.terasology.engine.logic.inventory.ItemComponent;
+import org.terasology.engine.logic.inventory.events.DropItemEvent;
+import org.terasology.engine.logic.inventory.events.GiveItemEvent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.world.WorldProvider;
+import org.terasology.engine.world.block.BlockManager;
+import org.terasology.engine.world.block.items.BlockItemComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.logic.common.lifespan.LifespanComponent;
-import org.terasology.logic.delay.DelayManager;
-import org.terasology.logic.delay.DelayedActionTriggeredEvent;
-import org.terasology.logic.inventory.ItemComponent;
-import org.terasology.logic.inventory.events.DropItemEvent;
-import org.terasology.logic.inventory.events.GiveItemEvent;
-import org.terasology.registry.In;
-import org.terasology.world.WorldProvider;
-import org.terasology.world.block.BlockManager;
-import org.terasology.world.block.items.BlockItemComponent;
 
 /**
  * Handles events related to flag drops and pickups.
@@ -53,7 +53,7 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
      * Priority is kept low because we want this handler to be triggered after the default handler of DropItem event to
      * be triggered first and let the LifespanComponent to be copied first.
      *
-     * @see org.terasology.logic.inventory.ItemPickupAuthoritySystem
+     * @see org.terasology.engine.logic.inventory.ItemPickupAuthoritySystem
      * @see DelayManager
      *
      * @param event

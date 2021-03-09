@@ -16,26 +16,26 @@
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.terasology.assets.management.AssetManager;
-import org.terasology.engine.modes.loadProcesses.AwaitedLocalCharacterSpawnEvent;
-import org.terasology.entitySystem.entity.EntityBuilder;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.entity.lifecycleEvents.OnChangedComponent;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.core.modes.loadProcesses.AwaitedLocalCharacterSpawnEvent;
+import org.terasology.engine.entitySystem.entity.EntityBuilder;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.entity.lifecycleEvents.OnChangedComponent;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.characters.VisualCharacterComponent;
+import org.terasology.engine.logic.characters.events.CreateVisualCharacterEvent;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.logic.SkeletalMeshComponent;
+import org.terasology.engine.rendering.nui.NUIManager;
+import org.terasology.engine.utilities.Assets;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
-import org.terasology.logic.characters.events.CreateVisualCharacterEvent;
-import org.terasology.logic.players.LocalPlayer;
-import org.terasology.registry.In;
-import org.terasology.rendering.nui.NUIManager;
-import org.terasology.rendering.nui.layers.hud.HealthHud;
 import org.terasology.nui.widgets.UIIconBar;
-import org.terasology.logic.characters.VisualCharacterComponent;
-import org.terasology.rendering.logic.SkeletalMeshComponent;
-import org.terasology.utilities.Assets;
+import org.terasology.rendering.nui.layers.hud.HealthHud;
 
 /**
  * Handles changing players' health HUD and skin based on their teams.
@@ -68,7 +68,7 @@ public class ClientSkinSystem extends BaseComponentSystem {
      * Default event handler for this event has Trivial priority. Hence, this method catches the event first
      * and consumes it.
      * @see CreateVisualCharacterEvent
-     * @see org.terasology.logic.characters.VisualCharacterSystem
+     * @see org.terasology.engine.logic.characters.VisualCharacterSystem
      *
      * @param event
      * @param characterEntity

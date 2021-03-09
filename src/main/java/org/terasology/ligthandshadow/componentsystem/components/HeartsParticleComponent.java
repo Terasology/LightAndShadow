@@ -15,8 +15,8 @@
  */
 package org.terasology.ligthandshadow.componentsystem.components;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.world.block.items.AddToBlockBasedItem;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.world.block.items.AddToBlockBasedItem;
 
 @AddToBlockBasedItem
 public class HeartsParticleComponent implements Component {

@@ -16,13 +16,12 @@
 package org.terasology.las.bases;
 
 import com.google.common.collect.ImmutableSet;
-import org.joml.Vector3ic;
+import org.terasology.engine.world.block.BlockRegion;
+import org.terasology.engine.world.generation.Border3D;
+import org.terasology.engine.world.generation.FacetProvider;
+import org.terasology.engine.world.generation.GeneratingRegion;
+import org.terasology.engine.world.generation.Produces;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.world.block.BlockRegion;
-import org.terasology.world.generation.Border3D;
-import org.terasology.world.generation.FacetProvider;
-import org.terasology.world.generation.GeneratingRegion;
-import org.terasology.world.generation.Produces;
 
 import java.util.Collection;
 

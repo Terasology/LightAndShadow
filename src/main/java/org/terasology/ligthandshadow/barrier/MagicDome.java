@@ -15,8 +15,8 @@
  */
 package org.terasology.ligthandshadow.barrier;
 
-import org.terasology.audio.StaticSound;
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.audio.StaticSound;
+import org.terasology.engine.entitySystem.Component;
 
 public class MagicDome implements Component {
     public StaticSound hitSound;

@@ -12,19 +12,19 @@ import org.terasology.core.world.generator.facetProviders.SimplexSurfaceTemperat
 import org.terasology.core.world.generator.facetProviders.SurfaceToDensityProvider;
 import org.terasology.core.world.generator.rasterizers.SolidRasterizer;
 import org.terasology.core.world.generator.rasterizers.TreeRasterizer;
-import org.terasology.engine.SimpleUri;
-import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.engine.core.SimpleUri;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.logic.spawner.Spawner;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.world.block.BlockManager;
+import org.terasology.engine.world.generation.BaseFacetedWorldGenerator;
+import org.terasology.engine.world.generation.WorldBuilder;
+import org.terasology.engine.world.generator.RegisterWorldGenerator;
+import org.terasology.engine.world.generator.plugin.WorldGeneratorPluginLibrary;
 import org.terasology.las.bases.BaseProvider;
 import org.terasology.las.bases.BaseRasterizer;
 import org.terasology.las.platform.FloatingPlatformProvider;
 import org.terasology.las.platform.FloatingPlatformRasterizer;
-import org.terasology.logic.spawner.Spawner;
-import org.terasology.registry.In;
-import org.terasology.world.block.BlockManager;
-import org.terasology.world.generation.BaseFacetedWorldGenerator;
-import org.terasology.world.generation.WorldBuilder;
-import org.terasology.world.generator.RegisterWorldGenerator;
-import org.terasology.world.generator.plugin.WorldGeneratorPluginLibrary;
 
 @RegisterWorldGenerator(id = "lasWorld", displayName = "A World of Light And Shadow")
 public class LaSSimpleWorldGenerator extends BaseFacetedWorldGenerator {

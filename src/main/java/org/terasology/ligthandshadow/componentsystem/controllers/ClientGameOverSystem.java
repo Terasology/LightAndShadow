@@ -15,34 +15,34 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
-
-import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
-import org.terasology.entitySystem.systems.BaseComponentSystem;
-import org.terasology.entitySystem.systems.RegisterMode;
-import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.entitySystem.entity.EntityManager;
+import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
+import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.logic.players.PlayerCharacterComponent;
+import org.terasology.engine.logic.players.PlayerUtil;
+import org.terasology.engine.network.ClientComponent;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.nui.NUIManager;
+import org.terasology.engine.rendering.nui.layers.ingame.DeathScreen;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
-import org.terasology.logic.players.LocalPlayer;
-import org.terasology.logic.players.PlayerCharacterComponent;
-import org.terasology.logic.players.PlayerUtil;
-import org.terasology.network.ClientComponent;
-import org.terasology.registry.In;
-import org.terasology.rendering.nui.NUIManager;
 import org.terasology.nui.WidgetUtil;
-import org.terasology.rendering.nui.layers.ingame.DeathScreen;
 import org.terasology.nui.layouts.miglayout.MigLayout;
 import org.terasology.nui.widgets.UIButton;
 import org.terasology.nui.widgets.UILabel;
+
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Displays game over screen for all clients.
