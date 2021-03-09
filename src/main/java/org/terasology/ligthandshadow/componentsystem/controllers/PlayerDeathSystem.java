@@ -15,6 +15,8 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import java.util.Random;
+
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.terasology.assets.management.AssetManager;
@@ -58,6 +60,8 @@ public class PlayerDeathSystem extends BaseComponentSystem {
     @In
     private BlockManager blockManager;
 
+    private Random random = new Random();
+
     /**
      * Empty the inventory and send player player back to its base with refilled health.
      * This is a high priority method, hence it receives the event first and consumes it.
@@ -77,7 +81,8 @@ public class PlayerDeathSystem extends BaseComponentSystem {
             updateStatistics(player, "deaths");
             dropItemsFromInventory(player);
             player.send(new RestoreFullHealthEvent(player));
-            player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
+            Vector3f randomVector = new Vector3f(-2 + random.nextFloat()*4, -2 + random.nextFloat()*4,0);
+            player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
         }
     }
 
