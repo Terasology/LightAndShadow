@@ -24,7 +24,7 @@ import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.common.ActivateEvent;
-import org.terasology.engine.logic.inventory.InventoryManager;
+import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.engine.logic.permission.PermissionManager;
 import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.network.ClientComponent;
