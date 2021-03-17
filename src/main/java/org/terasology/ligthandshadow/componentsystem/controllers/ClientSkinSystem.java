@@ -31,11 +31,11 @@ import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.logic.SkeletalMeshComponent;
 import org.terasology.engine.rendering.nui.NUIManager;
-import org.terasology.engine.rendering.nui.layers.hud.HealthHud;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.nui.widgets.UIIconBar;
+import org.terasology.rendering.nui.layers.hud.HealthHud;
 
 /**
  * Handles changing players' health HUD and skin based on their teams.
