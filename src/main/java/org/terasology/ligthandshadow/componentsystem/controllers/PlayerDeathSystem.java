@@ -81,7 +81,7 @@ public class PlayerDeathSystem extends BaseComponentSystem {
             updateStatistics(player, "deaths");
             dropItemsFromInventory(player);
             player.send(new RestoreFullHealthEvent(player));
-            Vector3f randomVector = new Vector3f(-1 + random.nextInt(4), 0, -1 + random.nextInt(4));
+            Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
             player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
         }
     }
