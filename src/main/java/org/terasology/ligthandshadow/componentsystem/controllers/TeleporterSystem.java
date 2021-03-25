@@ -70,7 +70,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     }
 
     private void handlePlayerTeleport(EntityRef player, String team) {
-        Vector3f randomVector = new Vector3f(-2 + random.nextInt(4), 0, -2 + random.nextInt(4));
+        Vector3f randomVector = new Vector3f(-1 + random.nextInt(4), 0, -1 + random.nextInt(4));
         player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
         inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(LASUtils.MAGIC_STAFF_URI));
     }
