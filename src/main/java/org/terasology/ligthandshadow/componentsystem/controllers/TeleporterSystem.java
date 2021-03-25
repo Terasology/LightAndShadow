@@ -15,6 +15,9 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import java.util.Random;
+
+import org.joml.Vector3f;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
@@ -42,6 +45,8 @@ public class TeleporterSystem extends BaseComponentSystem {
     @In
     EntityManager entityManager;
 
+    private Random random = new Random();
+
     /**
      * Depending on which teleporter the player chooses, they are set to that team
      * and teleported to that base
@@ -65,7 +70,8 @@ public class TeleporterSystem extends BaseComponentSystem {
     }
 
     private void handlePlayerTeleport(EntityRef player, String team) {
-        player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
+        Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
+        player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
         inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(LASUtils.MAGIC_STAFF_URI));
     }
 }
