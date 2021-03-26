@@ -13,7 +13,7 @@ import org.terasology.engine.registry.CoreRegistry;
 import org.terasology.engine.utilities.procedural.WhiteNoise;
 import org.terasology.engine.world.block.Block;
 import org.terasology.engine.world.block.BlockManager;
-import org.terasology.engine.world.chunks.CoreChunk;
+import org.terasology.engine.world.chunks.Chunk;
 import org.terasology.engine.world.generation.Region;
 
 import java.util.List;
@@ -49,7 +49,7 @@ public class LaSFloraRasterizer extends FloraRasterizer {
 
 
     @Override
-    public void generateChunk(CoreChunk chunk, Region chunkRegion) {
+    public void generateChunk(Chunk chunk, Region chunkRegion) {
         super.generateChunk(chunk, chunkRegion);
 
         FloraFacet facet = chunkRegion.getFacet(FloraFacet.class);

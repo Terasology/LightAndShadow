@@ -6,8 +6,8 @@ import org.joml.Vector3i;
 import org.terasology.engine.registry.CoreRegistry;
 import org.terasology.engine.world.block.Block;
 import org.terasology.engine.world.block.BlockManager;
+import org.terasology.engine.world.chunks.Chunk;
 import org.terasology.engine.world.chunks.Chunks;
-import org.terasology.engine.world.chunks.CoreChunk;
 import org.terasology.engine.world.generation.Region;
 import org.terasology.engine.world.generation.WorldRasterizerPlugin;
 import org.terasology.engine.world.generator.plugin.RegisterPlugin;
@@ -37,7 +37,7 @@ public class YinYangRasterizer implements WorldRasterizerPlugin {
     }
 
     @Override
-    public void generateChunk(CoreChunk chunk, Region chunkRegion) {
+    public void generateChunk(Chunk chunk, Region chunkRegion) {
         YinYangFacet yinYangFacet = chunkRegion.getFacet(YinYangFacet.class);
 
         yinYangFacet.getWorldEntries().keySet().stream()
@@ -45,7 +45,7 @@ public class YinYangRasterizer implements WorldRasterizerPlugin {
                 .forEach(yinYangPosition -> placeYinYang(chunk, yinYangPosition));
     }
 
-    private void placeYinYang(CoreChunk chunk, Vector3i yinYangPosition) {
+    private void placeYinYang(Chunk chunk, Vector3i yinYangPosition) {
         Vector3i tempPos = new Vector3i();
         for (int i = -RADIUS; i <= RADIUS; i++) {
             for (int j = -2 * RADIUS; j <= 2 * RADIUS; j++) {
