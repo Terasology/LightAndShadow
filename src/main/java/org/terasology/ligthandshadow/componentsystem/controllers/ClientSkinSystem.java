@@ -15,7 +15,7 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.terasology.assets.management.AssetManager;
+import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.engine.core.modes.loadProcesses.AwaitedLocalCharacterSpawnEvent;
 import org.terasology.engine.entitySystem.entity.EntityBuilder;
 import org.terasology.engine.entitySystem.entity.EntityRef;
