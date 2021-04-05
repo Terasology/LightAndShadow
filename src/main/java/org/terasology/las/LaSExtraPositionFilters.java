@@ -22,10 +22,12 @@ import org.terasology.engine.world.generation.facets.SurfacesFacet;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 
 
+
 /**
  * A collection of filters that restrict the placement of objects, specific to Light and Shadow.
  *
  */
+
 public final class LaSExtraPositionFilters {
 
     private LaSExtraPositionFilters() {
@@ -63,6 +65,7 @@ public final class LaSExtraPositionFilters {
                                 (myx == redx + xOffset && myz-1 == redz + zOffset)||
                                 (myx == blackx + xOffset && myz+1 == blackz + zOffset)||
                                 (myx == redx + xOffset && myz+1 == redz + zOffset))
+
                             return false;
                     }
                 }
