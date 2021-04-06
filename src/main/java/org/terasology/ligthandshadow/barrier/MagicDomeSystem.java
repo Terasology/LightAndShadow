@@ -36,6 +36,7 @@ import org.terasology.engine.world.RelevanceRegionComponent;
 import org.terasology.itemRendering.components.AnimateRotationComponent;
 
 @RegisterSystem
+// test comment
 public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscriberSystem {
 
     private static final Logger logger = LoggerFactory.getLogger(MagicDomeSystem.class);
