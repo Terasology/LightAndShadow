@@ -20,13 +20,13 @@
                 "layoutInfo": {
                     "width": 50,
                     "use-content-height": true,
-                    "position-right":{
+                    "position-right": {
                         "target": "RIGHT",
-                        "offset": 115
+                        "offset": 25
                     },
                     "position-bottom": {
                         "target": "BOTTOM",
-                        "offset": 17
+                        "offset": 35
                     }
                 }
             }
