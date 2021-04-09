@@ -1,0 +1,25 @@
+{
+    dynamic: [
+        {
+            guard: {
+                componentPresent: "LightAndShadow:NearbyEnemies",
+                values: ["N enemiesWithinRange nonEmpty"],
+                child: {
+                    sequence: [
+                        set_target_to_enemy,
+                        {
+                            lookup: {
+                                tree: "Behaviors:hostile"
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            lookup: {
+                tree: "Behaviors:stray"
+            }
+        }
+    ]
+}
