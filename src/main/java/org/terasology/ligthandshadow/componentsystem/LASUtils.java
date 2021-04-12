@@ -29,10 +29,10 @@ public final class LASUtils {
     /**
      * Floating Platform values
      */
-    public static final Vector3ic FLOATING_PLATFORM_POSITION = new Vector3i(0, 60, 252);
+    public static final int FLOATING_PLATFORM_HEIGHT_LEVEL = 90;
+    public static final Vector3ic FLOATING_PLATFORM_POSITION = new Vector3i(0, FLOATING_PLATFORM_HEIGHT_LEVEL, 252);
     public static final int FLOATING_PLATFORM_WIDTH = 28;
     public static final int FLOATING_PLATFORM_LENGTH = 56;
-    public static final int FLOATING_PLATFORM_HEIGHT_LEVEL = 60;
     public static final int TELEPORTER_OFFSET = 4;
     public static final int NPC_OFFSET = 24;
     /**
