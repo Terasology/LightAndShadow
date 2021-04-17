@@ -68,7 +68,7 @@ public class TeleporterSystem extends BaseComponentSystem {
                 oppositeTeamCount++;
             }
         }
-        if (teleporterTeamCount - oppositeTeamCount < maxTeamSizeDifference && teleporterTeamCount <= oppositeTeamCount) {
+        if (teleporterTeamCount - oppositeTeamCount < maxTeamSizeDifference) {
             return true;
         } else {
             player.getOwner().send(new ChatMessageEvent("The " + teleporterTeam + " team has more players so please join the " + LASUtils.getOppositionTeam(teleporterTeam)
