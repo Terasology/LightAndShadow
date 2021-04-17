@@ -5,21 +5,67 @@
     "displayName": "Light & Shadow",
     "description": "Light & Shadow is an experimental game type set in a quirky Alice in Wonderland inspired setting",
     "dependencies": [
-        { "id": "BiomesAPI", "minVersion": "4.0.0" },
-        { "id": "Behaviors", "minVersion": "1.0.0" },
-        { "id": "Cities", "minVersion": "1.1.0" },
-        { "id": "CoreAssets", "minVersion": "2.0.1" },
-        { "id": "CoreRendering", "minVersion": "1.0.0" },
-        { "id": "CoreWorlds", "minVersion": "1.1.0", "maxVersion": "3.0.0" },
-        { "id": "Dialogs", "minVersion": "1.0.0" },
-        { "id": "Health", "minVersion": "1.0.0" },
-        { "id": "Inventory", "minVersion": "1.1.0" },
-        { "id": "ItemRendering", "minVersion": "1.1.0" },
-        { "id": "LightAndShadowResources", "minVersion": "1.0.0" },
-        { "id": "Pathfinding", "minVersion": "1.0.0" },
-        { "id": "StaticCities", "minVersion": "1.0.0" },
-        { "id": "StructuralResources", "minVersion": "2.1.0" },
-        { "id": "Tasks", "minVersion": "1.0.0" }
+        {
+            "id": "BiomesAPI",
+            "minVersion": "4.0.0"
+        },
+        {
+            "id": "Behaviors",
+            "minVersion": "1.0.0"
+        },
+        {
+            "id": "Cities",
+            "minVersion": "1.1.0"
+        },
+        {
+            "id": "CoreAssets",
+            "minVersion": "2.0.1"
+        },
+        {
+            "id": "CoreRendering",
+            "minVersion": "1.0.0"
+        },
+        {
+            "id": "CoreWorlds",
+            "minVersion": "1.1.0",
+            "maxVersion": "3.0.0"
+        },
+        {
+            "id": "Dialogs",
+            "minVersion": "1.0.0"
+        },
+        {
+            "id": "Health",
+            "minVersion": "2.0.0-SNAPSHOT"
+        },
+        {
+            "id": "Inventory",
+            "minVersion": "1.1.0"
+        },
+        {
+            "id": "ItemRendering",
+            "minVersion": "1.1.0"
+        },
+        {
+            "id": "LightAndShadowResources",
+            "minVersion": "1.0.0"
+        },
+        {
+            "id": "Pathfinding",
+            "minVersion": "1.0.0"
+        },
+        {
+            "id": "StaticCities",
+            "minVersion": "1.0.0"
+        },
+        {
+            "id": "StructuralResources",
+            "minVersion": "2.1.0"
+        },
+        {
+            "id": "Tasks",
+            "minVersion": "1.0.0"
+        }
     ],
     "isServerSideOnly": false,
     "isGameplay": "true",
