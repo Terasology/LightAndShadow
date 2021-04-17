@@ -53,7 +53,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     }
 
     private boolean properTeamSize(EntityRef teleporter, EntityRef player) {
-        int maxTeamSizeDifference = 1;
+        int maxTeamSizeDifference = 3;
         int oppositeTeamCount = 0;
         int teleporterTeamCount = 0;
         String teleporterTeam = teleporter.getComponent(LASTeamComponent.class).team;
