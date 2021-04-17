@@ -1,18 +1,5 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import java.util.Random;
@@ -25,7 +12,9 @@ import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterTeleportEvent;
+import org.terasology.engine.logic.chat.ChatMessageEvent;
 import org.terasology.engine.logic.common.ActivateEvent;
+import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.registry.In;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
@@ -57,8 +46,35 @@ public class TeleporterSystem extends BaseComponentSystem {
     @ReceiveEvent(components = {SetTeamOnActivateComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
         EntityRef player = event.getInstigator();
-        String team = setPlayerTeamToTeleporterTeam(player, entity);
-        handlePlayerTeleport(player, team);
+        if (properTeamSize(entity, player)) {
+            String team = setPlayerTeamToTeleporterTeam(player, entity);
+            handlePlayerTeleport(player, team);
+        }
+    }
+
+    private boolean properTeamSize(EntityRef teleporter, EntityRef player) {
+        int maxTeamSizeDifference = 1;
+        int oppositeTeamCount = 0;
+        int teleporterTeamCount = 0;
+        String teleporterTeam = teleporter.getComponent(LASTeamComponent.class).team;
+        Iterable<EntityRef> characters = entityManager.getEntitiesWith(PlayerCharacterComponent.class,
+                LASTeamComponent.class);
+
+        for (EntityRef character : characters) {
+            String otherPlayerTeam = character.getComponent(LASTeamComponent.class).team;
+            if (teleporterTeam.equals(otherPlayerTeam)) {
+                teleporterTeamCount++;
+            } else if (!otherPlayerTeam.equals(LASUtils.WHITE_TEAM)) {
+                oppositeTeamCount++;
+            }
+        }
+        if (teleporterTeamCount - oppositeTeamCount < maxTeamSizeDifference && teleporterTeamCount <= oppositeTeamCount) {
+            return true;
+        } else {
+            player.getOwner().send(new ChatMessageEvent("The " + teleporterTeam + " team has more players so please join the " + LASUtils.getOppositionTeam(teleporterTeam)
+                    + " team.", EntityRef.NULL));
+            return false;
+        }
     }
 
     private String setPlayerTeamToTeleporterTeam(EntityRef player, EntityRef teleporter) {
