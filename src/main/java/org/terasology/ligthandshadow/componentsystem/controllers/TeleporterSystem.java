@@ -14,7 +14,6 @@ import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterTeleportEvent;
 import org.terasology.engine.logic.chat.ChatMessageEvent;
 import org.terasology.engine.logic.common.ActivateEvent;
-import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.registry.In;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
@@ -34,7 +33,11 @@ public class TeleporterSystem extends BaseComponentSystem {
     @In
     EntityManager entityManager;
 
-    private Random random = new Random();
+    private final Random random = new Random();
+
+    private final int maxTeamSizeDifference = 3;
+    private int redTeamCount;
+    private int blackTeamCount;
 
     /**
      * Depending on which teleporter the player chooses, they are set to that team
@@ -46,29 +49,22 @@ public class TeleporterSystem extends BaseComponentSystem {
     @ReceiveEvent(components = {SetTeamOnActivateComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
         EntityRef player = event.getInstigator();
-        if (properTeamSize(entity, player)) {
+        if (isProperTeamSize(entity, player)) {
             String team = setPlayerTeamToTeleporterTeam(player, entity);
             handlePlayerTeleport(player, team);
         }
     }
 
-    private boolean properTeamSize(EntityRef teleporter, EntityRef player) {
-        int maxTeamSizeDifference = 3;
-        int oppositeTeamCount = 0;
-        int teleporterTeamCount = 0;
+    private boolean isProperTeamSize(EntityRef teleporter, EntityRef player) {
         String teleporterTeam = teleporter.getComponent(LASTeamComponent.class).team;
-        Iterable<EntityRef> characters = entityManager.getEntitiesWith(PlayerCharacterComponent.class,
-                LASTeamComponent.class);
-
-        for (EntityRef character : characters) {
-            String otherPlayerTeam = character.getComponent(LASTeamComponent.class).team;
-            if (teleporterTeam.equals(otherPlayerTeam)) {
-                teleporterTeamCount++;
-            } else if (!otherPlayerTeam.equals(LASUtils.WHITE_TEAM)) {
-                oppositeTeamCount++;
-            }
-        }
+        int teleporterTeamCount = teleporterTeam.equals(LASUtils.RED_TEAM) ? redTeamCount : blackTeamCount;
+        int oppositeTeamCount = teleporterTeam.equals(LASUtils.RED_TEAM) ? blackTeamCount : redTeamCount;
         if (teleporterTeamCount - oppositeTeamCount < maxTeamSizeDifference) {
+            if (teleporterTeam.equals(LASUtils.RED_TEAM)) {
+                redTeamCount++;
+            } else {
+                blackTeamCount++;
+            }
             return true;
         } else {
             player.getOwner().send(new ChatMessageEvent("The " + teleporterTeam + " team has more players so please join the " + LASUtils.getOppositionTeam(teleporterTeam)
