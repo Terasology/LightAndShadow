@@ -22,11 +22,11 @@
                     "use-content-height": true,
                     "position-right": {
                         "target": "RIGHT",
-                        "offset": 25
+                        "offset": 115
                     },
                     "position-bottom": {
                         "target": "BOTTOM",
-                        "offset": 35
+                        "offset": 17
                     }
                 }
             }

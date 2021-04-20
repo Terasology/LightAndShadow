@@ -8,40 +8,12 @@
             {
                 "type": "flowLayout",
                 "id": "toolbar",
+                "topToBottomAlign": true,
                 "rightToLeftAlign": true,
                 "contents": [
                     {
                         "type": "InventoryCell",
-                        "targetSlot": 0,
-                        "selected": true
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 1
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 2
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 3
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 4
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 5
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 6
-                    },
-                    {
-                        "type": "InventoryCell",
-                        "targetSlot": 7
+                        "targetSlot": 9
                     },
                     {
                         "type": "InventoryCell",
@@ -49,7 +21,36 @@
                     },
                     {
                         "type": "InventoryCell",
-                        "targetSlot": 9
+                        "targetSlot": 7
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 6
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 5
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 4
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 3
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 2
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 1
+                    },
+                    {
+                        "type": "InventoryCell",
+                        "targetSlot": 0,
+                        "selected": true
                     }
                 ],
                 "layoutInfo": {
@@ -57,11 +58,11 @@
                     "use-content-width": true,
                     "position-bottom": {
                         "target": "BOTTOM",
-                        "offset": 35
+                        "offset": 10
                     },
                     "position-right": {
                         "target": "RIGHT",
-                        "offset": 75
+                        "offset": 10
                     }
                 }
             },
