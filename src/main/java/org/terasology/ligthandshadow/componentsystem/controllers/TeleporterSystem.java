@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import java.util.Optional;
 import java.util.Random;
 
 import org.joml.Vector3f;
@@ -57,19 +56,19 @@ public class TeleporterSystem extends BaseComponentSystem {
     }
 
     private boolean isProperTeamSize(EntityRef teleporter, EntityRef player) {
-        Optional<Prefab> gameplayPrefab = Assets.getPrefab("gameplayConfig");
-        Optional<Prefab> gameStatePrefab = Assets.getPrefab("gameState");
-        int maxTeamSizeDifference = gameplayPrefab.get().getComponent(MaxTeamSizeDifferenceComponent.class).maxTeamSizeDifference;
-        int redTeamCount = gameStatePrefab.get().getComponent(TeamCountComponent.class).redTeamCount;
-        int blackTeamCount = gameStatePrefab.get().getComponent(TeamCountComponent.class).blackTeamCount;
+        Prefab gameplayPrefab = Assets.getPrefab("gameplayConfig").get();
+        Prefab gameStatePrefab = Assets.getPrefab("gameState").get();
+        int maxTeamSizeDifference = gameplayPrefab.getComponent(MaxTeamSizeDifferenceComponent.class).maxTeamSizeDifference;
+        int redTeamCount = gameStatePrefab.getComponent(TeamCountComponent.class).redTeamCount;
+        int blackTeamCount = gameStatePrefab.getComponent(TeamCountComponent.class).blackTeamCount;
         String teleporterTeam = teleporter.getComponent(LASTeamComponent.class).team;
         int teleporterTeamCount = teleporterTeam.equals(LASUtils.RED_TEAM) ? redTeamCount : blackTeamCount;
         int oppositeTeamCount = teleporterTeam.equals(LASUtils.RED_TEAM) ? blackTeamCount : redTeamCount;
         if (teleporterTeamCount - oppositeTeamCount < maxTeamSizeDifference) {
             if (teleporterTeam.equals(LASUtils.RED_TEAM)) {
-                gameStatePrefab.get().getComponent(TeamCountComponent.class).redTeamCount++;
+                gameStatePrefab.getComponent(TeamCountComponent.class).redTeamCount++;
             } else {
-                gameStatePrefab.get().getComponent(TeamCountComponent.class).blackTeamCount++;
+                gameStatePrefab.getComponent(TeamCountComponent.class).blackTeamCount++;
             }
             return true;
         } else {
