@@ -29,7 +29,7 @@ import org.terasology.engine.entitySystem.prefab.PrefabManager;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.common.ActivateEvent;
-import org.terasology.logic.health.event.OnDamagedEvent;
+import org.terasology.module.health.events.OnDamagedEvent;
 import org.terasology.engine.logic.inventory.ItemComponent;
 import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.math.Side;
