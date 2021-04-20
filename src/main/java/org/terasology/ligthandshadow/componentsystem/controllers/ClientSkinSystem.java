@@ -35,7 +35,7 @@ import org.terasology.engine.utilities.Assets;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.nui.widgets.UIIconBar;
-import org.terasology.rendering.nui.layers.hud.HealthHud;
+import org.terasology.module.health.ui.HealthHud;
 
 /**
  * Handles changing players' health HUD and skin based on their teams.
