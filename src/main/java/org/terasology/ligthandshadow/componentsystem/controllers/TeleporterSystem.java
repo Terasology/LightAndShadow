@@ -2,18 +2,23 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import java.util.Optional;
 import java.util.Random;
 
 import org.joml.Vector3f;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterTeleportEvent;
 import org.terasology.engine.logic.chat.ChatMessageEvent;
 import org.terasology.engine.logic.common.ActivateEvent;
+import org.terasology.engine.utilities.Assets;
+import org.terasology.ligthandshadow.componentsystem.components.MaxTeamSizeDifferenceComponent;
+import org.terasology.ligthandshadow.componentsystem.components.TeamCountComponent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.registry.In;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
@@ -35,10 +40,6 @@ public class TeleporterSystem extends BaseComponentSystem {
 
     private final Random random = new Random();
 
-    private final int maxTeamSizeDifference = 3;
-    private int redTeamCount;
-    private int blackTeamCount;
-
     /**
      * Depending on which teleporter the player chooses, they are set to that team
      * and teleported to that base
@@ -56,14 +57,19 @@ public class TeleporterSystem extends BaseComponentSystem {
     }
 
     private boolean isProperTeamSize(EntityRef teleporter, EntityRef player) {
+        Optional<Prefab> gameplayPrefab = Assets.getPrefab("gameplayConfig");
+        Optional<Prefab> gameStatePrefab = Assets.getPrefab("gameState");
+        int maxTeamSizeDifference = gameplayPrefab.get().getComponent(MaxTeamSizeDifferenceComponent.class).maxTeamSizeDifference;
+        int redTeamCount = gameStatePrefab.get().getComponent(TeamCountComponent.class).redTeamCount;
+        int blackTeamCount = gameStatePrefab.get().getComponent(TeamCountComponent.class).blackTeamCount;
         String teleporterTeam = teleporter.getComponent(LASTeamComponent.class).team;
         int teleporterTeamCount = teleporterTeam.equals(LASUtils.RED_TEAM) ? redTeamCount : blackTeamCount;
         int oppositeTeamCount = teleporterTeam.equals(LASUtils.RED_TEAM) ? blackTeamCount : redTeamCount;
         if (teleporterTeamCount - oppositeTeamCount < maxTeamSizeDifference) {
             if (teleporterTeam.equals(LASUtils.RED_TEAM)) {
-                redTeamCount++;
+                gameStatePrefab.get().getComponent(TeamCountComponent.class).redTeamCount++;
             } else {
-                blackTeamCount++;
+                gameStatePrefab.get().getComponent(TeamCountComponent.class).blackTeamCount++;
             }
             return true;
         } else {
