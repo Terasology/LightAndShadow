@@ -15,6 +15,10 @@ import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterTeleportEvent;
 import org.terasology.engine.logic.chat.ChatMessageEvent;
 import org.terasology.engine.logic.common.ActivateEvent;
+import org.terasology.engine.logic.console.commandSystem.annotations.Command;
+import org.terasology.engine.logic.console.commandSystem.annotations.CommandParam;
+import org.terasology.engine.logic.console.commandSystem.annotations.Sender;
+import org.terasology.engine.logic.permission.PermissionManager;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.ligthandshadow.componentsystem.components.MaxTeamSizeDifferenceComponent;
 import org.terasology.ligthandshadow.componentsystem.components.TeamCountComponent;
@@ -38,6 +42,14 @@ public class TeleporterSystem extends BaseComponentSystem {
     EntityManager entityManager;
 
     private final Random random = new Random();
+
+    @Command(shortDescription = "Set the maximum team size difference", helpText = "Set maxTeamSizeDifference", runOnServer = true,
+            requiredPermission = PermissionManager.CHEAT_PERMISSION)
+    public String setMaxTeamSizeDifference(@Sender EntityRef client, @CommandParam("difference") int difference) {
+        Prefab gameplayPrefab = Assets.getPrefab("gameplayConfig").get();
+        gameplayPrefab.getComponent(MaxTeamSizeDifferenceComponent.class).maxTeamSizeDifference = difference;
+        return "The max team size difference is set to " + difference;
+    }
 
     /**
      * Depending on which teleporter the player chooses, they are set to that team
