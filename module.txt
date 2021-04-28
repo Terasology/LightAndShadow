@@ -53,18 +53,6 @@
         {
             "id": "Pathfinding",
             "minVersion": "1.0.0"
-        },
-        {
-            "id": "StaticCities",
-            "minVersion": "1.0.0"
-        },
-        {
-            "id": "StructuralResources",
-            "minVersion": "2.1.0"
-        },
-        {
-            "id": "Tasks",
-            "minVersion": "1.0.0"
         }
     ],
     "isServerSideOnly": false,
