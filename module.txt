@@ -53,6 +53,10 @@
         {
             "id": "Pathfinding",
             "minVersion": "1.0.0"
+        },
+        {
+            "id": "Tasks",
+            "minVersion": "1.0.0"
         }
     ],
     "isServerSideOnly": false,
