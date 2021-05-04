@@ -4,7 +4,7 @@ package org.terasology.ligthandshadow.componentsystem.components;
 
 import org.terasology.engine.entitySystem.Component;
 
-public class TeamCountComponent implements Component {
+public class GameStateComponent implements Component {
     public int redTeamCount;
     public int blackTeamCount;
 }

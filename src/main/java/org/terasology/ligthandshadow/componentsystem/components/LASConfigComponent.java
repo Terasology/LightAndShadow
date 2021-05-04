@@ -4,6 +4,6 @@ package org.terasology.ligthandshadow.componentsystem.components;
 
 import org.terasology.engine.entitySystem.Component;
 
-public class MaxTeamSizeDifferenceComponent implements Component {
+public class LASConfigComponent implements Component {
     public int maxTeamSizeDifference;
 }
