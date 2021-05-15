@@ -19,7 +19,6 @@ import org.terasology.engine.logic.console.commandSystem.annotations.CommandPara
 import org.terasology.engine.logic.console.commandSystem.annotations.Sender;
 import org.terasology.engine.logic.permission.PermissionManager;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
-import org.terasology.ligthandshadow.componentsystem.components.GameStateComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASConfigComponent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.registry.In;
@@ -47,7 +46,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     @Command(shortDescription = "Set the maximum team size difference", helpText = "Set maxTeamSizeDifference", runOnServer = true,
             requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public String setMaxTeamSizeDifference(@Sender EntityRef client, @CommandParam("difference") int difference) {
-        setGamePrefab();
+        setGameEntity();
         gameEntity.getComponent(LASConfigComponent.class).maxTeamSizeDifference = difference;
         return "The max team size difference is set to " + difference;
     }
@@ -69,7 +68,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     }
 
     private boolean isProperTeamSize(EntityRef teleporter, EntityRef player) {
-        setGamePrefab();
+        setGameEntity();
         int oppositeTeamCount = 0;
         int teleporterTeamCount = 0;
         int maxTeamSizeDifference = gameEntity.getComponent(LASConfigComponent.class).maxTeamSizeDifference;
@@ -86,24 +85,22 @@ public class TeleporterSystem extends BaseComponentSystem {
             }
         }
         if (teleporterTeamCount - oppositeTeamCount < maxTeamSizeDifference) {
-            teleporterTeamCount++;
-            gameEntity.getComponent(GameStateComponent.class).redTeamCount = teleporterTeam.equals(LASUtils.RED_TEAM) ? teleporterTeamCount : oppositeTeamCount;
-            gameEntity.getComponent(GameStateComponent.class).blackTeamCount = teleporterTeam.equals(LASUtils.RED_TEAM) ? oppositeTeamCount : teleporterTeamCount;
             return true;
         } else {
-            gameEntity.getComponent(GameStateComponent.class).redTeamCount = teleporterTeam.equals(LASUtils.RED_TEAM) ? teleporterTeamCount : oppositeTeamCount;
-            gameEntity.getComponent(GameStateComponent.class).blackTeamCount = teleporterTeam.equals(LASUtils.RED_TEAM) ? oppositeTeamCount : teleporterTeamCount;
-            player.getOwner().send(new ChatMessageEvent("The " + teleporterTeam + " team has more players so please join the " + LASUtils.getOppositionTeam(teleporterTeam)
-                    + " team.", EntityRef.NULL));
+            if (maxTeamSizeDifference == 1) {
+                player.getOwner().send(new ChatMessageEvent("The " + teleporterTeam + " team has " + maxTeamSizeDifference + " player more, so please join the "
+                        + LASUtils.getOppositionTeam(teleporterTeam) + " team.", EntityRef.NULL));
+            } else {
+                player.getOwner().send(new ChatMessageEvent("The " + teleporterTeam + " team has " + maxTeamSizeDifference + " players more, so please join the "
+                        + LASUtils.getOppositionTeam(teleporterTeam) + " team.", EntityRef.NULL));
+            }
             return false;
         }
     }
 
-    private void setGamePrefab() {
+    private void setGameEntity() {
         if (entityManager.getCountOfEntitiesWith(LASConfigComponent.class) == 0) {
             gameEntity = entityManager.create("LightAndShadowResources:gameEntity");
-        } else {
-            gameEntity = entityManager.getEntitiesWith(LASConfigComponent.class).iterator().next();
         }
     }
 
