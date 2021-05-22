@@ -8,8 +8,8 @@
             {
                 "type": "flowLayout",
                 "id": "toolbar",
+                "topToBottomAlign": true,
                 "rightToLeftAlign": true,
-                "verticalSpacing": 10,
                 "contents": [
                     {
                         "type": "InventoryCell",
@@ -54,12 +54,14 @@
                     }
                 ],
                 "layoutInfo": {
-                    "width" : 90,
                     "use-content-height": true,
+                    "use-content-width": true,
                     "position-bottom": {
+                        "target": "BOTTOM",
                         "offset": 10
                     },
                     "position-right": {
+                        "target": "RIGHT",
                         "offset": 10
                     }
                 }
