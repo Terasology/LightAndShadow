@@ -5,6 +5,8 @@ package org.terasology.ligthandshadow.componentsystem.controllers;
 import java.util.Random;
 
 import org.joml.Vector3f;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
@@ -34,6 +36,9 @@ import org.terasology.ligthandshadow.componentsystem.components.SetTeamOnActivat
  */
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TeleporterSystem extends BaseComponentSystem {
+
+    private static final Logger logger = LoggerFactory.getLogger(TeleporterSystem.class);
+
     @In
     InventoryManager inventoryManager;
     @In
@@ -46,8 +51,12 @@ public class TeleporterSystem extends BaseComponentSystem {
     @Command(shortDescription = "Set the maximum team size difference", helpText = "Set maxTeamSizeDifference", runOnServer = true,
             requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public String setMaxTeamSizeDifference(@Sender EntityRef client, @CommandParam("difference") int difference) {
-        setGameEntity();
-        gameEntity.getComponent(LASConfigComponent.class).maxTeamSizeDifference = difference;
+        if (gameEntity == null || gameEntity == EntityRef.NULL) {
+            setGameEntity();
+        }
+        LASConfigComponent lasconfig = gameEntity.getComponent(LASConfigComponent.class);
+        lasconfig.maxTeamSizeDifference = difference;
+        gameEntity.saveComponent(lasconfig);
         return "The max team size difference is set to " + difference;
     }
 
@@ -68,7 +77,9 @@ public class TeleporterSystem extends BaseComponentSystem {
     }
 
     private boolean isProperTeamSize(EntityRef teleporter, EntityRef player) {
-        setGameEntity();
+        if (gameEntity == null || gameEntity == EntityRef.NULL) {
+            setGameEntity();
+        }
         int oppositeTeamCount = 0;
         int teleporterTeamCount = 0;
         int maxTeamSizeDifference = gameEntity.getComponent(LASConfigComponent.class).maxTeamSizeDifference;
@@ -99,8 +110,13 @@ public class TeleporterSystem extends BaseComponentSystem {
     }
 
     private void setGameEntity() {
-        if (entityManager.getCountOfEntitiesWith(LASConfigComponent.class) == 0) {
-            gameEntity = entityManager.create("LightAndShadowResources:gameEntity");
+        int numberOfGameStateEntities = entityManager.getCountOfEntitiesWith(LASConfigComponent.class);
+        if (numberOfGameStateEntities == 0) {
+            gameEntity = entityManager.create("LightAndShadow:gameEntity");
+        } else if (numberOfGameStateEntities == 1) {
+            gameEntity = entityManager.getEntitiesWith(LASConfigComponent.class).iterator().next();
+        } else {
+            logger.warn("Multiple game state entities available.");
         }
     }
 
