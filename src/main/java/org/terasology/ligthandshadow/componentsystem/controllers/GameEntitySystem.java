@@ -23,7 +23,7 @@ public class GameEntitySystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(GameEntitySystem.class);
 
     @In
-    public EntityManager entityManager;
+    EntityManager entityManager;
 
     private EntityRef gameEntity = EntityRef.NULL;
 
