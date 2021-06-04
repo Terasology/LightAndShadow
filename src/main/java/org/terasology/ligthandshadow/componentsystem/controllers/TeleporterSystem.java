@@ -43,17 +43,15 @@ public class TeleporterSystem extends BaseComponentSystem {
     InventoryManager inventoryManager;
     @In
     EntityManager entityManager;
+    @In
+    GameEntitySystem gameEntitySystem;
 
     private final Random random = new Random();
-
-    private EntityRef gameEntity;
 
     @Command(shortDescription = "Set the maximum team size difference", helpText = "Set maxTeamSizeDifference", runOnServer = true,
             requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public String setMaxTeamSizeDifference(@Sender EntityRef client, @CommandParam("difference") int difference) {
-        if (gameEntity == null || gameEntity == EntityRef.NULL) {
-            setGameEntity();
-        }
+        EntityRef gameEntity = gameEntitySystem.getGameEntity();
         LASConfigComponent lasconfig = gameEntity.getComponent(LASConfigComponent.class);
         lasconfig.maxTeamSizeDifference = difference;
         gameEntity.saveComponent(lasconfig);
@@ -77,9 +75,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     }
 
     private boolean isProperTeamSize(EntityRef teleporter, EntityRef player) {
-        if (gameEntity == null || gameEntity == EntityRef.NULL) {
-            setGameEntity();
-        }
+        EntityRef gameEntity = gameEntitySystem.getGameEntity();
         int oppositeTeamCount = 0;
         int teleporterTeamCount = 0;
         int maxTeamSizeDifference = gameEntity.getComponent(LASConfigComponent.class).maxTeamSizeDifference;
@@ -106,17 +102,6 @@ public class TeleporterSystem extends BaseComponentSystem {
                         + LASUtils.getOppositionTeam(teleporterTeam) + " team.", EntityRef.NULL));
             }
             return false;
-        }
-    }
-
-    private void setGameEntity() {
-        int numberOfGameStateEntities = entityManager.getCountOfEntitiesWith(LASConfigComponent.class);
-        if (numberOfGameStateEntities == 0) {
-            gameEntity = entityManager.create("LightAndShadow:gameEntity");
-        } else if (numberOfGameStateEntities == 1) {
-            gameEntity = entityManager.getEntitiesWith(LASConfigComponent.class).iterator().next();
-        } else {
-            logger.warn("Multiple game state entities available.");
         }
     }
 
