@@ -1,23 +1,12 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import java.util.Random;
 
 import org.joml.Vector3f;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
@@ -25,7 +14,14 @@ import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterTeleportEvent;
+import org.terasology.engine.logic.chat.ChatMessageEvent;
 import org.terasology.engine.logic.common.ActivateEvent;
+import org.terasology.engine.logic.console.commandSystem.annotations.Command;
+import org.terasology.engine.logic.console.commandSystem.annotations.CommandParam;
+import org.terasology.engine.logic.console.commandSystem.annotations.Sender;
+import org.terasology.engine.logic.permission.PermissionManager;
+import org.terasology.engine.logic.players.PlayerCharacterComponent;
+import org.terasology.ligthandshadow.componentsystem.components.LASConfigComponent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.registry.In;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
@@ -40,12 +36,27 @@ import org.terasology.ligthandshadow.componentsystem.components.SetTeamOnActivat
  */
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TeleporterSystem extends BaseComponentSystem {
+
+    private static final Logger logger = LoggerFactory.getLogger(TeleporterSystem.class);
+
     @In
     InventoryManager inventoryManager;
     @In
     EntityManager entityManager;
+    @In
+    GameEntitySystem gameEntitySystem;
 
-    private Random random = new Random();
+    private final Random random = new Random();
+
+    @Command(shortDescription = "Set the maximum team size difference", helpText = "Set maxTeamSizeDifference", runOnServer = true,
+            requiredPermission = PermissionManager.CHEAT_PERMISSION)
+    public String setMaxTeamSizeDifference(@Sender EntityRef client, @CommandParam("difference") int difference) {
+        EntityRef gameEntity = gameEntitySystem.getGameEntity();
+        LASConfigComponent lasconfig = gameEntity.getComponent(LASConfigComponent.class);
+        lasconfig.maxTeamSizeDifference = difference;
+        gameEntity.saveComponent(lasconfig);
+        return "The max team size difference is set to " + difference;
+    }
 
     /**
      * Depending on which teleporter the player chooses, they are set to that team
@@ -57,8 +68,41 @@ public class TeleporterSystem extends BaseComponentSystem {
     @ReceiveEvent(components = {SetTeamOnActivateComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
         EntityRef player = event.getInstigator();
-        String team = setPlayerTeamToTeleporterTeam(player, entity);
-        handlePlayerTeleport(player, team);
+        if (isProperTeamSize(entity, player)) {
+            String team = setPlayerTeamToTeleporterTeam(player, entity);
+            handlePlayerTeleport(player, team);
+        }
+    }
+
+    private boolean isProperTeamSize(EntityRef teleporter, EntityRef player) {
+        EntityRef gameEntity = gameEntitySystem.getGameEntity();
+        int oppositeTeamCount = 0;
+        int teleporterTeamCount = 0;
+        int maxTeamSizeDifference = gameEntity.getComponent(LASConfigComponent.class).maxTeamSizeDifference;
+        String teleporterTeam = teleporter.getComponent(LASTeamComponent.class).team;
+        Iterable<EntityRef> characters = entityManager.getEntitiesWith(PlayerCharacterComponent.class,
+                LASTeamComponent.class);
+
+        for (EntityRef character : characters) {
+            String otherPlayerTeam = character.getComponent(LASTeamComponent.class).team;
+            if (teleporterTeam.equals(otherPlayerTeam)) {
+                teleporterTeamCount++;
+            } else if (!otherPlayerTeam.equals(LASUtils.WHITE_TEAM)) {
+                oppositeTeamCount++;
+            }
+        }
+        if (teleporterTeamCount - oppositeTeamCount < maxTeamSizeDifference) {
+            return true;
+        } else {
+            if (maxTeamSizeDifference == 1) {
+                player.getOwner().send(new ChatMessageEvent("The " + teleporterTeam + " team has " + maxTeamSizeDifference + " player more, so please join the "
+                        + LASUtils.getOppositionTeam(teleporterTeam) + " team.", EntityRef.NULL));
+            } else {
+                player.getOwner().send(new ChatMessageEvent("The " + teleporterTeam + " team has " + maxTeamSizeDifference + " players more, so please join the "
+                        + LASUtils.getOppositionTeam(teleporterTeam) + " team.", EntityRef.NULL));
+            }
+            return false;
+        }
     }
 
     private String setPlayerTeamToTeleporterTeam(EntityRef player, EntityRef teleporter) {

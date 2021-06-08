@@ -1,0 +1,5 @@
+{
+    "LASConfig" : {
+        "maxTeamSizeDifference" : 3
+    }
+}
