@@ -21,7 +21,7 @@ import org.terasology.engine.logic.console.commandSystem.annotations.CommandPara
 import org.terasology.engine.logic.console.commandSystem.annotations.Sender;
 import org.terasology.engine.logic.permission.PermissionManager;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
-import org.terasology.lightandshadow.gamestate.LASUtils;
+import org.terasology.lightandshadow.LASUtils;
 import org.terasology.lightandshadow.gamestate.components.LASConfigComponent;
 import org.terasology.lightandshadow.gamestate.components.LASTeamComponent;
 import org.terasology.lightandshadow.gamestate.components.SetTeamOnActivateComponent;

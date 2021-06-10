@@ -18,7 +18,7 @@ import org.terasology.engine.registry.In;
 import org.terasology.engine.world.WorldProvider;
 import org.terasology.engine.world.block.BlockManager;
 import org.terasology.engine.world.block.items.BlockItemComponent;
-import org.terasology.lightandshadow.gamestate.LASUtils;
+import org.terasology.lightandshadow.LASUtils;
 
 /**
  * Handles events related to flag drops and pickups.

@@ -19,7 +19,7 @@ import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.logic.SkeletalMeshComponent;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.utilities.Assets;
-import org.terasology.lightandshadow.gamestate.LASUtils;
+import org.terasology.lightandshadow.LASUtils;
 import org.terasology.lightandshadow.gamestate.components.LASTeamComponent;
 import org.terasology.nui.widgets.UIIconBar;
 import org.terasology.module.health.ui.HealthHud;

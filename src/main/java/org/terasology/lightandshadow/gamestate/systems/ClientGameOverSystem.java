@@ -15,7 +15,7 @@ import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.rendering.nui.layers.ingame.DeathScreen;
-import org.terasology.lightandshadow.gamestate.LASUtils;
+import org.terasology.lightandshadow.LASUtils;
 import org.terasology.lightandshadow.gamestate.components.LASTeamComponent;
 import org.terasology.lightandshadow.combat.components.PlayerStatisticsComponent;
 import org.terasology.lightandshadow.gamestate.events.GameOverEvent;

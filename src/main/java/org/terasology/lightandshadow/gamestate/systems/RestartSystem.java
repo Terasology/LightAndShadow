@@ -9,7 +9,7 @@ import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterTeleportEvent;
-import org.terasology.lightandshadow.gamestate.LASUtils;
+import org.terasology.lightandshadow.LASUtils;
 import org.terasology.module.health.events.RestoreFullHealthEvent;
 import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.network.ClientComponent;

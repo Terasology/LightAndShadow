@@ -14,7 +14,7 @@ import org.terasology.engine.world.generation.FacetProviderPlugin;
 import org.terasology.engine.world.generation.GeneratingRegion;
 import org.terasology.engine.world.generation.Produces;
 import org.terasology.engine.world.generator.plugin.RegisterPlugin;
-import org.terasology.lightandshadow.gamestate.LASUtils;
+import org.terasology.lightandshadow.LASUtils;
 
 import java.util.Collection;
 import java.util.Collections;

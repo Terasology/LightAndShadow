@@ -1,6 +1,6 @@
 // Copyright 2021 The Terasology Foundation
 // SPDX-License-Identifier: Apache-2.0
-package org.terasology.lightandshadow.gamestate;
+package org.terasology.lightandshadow;
 
 import org.joml.Vector3f;
 import org.joml.Vector3fc;

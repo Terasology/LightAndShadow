@@ -14,7 +14,7 @@ import org.terasology.engine.world.generation.EntityBuffer;
 import org.terasology.engine.world.generation.EntityProviderPlugin;
 import org.terasology.engine.world.generation.Region;
 import org.terasology.engine.world.generator.plugin.RegisterPlugin;
-import org.terasology.lightandshadow.gamestate.LASUtils;
+import org.terasology.lightandshadow.LASUtils;
 
 /**
  *

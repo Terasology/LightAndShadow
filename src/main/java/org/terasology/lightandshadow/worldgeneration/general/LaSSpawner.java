@@ -7,7 +7,7 @@ import org.joml.Vector3f;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.logic.spawner.Spawner;
 import org.terasology.engine.world.generation.World;
-import org.terasology.lightandshadow.gamestate.LASUtils;
+import org.terasology.lightandshadow.LASUtils;
 
 public class LaSSpawner implements Spawner {
 

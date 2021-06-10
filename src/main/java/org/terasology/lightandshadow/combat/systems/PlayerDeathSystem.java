@@ -17,7 +17,7 @@ import org.terasology.engine.logic.characters.AliveCharacterComponent;
 import org.terasology.engine.logic.characters.CharacterComponent;
 import org.terasology.engine.logic.characters.CharacterTeleportEvent;
 import org.terasology.engine.logic.health.BeforeDestroyEvent;
-import org.terasology.lightandshadow.gamestate.LASUtils;
+import org.terasology.lightandshadow.LASUtils;
 import org.terasology.module.health.events.RestoreFullHealthEvent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.module.inventory.events.DropItemRequest;

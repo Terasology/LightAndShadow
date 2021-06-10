@@ -12,7 +12,7 @@ import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.location.Location;
 import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.registry.In;
-import org.terasology.lightandshadow.gamestate.LASUtils;
+import org.terasology.lightandshadow.LASUtils;
 import org.terasology.lightandshadow.flag.components.FlagParticleComponent;
 import org.terasology.lightandshadow.flag.events.FlagDropEvent;
 import org.terasology.lightandshadow.flag.events.FlagPickupEvent;

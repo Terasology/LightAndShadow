@@ -10,7 +10,7 @@ import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
-import org.terasology.lightandshadow.gamestate.LASUtils;
+import org.terasology.lightandshadow.LASUtils;
 import org.terasology.lightandshadow.gamestate.events.ScoreUpdateFromServerEvent;
 import org.terasology.nui.ControlWidget;
 import org.terasology.nui.databinding.ReadOnlyBinding;

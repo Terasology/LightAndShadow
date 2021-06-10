@@ -8,7 +8,7 @@ import org.terasology.engine.world.generation.Border3D;
 import org.terasology.engine.world.generation.FacetProvider;
 import org.terasology.engine.world.generation.GeneratingRegion;
 import org.terasology.engine.world.generation.Produces;
-import org.terasology.lightandshadow.gamestate.LASUtils;
+import org.terasology.lightandshadow.LASUtils;
 
 @Produces(PlayAreaFacet.class)
 public class PlayAreaProvider implements FacetProvider {
