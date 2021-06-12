@@ -38,14 +38,14 @@ import org.terasology.engine.world.WorldProvider;
 import org.terasology.engine.world.block.BlockManager;
 import org.terasology.engine.world.block.items.BlockItemComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.ligthandshadow.componentsystem.components.BlackFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.FlagDropOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
-import org.terasology.ligthandshadow.componentsystem.components.RaycastOnActivateComponent;
-import org.terasology.ligthandshadow.componentsystem.components.RedFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.events.FlagDropEvent;
 import org.terasology.ligthandshadow.componentsystem.events.FlagPickupEvent;
+import org.terasology.lightandshadowresources.components.BlackFlagComponent;
+import org.terasology.lightandshadowresources.components.RaycastOnActivateComponent;
+import org.terasology.lightandshadowresources.components.RedFlagComponent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class AttackSystem extends BaseComponentSystem {

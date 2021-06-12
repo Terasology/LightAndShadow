@@ -45,6 +45,7 @@ import org.terasology.engine.world.block.BlockManager;
 import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.engine.world.block.family.BlockPlacementData;
 import org.terasology.engine.world.block.regions.BlockRegionComponent;
+import org.terasology.lightandshadowresources.components.CardComponent;
 
 @RegisterSystem
 public class CardSystem extends BaseComponentSystem {

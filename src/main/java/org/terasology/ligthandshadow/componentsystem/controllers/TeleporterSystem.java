@@ -26,7 +26,7 @@ import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.registry.In;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
-import org.terasology.ligthandshadow.componentsystem.components.SetTeamOnActivateComponent;
+import org.terasology.lightandshadowresources.components.SetTeamOnActivateComponent;
 
 /**
  * Teleports players to play arena once they chose their team.

@@ -33,7 +33,7 @@ import org.terasology.engine.world.block.BlockManager;
 import org.terasology.engine.world.block.items.BlockItemFactory;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
-import org.terasology.ligthandshadow.componentsystem.components.TakeBlockOnActivateComponent;
+import org.terasology.lightandshadowresources.components.TakeBlockOnActivateComponent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TakeBlockOnActivationSystem extends BaseComponentSystem {
