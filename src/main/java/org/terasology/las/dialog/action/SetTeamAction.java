@@ -22,7 +22,6 @@ import org.terasology.engine.logic.characters.CharacterComponent;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
 
-
 /**
  *
  */
