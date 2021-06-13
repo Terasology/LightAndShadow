@@ -15,7 +15,6 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.joml.Vector3i;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.Event;
@@ -57,14 +56,6 @@ public class ScoreSystem extends BaseComponentSystem {
     private NUIManager nuiManager;
     @In
     private EntityManager entityManager;
-    @In
-    private BlockManager blockManager;
-    @In
-    private WorldProvider worldProvider;
-    @In
-    private LocalPlayer localPlayer;
-    @In
-    private PermissionManager permissionManager;
     @In
     private FlagAuthoritySystem flagUtilities;
 
