@@ -1,21 +1,12 @@
-/*
- * Copyright 2019 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
+import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.Event;
 import org.terasology.engine.entitySystem.event.EventPriority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
@@ -27,16 +18,28 @@ import org.terasology.engine.logic.delay.DelayedActionTriggeredEvent;
 import org.terasology.engine.logic.inventory.ItemComponent;
 import org.terasology.engine.logic.inventory.events.DropItemEvent;
 import org.terasology.engine.logic.inventory.events.GiveItemEvent;
+import org.terasology.engine.logic.location.LocationComponent;
+import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
 import org.terasology.engine.world.WorldProvider;
+import org.terasology.engine.world.block.BlockComponent;
 import org.terasology.engine.world.block.BlockManager;
 import org.terasology.engine.world.block.items.BlockItemComponent;
+import org.terasology.engine.world.block.items.BlockItemFactory;
+import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
+import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
+import org.terasology.ligthandshadow.componentsystem.events.FlagDropEvent;
+import org.terasology.ligthandshadow.componentsystem.events.FlagPickupEvent;
+import org.terasology.module.inventory.events.DropItemRequest;
+import org.terasology.module.inventory.systems.InventoryManager;
 
 /**
  * Handles events related to flag drops and pickups.
  */
 @RegisterSystem(RegisterMode.AUTHORITY)
+@Share(value = FlagAuthoritySystem.class)
 public class FlagAuthoritySystem extends BaseComponentSystem {
 
     @In
@@ -47,6 +50,14 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
 
     @In
     BlockManager blockManager;
+
+    @In
+    InventoryManager inventoryManager;
+
+    @In
+    EntityManager entityManager;
+
+    private EntityRef flagSlot;
 
     /**
      * Add a delayed action using delay manager to flags when they are dropped.
@@ -111,6 +122,60 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
                                               BlockItemComponent blockItemComponent) {
         if (event.isHandled() && delayManager.hasDelayedAction(item, LASUtils.DROPPED_FLAG)) {
                 delayManager.cancelDelayedAction(item, LASUtils.DROPPED_FLAG);
+        }
+    }
+
+    public void dropFlag(EntityRef targetPlayer, EntityRef attackingPlayer, String flagTeam) {
+        int inventorySize = inventoryManager.getNumSlots(targetPlayer);
+        for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
+            EntityRef inventorySlot = inventoryManager.getItemInSlot(targetPlayer, slotNumber);
+            if (inventorySlot.hasComponent(BlockItemComponent.class)) {
+                if (inventorySlot.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(flagTeam)) {
+                    flagSlot = inventorySlot;
+                }
+            }
+        }
+        Vector3fc startPosition = targetPlayer.getComponent(LocationComponent.class).getLocalPosition();
+        Vector3f impulse = attackingPlayer.getComponent(LocationComponent.class).getLocalPosition()
+                .add(startPosition, new Vector3f()).div(2f);
+        targetPlayer.send(new DropItemRequest(flagSlot, targetPlayer, impulse, startPosition));
+    }
+
+    public void handleFlagPickup(EntityRef player, String flagTeam) {
+        sendEventToClients(new FlagPickupEvent(player, flagTeam));
+        if (!player.hasComponent(HasFlagComponent.class)) {
+            player.addComponent(new HasFlagComponent());
+            player.getComponent(HasFlagComponent.class).flag = flagTeam;
+        }
+    }
+
+    public void handleFlagDrop(EntityRef player) {
+        if (player.hasComponent(HasFlagComponent.class)) {
+            player.removeComponent(HasFlagComponent.class);
+        }
+        sendEventToClients(new FlagDropEvent(player));
+    }
+
+    public void moveFlagToBase(EntityRef playerEntity, String flagTeam, EntityRef item) {
+        worldProvider.setBlock(LASUtils.getFlagLocation(flagTeam), blockManager.getBlock(LASUtils.getFlagURI(flagTeam)));
+        inventoryManager.removeItem(playerEntity, EntityRef.NULL, item, true, 1);
+    }
+
+    public void giveFlagToPlayer(EntityRef flag, EntityRef player) {
+        BlockComponent blockComponent = flag.getComponent(BlockComponent.class);
+        LASTeamComponent flagTeamComponent = flag.getComponent(LASTeamComponent.class);
+        BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
+        inventoryManager.giveItem(player, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.getFlagURI(flagTeamComponent.team))));
+        worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
+        flag.destroy();
+    }
+
+    public void sendEventToClients(Event event) {
+        if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
+            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
+            for (EntityRef client : clients) {
+                client.send(event);
+            }
         }
     }
 }

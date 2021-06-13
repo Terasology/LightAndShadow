@@ -65,6 +65,8 @@ public class ScoreSystem extends BaseComponentSystem {
     private LocalPlayer localPlayer;
     @In
     private PermissionManager permissionManager;
+    @In
+    private FlagAuthoritySystem flagUtilities;
 
     private int redScore;
     private int blackScore;
@@ -126,7 +128,7 @@ public class ScoreSystem extends BaseComponentSystem {
 
             if (checkIfTeamScores(baseTeamComponent, heldFlag)) {
                 incrementScore(baseTeamComponent);
-                movePlayerFlagToBase(player, oppositionTeam, heldFlag);
+                flagUtilities.moveFlagToBase(player, oppositionTeam, heldFlag);
                 if (redScore >= LASUtils.GOAL_SCORE) {
                     resetLevel();
                     sendGameOverEventToClients(LASUtils.RED_TEAM);
@@ -203,15 +205,8 @@ public class ScoreSystem extends BaseComponentSystem {
                 continue;
             }
 
-            movePlayerFlagToBase(playerWithFlag, oppositionTeam, heldFlag);
+            flagUtilities.moveFlagToBase(playerWithFlag, oppositionTeam, heldFlag);
         }
-    }
-
-    private void movePlayerFlagToBase(EntityRef player, String oppositionTeam, EntityRef heldFlag) {
-        Vector3i basePosition = LASUtils.getFlagLocation(oppositionTeam);
-        String flag = LASUtils.getFlagURI(oppositionTeam);
-        inventoryManager.removeItem(player, player, heldFlag, true);
-        worldProvider.setBlock(basePosition, blockManager.getBlock(flag));
     }
 
     private void sendEventToClients(Event event) {
