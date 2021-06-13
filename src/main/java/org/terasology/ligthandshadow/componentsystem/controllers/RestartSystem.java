@@ -29,9 +29,9 @@ import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.rendering.nui.layers.ingame.DeathScreen;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.events.ClientRestartEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
+import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.nui.layouts.miglayout.MigLayout;
 
 @RegisterSystem
