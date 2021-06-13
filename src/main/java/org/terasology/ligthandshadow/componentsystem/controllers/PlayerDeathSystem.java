@@ -39,8 +39,8 @@ import org.terasology.engine.registry.In;
 import org.terasology.engine.world.WorldProvider;
 import org.terasology.engine.world.block.BlockManager;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.ligthandshadow.componentsystem.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
+import org.terasology.lightandshadowresources.components.LASTeamComponent;
 
 
 /**
