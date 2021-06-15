@@ -12,7 +12,6 @@ import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.prefab.Prefab;
-import org.terasology.engine.entitySystem.prefab.PrefabManager;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
@@ -51,8 +50,6 @@ public class TeleporterSystem extends BaseComponentSystem {
     EntityManager entityManager;
     @In
     GameEntitySystem gameEntitySystem;
-    @In
-    private PrefabManager prefabManager;
 
     private final Random random = new Random();
 
