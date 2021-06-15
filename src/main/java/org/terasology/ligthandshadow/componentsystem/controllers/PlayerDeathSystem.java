@@ -15,10 +15,12 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import java.util.Optional;
 import java.util.Random;
 
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
+import org.terasology.engine.utilities.Assets;
 import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
@@ -31,6 +33,8 @@ import org.terasology.engine.logic.characters.CharacterComponent;
 import org.terasology.engine.logic.characters.CharacterTeleportEvent;
 import org.terasology.engine.logic.health.BeforeDestroyEvent;
 import org.terasology.module.health.events.RestoreFullHealthEvent;
+import org.terasology.module.inventory.components.StartingInventoryComponent;
+import org.terasology.module.inventory.events.RequestInventoryEvent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.module.inventory.events.DropItemRequest;
 import org.terasology.engine.logic.location.LocationComponent;
@@ -83,6 +87,10 @@ public class PlayerDeathSystem extends BaseComponentSystem {
             player.send(new RestoreFullHealthEvent(player));
             Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
             player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
+            Optional<Prefab> prefab = Assets.getPrefab("inventory");
+            StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
+            player.addOrSaveComponent(startingInventory);
+            player.send(new RequestInventoryEvent());
         }
     }
 

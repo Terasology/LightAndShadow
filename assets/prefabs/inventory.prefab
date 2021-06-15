@@ -1,0 +1,16 @@
+{
+  "StartingInventory": {
+    "items": [
+      { "uri": "CombatSystem:bow", "quantity": 1 },
+      { "uri": "CombatSystem:stickArrowItem", "quantity": 16 },
+      { "uri": "CombatSystem:bounceArrowItem", "quantity": 16 },
+      { "uri": "CombatSystem:explodeArrowItem", "quantity": 16 },
+      { "uri": "CombatSystem:sword", "quantity": 1 },
+      { "uri": "CombatSystem:waraxe", "quantity": 1 },
+      { "uri": "CombatSystem:staff", "quantity": 1 },
+      { "uri": "CombatSystem:spearItem", "quantity": 1 },
+      { "uri": "CombatSystem:fireBallMine", "quantity": 1 },
+      { "uri": "CombatSystem:explodeMine", "quantity": 1 }
+    ]
+  }
+}

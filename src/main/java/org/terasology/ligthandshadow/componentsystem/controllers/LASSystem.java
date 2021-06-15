@@ -17,6 +17,7 @@ package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.EventPriority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
@@ -46,7 +47,7 @@ public class LASSystem extends BaseComponentSystem {
     /**
      * Gives player inventory items on game start
      */
-    @ReceiveEvent
+    @ReceiveEvent(priority = EventPriority.PRIORITY_LOW)
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, InventoryComponent inventory) {
         BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
         for (int i = 0; i < inventoryManager.getNumSlots(player); i++) {
