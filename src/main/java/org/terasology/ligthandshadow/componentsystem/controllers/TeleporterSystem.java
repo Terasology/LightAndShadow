@@ -51,6 +51,9 @@ public class TeleporterSystem extends BaseComponentSystem {
     @In
     GameEntitySystem gameEntitySystem;
 
+    Optional<Prefab> prefab = Assets.getPrefab("inventory");
+    StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
+
     private final Random random = new Random();
 
     @Command(shortDescription = "Set the maximum team size difference", helpText = "Set maxTeamSizeDifference", runOnServer = true,
@@ -121,10 +124,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     private void handlePlayerTeleport(EntityRef player, String team) {
         Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
         player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
-        Optional<Prefab> prefab = Assets.getPrefab("inventory");
-        StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
-        player.addComponent(startingInventory);
-        player.send(new RequestInventoryEvent());
-        inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(LASUtils.MAGIC_STAFF_URI));
+        player.addOrSaveComponent(startingInventory);
+        player.send(new RequestInventoryEvent(startingInventory.items));
     }
 }

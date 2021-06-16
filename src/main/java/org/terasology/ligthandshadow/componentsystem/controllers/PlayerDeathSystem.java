@@ -64,6 +64,9 @@ public class PlayerDeathSystem extends BaseComponentSystem {
     @In
     private BlockManager blockManager;
 
+    Optional<Prefab> prefab = Assets.getPrefab("inventory");
+    StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
+
     private Random random = new Random();
 
     /**
@@ -87,10 +90,8 @@ public class PlayerDeathSystem extends BaseComponentSystem {
             player.send(new RestoreFullHealthEvent(player));
             Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
             player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
-            Optional<Prefab> prefab = Assets.getPrefab("inventory");
-            StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
             player.addOrSaveComponent(startingInventory);
-            player.send(new RequestInventoryEvent());
+            player.send(new RequestInventoryEvent(startingInventory.items));
         }
     }
 
