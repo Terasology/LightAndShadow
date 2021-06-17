@@ -21,7 +21,6 @@ import java.util.Random;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.terasology.engine.utilities.Assets;
-import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
@@ -40,8 +39,6 @@ import org.terasology.module.inventory.events.DropItemRequest;
 import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.engine.registry.In;
-import org.terasology.engine.world.WorldProvider;
-import org.terasology.engine.world.block.BlockManager;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
@@ -53,16 +50,7 @@ import org.terasology.lightandshadowresources.components.LASTeamComponent;
 @RegisterSystem
 public class PlayerDeathSystem extends BaseComponentSystem {
     @In
-    private AssetManager assetManager;
-
-    @In
     private InventoryManager inventoryManager;
-
-    @In
-    private WorldProvider worldProvider;
-
-    @In
-    private BlockManager blockManager;
 
     Optional<Prefab> prefab = Assets.getPrefab("inventory");
     StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
@@ -96,16 +84,13 @@ public class PlayerDeathSystem extends BaseComponentSystem {
     }
 
     private void dropItemsFromInventory(EntityRef player) {
-        Prefab staffPrefab = assetManager.getAsset(LASUtils.MAGIC_STAFF_URI, Prefab.class).orElse(null);
         Vector3fc deathPosition = player.getComponent(LocationComponent.class).getLocalPosition();
         Vector3f impulse = new Vector3f();
         int inventorySize = inventoryManager.getNumSlots(player);
         for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
             EntityRef slot = inventoryManager.getItemInSlot(player, slotNumber);
             Prefab currentPrefab = slot.getParentPrefab();
-            if (currentPrefab != null && currentPrefab.equals(staffPrefab)) {
-                inventoryManager.removeItem(player, EntityRef.NULL, slotNumber, true, 1);
-            } else if (currentPrefab != null) {
+            if (currentPrefab != null) {
                 int count = inventoryManager.getStackSize(slot);
                 player.send(new DropItemRequest(slot, player, impulse, deathPosition, count));
             }
