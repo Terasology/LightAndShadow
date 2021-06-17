@@ -10,7 +10,8 @@
       { "uri": "CombatSystem:staff", "quantity": 1 },
       { "uri": "CombatSystem:spearItem", "quantity": 1 },
       { "uri": "CombatSystem:fireBallMine", "quantity": 1 },
-      { "uri": "CombatSystem:explodeMine", "quantity": 1 }
+      { "uri": "CombatSystem:explodeMine", "quantity": 1 },
+      { "uri": "LightAndShadowResources:magicStaff", "quantity": 1 }
     ]
   }
 }

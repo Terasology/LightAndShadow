@@ -103,7 +103,9 @@ public class PlayerDeathSystem extends BaseComponentSystem {
         for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
             EntityRef slot = inventoryManager.getItemInSlot(player, slotNumber);
             Prefab currentPrefab = slot.getParentPrefab();
-            if (currentPrefab != null && !currentPrefab.equals(staffPrefab)) {
+            if (currentPrefab != null && currentPrefab.equals(staffPrefab)) {
+                inventoryManager.removeItem(player, EntityRef.NULL, slotNumber, true, 1);
+            } else if (currentPrefab != null) {
                 int count = inventoryManager.getStackSize(slot);
                 player.send(new DropItemRequest(slot, player, impulse, deathPosition, count));
             }
