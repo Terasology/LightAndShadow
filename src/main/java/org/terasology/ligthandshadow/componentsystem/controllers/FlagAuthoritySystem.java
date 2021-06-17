@@ -19,7 +19,6 @@ import org.terasology.engine.logic.inventory.events.DropItemEvent;
 import org.terasology.engine.logic.inventory.events.GiveItemEvent;
 import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.registry.In;
-import org.terasology.engine.registry.Share;
 import org.terasology.engine.world.WorldProvider;
 import org.terasology.engine.world.block.BlockComponent;
 import org.terasology.engine.world.block.BlockManager;
@@ -37,7 +36,6 @@ import org.terasology.module.inventory.systems.InventoryManager;
  * Handles events related to flag drops and pickups.
  */
 @RegisterSystem(RegisterMode.AUTHORITY)
-@Share(value = FlagAuthoritySystem.class)
 public class FlagAuthoritySystem extends BaseComponentSystem {
 
     @In
