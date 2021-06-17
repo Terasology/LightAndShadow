@@ -114,7 +114,7 @@ public class AttackSystem extends BaseComponentSystem {
         return null;
     }
 
-    public void handleFlagPickup(EntityRef player, String flagTeam) {
+    private void handleFlagPickup(EntityRef player, String flagTeam) {
         sendEventToClients(new FlagPickupEvent(player, flagTeam));
         if (!player.hasComponent(HasFlagComponent.class)) {
             player.addComponent(new HasFlagComponent());
@@ -122,14 +122,14 @@ public class AttackSystem extends BaseComponentSystem {
         }
     }
 
-    public void handleFlagDrop(EntityRef player) {
+    private void handleFlagDrop(EntityRef player) {
         if (player.hasComponent(HasFlagComponent.class)) {
             player.removeComponent(HasFlagComponent.class);
         }
         sendEventToClients(new FlagDropEvent(player));
     }
 
-    public void sendEventToClients(Event event) {
+    private void sendEventToClients(Event event) {
         if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
             Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
             for (EntityRef client : clients) {
