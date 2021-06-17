@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import java.util.Optional;
 import java.util.Random;
 
 import org.joml.Vector3f;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
@@ -21,7 +23,10 @@ import org.terasology.engine.logic.console.commandSystem.annotations.CommandPara
 import org.terasology.engine.logic.console.commandSystem.annotations.Sender;
 import org.terasology.engine.logic.permission.PermissionManager;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
+import org.terasology.engine.utilities.Assets;
 import org.terasology.ligthandshadow.componentsystem.components.LASConfigComponent;
+import org.terasology.module.inventory.components.StartingInventoryComponent;
+import org.terasology.module.inventory.events.RequestInventoryEvent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.registry.In;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
@@ -45,6 +50,9 @@ public class TeleporterSystem extends BaseComponentSystem {
     EntityManager entityManager;
     @In
     GameEntitySystem gameEntitySystem;
+
+    Optional<Prefab> prefab = Assets.getPrefab("inventory");
+    StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
 
     private final Random random = new Random();
 
@@ -116,6 +124,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     private void handlePlayerTeleport(EntityRef player, String team) {
         Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
         player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
-        inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create(LASUtils.MAGIC_STAFF_URI));
+        player.addOrSaveComponent(startingInventory);
+        player.send(new RequestInventoryEvent(startingInventory.items));
     }
 }
