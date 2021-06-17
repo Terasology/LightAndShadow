@@ -3,14 +3,21 @@
 
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.Event;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterHeldItemComponent;
 import org.terasology.engine.logic.common.ActivateEvent;
+import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
+import org.terasology.ligthandshadow.componentsystem.events.FlagDropEvent;
+import org.terasology.ligthandshadow.componentsystem.events.FlagDropRequestEvent;
+import org.terasology.ligthandshadow.componentsystem.events.FlagPickupEvent;
+import org.terasology.ligthandshadow.componentsystem.events.MoveFlagToBaseEvent;
 import org.terasology.module.inventory.events.InventorySlotChangedEvent;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
@@ -24,7 +31,7 @@ import org.terasology.lightandshadowresources.components.RedFlagComponent;
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class AttackSystem extends BaseComponentSystem {
     @In
-    FlagAuthoritySystem flagUtilities;
+    EntityManager entityManager;
 
     private EntityRef item;
 
@@ -44,11 +51,11 @@ public class AttackSystem extends BaseComponentSystem {
             if (targetPlayer.hasComponent(PlayerCharacterComponent.class) && targetPlayer.hasComponent(HasFlagComponent.class)) {
                 // If the target player has the black flag
                 if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
-                    flagUtilities.dropFlag(targetPlayer, attackingPlayer, LASUtils.BLACK_FLAG_URI);
+                    targetPlayer.send(new FlagDropRequestEvent(attackingPlayer, LASUtils.BLACK_FLAG_URI));
                     return;
                 }
                 if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
-                    flagUtilities.dropFlag(targetPlayer, attackingPlayer, LASUtils.RED_FLAG_URI);
+                    targetPlayer.send(new FlagDropRequestEvent(attackingPlayer, LASUtils.RED_FLAG_URI));
                     return;
                 }
             }
@@ -78,18 +85,17 @@ public class AttackSystem extends BaseComponentSystem {
         if (itemIsFlag(item)) {
             String flagTeam = checkWhichFlagPicked(event);
             if (flagTeam.equals(player.getComponent(LASTeamComponent.class).team)) {
-                flagUtilities.moveFlagToBase(player, flagTeam, item);
-                return;
+                player.send(new MoveFlagToBaseEvent(item, flagTeam));
             } else {
-                flagUtilities.handleFlagPickup(player, flagTeam);
-                return;
+                handleFlagPickup(player, flagTeam);
             }
+            return;
         }
 
         // Checks if player puts down flag
         item = event.getOldItem();
         if (itemIsFlag(item)) {
-            flagUtilities.handleFlagDrop(player);
+            handleFlagDrop(player);
         }
     }
 
@@ -106,6 +112,30 @@ public class AttackSystem extends BaseComponentSystem {
             return LASUtils.RED_TEAM;
         }
         return null;
+    }
+
+    public void handleFlagPickup(EntityRef player, String flagTeam) {
+        sendEventToClients(new FlagPickupEvent(player, flagTeam));
+        if (!player.hasComponent(HasFlagComponent.class)) {
+            player.addComponent(new HasFlagComponent());
+            player.getComponent(HasFlagComponent.class).flag = flagTeam;
+        }
+    }
+
+    public void handleFlagDrop(EntityRef player) {
+        if (player.hasComponent(HasFlagComponent.class)) {
+            player.removeComponent(HasFlagComponent.class);
+        }
+        sendEventToClients(new FlagDropEvent(player));
+    }
+
+    public void sendEventToClients(Event event) {
+        if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
+            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
+            for (EntityRef client : clients) {
+                client.send(event);
+            }
+        }
     }
 
 }

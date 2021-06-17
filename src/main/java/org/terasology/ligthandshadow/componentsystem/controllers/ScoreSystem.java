@@ -23,6 +23,7 @@ import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.common.ActivateEvent;
+import org.terasology.ligthandshadow.componentsystem.events.MoveFlagToBaseEvent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
@@ -52,8 +53,6 @@ public class ScoreSystem extends BaseComponentSystem {
     private NUIManager nuiManager;
     @In
     private EntityManager entityManager;
-    @In
-    private FlagAuthoritySystem flagUtilities;
 
     private int redScore;
     private int blackScore;
@@ -115,7 +114,7 @@ public class ScoreSystem extends BaseComponentSystem {
 
             if (checkIfTeamScores(baseTeamComponent, heldFlag)) {
                 incrementScore(baseTeamComponent);
-                flagUtilities.moveFlagToBase(player, oppositionTeam, heldFlag);
+                player.send(new MoveFlagToBaseEvent(heldFlag,oppositionTeam));
                 if (redScore >= LASUtils.GOAL_SCORE) {
                     resetLevel();
                     sendGameOverEventToClients(LASUtils.RED_TEAM);
@@ -192,7 +191,7 @@ public class ScoreSystem extends BaseComponentSystem {
                 continue;
             }
 
-            flagUtilities.moveFlagToBase(playerWithFlag, oppositionTeam, heldFlag);
+            playerWithFlag.send(new MoveFlagToBaseEvent(heldFlag,oppositionTeam));
         }
     }
 

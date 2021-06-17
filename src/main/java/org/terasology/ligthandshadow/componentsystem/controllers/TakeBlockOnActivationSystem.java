@@ -23,17 +23,14 @@ import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.common.ActivateEvent;
-import org.terasology.engine.registry.In;
 import org.terasology.engine.world.block.BlockComponent;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.lightandshadowresources.components.TakeBlockOnActivateComponent;
+import org.terasology.ligthandshadow.componentsystem.events.GiveFlagEvent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(TakeBlockOnActivationSystem.class);
-
-    @In
-    private FlagAuthoritySystem flagUtilities;
 
     @ReceiveEvent(components = {TakeBlockOnActivateComponent.class, BlockComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
@@ -41,7 +38,7 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
 
         // If the flag being taken is a red flag and the player is on the black team, let them take the flag
         if (!playerTeamMatchesFlagTeam(entity, flagTaker)) {
-            flagUtilities.giveFlagToPlayer(entity, flagTaker);
+            flagTaker.send(new GiveFlagEvent(entity));
         }
     }
 
