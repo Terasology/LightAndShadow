@@ -26,11 +26,13 @@ import org.terasology.engine.world.block.items.BlockItemComponent;
 import org.terasology.engine.world.block.items.BlockItemFactory;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.ligthandshadow.componentsystem.events.FlagDropRequestEvent;
+import org.terasology.ligthandshadow.componentsystem.events.FlagDropEvent;
 import org.terasology.ligthandshadow.componentsystem.events.GiveFlagEvent;
 import org.terasology.ligthandshadow.componentsystem.events.MoveFlagToBaseEvent;
 import org.terasology.module.inventory.events.DropItemRequest;
 import org.terasology.module.inventory.systems.InventoryManager;
+
+import java.util.Optional;
 
 /**
  * Handles events related to flag drops and pickups.
@@ -122,36 +124,38 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void dropFlagRequest(FlagDropRequestEvent event, EntityRef targetPlayer) {
+    public void dropFlagRequest(FlagDropEvent event, EntityRef targetPlayer) {
         int inventorySize = inventoryManager.getNumSlots(targetPlayer);
         for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
             EntityRef inventorySlot = inventoryManager.getItemInSlot(targetPlayer, slotNumber);
-            if (inventorySlot.hasComponent(BlockItemComponent.class)) {
-                if (inventorySlot.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(event.flagTeam)) {
+            Optional<BlockItemComponent> inventoryItem = Optional.ofNullable(inventoryManager.getItemInSlot(targetPlayer,
+                    slotNumber).getComponent(BlockItemComponent.class));
+            inventoryItem.ifPresent(item -> {
+                if (item.blockFamily.getURI().toString().equals(event.getFlagTeam())) {
                     flagSlot = inventorySlot;
                 }
-            }
+            });
         }
         Vector3fc startPosition = targetPlayer.getComponent(LocationComponent.class).getLocalPosition();
-        Vector3f impulse = event.attackingPlayer.getComponent(LocationComponent.class).getLocalPosition()
+        Vector3f impulse = event.getAttackingPlayer().getComponent(LocationComponent.class).getLocalPosition()
                 .add(startPosition, new Vector3f()).div(2f);
         targetPlayer.send(new DropItemRequest(flagSlot, targetPlayer, impulse, startPosition));
     }
 
     @ReceiveEvent
     public void moveFlagToBase(MoveFlagToBaseEvent event, EntityRef playerEntity) {
-        worldProvider.setBlock(LASUtils.getFlagLocation(event.flagTeam), blockManager.getBlock(LASUtils.getFlagURI(event.flagTeam)));
-        inventoryManager.removeItem(playerEntity, EntityRef.NULL, event.heldFlag, true, 1);
+        worldProvider.setBlock(LASUtils.getFlagLocation(event.getFlagTeam()), blockManager.getBlock(LASUtils.getFlagURI(event.getFlagTeam())));
+        inventoryManager.removeItem(playerEntity, EntityRef.NULL, event.getHeldFlag(), true, 1);
     }
 
     @ReceiveEvent
     public void giveFlagToPlayer(GiveFlagEvent event, EntityRef player) {
-        BlockComponent blockComponent = event.flag.getComponent(BlockComponent.class);
-        LASTeamComponent flagTeamComponent = event.flag.getComponent(LASTeamComponent.class);
+        BlockComponent blockComponent = event.getFlag().getComponent(BlockComponent.class);
+        LASTeamComponent flagTeamComponent = event.getFlag().getComponent(LASTeamComponent.class);
         BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
         inventoryManager.giveItem(player, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.getFlagURI(flagTeamComponent.team))));
         worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
-        event.flag.destroy();
+        event.getFlag().destroy();
     }
 
 }

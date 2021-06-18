@@ -7,11 +7,19 @@ import org.terasology.engine.entitySystem.event.Event;
 
 
 public class MoveFlagToBaseEvent implements Event {
-    public EntityRef heldFlag;
-    public String flagTeam;
+    private final EntityRef heldFlag;
+    private final String flagTeam;
 
     public MoveFlagToBaseEvent(EntityRef heldFlag, String flagTeam) {
         this.heldFlag = heldFlag;
         this.flagTeam = flagTeam;
+    }
+
+    public EntityRef getHeldFlag() {
+        return heldFlag;
+    }
+
+    public String getFlagTeam() {
+        return flagTeam;
     }
 }

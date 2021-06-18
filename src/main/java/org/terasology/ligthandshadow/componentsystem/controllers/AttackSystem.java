@@ -14,19 +14,18 @@ import org.terasology.engine.logic.characters.CharacterHeldItemComponent;
 import org.terasology.engine.logic.common.ActivateEvent;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
+import org.terasology.ligthandshadow.componentsystem.components.FlagComponent;
+import org.terasology.ligthandshadow.componentsystem.events.OnFlagDropEvent;
 import org.terasology.ligthandshadow.componentsystem.events.FlagDropEvent;
-import org.terasology.ligthandshadow.componentsystem.events.FlagDropRequestEvent;
-import org.terasology.ligthandshadow.componentsystem.events.FlagPickupEvent;
+import org.terasology.ligthandshadow.componentsystem.events.OnFlagPickupEvent;
 import org.terasology.ligthandshadow.componentsystem.events.MoveFlagToBaseEvent;
 import org.terasology.module.inventory.events.InventorySlotChangedEvent;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.FlagDropOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
-import org.terasology.lightandshadowresources.components.BlackFlagComponent;
 import org.terasology.lightandshadowresources.components.RaycastOnActivateComponent;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
-import org.terasology.lightandshadowresources.components.RedFlagComponent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class AttackSystem extends BaseComponentSystem {
@@ -51,11 +50,11 @@ public class AttackSystem extends BaseComponentSystem {
             if (targetPlayer.hasComponent(PlayerCharacterComponent.class) && targetPlayer.hasComponent(HasFlagComponent.class)) {
                 // If the target player has the black flag
                 if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
-                    targetPlayer.send(new FlagDropRequestEvent(attackingPlayer, LASUtils.BLACK_FLAG_URI));
+                    targetPlayer.send(new FlagDropEvent(attackingPlayer, LASUtils.BLACK_FLAG_URI));
                     return;
                 }
                 if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
-                    targetPlayer.send(new FlagDropRequestEvent(attackingPlayer, LASUtils.RED_FLAG_URI));
+                    targetPlayer.send(new FlagDropEvent(attackingPlayer, LASUtils.RED_FLAG_URI));
                     return;
                 }
             }
@@ -100,22 +99,19 @@ public class AttackSystem extends BaseComponentSystem {
     }
 
     private boolean itemIsFlag(EntityRef checkedItem) {
-        return (checkedItem.hasComponent(BlackFlagComponent.class) || checkedItem.hasComponent(RedFlagComponent.class));
+        return checkedItem.hasComponent(FlagComponent.class);
     }
 
     private String checkWhichFlagPicked(InventorySlotChangedEvent event) {
         item = event.getNewItem();
-        if (item.hasComponent(BlackFlagComponent.class)) {
-            return LASUtils.BLACK_TEAM;
-        }
-        if (item.hasComponent(RedFlagComponent.class)) {
-            return LASUtils.RED_TEAM;
+        if (item.hasComponent(FlagComponent.class)) {
+            return item.getComponent(FlagComponent.class).team;
         }
         return null;
     }
 
     private void handleFlagPickup(EntityRef player, String flagTeam) {
-        sendEventToClients(new FlagPickupEvent(player, flagTeam));
+        sendEventToClients(new OnFlagPickupEvent(player, flagTeam));
         if (!player.hasComponent(HasFlagComponent.class)) {
             player.addComponent(new HasFlagComponent());
             player.getComponent(HasFlagComponent.class).flag = flagTeam;
@@ -126,7 +122,7 @@ public class AttackSystem extends BaseComponentSystem {
         if (player.hasComponent(HasFlagComponent.class)) {
             player.removeComponent(HasFlagComponent.class);
         }
-        sendEventToClients(new FlagDropEvent(player));
+        sendEventToClients(new OnFlagDropEvent(player));
     }
 
     private void sendEventToClients(Event event) {

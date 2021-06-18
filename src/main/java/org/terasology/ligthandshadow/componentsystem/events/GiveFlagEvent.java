@@ -7,9 +7,12 @@ import org.terasology.engine.entitySystem.event.Event;
 
 
 public class GiveFlagEvent implements Event {
-    public EntityRef flag;
+    private final EntityRef flag;
 
     public GiveFlagEvent(EntityRef flag) {
         this.flag = flag;
+    }
+    public EntityRef getFlag() {
+        return flag;
     }
 }
