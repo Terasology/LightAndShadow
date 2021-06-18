@@ -14,7 +14,7 @@ import org.terasology.engine.logic.characters.CharacterHeldItemComponent;
 import org.terasology.engine.logic.common.ActivateEvent;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
-import org.terasology.ligthandshadow.componentsystem.components.FlagComponent;
+import org.terasology.lightandshadowresources.components.FlagComponent;
 import org.terasology.ligthandshadow.componentsystem.events.OnFlagDropEvent;
 import org.terasology.ligthandshadow.componentsystem.events.FlagDropEvent;
 import org.terasology.ligthandshadow.componentsystem.events.OnFlagPickupEvent;
