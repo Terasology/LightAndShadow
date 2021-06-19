@@ -18,6 +18,8 @@ package org.terasology.ligthandshadow.componentsystem.controllers;
 import java.util.Optional;
 import java.util.Random;
 
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.terasology.engine.utilities.Assets;
@@ -72,12 +74,14 @@ public class PlayerDeathSystem extends BaseComponentSystem {
         if (player.hasComponent(PlayerCharacterComponent.class)) {
             event.consume();
             String team = player.getComponent(LASTeamComponent.class).team;
-            updateStatistics(event.getInstigator(), "kills");
+            if (event.getInstigator() != EntityRef.NULL) {
+                updateStatistics(event.getInstigator(), "kills");
+            }
             updateStatistics(player, "deaths");
             dropItemsFromInventory(player);
             player.send(new RestoreFullHealthEvent(player));
             Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
-            player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
+            player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team)), new Quaternionf(new AxisAngle4f((float) (Math.PI), 0, 1, 0))));
             player.addOrSaveComponent(startingInventory);
             player.send(new RequestInventoryEvent(startingInventory.items));
         }

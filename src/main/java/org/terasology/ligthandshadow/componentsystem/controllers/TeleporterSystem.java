@@ -5,6 +5,8 @@ package org.terasology.ligthandshadow.componentsystem.controllers;
 import java.util.Optional;
 import java.util.Random;
 
+import org.joml.AxisAngle4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,7 +125,7 @@ public class TeleporterSystem extends BaseComponentSystem {
 
     private void handlePlayerTeleport(EntityRef player, String team) {
         Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
-        player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
+        player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team)), new Quaternionf(new AxisAngle4f((float) (Math.PI), 0, 1, 0))));
         player.addOrSaveComponent(startingInventory);
         player.send(new RequestInventoryEvent(startingInventory.items));
     }
