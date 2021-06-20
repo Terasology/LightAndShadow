@@ -16,7 +16,6 @@
 
 package org.terasology.las.platform;
 
-import org.joml.Vector2ic;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 import org.terasology.engine.entitySystem.Component;
@@ -78,7 +77,6 @@ public class FloatingPlatformProvider implements ConfigurableFacetProvider, Face
     @Override
     public void process(GeneratingRegion region) {
         SurfacesFacet surfacesFacet = region.getRegionFacet(SurfacesFacet.class);
-        ElevationFacet elevation = region.getRegionFacet(ElevationFacet.class);
         Border3D border = region.getBorderForFacet(FloatingPlatformFacet.class);
         FloatingPlatformFacet platformFacet = new FloatingPlatformFacet(region.getRegion(), border);
         BlockAreac worldRect = platformFacet.getWorldArea();
@@ -89,12 +87,11 @@ public class FloatingPlatformProvider implements ConfigurableFacetProvider, Face
                 platformFacet.add(platform);
             }
         }
-        BlockArea surfaceRect = new BlockArea(surfacesFacet.getWorldRegion().minX(), surfacesFacet.getWorldRegion().minZ(),
-                surfacesFacet.getWorldRegion().maxX(), surfacesFacet.getWorldRegion().maxZ());
-        for (Vector2ic pos : surfaceRect) {
-            if (FLOATING_PLATFORM_REGION.contains(pos.x(), pos.y())) {
-                int y = surfacesFacet.getNextBelow(new Vector3i(pos.x(), LASUtils.FLOATING_PLATFORM_POSITION.y(), pos.y()));
-                surfacesFacet.setWorld(pos.x(), y, pos.y(), false);
+        BlockRegion surfaceRect = surfacesFacet.getWorldRegion();
+        for (Vector3ic pos : surfaceRect) {
+            if (FLOATING_PLATFORM_REGION.contains(pos.x(), pos.z())) {
+                int y = surfacesFacet.getNextBelow(pos);
+                surfacesFacet.setWorld(pos.x(), y, pos.z(), false);
             }
         }
         region.setRegionFacet(FloatingPlatformFacet.class, platformFacet);
