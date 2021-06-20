@@ -28,9 +28,7 @@ import org.terasology.engine.world.generation.Facet;
 import org.terasology.engine.world.generation.FacetProviderPlugin;
 import org.terasology.engine.world.generation.GeneratingRegion;
 import org.terasology.engine.world.generation.Produces;
-import org.terasology.engine.world.generation.Requires;
 import org.terasology.engine.world.generation.Updates;
-import org.terasology.engine.world.generation.facets.ElevationFacet;
 import org.terasology.engine.world.generation.facets.SurfacesFacet;
 import org.terasology.engine.world.generator.plugin.RegisterPlugin;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
@@ -43,7 +41,6 @@ import java.util.Collections;
  */
 @RegisterPlugin
 @Produces(FloatingPlatformFacet.class)
-@Requires(@Facet(value = ElevationFacet.class))
 @Updates(@Facet(value = SurfacesFacet.class))
 public class FloatingPlatformProvider implements ConfigurableFacetProvider, FacetProviderPlugin {
     private static final BlockAreac FLOATING_PLATFORM_REGION =
