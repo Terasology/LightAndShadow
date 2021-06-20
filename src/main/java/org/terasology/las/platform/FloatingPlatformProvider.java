@@ -16,7 +16,6 @@
 
 package org.terasology.las.platform;
 
-import org.joml.Vector3i;
 import org.joml.Vector3ic;
 import org.terasology.engine.entitySystem.Component;
 import org.terasology.engine.world.block.BlockArea;

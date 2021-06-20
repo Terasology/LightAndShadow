@@ -16,7 +16,6 @@
 package org.terasology.las.bases;
 
 import com.google.common.collect.ImmutableSet;
-import org.joml.Vector3i;
 import org.joml.Vector3ic;
 import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.engine.world.generation.Border3D;
