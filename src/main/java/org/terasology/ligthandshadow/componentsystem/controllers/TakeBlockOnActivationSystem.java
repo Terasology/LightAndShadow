@@ -24,6 +24,7 @@ import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.common.ActivateEvent;
+import org.terasology.lightandshadowresources.components.FlagComponent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.world.BlockEntityRegistry;
@@ -61,14 +62,14 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     }
 
     private boolean playerTeamMatchesFlagTeam(EntityRef flag, EntityRef player) {
-        LASTeamComponent flagTeamComponent = flag.getComponent(LASTeamComponent.class);
+        FlagComponent flagTeamComponent = flag.getComponent(FlagComponent.class);
         LASTeamComponent playerTeamComponent = player.getComponent(LASTeamComponent.class);
         return (flagTeamComponent.team.equals(playerTeamComponent.team));
     }
 
     private void giveFlagToPlayer(EntityRef flag, EntityRef player) {
         BlockComponent blockComponent = flag.getComponent(BlockComponent.class);
-        LASTeamComponent flagTeamComponent = flag.getComponent(LASTeamComponent.class);
+        FlagComponent flagTeamComponent = flag.getComponent(FlagComponent.class);
         BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
         inventoryManager.giveItem(player, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.getFlagURI(flagTeamComponent.team))));
         worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
