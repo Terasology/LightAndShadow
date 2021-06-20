@@ -62,16 +62,16 @@ public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     }
 
     private boolean playerTeamMatchesFlagTeam(EntityRef flag, EntityRef player) {
-        FlagComponent flagTeamComponent = flag.getComponent(FlagComponent.class);
+        FlagComponent flagComponent = flag.getComponent(FlagComponent.class);
         LASTeamComponent playerTeamComponent = player.getComponent(LASTeamComponent.class);
-        return (flagTeamComponent.team.equals(playerTeamComponent.team));
+        return (flagComponent.team.equals(playerTeamComponent.team));
     }
 
     private void giveFlagToPlayer(EntityRef flag, EntityRef player) {
         BlockComponent blockComponent = flag.getComponent(BlockComponent.class);
-        FlagComponent flagTeamComponent = flag.getComponent(FlagComponent.class);
+        FlagComponent flagComponent = flag.getComponent(FlagComponent.class);
         BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
-        inventoryManager.giveItem(player, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.getFlagURI(flagTeamComponent.team))));
+        inventoryManager.giveItem(player, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.getFlagURI(flagComponent.team))));
         worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
         flag.destroy();
     }
