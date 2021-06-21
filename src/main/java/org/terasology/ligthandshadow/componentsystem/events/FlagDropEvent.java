@@ -5,7 +5,9 @@ package org.terasology.ligthandshadow.componentsystem.events;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.Event;
 
-
+/**
+ * This event causes the player to drop the flag.
+ */
 public class FlagDropEvent implements Event {
     private final EntityRef attackingPlayer;
     private final String flagTeam;

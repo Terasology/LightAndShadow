@@ -123,7 +123,13 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
                 delayManager.cancelDelayedAction(item, LASUtils.DROPPED_FLAG);
         }
     }
-
+    /**
+     * Iterates through the inventory to locate the flag and then sends a {@link DropItemRequest} to remove the flag from
+     * the player's inventory.
+     *
+     * @param event The FlagDrop event sent to the player.
+     * @param targetPlayer The entity which should drop the flag.
+     */
     @ReceiveEvent
     public void dropFlagRequest(FlagDropEvent event, EntityRef targetPlayer) {
         int inventorySize = inventoryManager.getNumSlots(targetPlayer);
@@ -143,12 +149,24 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
         targetPlayer.send(new DropItemRequest(flagSlot, targetPlayer, impulse, startPosition));
     }
 
+    /**
+     * Places the flag at the base and removes the flag from the players inventory.
+     *
+     * @param event The MoveFlagToBase event sent to the player.
+     * @param playerEntity The entity from which the flag should be removed.
+     */
     @ReceiveEvent
     public void moveFlagToBase(MoveFlagToBaseEvent event, EntityRef playerEntity) {
         worldProvider.setBlock(LASUtils.getFlagLocation(event.getFlagTeam()), blockManager.getBlock(LASUtils.getFlagURI(event.getFlagTeam())));
         inventoryManager.removeItem(playerEntity, EntityRef.NULL, event.getHeldFlag(), true, 1);
     }
 
+    /**
+     * Gives the flag to the player triggering the event by adding it to their inventory and then removes the flag from the base.
+     *
+     * @param event The GiveFlag event sent to the player.
+     * @param player The entity that is taking the flag.
+     */
     @ReceiveEvent
     public void giveFlagToPlayer(GiveFlagEvent event, EntityRef player) {
         BlockComponent blockComponent = event.getFlag().getComponent(BlockComponent.class);
