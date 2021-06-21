@@ -21,12 +21,16 @@ import org.terasology.engine.network.BroadcastEvent;
 
 @BroadcastEvent
 public class OnFlagDropEvent implements Event {
-    public EntityRef player;
+    private EntityRef player;
 
     public OnFlagDropEvent() {
     }
 
     public OnFlagDropEvent(EntityRef player) {
         this.player = player;
+    }
+
+    public EntityRef getPlayer() {
+        return player;
     }
 }

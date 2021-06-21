@@ -6,7 +6,7 @@ import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.Event;
 
 /**
- * This event is responsible for giving the flag to the player.
+ * This trigger event is responsible for giving the flag to the player.
  */
 public class GiveFlagEvent implements Event {
     private final EntityRef flag;

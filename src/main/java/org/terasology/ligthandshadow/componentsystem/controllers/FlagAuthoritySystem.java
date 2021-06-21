@@ -25,9 +25,8 @@ import org.terasology.engine.world.block.BlockManager;
 import org.terasology.engine.world.block.items.BlockItemComponent;
 import org.terasology.engine.world.block.items.BlockItemFactory;
 import org.terasology.lightandshadowresources.components.FlagComponent;
-import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
-import org.terasology.ligthandshadow.componentsystem.events.FlagDropEvent;
+import org.terasology.ligthandshadow.componentsystem.events.DropFlagEvent;
 import org.terasology.ligthandshadow.componentsystem.events.GiveFlagEvent;
 import org.terasology.ligthandshadow.componentsystem.events.MoveFlagToBaseEvent;
 import org.terasology.module.inventory.events.DropItemRequest;
@@ -131,7 +130,7 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
      * @param targetPlayer The entity which should drop the flag.
      */
     @ReceiveEvent
-    public void dropFlagRequest(FlagDropEvent event, EntityRef targetPlayer) {
+    public void dropFlagRequest(DropFlagEvent event, EntityRef targetPlayer) {
         int inventorySize = inventoryManager.getNumSlots(targetPlayer);
         for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
             EntityRef inventorySlot = inventoryManager.getItemInSlot(targetPlayer, slotNumber);

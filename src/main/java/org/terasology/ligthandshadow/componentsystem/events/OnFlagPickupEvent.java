@@ -21,8 +21,8 @@ import org.terasology.engine.network.BroadcastEvent;
 
 @BroadcastEvent
 public class OnFlagPickupEvent implements Event {
-    public String team;
-    public EntityRef player;
+    private String team;
+    private EntityRef player;
 
     public OnFlagPickupEvent() {
     }
@@ -30,5 +30,13 @@ public class OnFlagPickupEvent implements Event {
     public OnFlagPickupEvent(EntityRef player, String team) {
         this.player = player;
         this.team = team;
+    }
+
+    public String getTeam() {
+        return team;
+    }
+
+    public EntityRef getPlayer() {
+        return player;
     }
 }

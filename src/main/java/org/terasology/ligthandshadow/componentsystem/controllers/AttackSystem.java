@@ -16,7 +16,7 @@ import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.lightandshadowresources.components.FlagComponent;
 import org.terasology.ligthandshadow.componentsystem.events.OnFlagDropEvent;
-import org.terasology.ligthandshadow.componentsystem.events.FlagDropEvent;
+import org.terasology.ligthandshadow.componentsystem.events.DropFlagEvent;
 import org.terasology.ligthandshadow.componentsystem.events.OnFlagPickupEvent;
 import org.terasology.ligthandshadow.componentsystem.events.MoveFlagToBaseEvent;
 import org.terasology.module.inventory.events.InventorySlotChangedEvent;
@@ -50,11 +50,11 @@ public class AttackSystem extends BaseComponentSystem {
             if (targetPlayer.hasComponent(PlayerCharacterComponent.class) && targetPlayer.hasComponent(HasFlagComponent.class)) {
                 // If the target player has the black flag
                 if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
-                    targetPlayer.send(new FlagDropEvent(attackingPlayer, LASUtils.BLACK_FLAG_URI));
+                    targetPlayer.send(new DropFlagEvent(attackingPlayer, LASUtils.BLACK_FLAG_URI));
                     return;
                 }
                 if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
-                    targetPlayer.send(new FlagDropEvent(attackingPlayer, LASUtils.RED_FLAG_URI));
+                    targetPlayer.send(new DropFlagEvent(attackingPlayer, LASUtils.RED_FLAG_URI));
                     return;
                 }
             }

@@ -6,7 +6,7 @@ import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.Event;
 
 /**
- * This event is responsible for sending the flag back to the base.
+ * This trigger event is responsible for sending the flag back to the base.
  */
 public class MoveFlagToBaseEvent implements Event {
     private final EntityRef heldFlag;

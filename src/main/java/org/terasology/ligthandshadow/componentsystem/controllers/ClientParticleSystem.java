@@ -37,8 +37,8 @@ public class ClientParticleSystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void onFlagPickup(OnFlagPickupEvent event, EntityRef entity) {
-        String team = event.team;
-        EntityRef player = event.player;
+        String team = event.getTeam();
+        EntityRef player = event.getPlayer();
 
         if (!player.hasComponent(FlagParticleComponent.class)) {
             EntityRef particleEntity = entityManager.create(LASUtils.getFlagParticle(team));
@@ -54,7 +54,7 @@ public class ClientParticleSystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void onFlagDrop(OnFlagDropEvent event, EntityRef entity) {
-        EntityRef player = event.player;
+        EntityRef player = event.getPlayer();
         if (player.hasComponent(FlagParticleComponent.class)) {
             EntityRef particleEntity = player.getComponent(FlagParticleComponent.class).particleEntity;
             if (particleEntity != EntityRef.NULL) {

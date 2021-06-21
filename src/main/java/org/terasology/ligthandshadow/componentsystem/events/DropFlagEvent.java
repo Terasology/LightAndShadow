@@ -6,13 +6,13 @@ import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.Event;
 
 /**
- * This event causes the player to drop the flag.
+ * This trigger event causes the player to drop the flag.
  */
-public class FlagDropEvent implements Event {
+public class DropFlagEvent implements Event {
     private final EntityRef attackingPlayer;
     private final String flagTeam;
 
-    public FlagDropEvent(EntityRef attackingPlayer, String flagTeam) {
+    public DropFlagEvent(EntityRef attackingPlayer, String flagTeam) {
         this.attackingPlayer = attackingPlayer;
         this.flagTeam = flagTeam;
     }
