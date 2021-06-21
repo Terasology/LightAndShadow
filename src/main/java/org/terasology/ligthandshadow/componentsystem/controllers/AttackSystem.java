@@ -1,18 +1,5 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
@@ -27,6 +14,7 @@ import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterHeldItemComponent;
 import org.terasology.engine.logic.common.ActivateEvent;
+import org.terasology.lightandshadowresources.components.FlagComponent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.module.inventory.events.DropItemRequest;
 import org.terasology.module.inventory.events.InventorySlotChangedEvent;
@@ -42,10 +30,8 @@ import org.terasology.ligthandshadow.componentsystem.components.FlagDropOnActiva
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.events.FlagDropEvent;
 import org.terasology.ligthandshadow.componentsystem.events.FlagPickupEvent;
-import org.terasology.lightandshadowresources.components.BlackFlagComponent;
 import org.terasology.lightandshadowresources.components.RaycastOnActivateComponent;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
-import org.terasology.lightandshadowresources.components.RedFlagComponent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class AttackSystem extends BaseComponentSystem {
@@ -143,7 +129,7 @@ public class AttackSystem extends BaseComponentSystem {
     }
 
     private boolean itemIsFlag(EntityRef checkedItem) {
-        return (checkedItem.hasComponent(BlackFlagComponent.class) || checkedItem.hasComponent(RedFlagComponent.class));
+        return (checkedItem.hasComponent(FlagComponent.class));
     }
 
     private void handleFlagPickup(EntityRef player, String flagTeam) {
@@ -168,11 +154,8 @@ public class AttackSystem extends BaseComponentSystem {
 
     private String checkWhichFlagPicked(InventorySlotChangedEvent event) {
         item = event.getNewItem();
-        if (item.hasComponent(BlackFlagComponent.class)) {
-            return LASUtils.BLACK_TEAM;
-        }
-        if (item.hasComponent(RedFlagComponent.class)) {
-            return LASUtils.RED_TEAM;
+        if (item.hasComponent(FlagComponent.class)) {
+            return item.getComponent(FlagComponent.class).team;
         }
         return null;
     }

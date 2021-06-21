@@ -24,6 +24,7 @@ import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.common.ActivateEvent;
+import org.terasology.lightandshadowresources.components.FlagComponent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.logic.permission.PermissionManager;
 import org.terasology.engine.logic.players.LocalPlayer;
@@ -39,9 +40,7 @@ import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
-import org.terasology.lightandshadowresources.components.BlackFlagComponent;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
-import org.terasology.lightandshadowresources.components.RedFlagComponent;
 import org.terasology.lightandshadowresources.components.WinConditionCheckOnActivateComponent;
 import org.terasology.nui.ControlWidget;
 import org.terasology.nui.databinding.ReadOnlyBinding;
@@ -164,10 +163,10 @@ public class ScoreSystem extends BaseComponentSystem {
 
     private boolean checkIfTeamScores(LASTeamComponent baseTeamComponent, EntityRef heldItem) {
         // Check to see if player has other team's flag
-        if (baseTeamComponent.team.equals(LASUtils.RED_TEAM) && heldItem.hasComponent(BlackFlagComponent.class)) {
+        if (baseTeamComponent.team.equals(LASUtils.RED_TEAM) && heldItem.hasComponent(FlagComponent.class)) {
             return true;
         }
-        if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM) && heldItem.hasComponent(RedFlagComponent.class)) {
+        if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM) && heldItem.hasComponent(FlagComponent.class)) {
             return true;
         }
         return false;
