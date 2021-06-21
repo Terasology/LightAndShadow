@@ -6,17 +6,17 @@ import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.Event;
 
 
-public class FlagDropEvent implements Event {
-    private final EntityRef attackingPlayer;
+public class MoveFlagToBaseEvent implements Event {
+    private final EntityRef heldFlag;
     private final String flagTeam;
 
-    public FlagDropEvent(EntityRef attackingPlayer, String flagTeam) {
-        this.attackingPlayer = attackingPlayer;
+    public MoveFlagToBaseEvent(EntityRef heldFlag, String flagTeam) {
+        this.heldFlag = heldFlag;
         this.flagTeam = flagTeam;
     }
 
-    public EntityRef getAttackingPlayer() {
-        return attackingPlayer;
+    public EntityRef getHeldFlag() {
+        return heldFlag;
     }
 
     public String getFlagTeam() {

@@ -3,8 +3,6 @@
 
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.Event;
@@ -14,37 +12,26 @@ import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterHeldItemComponent;
 import org.terasology.engine.logic.common.ActivateEvent;
-import org.terasology.lightandshadowresources.components.FlagComponent;
-import org.terasology.module.inventory.systems.InventoryManager;
-import org.terasology.module.inventory.events.DropItemRequest;
-import org.terasology.module.inventory.events.InventorySlotChangedEvent;
-import org.terasology.engine.logic.location.LocationComponent;
-import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
-import org.terasology.engine.world.WorldProvider;
-import org.terasology.engine.world.block.BlockManager;
-import org.terasology.engine.world.block.items.BlockItemComponent;
+import org.terasology.lightandshadowresources.components.FlagComponent;
+import org.terasology.ligthandshadow.componentsystem.events.OnFlagDropEvent;
+import org.terasology.ligthandshadow.componentsystem.events.FlagDropEvent;
+import org.terasology.ligthandshadow.componentsystem.events.OnFlagPickupEvent;
+import org.terasology.ligthandshadow.componentsystem.events.MoveFlagToBaseEvent;
+import org.terasology.module.inventory.events.InventorySlotChangedEvent;
+import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.FlagDropOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
-import org.terasology.ligthandshadow.componentsystem.events.FlagDropEvent;
-import org.terasology.ligthandshadow.componentsystem.events.FlagPickupEvent;
 import org.terasology.lightandshadowresources.components.RaycastOnActivateComponent;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class AttackSystem extends BaseComponentSystem {
     @In
-    InventoryManager inventoryManager;
-    @In
     EntityManager entityManager;
-    @In
-    private WorldProvider worldProvider;
-    @In
-    private BlockManager blockManager;
 
-    private EntityRef flagSlot;
     private EntityRef item;
 
     @ReceiveEvent(components = {FlagDropOnActivateComponent.class, PlayerCharacterComponent.class, HasFlagComponent.class})
@@ -63,31 +50,15 @@ public class AttackSystem extends BaseComponentSystem {
             if (targetPlayer.hasComponent(PlayerCharacterComponent.class) && targetPlayer.hasComponent(HasFlagComponent.class)) {
                 // If the target player has the black flag
                 if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
-                    dropFlag(targetPlayer, attackingPlayer, LASUtils.BLACK_FLAG_URI);
+                    targetPlayer.send(new FlagDropEvent(attackingPlayer, LASUtils.BLACK_FLAG_URI));
                     return;
                 }
                 if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
-                    dropFlag(targetPlayer, attackingPlayer, LASUtils.RED_FLAG_URI);
+                    targetPlayer.send(new FlagDropEvent(attackingPlayer, LASUtils.RED_FLAG_URI));
                     return;
                 }
             }
         }
-    }
-
-    private void dropFlag(EntityRef targetPlayer, EntityRef attackingPlayer, String flagTeam) {
-        int inventorySize = inventoryManager.getNumSlots(targetPlayer);
-        for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
-            EntityRef inventorySlot = inventoryManager.getItemInSlot(targetPlayer, slotNumber);
-            if (inventorySlot.hasComponent(BlockItemComponent.class)) {
-                if (inventorySlot.getComponent(BlockItemComponent.class).blockFamily.getURI().toString().equals(flagTeam)) {
-                    flagSlot = inventorySlot;
-                }
-            }
-        }
-        Vector3fc startPosition = targetPlayer.getComponent(LocationComponent.class).getLocalPosition();
-        Vector3f impulse = attackingPlayer.getComponent(LocationComponent.class).getLocalPosition()
-                .add(startPosition, new Vector3f()).div(2f);
-        targetPlayer.send(new DropItemRequest(flagSlot, targetPlayer, impulse, startPosition));
     }
 
     private boolean canPlayerAttack(EntityRef attackingPlayer) {
@@ -113,12 +84,11 @@ public class AttackSystem extends BaseComponentSystem {
         if (itemIsFlag(item)) {
             String flagTeam = checkWhichFlagPicked(event);
             if (flagTeam.equals(player.getComponent(LASTeamComponent.class).team)) {
-                moveFlagToBase(player, flagTeam);
-                return;
+                player.send(new MoveFlagToBaseEvent(item, flagTeam));
             } else {
                 handleFlagPickup(player, flagTeam);
-                return;
             }
+            return;
         }
 
         // Checks if player puts down flag
@@ -129,27 +99,7 @@ public class AttackSystem extends BaseComponentSystem {
     }
 
     private boolean itemIsFlag(EntityRef checkedItem) {
-        return (checkedItem.hasComponent(FlagComponent.class));
-    }
-
-    private void handleFlagPickup(EntityRef player, String flagTeam) {
-        sendEventToClients(new FlagPickupEvent(player, flagTeam));
-        if (!player.hasComponent(HasFlagComponent.class)) {
-            player.addComponent(new HasFlagComponent());
-            player.getComponent(HasFlagComponent.class).flag = flagTeam;
-        }
-    }
-
-    private void handleFlagDrop(EntityRef player) {
-        if (player.hasComponent(HasFlagComponent.class)) {
-            player.removeComponent(HasFlagComponent.class);
-        }
-        sendEventToClients(new FlagDropEvent(player));
-    }
-
-    private void moveFlagToBase(EntityRef playerEntity, String flagTeam) {
-        worldProvider.setBlock(LASUtils.getFlagLocation(flagTeam), blockManager.getBlock(LASUtils.getFlagURI(flagTeam)));
-        inventoryManager.removeItem(playerEntity, EntityRef.NULL, item, true, 1);
+        return checkedItem.hasComponent(FlagComponent.class);
     }
 
     private String checkWhichFlagPicked(InventorySlotChangedEvent event) {
@@ -160,6 +110,21 @@ public class AttackSystem extends BaseComponentSystem {
         return null;
     }
 
+    private void handleFlagPickup(EntityRef player, String flagTeam) {
+        sendEventToClients(new OnFlagPickupEvent(player, flagTeam));
+        if (!player.hasComponent(HasFlagComponent.class)) {
+            player.addComponent(new HasFlagComponent());
+            player.getComponent(HasFlagComponent.class).flag = flagTeam;
+        }
+    }
+
+    private void handleFlagDrop(EntityRef player) {
+        if (player.hasComponent(HasFlagComponent.class)) {
+            player.removeComponent(HasFlagComponent.class);
+        }
+        sendEventToClients(new OnFlagDropEvent(player));
+    }
+
     private void sendEventToClients(Event event) {
         if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
             Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
@@ -168,4 +133,5 @@ public class AttackSystem extends BaseComponentSystem {
             }
         }
     }
+
 }
