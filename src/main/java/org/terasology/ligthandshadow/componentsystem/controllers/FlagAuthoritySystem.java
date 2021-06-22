@@ -25,6 +25,7 @@ import org.terasology.engine.world.block.BlockManager;
 import org.terasology.engine.world.block.items.BlockItemComponent;
 import org.terasology.engine.world.block.items.BlockItemFactory;
 import org.terasology.lightandshadowresources.components.FlagComponent;
+import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.DropFlagEvent;
 import org.terasology.ligthandshadow.componentsystem.events.GiveFlagEvent;
@@ -134,10 +135,10 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
         int inventorySize = inventoryManager.getNumSlots(targetPlayer);
         for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
             EntityRef inventorySlot = inventoryManager.getItemInSlot(targetPlayer, slotNumber);
-            Optional<BlockItemComponent> inventoryItem = Optional.ofNullable(inventoryManager.getItemInSlot(targetPlayer,
-                    slotNumber).getComponent(BlockItemComponent.class));
-            inventoryItem.ifPresent(item -> {
-                if (item.blockFamily.getURI().toString().equals(event.getFlagTeam())) {
+            Optional<FlagComponent> flagComponent = Optional.ofNullable(inventoryManager.getItemInSlot(targetPlayer,
+                    slotNumber).getComponent(FlagComponent.class));
+            flagComponent.ifPresent(flag -> {
+                if (flag.team.equals(LASUtils.getOppositionTeam(targetPlayer.getComponent(LASTeamComponent.class).team))) {
                     flagSlot = inventorySlot;
                 }
             });

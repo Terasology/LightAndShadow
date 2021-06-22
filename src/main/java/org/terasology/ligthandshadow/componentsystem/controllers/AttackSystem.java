@@ -21,7 +21,6 @@ import org.terasology.ligthandshadow.componentsystem.events.OnFlagPickupEvent;
 import org.terasology.ligthandshadow.componentsystem.events.ReturnFlagEvent;
 import org.terasology.module.inventory.events.InventorySlotChangedEvent;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
-import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.FlagDropOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.lightandshadowresources.components.RaycastOnActivateComponent;
@@ -48,13 +47,8 @@ public class AttackSystem extends BaseComponentSystem {
         EntityRef attackingPlayer = event.getInstigator(); // The player using the staff to attack
         if (canPlayerAttack(attackingPlayer)) {
             if (targetPlayer.hasComponent(PlayerCharacterComponent.class) && targetPlayer.hasComponent(HasFlagComponent.class)) {
-                // If the target player has the black flag
-                if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
-                    targetPlayer.send(new DropFlagEvent(attackingPlayer, LASUtils.BLACK_FLAG_URI));
-                }
-                if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
-                    targetPlayer.send(new DropFlagEvent(attackingPlayer, LASUtils.RED_FLAG_URI));
-                }
+                // If the target player has the flag
+                targetPlayer.send(new DropFlagEvent(attackingPlayer));
             }
         }
     }
@@ -114,7 +108,6 @@ public class AttackSystem extends BaseComponentSystem {
         sendEventToClients(new OnFlagPickupEvent(player, flagTeam));
         if (!player.hasComponent(HasFlagComponent.class)) {
             player.addComponent(new HasFlagComponent());
-            player.getComponent(HasFlagComponent.class).flag = flagTeam;
         }
     }
 
