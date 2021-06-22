@@ -24,7 +24,7 @@ import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.common.ActivateEvent;
 import org.terasology.lightandshadowresources.components.FlagComponent;
-import org.terasology.ligthandshadow.componentsystem.events.MoveFlagToBaseEvent;
+import org.terasology.ligthandshadow.componentsystem.events.ReturnFlagEvent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
@@ -113,7 +113,7 @@ public class ScoreSystem extends BaseComponentSystem {
 
             if (checkIfTeamScores(baseTeamComponent, heldFlag)) {
                 incrementScore(baseTeamComponent);
-                player.send(new MoveFlagToBaseEvent(heldFlag,oppositionTeam));
+                player.send(new ReturnFlagEvent(heldFlag));
                 if (redScore >= LASUtils.GOAL_SCORE) {
                     resetLevel();
                     sendGameOverEventToClients(LASUtils.RED_TEAM);
@@ -190,7 +190,7 @@ public class ScoreSystem extends BaseComponentSystem {
                 continue;
             }
 
-            playerWithFlag.send(new MoveFlagToBaseEvent(heldFlag,oppositionTeam));
+            playerWithFlag.send(new ReturnFlagEvent(heldFlag));
         }
     }
 

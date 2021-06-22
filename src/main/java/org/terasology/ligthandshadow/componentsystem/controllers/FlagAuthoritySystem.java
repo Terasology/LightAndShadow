@@ -28,7 +28,7 @@ import org.terasology.lightandshadowresources.components.FlagComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.DropFlagEvent;
 import org.terasology.ligthandshadow.componentsystem.events.GiveFlagEvent;
-import org.terasology.ligthandshadow.componentsystem.events.MoveFlagToBaseEvent;
+import org.terasology.ligthandshadow.componentsystem.events.ReturnFlagEvent;
 import org.terasology.module.inventory.events.DropItemRequest;
 import org.terasology.module.inventory.systems.InventoryManager;
 
@@ -155,9 +155,10 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
      * @param playerEntity The entity from which the flag should be removed.
      */
     @ReceiveEvent
-    public void moveFlagToBase(MoveFlagToBaseEvent event, EntityRef playerEntity) {
-        worldProvider.setBlock(LASUtils.getFlagLocation(event.getFlagTeam()), blockManager.getBlock(LASUtils.getFlagURI(event.getFlagTeam())));
-        inventoryManager.removeItem(playerEntity, EntityRef.NULL, event.getHeldFlag(), true, 1);
+    public void moveFlagToBase(ReturnFlagEvent event, EntityRef playerEntity) {
+        String flagTeam = event.getFlag().getComponent(FlagComponent.class).team;
+        worldProvider.setBlock(LASUtils.getFlagLocation(flagTeam), blockManager.getBlock(LASUtils.getFlagURI(flagTeam)));
+        inventoryManager.removeItem(playerEntity, EntityRef.NULL, event.getFlag(), true, 1);
     }
 
     /**

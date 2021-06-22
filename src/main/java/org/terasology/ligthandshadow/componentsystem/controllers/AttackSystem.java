@@ -18,7 +18,7 @@ import org.terasology.lightandshadowresources.components.FlagComponent;
 import org.terasology.ligthandshadow.componentsystem.events.OnFlagDropEvent;
 import org.terasology.ligthandshadow.componentsystem.events.DropFlagEvent;
 import org.terasology.ligthandshadow.componentsystem.events.OnFlagPickupEvent;
-import org.terasology.ligthandshadow.componentsystem.events.MoveFlagToBaseEvent;
+import org.terasology.ligthandshadow.componentsystem.events.ReturnFlagEvent;
 import org.terasology.module.inventory.events.InventorySlotChangedEvent;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
@@ -51,11 +51,9 @@ public class AttackSystem extends BaseComponentSystem {
                 // If the target player has the black flag
                 if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.BLACK_TEAM)) {
                     targetPlayer.send(new DropFlagEvent(attackingPlayer, LASUtils.BLACK_FLAG_URI));
-                    return;
                 }
                 if (targetPlayer.getComponent(HasFlagComponent.class).flag.equals(LASUtils.RED_TEAM)) {
                     targetPlayer.send(new DropFlagEvent(attackingPlayer, LASUtils.RED_FLAG_URI));
-                    return;
                 }
             }
         }
@@ -84,11 +82,10 @@ public class AttackSystem extends BaseComponentSystem {
         if (itemIsFlag(item)) {
             String flagTeam = checkWhichFlagPicked(event);
             if (flagTeam.equals(player.getComponent(LASTeamComponent.class).team)) {
-                player.send(new MoveFlagToBaseEvent(item, flagTeam));
+                player.send(new ReturnFlagEvent(item));
             } else {
                 handleFlagPickup(player, flagTeam);
             }
-            return;
         }
 
         // Checks if player puts down flag
@@ -102,6 +99,9 @@ public class AttackSystem extends BaseComponentSystem {
         return checkedItem.hasComponent(FlagComponent.class);
     }
 
+    /**
+     * Returns the team to which the flag picked belongs to if it exists.
+     */
     private String checkWhichFlagPicked(InventorySlotChangedEvent event) {
         item = event.getNewItem();
         if (item.hasComponent(FlagComponent.class)) {
