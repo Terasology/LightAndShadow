@@ -152,7 +152,7 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
     /**
      * Places the flag at the base and removes the flag from the players inventory.
      *
-     * @param event The MoveFlagToBase event sent to the player.
+     * @param event The ReturnFlag event sent to the player.
      * @param playerEntity The entity from which the flag should be removed.
      */
     @ReceiveEvent
