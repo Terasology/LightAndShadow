@@ -12,6 +12,7 @@ import org.terasology.engine.world.generation.Produces;
 import org.terasology.engine.world.generation.Updates;
 import org.terasology.engine.world.generation.facets.SurfacesFacet;
 import org.terasology.engine.world.generator.plugin.RegisterPlugin;
+import org.terasology.ligthandshadow.componentsystem.LASUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,11 +41,14 @@ public class YinYangProvider implements FacetProviderPlugin {
                 .filter(worldRect::contains)
                 .forEach(pos -> {
                     yinYangFacet.setWorld(pos, new YinYang());
+                    int y = surfacesFacet.getNextBelow(pos);
                     for (int i = -RADIUS; i <= RADIUS; i++) {
                         for (int j = -2 * RADIUS; j <= 2 * RADIUS; j++) {
-                            int y = surfacesFacet.getNextBelow(pos);
-                            Vector3i blockPos = new Vector3i(i, y, j).add(pos);
-                            surfacesFacet.setWorld(blockPos, false);
+                            if (!LASUtils.pixel(j, i, RADIUS).equals("engine:air")) {
+                                Vector3i blockPos = new Vector3i(i, 0, j).add(pos);
+                                blockPos.y = y;
+                                surfacesFacet.setWorld(blockPos, false);
+                            }
                         }
                     }
                 });
