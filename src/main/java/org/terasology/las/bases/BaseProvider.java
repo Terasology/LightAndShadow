@@ -56,8 +56,8 @@ public class BaseProvider implements FacetProvider {
             facet.add(base);
         }
 
-        BlockRegion surfaceRect = surfacesFacet.getWorldRegion();
-        for (Vector3ic pos : surfaceRect) {
+        BlockRegion surfaceRegion = surfacesFacet.getWorldRegion();
+        for (Vector3ic pos : surfaceRegion) {
             if ((redBaseRegion.contains(pos) || blackBaseRegion.contains(pos))) {
                 int y = surfacesFacet.getNextBelow(pos);
                 surfacesFacet.setWorld(pos.x(), y, pos.z(), false);
