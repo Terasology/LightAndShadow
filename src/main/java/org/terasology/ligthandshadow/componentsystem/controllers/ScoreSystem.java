@@ -15,7 +15,6 @@
  */
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.joml.Vector3i;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.Event;
@@ -25,15 +24,12 @@ import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.common.ActivateEvent;
 import org.terasology.lightandshadowresources.components.FlagComponent;
+import org.terasology.ligthandshadow.componentsystem.events.ReturnFlagEvent;
 import org.terasology.module.inventory.systems.InventoryManager;
-import org.terasology.engine.logic.permission.PermissionManager;
-import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.registry.Share;
 import org.terasology.engine.rendering.nui.NUIManager;
-import org.terasology.engine.world.WorldProvider;
-import org.terasology.engine.world.block.BlockManager;
 import org.terasology.engine.world.block.items.BlockItemComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
@@ -56,14 +52,6 @@ public class ScoreSystem extends BaseComponentSystem {
     private NUIManager nuiManager;
     @In
     private EntityManager entityManager;
-    @In
-    private BlockManager blockManager;
-    @In
-    private WorldProvider worldProvider;
-    @In
-    private LocalPlayer localPlayer;
-    @In
-    private PermissionManager permissionManager;
 
     private int redScore;
     private int blackScore;
@@ -125,7 +113,7 @@ public class ScoreSystem extends BaseComponentSystem {
 
             if (checkIfTeamScores(baseTeamComponent, heldFlag)) {
                 incrementScore(baseTeamComponent);
-                movePlayerFlagToBase(player, oppositionTeam, heldFlag);
+                player.send(new ReturnFlagEvent(heldFlag));
                 if (redScore >= LASUtils.GOAL_SCORE) {
                     resetLevel();
                     sendGameOverEventToClients(LASUtils.RED_TEAM);
@@ -202,15 +190,8 @@ public class ScoreSystem extends BaseComponentSystem {
                 continue;
             }
 
-            movePlayerFlagToBase(playerWithFlag, oppositionTeam, heldFlag);
+            playerWithFlag.send(new ReturnFlagEvent(heldFlag));
         }
-    }
-
-    private void movePlayerFlagToBase(EntityRef player, String oppositionTeam, EntityRef heldFlag) {
-        Vector3i basePosition = LASUtils.getFlagLocation(oppositionTeam);
-        String flag = LASUtils.getFlagURI(oppositionTeam);
-        inventoryManager.removeItem(player, player, heldFlag, true);
-        worldProvider.setBlock(basePosition, blockManager.getBlock(flag));
     }
 
     private void sendEventToClients(Event event) {
