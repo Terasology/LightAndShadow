@@ -67,32 +67,32 @@ public class MagicDomeSystem extends BaseComponentSystem {
         float deltaDistance = Math.abs(pos.distance(lastPos));
 
         for (EntityRef domeEntity : entityManager.getEntitiesWith(MagicDome.class, LocationComponent.class)) {
-                LocationComponent domeLocationComponent = domeEntity.getComponent(LocationComponent.class);
-                Vector3f domeCenter = domeLocationComponent.getWorldPosition(new Vector3f());
-                pos.sub(domeCenter, df);
-                float distance = df.length();
-                if (deltaDistance > 0.2f) {
+            LocationComponent domeLocationComponent = domeEntity.getComponent(LocationComponent.class);
+            Vector3f domeCenter = domeLocationComponent.getWorldPosition(new Vector3f());
+            pos.sub(domeCenter, df);
+            float distance = df.length();
+            if (deltaDistance > 0.2f) {
 //                logger.info("CharacerMoveInputEvent: position: {} - distance from O: {}, delta: {}", pos, distance, deltaDistance);
 
-                    if (distance > WORLD_RADIUS && isAllowedInsideBarrier(player, domeEntity)) {
+                if (distance > WORLD_RADIUS && isAllowedInsideBarrier(player, domeEntity)) {
 //                      logger.info("Sending player back inside!");
-                        Vector3f impulse = df.normalize().negate();
-                        impulse.mul(8);
+                    Vector3f impulse = df.normalize().negate();
+                    impulse.mul(8);
 
-                        player.send(new CharacterImpulseEvent(impulse));
-                        player.send(new PlaySoundEvent(domeEntity.getComponent(MagicDome.class).hitSound, 2f));
-                    }
-                    if (distance < WORLD_RADIUS && !isAllowedInsideBarrier(player, domeEntity)) {
-//                      logger.info("Sending player back outside");
-                        Vector3f impulse = df.normalize();
-                        impulse.mul(8);
-                        player.send(new CharacterImpulseEvent(impulse));
-
-                        player.send(new PlaySoundEvent(domeEntity.getComponent(MagicDome.class).hitSound, 2f));
-
-                    }
-                    lastPos.set(pos);
+                    player.send(new CharacterImpulseEvent(impulse));
+                    player.send(new PlaySoundEvent(domeEntity.getComponent(MagicDome.class).hitSound, 2f));
                 }
+                if (distance < WORLD_RADIUS && !isAllowedInsideBarrier(player, domeEntity)) {
+//                      logger.info("Sending player back outside");
+                    Vector3f impulse = df.normalize();
+                    impulse.mul(8);
+                    player.send(new CharacterImpulseEvent(impulse));
+
+                    player.send(new PlaySoundEvent(domeEntity.getComponent(MagicDome.class).hitSound, 2f));
+
+                }
+                lastPos.set(pos);
+            }
         }
     }
 
