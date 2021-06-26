@@ -16,7 +16,6 @@
 package org.terasology.ligthandshadow.componentsystem.components;
 
 import org.terasology.engine.entitySystem.Component;
-import org.terasology.engine.network.Replicate;
 
 /**
  * This is attached to player entities to indicate whether or not they have a
@@ -25,6 +24,4 @@ import org.terasology.engine.network.Replicate;
  */
 
 public class HasFlagComponent implements Component {
-    @Replicate
-    public String flag;
 }

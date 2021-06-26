@@ -27,8 +27,8 @@ import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.FlagParticleComponent;
-import org.terasology.ligthandshadow.componentsystem.events.FlagDropEvent;
-import org.terasology.ligthandshadow.componentsystem.events.FlagPickupEvent;
+import org.terasology.ligthandshadow.componentsystem.events.OnFlagDropEvent;
+import org.terasology.ligthandshadow.componentsystem.events.OnFlagPickupEvent;
 
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientParticleSystem extends BaseComponentSystem {
@@ -36,9 +36,9 @@ public class ClientParticleSystem extends BaseComponentSystem {
     private EntityManager entityManager;
 
     @ReceiveEvent
-    public void onFlagPickup(FlagPickupEvent event, EntityRef entity) {
-        String team = event.team;
-        EntityRef player = event.player;
+    public void onFlagPickup(OnFlagPickupEvent event, EntityRef entity) {
+        String team = event.getTeam();
+        EntityRef player = event.getPlayer();
 
         if (!player.hasComponent(FlagParticleComponent.class)) {
             EntityRef particleEntity = entityManager.create(LASUtils.getFlagParticle(team));
@@ -53,8 +53,8 @@ public class ClientParticleSystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void onFlagDrop(FlagDropEvent event, EntityRef entity) {
-        EntityRef player = event.player;
+    public void onFlagDrop(OnFlagDropEvent event, EntityRef entity) {
+        EntityRef player = event.getPlayer();
         if (player.hasComponent(FlagParticleComponent.class)) {
             EntityRef particleEntity = player.getComponent(FlagParticleComponent.class).particleEntity;
             if (particleEntity != EntityRef.NULL) {

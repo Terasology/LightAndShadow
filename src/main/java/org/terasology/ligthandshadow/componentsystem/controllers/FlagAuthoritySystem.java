@@ -1,20 +1,10 @@
-/*
- * Copyright 2019 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
+import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
@@ -27,11 +17,23 @@ import org.terasology.engine.logic.delay.DelayedActionTriggeredEvent;
 import org.terasology.engine.logic.inventory.ItemComponent;
 import org.terasology.engine.logic.inventory.events.DropItemEvent;
 import org.terasology.engine.logic.inventory.events.GiveItemEvent;
+import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.world.WorldProvider;
+import org.terasology.engine.world.block.BlockComponent;
 import org.terasology.engine.world.block.BlockManager;
 import org.terasology.engine.world.block.items.BlockItemComponent;
+import org.terasology.engine.world.block.items.BlockItemFactory;
+import org.terasology.lightandshadowresources.components.FlagComponent;
+import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
+import org.terasology.ligthandshadow.componentsystem.events.DropFlagEvent;
+import org.terasology.ligthandshadow.componentsystem.events.GiveFlagEvent;
+import org.terasology.ligthandshadow.componentsystem.events.ReturnFlagEvent;
+import org.terasology.module.inventory.events.DropItemRequest;
+import org.terasology.module.inventory.systems.InventoryManager;
+
+import java.util.Optional;
 
 /**
  * Handles events related to flag drops and pickups.
@@ -47,6 +49,14 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
 
     @In
     BlockManager blockManager;
+
+    @In
+    InventoryManager inventoryManager;
+
+    @In
+    EntityManager entityManager;
+
+    private EntityRef flagSlot;
 
     /**
      * Add a delayed action using delay manager to flags when they are dropped.
@@ -113,4 +123,59 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
                 delayManager.cancelDelayedAction(item, LASUtils.DROPPED_FLAG);
         }
     }
+    /**
+     * Iterates through the inventory to locate the flag and then sends a {@link DropItemRequest} to remove the flag from
+     * the player's inventory.
+     *
+     * @param event The FlagDrop event sent to the player.
+     * @param targetPlayer The entity which should drop the flag.
+     */
+    @ReceiveEvent
+    public void dropFlagRequest(DropFlagEvent event, EntityRef targetPlayer) {
+        int inventorySize = inventoryManager.getNumSlots(targetPlayer);
+        for (int slotNumber = 0; slotNumber <= inventorySize; slotNumber++) {
+            EntityRef inventorySlot = inventoryManager.getItemInSlot(targetPlayer, slotNumber);
+            Optional<FlagComponent> flagComponent = Optional.ofNullable(inventoryManager.getItemInSlot(targetPlayer,
+                    slotNumber).getComponent(FlagComponent.class));
+            flagComponent.ifPresent(flag -> {
+                if (flag.team.equals(LASUtils.getOppositionTeam(targetPlayer.getComponent(LASTeamComponent.class).team))) {
+                    flagSlot = inventorySlot;
+                }
+            });
+        }
+        Vector3fc startPosition = targetPlayer.getComponent(LocationComponent.class).getLocalPosition();
+        Vector3f impulse = event.getAttackingPlayer().getComponent(LocationComponent.class).getLocalPosition()
+                .add(startPosition, new Vector3f()).div(2f);
+        targetPlayer.send(new DropItemRequest(flagSlot, targetPlayer, impulse, startPosition));
+    }
+
+    /**
+     * Places the flag at the base and removes the flag from the players inventory.
+     *
+     * @param event The ReturnFlag event sent to the player.
+     * @param playerEntity The entity from which the flag should be removed.
+     */
+    @ReceiveEvent
+    public void moveFlagToBase(ReturnFlagEvent event, EntityRef playerEntity) {
+        String flagTeam = event.getFlag().getComponent(FlagComponent.class).team;
+        worldProvider.setBlock(LASUtils.getFlagLocation(flagTeam), blockManager.getBlock(LASUtils.getFlagURI(flagTeam)));
+        inventoryManager.removeItem(playerEntity, EntityRef.NULL, event.getFlag(), true, 1);
+    }
+
+    /**
+     * Gives the flag to the player triggering the event by adding it to their inventory and then removes the flag from the base.
+     *
+     * @param event The GiveFlag event sent to the player.
+     * @param player The entity that is taking the flag.
+     */
+    @ReceiveEvent
+    public void giveFlagToPlayer(GiveFlagEvent event, EntityRef player) {
+        BlockComponent blockComponent = event.getFlag().getComponent(BlockComponent.class);
+        FlagComponent flagComponent = event.getFlag().getComponent(FlagComponent.class);
+        BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
+        inventoryManager.giveItem(player, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.getFlagURI(flagComponent.team))));
+        worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
+        event.getFlag().destroy();
+    }
+
 }

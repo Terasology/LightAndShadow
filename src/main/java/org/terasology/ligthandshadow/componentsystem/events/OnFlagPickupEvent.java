@@ -20,13 +20,23 @@ import org.terasology.engine.entitySystem.event.Event;
 import org.terasology.engine.network.BroadcastEvent;
 
 @BroadcastEvent
-public class FlagDropEvent implements Event {
-    public EntityRef player;
+public class OnFlagPickupEvent implements Event {
+    private String team;
+    private EntityRef player;
 
-    public FlagDropEvent() {
+    public OnFlagPickupEvent() {
     }
 
-    public FlagDropEvent(EntityRef player) {
+    public OnFlagPickupEvent(EntityRef player, String team) {
         this.player = player;
+        this.team = team;
+    }
+
+    public String getTeam() {
+        return team;
+    }
+
+    public EntityRef getPlayer() {
+        return player;
     }
 }
