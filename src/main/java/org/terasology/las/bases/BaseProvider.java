@@ -16,6 +16,7 @@
 package org.terasology.las.bases;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Iterables;
 import org.joml.Vector3ic;
 import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.engine.world.generation.Border3D;
@@ -57,13 +58,12 @@ public class BaseProvider implements FacetProvider {
         }
 
         BlockRegion surfaceRegion = surfacesFacet.getWorldRegion();
-        for (Vector3ic pos : surfaceRegion) {
-            if ((redBaseRegion.contains(pos) || blackBaseRegion.contains(pos))) {
+        for (Vector3ic pos : Iterables.concat(redBaseRegion, blackBaseRegion)) {
+            if (surfaceRegion.contains(pos)) {
                 int y = surfacesFacet.getNextBelow(pos);
                 surfacesFacet.setWorld(pos.x(), y, pos.z(), false);
             }
         }
         region.setRegionFacet(BaseFacet.class, facet);
-        region.setRegionFacet(SurfacesFacet.class, surfacesFacet);
     }
 }

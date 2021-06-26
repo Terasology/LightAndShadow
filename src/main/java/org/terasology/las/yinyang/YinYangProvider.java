@@ -36,25 +36,25 @@ public class YinYangProvider implements FacetProviderPlugin {
         YinYangFacet yinYangFacet = new YinYangFacet(region.getRegion(), border);
 
         BlockRegion worldRect = yinYangFacet.getWorldRegion();
-
+        Vector3i[] tempPos = new Vector3i[1];
+        tempPos[0] = new Vector3i();
         yinYangPositions.stream()
-                .filter(worldRect::contains)
-                .forEach(pos -> {
-                    yinYangFacet.setWorld(pos, new YinYang());
-                    int y = surfacesFacet.getNextBelow(pos);
-                    for (int i = -RADIUS; i <= RADIUS; i++) {
-                        for (int j = -2 * RADIUS; j <= 2 * RADIUS; j++) {
-                            if (!LASUtils.pixel(j, i, RADIUS).equals("engine:air")) {
-                                Vector3i blockPos = new Vector3i(i, 0, j).add(pos);
-                                blockPos.y = y;
-                                surfacesFacet.setWorld(blockPos, false);
-                            }
+            .filter(worldRect::contains)
+            .forEach(pos -> {
+                yinYangFacet.setWorld(pos, new YinYang());
+                int y = surfacesFacet.getNextBelow(pos);
+                for (int i = -RADIUS; i <= RADIUS; i++) {
+                    for (int j = -2 * RADIUS; j <= 2 * RADIUS; j++) {
+                        if (!LASUtils.pixel(j, i, RADIUS).equals("engine:air")) {
+                            pos.add(i, 0, j, tempPos[0]);
+                            tempPos[0].y = y;
+                            surfacesFacet.setWorld(tempPos[0], false);
                         }
                     }
-                });
+                }
+            });
 
         region.setRegionFacet(YinYangFacet.class, yinYangFacet);
-        region.setRegionFacet(SurfacesFacet.class, surfacesFacet);
     }
 
 }
