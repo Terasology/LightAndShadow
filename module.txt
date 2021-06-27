@@ -18,6 +18,10 @@
             "minVersion": "1.1.0"
         },
         {
+            "id": "CombatSystem",
+            "minVersion": "1.0.0"
+        },
+        {
             "id": "CoreAssets",
             "minVersion": "2.0.1"
         },
