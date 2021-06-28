@@ -185,6 +185,23 @@
                                     "offset": 5
                                 }
                             }
+                        },
+                        {
+                            "type": "UILabel",
+                            "id": "timer",
+                            "text": "0",
+                            "layoutInfo": {
+                                "width": 70,
+                                "height": 25,
+                                "position-top": {
+                                    "offset": 70
+                                },
+                                "position-left": {
+                                    "widget": "blackGoalScore",
+                                    "target": "RIGHT",
+                                    "offset": 35
+                                }
+                            }
                         }
                     ]
                 }

@@ -25,6 +25,8 @@ import org.terasology.engine.logic.permission.PermissionManager;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.ligthandshadow.componentsystem.components.LASConfigComponent;
+import org.terasology.ligthandshadow.componentsystem.events.PregameEvent;
+import org.terasology.ligthandshadow.componentsystem.events.TimerEvent;
 import org.terasology.module.inventory.components.StartingInventoryComponent;
 import org.terasology.module.inventory.events.RequestInventoryEvent;
 import org.terasology.module.inventory.systems.InventoryManager;
@@ -73,7 +75,7 @@ public class TeleporterSystem extends BaseComponentSystem {
      * @param event
      * @param entity
      */
-    @ReceiveEvent(components = {SetTeamOnActivateComponent.class})
+    @ReceiveEvent(components = SetTeamOnActivateComponent.class)
     public void onActivate(ActivateEvent event, EntityRef entity) {
         EntityRef player = event.getInstigator();
         if (isProperTeamSize(entity, player)) {
@@ -100,6 +102,9 @@ public class TeleporterSystem extends BaseComponentSystem {
             }
         }
         if (teleporterTeamCount - oppositeTeamCount < maxTeamSizeDifference) {
+            if (teleporterTeamCount >= 0 && oppositeTeamCount >= 1) {
+                player.send(new TimerEvent());
+            }
             return true;
         } else {
             if (maxTeamSizeDifference == 1) {
@@ -123,6 +128,7 @@ public class TeleporterSystem extends BaseComponentSystem {
 
     private void handlePlayerTeleport(EntityRef player, String team) {
         Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
+        player.send(new PregameEvent());
         player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
         player.addOrSaveComponent(startingInventory);
         player.send(new RequestInventoryEvent(startingInventory.items));

@@ -16,11 +16,12 @@ import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.entitySystem.systems.UpdateSubscriberSystem;
 import org.terasology.engine.logic.characters.CharacterImpulseEvent;
 import org.terasology.engine.logic.characters.CharacterMoveInputEvent;
-import org.terasology.engine.logic.console.commandSystem.annotations.Command;
 import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
+import org.terasology.ligthandshadow.componentsystem.events.BarrierActivateEvent;
+import org.terasology.ligthandshadow.componentsystem.events.BarrierDeactivateEvent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscriberSystem {
@@ -35,27 +36,19 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
     private EntityRef redBarrier = EntityRef.NULL;
     private EntityRef blackBarrier = EntityRef.NULL;
 
-    @Override
-    public void postBegin() {
-        //toggleDome();
+
+    @ReceiveEvent()
+    public void activateBarrier(BarrierActivateEvent event, EntityRef entity) {
+        redBarrier = createBarrier("lightAndShadowResources:magicDome", LASUtils.CENTER_RED_BASE_POSITION, "red");
+        blackBarrier = createBarrier("lightAndShadowResources:magicDome", LASUtils.CENTER_BLACK_BASE_POSITION, "black");
     }
 
-    @Command(shortDescription = "Activate/Deactivate dome barrier", helpText = "Activates or deactivates the dome barrier around the world", runOnServer = true)
-    public String dome() {
-        toggleDome();
-        return "Toggled dome.";
+    @ReceiveEvent
+    public void deactivateBarrier(BarrierDeactivateEvent event, EntityRef entity) {
+        redBarrier.destroy();
+        blackBarrier.destroy();
     }
 
-    public void toggleDome() {
-
-        if (!entityManager.getEntitiesWith(MagicDome.class).iterator().hasNext()) {
-            redBarrier = createBarrier("lightAndShadowResources:magicDome", LASUtils.CENTER_RED_BASE_POSITION, "red");
-            blackBarrier = createBarrier("lightAndShadowResources:magicDome", LASUtils.CENTER_BLACK_BASE_POSITION, "black");
-        } else {
-            redBarrier.destroy();
-            blackBarrier.destroy();
-        }
-    }
 
     @ReceiveEvent(components = {LocationComponent.class})
     public void onCharacterMovement(CharacterMoveInputEvent moveInputEvent, EntityRef player, LocationComponent loc) {
@@ -103,17 +96,19 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
     }
 
     public boolean isProjectileAllowedInsideBarrier(EntityRef projectile, EntityRef barrier) {
-
-        if (projectile.hasComponent(LASTeamComponent.class) && projectile.getComponent(LASTeamComponent.class).team.equals("white")) {
-            projectile.getComponent(LocationComponent.class).getWorldPosition(temp);
-            if (temp.sub(new Vector3f(LASUtils.CENTER_RED_BASE_POSITION), new Vector3f()).length()
-                    < temp.sub(new Vector3f(LASUtils.CENTER_BLACK_BASE_POSITION), new Vector3f()).length()) {
-                projectile.getComponent(LASTeamComponent.class).team = "red";
-            } else {
-                projectile.getComponent(LASTeamComponent.class).team = "black";
+        if (projectile.hasComponent(LASTeamComponent.class)) {
+            if (projectile.getComponent(LASTeamComponent.class).team.equals("white")) {
+                projectile.getComponent(LocationComponent.class).getWorldPosition(temp);
+                if (temp.sub(new Vector3f(LASUtils.CENTER_RED_BASE_POSITION), new Vector3f()).length()
+                        < temp.sub(new Vector3f(LASUtils.CENTER_BLACK_BASE_POSITION), new Vector3f()).length()) {
+                    projectile.getComponent(LASTeamComponent.class).team = "red";
+                } else {
+                    projectile.getComponent(LASTeamComponent.class).team = "black";
+                }
             }
+            return barrier.getComponent(MagicDome.class).team.equals(projectile.getComponent(LASTeamComponent.class).team);
         }
-        return barrier.getComponent(MagicDome.class).team.equals(projectile.getComponent(LASTeamComponent.class).team);
+        return false;
     }
 
     public void destroyProjectile(Iterable<EntityRef> items) {
