@@ -1,18 +1,5 @@
-/*
- * Copyright 2019 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.terasology.engine.entitySystem.entity.EntityManager;
@@ -28,8 +15,6 @@ import org.terasology.ligthandshadow.componentsystem.events.ReturnFlagEvent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
-import org.terasology.engine.registry.Share;
-import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.world.block.items.BlockItemComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
@@ -38,49 +23,17 @@ import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.lightandshadowresources.components.WinConditionCheckOnActivateComponent;
-import org.terasology.nui.ControlWidget;
-import org.terasology.nui.databinding.ReadOnlyBinding;
-import org.terasology.nui.widgets.UILabel;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
-@Share(ScoreSystem.class)
 public class ScoreSystem extends BaseComponentSystem {
 
     @In
     private InventoryManager inventoryManager;
     @In
-    private NUIManager nuiManager;
-    @In
     private EntityManager entityManager;
 
     private int redScore;
     private int blackScore;
-
-    @Override
-    public void postBegin() {
-        // Sets score screen bindings
-        ControlWidget scoreScreen = nuiManager.getHUD().getHUDElement("LightAndShadow:ScoreHud");
-        UILabel blackScoreArea = scoreScreen.find("blackScoreArea", UILabel.class);
-        blackScoreArea.bindText(new ReadOnlyBinding<String>() {
-            @Override
-            public String get() {
-                return String.valueOf(blackScore);
-            }
-        });
-        UILabel redScoreArea = scoreScreen.find("redScoreArea", UILabel.class);
-        redScoreArea.bindText(new ReadOnlyBinding<String>() {
-            @Override
-            public String get() {
-                return String.valueOf(redScore);
-            }
-        });
-    }
-
-    @Override
-    public void initialise() {
-        // Displays score UI on game start
-        nuiManager.getHUD().addHUDElement("ScoreHud");
-    }
 
     @ReceiveEvent(components = {WinConditionCheckOnActivateComponent.class, LASTeamComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
