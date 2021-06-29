@@ -37,10 +37,12 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
     private EntityRef blackBarrier = EntityRef.NULL;
 
 
-    @ReceiveEvent()
+    @ReceiveEvent
     public void activateBarrier(BarrierActivateEvent event, EntityRef entity) {
-        redBarrier = createBarrier("lightAndShadowResources:magicDome", LASUtils.CENTER_RED_BASE_POSITION, "red");
-        blackBarrier = createBarrier("lightAndShadowResources:magicDome", LASUtils.CENTER_BLACK_BASE_POSITION, "black");
+        if (redBarrier == EntityRef.NULL && blackBarrier == EntityRef.NULL) {
+            redBarrier = createBarrier("lightAndShadowResources:magicDome", LASUtils.CENTER_RED_BASE_POSITION, "red");
+            blackBarrier = createBarrier("lightAndShadowResources:magicDome", LASUtils.CENTER_BLACK_BASE_POSITION, "black");
+        }
     }
 
     @ReceiveEvent

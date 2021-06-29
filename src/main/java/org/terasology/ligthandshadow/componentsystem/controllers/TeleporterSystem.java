@@ -23,6 +23,7 @@ import org.terasology.engine.logic.console.commandSystem.annotations.CommandPara
 import org.terasology.engine.logic.console.commandSystem.annotations.Sender;
 import org.terasology.engine.logic.permission.PermissionManager;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
+import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.ligthandshadow.componentsystem.components.LASConfigComponent;
 import org.terasology.ligthandshadow.componentsystem.events.PregameEvent;
@@ -43,15 +44,12 @@ import org.terasology.lightandshadowresources.components.SetTeamOnActivateCompon
  */
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TeleporterSystem extends BaseComponentSystem {
-
-    private static final Logger logger = LoggerFactory.getLogger(TeleporterSystem.class);
-
-    @In
-    InventoryManager inventoryManager;
     @In
     EntityManager entityManager;
     @In
     GameEntitySystem gameEntitySystem;
+
+    private boolean gameStart;
 
     Optional<Prefab> prefab = Assets.getPrefab("inventory");
     StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
@@ -102,8 +100,9 @@ public class TeleporterSystem extends BaseComponentSystem {
             }
         }
         if (teleporterTeamCount - oppositeTeamCount < maxTeamSizeDifference) {
-            if (teleporterTeamCount >= 0 && oppositeTeamCount >= 1) {
-                player.send(new TimerEvent());
+            if (teleporterTeamCount >= 0 && oppositeTeamCount >= 1 && !gameStart) {
+                sendTimerEventToClients();
+                gameStart = true;
             }
             return true;
         } else {
@@ -132,5 +131,14 @@ public class TeleporterSystem extends BaseComponentSystem {
         player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
         player.addOrSaveComponent(startingInventory);
         player.send(new RequestInventoryEvent(startingInventory.items));
+    }
+
+    private void sendTimerEventToClients() {
+        if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
+            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
+            for (EntityRef client : clients) {
+                client.send(new TimerEvent());
+            }
+        }
     }
 }
