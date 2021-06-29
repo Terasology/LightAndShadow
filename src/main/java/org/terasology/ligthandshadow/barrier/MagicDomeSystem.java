@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.barrier;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.combatSystem.weaponFeatures.components.ArrowComponent;
 import org.terasology.combatSystem.weaponFeatures.components.ExplodeComponent;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
@@ -22,13 +24,16 @@ import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.BarrierActivateEvent;
 import org.terasology.ligthandshadow.componentsystem.events.BarrierDeactivateEvent;
+import org.terasology.module.inventory.systems.InventoryManager;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscriberSystem {
     private static final int WORLD_RADIUS = 20;
-
+    private static final Logger logger = LoggerFactory.getLogger(MagicDomeSystem.class);
     @In
     private EntityManager entityManager;
+    @In
+    private InventoryManager inventoryManager;
 
     private float updateDelta;
     private Vector3f df = new Vector3f();
@@ -97,6 +102,7 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
         return barrier.getComponent(MagicDome.class).team.equals(player.getComponent(LASTeamComponent.class).team);
     }
 
+
     public boolean isProjectileAllowedInsideBarrier(EntityRef projectile, EntityRef barrier) {
         if (projectile.hasComponent(LASTeamComponent.class)) {
             if (projectile.getComponent(LASTeamComponent.class).team.equals("white")) {
@@ -134,7 +140,7 @@ public class MagicDomeSystem extends BaseComponentSystem implements UpdateSubscr
     @Override
     public void update(float delta) {
         updateDelta += delta;
-        if (updateDelta > 0.5f) {
+        if (updateDelta > 0.1f) {
             // required to destroy the fireball sent by the staff
             Iterable<EntityRef> fireballs = entityManager.getEntitiesWith(ExplodeComponent.class, LASTeamComponent.class);
             destroyProjectile(fireballs);
