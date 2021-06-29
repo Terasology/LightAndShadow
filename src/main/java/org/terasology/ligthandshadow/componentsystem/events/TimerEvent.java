@@ -3,7 +3,8 @@
 package org.terasology.ligthandshadow.componentsystem.events;
 
 import org.terasology.engine.entitySystem.event.Event;
+import org.terasology.engine.network.OwnerEvent;
 
+@OwnerEvent
 public class TimerEvent implements Event {
-
 }
