@@ -87,26 +87,22 @@
                     "contents": [
                       {
                         "type": "UISpace",
-                        "family": "noBackground",
-                        "cc": ""
+                        "family": "noBackground"
                       },
                       {
                         "type": "UILabel",
                         "text": "Kills",
-                        "family": "noBackground",
-                        "cc": ""
+                        "family": "noBackground"
                       },
                       {
                         "type": "UILabel",
                         "text": "Deaths",
-                        "family": "noBackground",
-                        "cc": ""
+                        "family": "noBackground"
                       },
                       {
                         "type": "UILabel",
                         "text": "Enemy Flags Captured",
-                        "family": "noBackground",
-                        "cc": ""
+                        "family": "noBackground"
                       }
                     ]
                   },
@@ -119,46 +115,36 @@
                     "contents": [
                       {
                         "type": "UIImage",
-                        "image": "LightAndShadowResources:spadesIcon",
-                        "cc": ""
+                        "image": "LightAndShadowResources:spadesIcon"
                       },
                       {
                         "type": "UILabel",
                         "text": "Spades Team",
-                        "family": "spadesTeamLabel",
-                        "cc": ""
+                        "family": "spadesTeamLabel"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
                         "type": "MigLayout",
@@ -219,50 +205,39 @@
                     "contents": [
                       {
                         "type": "UIImage",
-                        "image": "LightAndShadowResources:heartsIcon",
-                        "cc": ""
+                        "image": "LightAndShadowResources:heartsIcon"
                       },
                       {
                         "type": "UILabel",
                         "text": "Hearts Team",
-                        "family": "heartsTeamLabel",
-                        "cc": ""
+                        "family": "heartsTeamLabel"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
-                        "type": "UISpace",
-                        "cc": ""
+                        "type": "UISpace"
                       },
                       {
                         "type": "MigLayout",
