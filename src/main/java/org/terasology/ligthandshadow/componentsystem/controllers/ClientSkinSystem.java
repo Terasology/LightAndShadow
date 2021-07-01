@@ -37,7 +37,7 @@ public class ClientSkinSystem extends BaseComponentSystem {
     private AssetManager assetManager;
 
     /**
-     * Initializes the Health HUD based on the default white team.
+     * Initializes the Health HUD when the local player is spawned based on the default white team.
      * @see LASTeamComponent
      *
      * @param event            The event that is triggered when local player has been spawned
