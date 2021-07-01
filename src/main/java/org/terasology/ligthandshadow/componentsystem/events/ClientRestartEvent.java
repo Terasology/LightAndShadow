@@ -6,7 +6,7 @@ import org.terasology.engine.entitySystem.event.Event;
 import org.terasology.engine.network.OwnerEvent;
 
 /**
- * Event to indicate a client that restart is complete.
+ *  Notification Event to inform a client that restart is complete.
  */
 @OwnerEvent
 public class ClientRestartEvent implements Event {

@@ -5,6 +5,9 @@ package org.terasology.ligthandshadow.componentsystem.events;
 import org.terasology.engine.entitySystem.event.Event;
 import org.terasology.engine.network.BroadcastEvent;
 
+/**
+ * Notification event to indicate that the score has been updated.
+ */
 @BroadcastEvent
 public class ScoreUpdateFromServerEvent implements Event {
     public String team;

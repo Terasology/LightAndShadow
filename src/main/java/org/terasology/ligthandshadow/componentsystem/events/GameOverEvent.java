@@ -6,7 +6,7 @@ import org.terasology.engine.entitySystem.event.Event;
 import org.terasology.engine.network.OwnerEvent;
 
 /**
- * Event to indicate clients about GameOver.
+ * Notification Event to inform clients that the game is over.
  */
 @OwnerEvent
 public class GameOverEvent implements Event {

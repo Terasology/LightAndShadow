@@ -6,7 +6,7 @@ import org.terasology.engine.entitySystem.event.Event;
 import org.terasology.engine.network.ServerEvent;
 
 /**
- * Event to request game restart by a client.
+ *  Trigger event to request game restart by a client.
  */
 @ServerEvent
 public class RestartRequestEvent implements Event {

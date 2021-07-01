@@ -6,6 +6,9 @@ import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.Event;
 import org.terasology.engine.network.BroadcastEvent;
 
+/**
+ * Notification event to indicate that the flag has been picked up.
+ */
 @BroadcastEvent
 public class OnFlagPickupEvent implements Event {
     private String team;
