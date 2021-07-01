@@ -57,7 +57,7 @@ public class LaSSimpleWorldGenerator extends BaseFacetedWorldGenerator {
                 .addProvider(new SimplexSurfaceTemperatureProvider())
                 .addProvider(new MountainsProvider())
                 .addProvider(new LaSBiomeProvider())
-                .addProvider(new SurfaceToDensityProvider())
+                .addProvider(new LaSSurfaceToDensityProvider())
                 .addProvider(new DefaultFloraProvider())
                 .addProvider(new DefaultTreeProvider())
                 .addProvider(new BaseProvider())
