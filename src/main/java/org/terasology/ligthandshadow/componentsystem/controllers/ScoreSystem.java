@@ -24,6 +24,9 @@ import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServe
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.lightandshadowresources.components.WinConditionCheckOnActivateComponent;
 
+/**
+ * System responsible for calculating and providing score.
+ */
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class ScoreSystem extends BaseComponentSystem {
 
@@ -35,6 +38,12 @@ public class ScoreSystem extends BaseComponentSystem {
     private int redScore;
     private int blackScore;
 
+    /**
+     * Updates score when player tries to place the flag at their home base.
+     *
+     * @param event
+     * @param entity
+     */
     @ReceiveEvent(components = {WinConditionCheckOnActivateComponent.class, LASTeamComponent.class})
     public void onActivate(ActivateEvent event, EntityRef entity) {
         checkAndResetGameOnScore(event, entity);
@@ -48,6 +57,14 @@ public class ScoreSystem extends BaseComponentSystem {
         sendEventToClients(new ScoreUpdateFromServerEvent(LASUtils.BLACK_TEAM, blackScore));
     }
 
+    /**
+     * If the flag the player has corresponds to the opponent's team and the player places the flag at their home base
+     * the score of the player's team increases and the flag returns back to it's base.
+     * After the winning team reaches the goal score the game restarts.
+     *
+     * @param event
+     * @param entity
+     */
     private void checkAndResetGameOnScore(ActivateEvent event, EntityRef entity) {
         LASTeamComponent baseTeamComponent = entity.getComponent(LASTeamComponent.class);
         EntityRef player = event.getInstigator();
@@ -104,13 +121,7 @@ public class ScoreSystem extends BaseComponentSystem {
 
     private boolean checkIfTeamScores(LASTeamComponent baseTeamComponent, EntityRef heldItem) {
         // Check to see if player has other team's flag
-        if (baseTeamComponent.team.equals(LASUtils.RED_TEAM) && heldItem.hasComponent(FlagComponent.class)) {
-            return true;
-        }
-        if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM) && heldItem.hasComponent(FlagComponent.class)) {
-            return true;
-        }
-        return false;
+        return !baseTeamComponent.team.equals(heldItem.getComponent(FlagComponent.class).team);
     }
 
     private void incrementScore(LASTeamComponent baseTeamComponent) {

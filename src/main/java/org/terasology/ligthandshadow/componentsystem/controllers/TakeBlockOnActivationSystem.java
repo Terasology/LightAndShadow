@@ -16,6 +16,9 @@ import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.lightandshadowresources.components.TakeBlockOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.events.GiveFlagEvent;
 
+/**
+ * System responsible for giving the flag only to a player from the opposing team trying to take it.
+ */
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TakeBlockOnActivationSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(TakeBlockOnActivationSystem.class);
