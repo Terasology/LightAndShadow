@@ -121,7 +121,13 @@ public class ScoreSystem extends BaseComponentSystem {
 
     private boolean checkIfTeamScores(LASTeamComponent baseTeamComponent, EntityRef heldItem) {
         // Check to see if player has other team's flag
-        return !baseTeamComponent.team.equals(heldItem.getComponent(FlagComponent.class).team);
+        if (baseTeamComponent.team.equals(LASUtils.RED_TEAM) && heldItem.hasComponent(FlagComponent.class)) {
+            return true;
+        }
+        if (baseTeamComponent.team.equals(LASUtils.BLACK_TEAM) && heldItem.hasComponent(FlagComponent.class)) {
+            return true;
+        }
+        return false;
     }
 
     private void incrementScore(LASTeamComponent baseTeamComponent) {
