@@ -74,7 +74,7 @@ public class ClientSkinSystem extends BaseComponentSystem {
     }
 
     /**
-     * Updates the skeletal mesh and the Health HUD of a player when the player teleports and their team is changed.
+     * Updates the skeletal mesh and the Health HUD of a player when the player teleports to their teams base and their team is changed.
      * @see LASTeamComponent
      *
      * @param event

@@ -17,7 +17,7 @@ import org.terasology.lightandshadowresources.components.TakeBlockOnActivateComp
 import org.terasology.ligthandshadow.componentsystem.events.GiveFlagEvent;
 
 /**
- * System responsible for giving the flag only to a player from the opposing team trying to take it.
+ * System responsible for giving the flag only when a player from the opposing team tries to take it.
  */
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class TakeBlockOnActivationSystem extends BaseComponentSystem {
