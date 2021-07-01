@@ -1,18 +1,5 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.terasology.gestalt.assets.management.AssetManager;
@@ -50,7 +37,7 @@ public class ClientSkinSystem extends BaseComponentSystem {
     private AssetManager assetManager;
 
     /**
-     * Change the Health HUD when the local player is spawned based on their Light and Shadow Team.
+     * Initializes the Health HUD based on the default white team.
      * @see LASTeamComponent
      *
      * @param event            The event that is triggered when local player has been spawned
@@ -64,7 +51,7 @@ public class ClientSkinSystem extends BaseComponentSystem {
     }
 
     /**
-     * Updates the skeletal mesh of a player when its visual character is being created.
+     * Initializes the skeletal mesh of a player to the mesh corresponding to the default white team when its visual character is being created.
      * Default event handler for this event has Trivial priority. Hence, this method catches the event first
      * and consumes it.
      * @see CreateVisualCharacterEvent
@@ -87,7 +74,7 @@ public class ClientSkinSystem extends BaseComponentSystem {
     }
 
     /**
-     * Updates the skeletal mesh of a player when its team changes.
+     * Updates the skeletal mesh and the Health HUD of a player when the player teleports and their team is changed.
      * @see LASTeamComponent
      *
      * @param event

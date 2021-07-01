@@ -1,18 +1,5 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.joml.Vector3f;
@@ -35,6 +22,14 @@ public class ClientParticleSystem extends BaseComponentSystem {
     @In
     private EntityManager entityManager;
 
+    /**
+     * Attaches a particle emitter to the player when the player picks up a flag which emits particles based on the flag's team.
+     * @see OnFlagPickupEvent
+     * @see org.terasology.ligthandshadow.componentsystem.controllers.AttackSystem
+     *
+     * @param event
+     * @param entity
+     */
     @ReceiveEvent
     public void onFlagPickup(OnFlagPickupEvent event, EntityRef entity) {
         String team = event.getTeam();
@@ -52,6 +47,14 @@ public class ClientParticleSystem extends BaseComponentSystem {
         }
     }
 
+    /**
+     * Removes the particle emitter from the player when the player drops the flag.
+     * @see OnFlagDropEvent
+     * @see org.terasology.ligthandshadow.componentsystem.controllers.AttackSystem
+     *
+     * @param event
+     * @param entity
+     */
     @ReceiveEvent
     public void onFlagDrop(OnFlagDropEvent event, EntityRef entity) {
         EntityRef player = event.getPlayer();

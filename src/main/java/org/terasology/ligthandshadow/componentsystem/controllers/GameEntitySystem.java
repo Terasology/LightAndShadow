@@ -16,6 +16,9 @@ import org.terasology.engine.registry.Share;
 import org.terasology.ligthandshadow.componentsystem.components.LASConfigComponent;
 import org.terasology.engine.registry.In;
 
+/**
+ *  Provides an entity that keeps track of game state information.
+ */
 @RegisterSystem
 @Share(value = GameEntitySystem.class)
 public class GameEntitySystem extends BaseComponentSystem {
