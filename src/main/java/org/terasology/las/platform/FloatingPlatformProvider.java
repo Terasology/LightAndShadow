@@ -16,6 +16,9 @@
 
 package org.terasology.las.platform;
 
+import org.joml.Vector2ic;
+import org.joml.Vector3i;
+import org.joml.Vector3ic;
 import org.terasology.engine.entitySystem.Component;
 import org.terasology.engine.world.block.BlockArea;
 import org.terasology.engine.world.block.BlockAreac;
@@ -23,9 +26,13 @@ import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.engine.world.block.BlockRegionc;
 import org.terasology.engine.world.generation.Border3D;
 import org.terasology.engine.world.generation.ConfigurableFacetProvider;
+import org.terasology.engine.world.generation.Facet;
+import org.terasology.engine.world.generation.FacetBorder;
 import org.terasology.engine.world.generation.FacetProviderPlugin;
 import org.terasology.engine.world.generation.GeneratingRegion;
 import org.terasology.engine.world.generation.Produces;
+import org.terasology.engine.world.generation.Updates;
+import org.terasology.engine.world.generation.facets.SurfacesFacet;
 import org.terasology.engine.world.generator.plugin.RegisterPlugin;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 
@@ -37,6 +44,7 @@ import java.util.Collections;
  */
 @RegisterPlugin
 @Produces(FloatingPlatformFacet.class)
+@Updates(@Facet(value = SurfacesFacet.class, border = @FacetBorder(sides = 200, top = 200, bottom = 200)))
 public class FloatingPlatformProvider implements ConfigurableFacetProvider, FacetProviderPlugin {
     private static final BlockAreac FLOATING_PLATFORM_REGION =
             new BlockArea(LASUtils.FLOATING_PLATFORM_POSITION.x() - LASUtils.FLOATING_PLATFORM_WIDTH / 2,
@@ -67,14 +75,23 @@ public class FloatingPlatformProvider implements ConfigurableFacetProvider, Face
 
     @Override
     public void process(GeneratingRegion region) {
-        Border3D border = region.getBorderForFacet(FloatingPlatformFacet.class);
+        Border3D border = region.getBorderForFacet(SurfacesFacet.class);
         FloatingPlatformFacet platformFacet = new FloatingPlatformFacet(region.getRegion(), border);
+        SurfacesFacet surfacesFacet = new SurfacesFacet(region.getRegion(),
+                region.getBorderForFacet(SurfacesFacet.class));
         BlockAreac worldRect = platformFacet.getWorldArea();
 
         for (FloatingPlatform platform : fixedPlatforms) {
             if (platform.getArea().intersectsBlockArea(worldRect)) {
                 // TODO: consider checking height as well
                 platformFacet.add(platform);
+            }
+        }
+        BlockRegionc surfacesRegion = surfacesFacet.getWorldRegion();
+        for (Vector3ic pos : surfacesRegion) {
+            if (FLOATING_PLATFORM_REGION.contains(pos.x(), pos.z())) {
+                int y = surfacesFacet.getNextBelow(pos);
+                surfacesFacet.setWorld(pos.x(), y, pos.z(), false);
             }
         }
         region.setRegionFacet(FloatingPlatformFacet.class, platformFacet);
