@@ -25,7 +25,7 @@ public class ClientPregameSystem extends BaseComponentSystem {
 
     public static final ResourceUrn ASSET_URI = new ResourceUrn("LightAndShadow:Timer");
 
-    private static final String PREGAME_MESSAGE = "The game start's as soon as there is at least one player in each team.";
+    private static final String PREGAME_MESSAGE = "The game start's as soon as there is \n at least one player in each team.";
 
     private static Timer timer;
 
