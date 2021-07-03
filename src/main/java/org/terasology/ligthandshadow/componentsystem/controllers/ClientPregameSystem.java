@@ -58,10 +58,17 @@ public class ClientPregameSystem extends BaseComponentSystem {
             timer = new Timer();
             timer.scheduleAtFixedRate(new TimerTask() {
                 int timePeriod = 10;
+                boolean addNotification;
                 public void run() {
-                    window.removeNotification("The game start's when there is at least one player in each team.");
-                    window.removeNotification("The game starts in " + (timePeriod + 1) + " seconds.");
-                    window.addNotification("The game starts in " + timePeriod-- + " seconds.");
+                    if (addNotification) {
+                        window.removeNotification("The game start's when there is at least one player in each team.");
+                        window.addNotification("The game starts in " + timePeriod-- + " seconds.");
+                        addNotification = false;
+                    } else {
+                        window.removeNotification("The game start's when there is at least one player in each team.");
+                        window.removeNotification("The game starts in " + (timePeriod + 1) + " seconds.");
+                        addNotification = true;
+                    }
                     if (timePeriod < 0) {
                         window.removeNotification("The game starts in " + (timePeriod + 1) + " seconds.");
                         entity.send(new BarrierDeactivateEvent());
@@ -69,7 +76,7 @@ public class ClientPregameSystem extends BaseComponentSystem {
                         timer.cancel();
                     }
                 }
-            }, 0, 1000);
+            }, 0, 500);
         }
     }
 }
