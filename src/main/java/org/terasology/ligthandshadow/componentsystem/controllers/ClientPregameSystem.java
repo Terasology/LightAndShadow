@@ -57,7 +57,7 @@ public class ClientPregameSystem extends BaseComponentSystem {
         if (localPlayer.getClientEntity().equals(entity)) {
             timer = new Timer();
             timer.scheduleAtFixedRate(new TimerTask() {
-                int timePeriod = 10;
+                int timePeriod = 30;
                 boolean addNotification;
                 public void run() {
                     if (addNotification) {
