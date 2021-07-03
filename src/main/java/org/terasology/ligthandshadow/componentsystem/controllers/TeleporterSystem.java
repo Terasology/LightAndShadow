@@ -4,12 +4,12 @@ package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import java.util.Optional;
 import java.util.Random;
+import java.util.function.Supplier;
 
 import org.joml.Vector3f;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.Event;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
@@ -31,7 +31,6 @@ import org.terasology.ligthandshadow.componentsystem.events.PregameEvent;
 import org.terasology.ligthandshadow.componentsystem.events.TimerEvent;
 import org.terasology.module.inventory.components.StartingInventoryComponent;
 import org.terasology.module.inventory.events.RequestInventoryEvent;
-import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.registry.In;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
@@ -102,7 +101,7 @@ public class TeleporterSystem extends BaseComponentSystem {
         }
         if (teleporterTeamCount - oppositeTeamCount < maxTeamSizeDifference) {
             if (teleporterTeamCount >= 0 && oppositeTeamCount >= 1 && !gameStart) {
-                sendTimerEventToClients();
+                sendEventToClients(TimerEvent::new);
                 gameStart = true;
             }
             return true;
@@ -132,24 +131,13 @@ public class TeleporterSystem extends BaseComponentSystem {
         player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
         player.addOrSaveComponent(startingInventory);
         player.send(new RequestInventoryEvent(startingInventory.items));
-        sendGameStartMessageEventToClients();
+        sendEventToClients(GameStartMessageEvent::new);
     }
 
-    private void sendTimerEventToClients() {
-        if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
-            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
-            for (EntityRef client : clients) {
-                client.send(new TimerEvent());
-            }
-        }
-    }
-
-    private void sendGameStartMessageEventToClients() {
-        if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
-            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
-            for (EntityRef client : clients) {
-                client.send(new GameStartMessageEvent());
-            }
+    private void sendEventToClients(Supplier<Event> eventSupplier) {
+        Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
+        for (EntityRef client : clients) {
+            client.send(eventSupplier.get());
         }
     }
 }

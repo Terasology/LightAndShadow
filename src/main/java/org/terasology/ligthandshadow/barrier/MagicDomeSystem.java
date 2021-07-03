@@ -31,6 +31,13 @@ public class MagicDomeSystem extends BaseComponentSystem {
     private EntityRef blackBarrier = EntityRef.NULL;
 
 
+    /**
+     * Activates the barriers for the pregame regions corresponding to both the teams only in the beginning when
+     * the barriers haven't been created yet.
+     *
+     * @param event
+     * @param entity
+     */
     @ReceiveEvent
     public void activateBarriers(ActivateBarrierEvent event, EntityRef entity) {
         if (redBarrier == EntityRef.NULL && blackBarrier == EntityRef.NULL) {
@@ -85,6 +92,8 @@ public class MagicDomeSystem extends BaseComponentSystem {
     }
 
     public boolean isAllowedInsideBarrier(EntityRef player, EntityRef barrier) {
-        return barrier.getComponent(MagicDome.class).team.equals(player.getComponent(LASTeamComponent.class).team);
+        String barrierTeam = barrier.getComponent(MagicDome.class).team;
+        String playerTeam = player.getComponent(LASTeamComponent.class).team;
+        return barrierTeam.equals(playerTeam);
     }
 }
