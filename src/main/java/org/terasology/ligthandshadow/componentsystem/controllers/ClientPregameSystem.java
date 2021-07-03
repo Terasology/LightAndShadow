@@ -11,7 +11,7 @@ import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.gestalt.assets.ResourceUrn;
-import org.terasology.ligthandshadow.componentsystem.events.BarrierDeactivateEvent;
+import org.terasology.ligthandshadow.componentsystem.events.DeactivateBarrierEvent;
 import org.terasology.ligthandshadow.componentsystem.events.GameStartMessageEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RemoveInvulnerabilityEvent;
 import org.terasology.ligthandshadow.componentsystem.events.TimerEvent;
@@ -23,9 +23,11 @@ import java.util.TimerTask;
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientPregameSystem extends BaseComponentSystem {
 
-    private static Timer timer;
-
     public static final ResourceUrn ASSET_URI = new ResourceUrn("LightAndShadow:Timer");
+
+    private static final String PREGAME_MESSAGE = "The game start's as soon as there is at least one player in each team.";
+
+    private static Timer timer;
 
     @In
     private NUIManager nuiManager;
@@ -48,7 +50,7 @@ public class ClientPregameSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onPregameStart(GameStartMessageEvent event, EntityRef entity) {
         if (localPlayer.getClientEntity().equals(entity)) {
-            window.addNotification("The game start's when there is at least one player in each team.");
+            window.addNotification(PREGAME_MESSAGE);
         }
     }
 
@@ -61,17 +63,17 @@ public class ClientPregameSystem extends BaseComponentSystem {
                 boolean addNotification;
                 public void run() {
                     if (addNotification) {
-                        window.removeNotification("The game start's when there is at least one player in each team.");
+                        window.removeNotification(PREGAME_MESSAGE);
                         window.addNotification("The game starts in " + timePeriod-- + " seconds.");
                         addNotification = false;
                     } else {
-                        window.removeNotification("The game start's when there is at least one player in each team.");
+                        window.removeNotification(PREGAME_MESSAGE);
                         window.removeNotification("The game starts in " + (timePeriod + 1) + " seconds.");
                         addNotification = true;
                     }
                     if (timePeriod < 0) {
                         window.removeNotification("The game starts in " + (timePeriod + 1) + " seconds.");
-                        entity.send(new BarrierDeactivateEvent());
+                        entity.send(new DeactivateBarrierEvent());
                         entity.send(new RemoveInvulnerabilityEvent());
                         timer.cancel();
                     }

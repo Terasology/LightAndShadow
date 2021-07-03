@@ -4,6 +4,8 @@ package org.terasology.ligthandshadow.componentsystem.events;
 
 import org.terasology.engine.entitySystem.event.Event;
 
-public class BarrierDeactivateEvent implements Event {
-
+/**
+ * Trigger event to activate the pregame barriers.
+ */
+public class ActivateBarrierEvent implements Event {
 }

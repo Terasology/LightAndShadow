@@ -13,8 +13,8 @@ import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.utilities.Assets;
-import org.terasology.ligthandshadow.componentsystem.components.PlayerInvulnerableComponent;
-import org.terasology.ligthandshadow.componentsystem.events.BarrierActivateEvent;
+import org.terasology.ligthandshadow.componentsystem.components.InvulnerableComponent;
+import org.terasology.ligthandshadow.componentsystem.events.ActivateBarrierEvent;
 import org.terasology.ligthandshadow.componentsystem.events.PregameEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RemoveInvulnerabilityEvent;
 import org.terasology.module.health.events.BeforeDamagedEvent;
@@ -33,11 +33,11 @@ public class PregameSystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void onPregameStart(PregameEvent event, EntityRef entity) {
-        entity.send(new BarrierActivateEvent());
-        entity.addComponent(new PlayerInvulnerableComponent());
+        entity.send(new ActivateBarrierEvent());
+        entity.addComponent(new InvulnerableComponent());
     }
 
-    @ReceiveEvent(components = PlayerInvulnerableComponent.class, priority = EventPriority.PRIORITY_HIGH)
+    @ReceiveEvent(components = InvulnerableComponent.class, priority = EventPriority.PRIORITY_HIGH)
     public void preventFriendlyFire(BeforeDamagedEvent event, EntityRef entity) {
         event.consume();
     }
@@ -45,9 +45,9 @@ public class PregameSystem extends BaseComponentSystem {
     @ReceiveEvent
     private void removePlayerInvulnerableComponents(RemoveInvulnerabilityEvent event, EntityRef entity) {
         Iterable<EntityRef> players = entityManager.getEntitiesWith(PlayerCharacterComponent.class,
-                PlayerInvulnerableComponent.class);
+                InvulnerableComponent.class);
         for (EntityRef player : players) {
-            player.removeComponent(PlayerInvulnerableComponent.class);
+            player.removeComponent(InvulnerableComponent.class);
         }
     }
 
