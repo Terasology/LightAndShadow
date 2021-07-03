@@ -26,6 +26,7 @@ import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.ligthandshadow.componentsystem.components.LASConfigComponent;
+import org.terasology.ligthandshadow.componentsystem.events.GameStartMessageEvent;
 import org.terasology.ligthandshadow.componentsystem.events.PregameEvent;
 import org.terasology.ligthandshadow.componentsystem.events.TimerEvent;
 import org.terasology.module.inventory.components.StartingInventoryComponent;
@@ -131,6 +132,7 @@ public class TeleporterSystem extends BaseComponentSystem {
         player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
         player.addOrSaveComponent(startingInventory);
         player.send(new RequestInventoryEvent(startingInventory.items));
+        sendGameStartMessageEventToClients();
     }
 
     private void sendTimerEventToClients() {
@@ -138,6 +140,15 @@ public class TeleporterSystem extends BaseComponentSystem {
             Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
             for (EntityRef client : clients) {
                 client.send(new TimerEvent());
+            }
+        }
+    }
+
+    private void sendGameStartMessageEventToClients() {
+        if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
+            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
+            for (EntityRef client : clients) {
+                client.send(new GameStartMessageEvent());
             }
         }
     }
