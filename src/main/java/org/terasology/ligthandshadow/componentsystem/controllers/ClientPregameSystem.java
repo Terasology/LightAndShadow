@@ -15,7 +15,6 @@ import org.terasology.gestalt.assets.ResourceUrn;
 import org.terasology.ligthandshadow.componentsystem.components.InvulnerableComponent;
 import org.terasology.ligthandshadow.componentsystem.events.DeactivateBarrierEvent;
 import org.terasology.ligthandshadow.componentsystem.events.GameStartMessageEvent;
-import org.terasology.ligthandshadow.componentsystem.events.RemoveInvulnerabilityEvent;
 import org.terasology.ligthandshadow.componentsystem.events.TimerEvent;
 import org.terasology.notify.ui.DialogNotificationOverlay;
 

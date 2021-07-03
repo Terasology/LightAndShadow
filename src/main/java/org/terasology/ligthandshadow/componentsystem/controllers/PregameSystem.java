@@ -25,8 +25,6 @@ import java.util.Optional;
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class PregameSystem extends BaseComponentSystem {
 
-    private static final Logger logger = LoggerFactory.getLogger(PregameSystem.class);
-
     @In
     private EntityManager entityManager;
 
