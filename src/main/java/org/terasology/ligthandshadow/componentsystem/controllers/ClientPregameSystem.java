@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
@@ -11,6 +12,7 @@ import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.gestalt.assets.ResourceUrn;
+import org.terasology.ligthandshadow.componentsystem.components.InvulnerableComponent;
 import org.terasology.ligthandshadow.componentsystem.events.DeactivateBarrierEvent;
 import org.terasology.ligthandshadow.componentsystem.events.GameStartMessageEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RemoveInvulnerabilityEvent;
@@ -29,6 +31,8 @@ public class ClientPregameSystem extends BaseComponentSystem {
 
     private static Timer timer;
 
+    @In
+    private EntityManager entityManager;
     @In
     private NUIManager nuiManager;
 
@@ -74,11 +78,18 @@ public class ClientPregameSystem extends BaseComponentSystem {
                     if (timePeriod < 0) {
                         window.removeNotification("The game starts in " + (timePeriod + 1) + " seconds.");
                         entity.send(new DeactivateBarrierEvent());
-                        entity.send(new RemoveInvulnerabilityEvent());
+                        removePlayerInvulnerableComponents();
                         timer.cancel();
                     }
                 }
             }, 0, 500);
+        }
+    }
+
+    private void removePlayerInvulnerableComponents() {
+        Iterable<EntityRef> players = entityManager.getEntitiesWith(InvulnerableComponent.class);
+        for (EntityRef player : players) {
+            player.removeComponent(InvulnerableComponent.class);
         }
     }
 }
