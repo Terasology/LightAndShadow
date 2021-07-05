@@ -23,7 +23,8 @@ public class ClientParticleSystem extends BaseComponentSystem {
     private EntityManager entityManager;
 
     /**
-     * Attaches a particle emitter to the player when the player picks up a flag, which emits particles based on the flag's team.
+     * Attaches a particle emitter to the player when the player picks up a flag.
+     * Emitted particles are based on the flag's team.
      * @see OnFlagPickupEvent
      * @see org.terasology.ligthandshadow.componentsystem.controllers.AttackSystem
      *

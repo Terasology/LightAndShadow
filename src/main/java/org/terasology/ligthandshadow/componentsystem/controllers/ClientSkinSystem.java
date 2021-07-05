@@ -37,7 +37,7 @@ public class ClientSkinSystem extends BaseComponentSystem {
     private AssetManager assetManager;
 
     /**
-     * Initializes the Health HUD when the local player is spawned based on the default white team.
+     * Initializes the Health HUD when the local player is spawned in the lobby based on the default white team.
      * @see LASTeamComponent
      *
      * @param event            The event that is triggered when local player has been spawned
@@ -74,7 +74,8 @@ public class ClientSkinSystem extends BaseComponentSystem {
     }
 
     /**
-     * Updates the skeletal mesh and the Health HUD of a player when the player teleports to their teams base and their team is changed.
+     * Updates the skeletal mesh and the Health HUD of a player when the player
+     * chooses a team and teleports into the arena.
      * @see LASTeamComponent
      *
      * @param event

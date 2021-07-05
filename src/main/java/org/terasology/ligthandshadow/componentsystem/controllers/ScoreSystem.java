@@ -58,8 +58,8 @@ public class ScoreSystem extends BaseComponentSystem {
     }
 
     /**
-     * If the flag the player has corresponds to the opponent's team and the player places the flag at their home base
-     * the score of the player's team increases and the flag returns back to it's base.
+     * When a player places the opponent's flag at their home base, the player's team score
+     * increases and the flag returns back to its team's base.
      * After the winning team reaches the goal score the game restarts.
      *
      * @param event
