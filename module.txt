@@ -1,6 +1,6 @@
 {
     "id": "LightAndShadow",
-    "version": "1.1.0",
+    "version": "1.2.0-SNAPSHOT",
     "author": "The Terasology Foundation",
     "displayName": "Light & Shadow",
     "description": "Light & Shadow is an experimental game type set in a quirky Alice in Wonderland inspired setting",
