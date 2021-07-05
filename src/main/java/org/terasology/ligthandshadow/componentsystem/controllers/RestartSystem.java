@@ -6,6 +6,7 @@ import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterTeleportEvent;
 import org.terasology.engine.logic.players.LocalPlayer;
@@ -36,16 +37,16 @@ public class RestartSystem extends BaseComponentSystem {
      * @param event
      * @param clientEntity
      */
-    @ReceiveEvent
+    @ReceiveEvent(netFilter = RegisterMode.AUTHORITY)
     public void onRestartRequest(RestartRequestEvent event, EntityRef clientEntity, ClientComponent clientComponent) {
-        Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
-        for (EntityRef client: clients) {
-            EntityRef player = client.getComponent(ClientComponent.class).character;
-            String team = player.getComponent(LASTeamComponent.class).team;
-            player.send(new RestoreFullHealthEvent(player));
-            player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
-            client.send(new ClientRestartEvent());
-        }
+            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
+            for (EntityRef client: clients) {
+                EntityRef player = client.getComponent(ClientComponent.class).character;
+                String team = player.getComponent(LASTeamComponent.class).team;
+                player.send(new RestoreFullHealthEvent(player));
+                player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
+                client.send(new ClientRestartEvent());
+            }
     }
 
     /**
@@ -54,7 +55,7 @@ public class RestartSystem extends BaseComponentSystem {
      * @param event
      * @param clientEntity
      */
-    @ReceiveEvent
+    @ReceiveEvent(netFilter = RegisterMode.CLIENT)
     public void onClientRestart(ClientRestartEvent event, EntityRef clientEntity) {
         if (localPlayer.getClientEntity().equals(clientEntity)) {
             if (nuiManager.isOpen(LASUtils.DEATH_SCREEN)) {
