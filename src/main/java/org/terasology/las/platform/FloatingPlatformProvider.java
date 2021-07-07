@@ -87,7 +87,7 @@ public class FloatingPlatformProvider implements ConfigurableFacetProvider, Face
         for (int x = worldRegion.minX(); x <= worldRegion.maxX(); x++) {
             for (int z = worldRegion.minZ(); z <= worldRegion.maxZ(); z++) {
                 int y = surfacesFacet.getNextBelow(new Vector3i(x, LASUtils.FLOATING_PLATFORM_HEIGHT_LEVEL, z));
-                if (surfacesFacet.getWorldRegion().contains(x, y, z) && FLOATING_PLATFORM_REGION.contains(x, z)) {
+                if (worldRegion.contains(x, y, z) && FLOATING_PLATFORM_REGION.contains(x, z)) {
                     surfacesFacet.setWorld(x, y, z, false);
                 }
             }
