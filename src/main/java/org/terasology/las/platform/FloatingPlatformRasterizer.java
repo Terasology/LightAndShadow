@@ -30,12 +30,14 @@ import org.terasology.engine.world.generator.plugin.RegisterPlugin;
 public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
 
     private BlockTheme theme;
-    private static final Block RED_DICE = CoreRegistry.get(BlockManager.class).getBlock("LightAndShadowResources:redDice");
-    private static final Block BLACK_DICE = CoreRegistry.get(BlockManager.class).getBlock("LightAndShadowResources:blackDice");
+    private Block redDice;
+    private Block blackDice;
 
     @Override
     public void initialize() {
         BlockManager blockManager = CoreRegistry.get(BlockManager.class);
+        redDice = blockManager.getBlock("LightAndShadowResources:redDice");
+        blackDice = blockManager.getBlock("LightAndShadowResources:blackDice");
         theme = BlockTheme.builder(blockManager)
                 .register(DefaultBlockType.ROOF_FLAT, "LightAndShadowResources:MagicPlank")
                 .register(DefaultBlockType.FENCE, "LightAndShadowResources:MagicGlass")
@@ -98,14 +100,14 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
             for (Vector3ic blackTeleporterPosition : blackTeleporterRegion) {
                 //set down the teleporter at every square in the designated region
                 if (chunkRegion.getRegion().contains(blackTeleporterPosition)) {
-                    chunk.setBlock(Chunks.toRelative(blackTeleporterPosition, tempPos), BLACK_DICE);
+                    chunk.setBlock(Chunks.toRelative(blackTeleporterPosition, tempPos), blackDice);
                 }
             }
 
             for (Vector3ic redTeleporterPosition : redTeleporterRegion) {
                 //set down the teleporter at every square in the designated region
                 if (chunkRegion.getRegion().contains(redTeleporterPosition)) {
-                    chunk.setBlock(Chunks.toRelative(redTeleporterPosition, tempPos), RED_DICE);
+                    chunk.setBlock(Chunks.toRelative(redTeleporterPosition, tempPos), redDice);
                 }
             }
         }
