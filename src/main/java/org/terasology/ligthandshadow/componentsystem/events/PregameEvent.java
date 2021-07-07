@@ -3,11 +3,9 @@
 package org.terasology.ligthandshadow.componentsystem.events;
 
 import org.terasology.engine.entitySystem.event.Event;
-import org.terasology.engine.network.OwnerEvent;
 
 /**
- *  Notification Event to inform a client that restart is complete.
+ * Notification event that indicates the pregame phase has started.
  */
-@OwnerEvent
-public class ClientRestartEvent implements Event {
+public class PregameEvent implements Event {
 }

@@ -6,8 +6,8 @@ import org.terasology.engine.entitySystem.event.Event;
 import org.terasology.engine.network.OwnerEvent;
 
 /**
- *  Notification Event to inform a client that restart is complete.
+ * Notification event that indicates the pregame phase has started so that the pregame message can be displayed.
  */
 @OwnerEvent
-public class ClientRestartEvent implements Event {
+public class GameStartMessageEvent implements Event {
 }

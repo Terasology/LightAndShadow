@@ -1,18 +1,5 @@
-/*
- * Copyright 2019 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2021 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.terasology.engine.entitySystem.entity.EntityManager;
@@ -40,29 +27,20 @@ import org.terasology.nui.widgets.UILabel;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Displays game over screen for all clients.
  */
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientGameOverSystem extends BaseComponentSystem {
+    private static Timer timer;
+
     @In
     private NUIManager nuiManager;
     @In
     private LocalPlayer localPlayer;
     @In
     private EntityManager entityManager;
-
-    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor(runnable -> {
-        Thread thread = Executors.defaultThreadFactory().newThread(runnable);
-        thread.setDaemon(true);
-        return thread;
-    });
-
-    private static Timer timer;
 
     /**
      * System to show game over screen once a team achieves goal score.
@@ -89,13 +67,13 @@ public class ClientGameOverSystem extends BaseComponentSystem {
                         countDown.setText(Integer.toString(timePeriod--));
                         if (timePeriod < 0) {
                             countDown.setText(" ");
+                            restartButton.setEnabled(true);
                             timer.cancel();
                         }
                     }
                 }, 0, 1000);
                 restartButton.setVisible(true);
                 restartButton.setEnabled(false);
-                executorService.schedule(() -> restartButton.setEnabled(true), 10, TimeUnit.SECONDS);
             }
 
             WidgetUtil.trySubscribe(deathScreen, "restart", widget -> triggerRestart());

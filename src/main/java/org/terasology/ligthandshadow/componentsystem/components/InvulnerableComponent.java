@@ -4,5 +4,5 @@ package org.terasology.ligthandshadow.componentsystem.components;
 
 import org.terasology.engine.entitySystem.Component;
 
-public class FlagDropOnActivateComponent implements Component {
+public class InvulnerableComponent implements Component {
 }

@@ -6,8 +6,8 @@ import org.terasology.engine.entitySystem.event.Event;
 import org.terasology.engine.network.OwnerEvent;
 
 /**
- *  Notification Event to inform a client that restart is complete.
+ * Trigger Event that starts and displays the timer for the actual game to begin.
  */
 @OwnerEvent
-public class ClientRestartEvent implements Event {
+public class TimerEvent implements Event {
 }
