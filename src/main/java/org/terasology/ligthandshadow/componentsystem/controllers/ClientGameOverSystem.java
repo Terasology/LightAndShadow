@@ -52,7 +52,12 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     private static final Logger logger = LoggerFactory.getLogger(ClientGameOverSystem.class);
 
     private static final ResourceUrn DEATH_UI = new ResourceUrn(LASUtils.DEATH_SCREEN);
-    DeathScreen deathScreen = nuiManager.createScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
+    DeathScreen deathScreen;
+
+    @Override
+    public void initialise() {
+        deathScreen = nuiManager.createScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
+    }
 
     /**
      * System to show game over screen once a team achieves goal score.
