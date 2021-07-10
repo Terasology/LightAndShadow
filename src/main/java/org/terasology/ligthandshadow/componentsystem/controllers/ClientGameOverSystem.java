@@ -18,7 +18,6 @@ import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.rendering.nui.layers.ingame.DeathScreen;
-import org.terasology.gestalt.assets.ResourceUrn;
 import org.terasology.input.ButtonState;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
@@ -51,12 +50,13 @@ public class ClientGameOverSystem extends BaseComponentSystem {
 
     private static final Logger logger = LoggerFactory.getLogger(ClientGameOverSystem.class);
 
-    private static final ResourceUrn DEATH_UI = new ResourceUrn(LASUtils.DEATH_SCREEN);
     DeathScreen deathScreen;
+    StatisticsScreen stats;
 
     @Override
     public void initialise() {
         deathScreen = nuiManager.createScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
+        stats = nuiManager.createScreen("LightAndShadow:statisticsScreen", StatisticsScreen.class);
     }
 
     /**
@@ -106,13 +106,13 @@ public class ClientGameOverSystem extends BaseComponentSystem {
         }
     }
 
-    @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
+    @ReceiveEvent(priority = EventPriority.PRIORITY_CRITICAL)
     public void onTab(TabButton event, EntityRef entity) {
-        logger.info("Test");
         if (event.getState() == ButtonState.DOWN) {
-            nuiManager.removeOverlay(LASUtils.ONLINE_PLAYERS_OVERLAY);
-            nuiManager.toggleScreen(LASUtils.DEATH_SCREEN);
-            addPlayerStatisticsInfo(deathScreen);
+            addPlayerStatisticsInfo(stats);
+            if  (!nuiManager.isOpen("LightAndShadow:statisticsScreen")) {
+                nuiManager.pushScreen("LightAndShadow:statisticsScreen");
+            }
         }
     }
 
