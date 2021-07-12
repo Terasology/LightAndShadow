@@ -3,6 +3,7 @@
 package org.terasology.las.yinyang;
 
 import org.joml.Vector3i;
+import org.joml.Vector3ic;
 import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.engine.world.generation.Border3D;
 import org.terasology.engine.world.generation.Facet;
@@ -36,8 +37,7 @@ public class YinYangProvider implements FacetProviderPlugin {
         YinYangFacet yinYangFacet = new YinYangFacet(region.getRegion(), border);
 
         BlockRegion worldRect = yinYangFacet.getWorldRegion();
-        Vector3i[] tempPos = new Vector3i[1];
-        tempPos[0] = new Vector3i();
+        final Vector3i tempPos = new Vector3i();
         yinYangPositions.stream()
             .filter(worldRect::contains)
             .forEach(pos -> {
@@ -46,9 +46,9 @@ public class YinYangProvider implements FacetProviderPlugin {
                 for (int i = -RADIUS; i <= RADIUS; i++) {
                     for (int j = -2 * RADIUS; j <= 2 * RADIUS; j++) {
                         if (!LASUtils.pixel(j, i, RADIUS).equals("engine:air")) {
-                            pos.add(i, 0, j, tempPos[0]);
-                            tempPos[0].y = y;
-                            surfacesFacet.setWorld(tempPos[0], false);
+                            pos.add(i, 0, j, tempPos);
+                            tempPos.y = y;
+                            surfacesFacet.setWorld(tempPos, false);
                         }
                     }
                 }

@@ -83,10 +83,11 @@ public class FloatingPlatformProvider implements ConfigurableFacetProvider, Face
                 platformFacet.add(platform);
             }
         }
+        Vector3i pos = new Vector3i();
         BlockRegion worldRegion = surfacesFacet.getWorldRegion();
         for (int x = worldRegion.minX(); x <= worldRegion.maxX(); x++) {
             for (int z = worldRegion.minZ(); z <= worldRegion.maxZ(); z++) {
-                int y = surfacesFacet.getNextBelow(new Vector3i(x, LASUtils.FLOATING_PLATFORM_HEIGHT_LEVEL, z));
+                int y = surfacesFacet.getNextBelow(pos.set(x, LASUtils.FLOATING_PLATFORM_HEIGHT_LEVEL, z));
                 if (worldRegion.contains(x, y, z) && FLOATING_PLATFORM_REGION.contains(x, z)) {
                     surfacesFacet.setWorld(x, y, z, false);
                 }
