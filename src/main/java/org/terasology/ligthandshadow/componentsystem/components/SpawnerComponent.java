@@ -47,4 +47,15 @@ public class SpawnerComponent implements Component<SpawnerComponent> {
         }
         return null;
     }
+
+    @Override
+    public void copy(SpawnerComponent other) {
+        this.prefabs = Lists.newArrayList(other.prefabs);
+        this.each = other.each;
+        this.spawn = other.spawn;
+        this.max = other.max;
+        this.nextSpawnedPrefab = other.nextSpawnedPrefab;
+        this.currentlyAlive = other.currentlyAlive;
+        this.cooldown = other.cooldown;
+    }
 }

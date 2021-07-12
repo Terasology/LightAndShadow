@@ -7,4 +7,10 @@ import org.terasology.gestalt.entitysystem.component.Component;
 public class ScoreComponent implements Component<ScoreComponent> {
     public int redScore;
     public int blackScore;
+
+    @Override
+    public void copy(ScoreComponent other) {
+        this.redScore = other.redScore;
+        this.blackScore = other.blackScore;
+    }
 }

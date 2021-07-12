@@ -17,8 +17,14 @@ public class PlayerStatisticsComponent implements Component<PlayerStatisticsComp
     @Replicate
     public int deaths;
 
-    public  PlayerStatisticsComponent() {
+    public PlayerStatisticsComponent() {
         this.kills = 0;
         this.deaths = 0;
+    }
+
+    @Override
+    public void copy(PlayerStatisticsComponent other) {
+        this.kills = other.kills;
+        this.deaths = other.deaths;
     }
 }

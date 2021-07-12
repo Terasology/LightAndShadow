@@ -5,4 +5,8 @@ package org.terasology.ligthandshadow.componentsystem.components;
 import org.terasology.gestalt.entitysystem.component.Component;
 
 public class BaseComponent implements Component<BaseComponent> {
+    @Override
+    public void copy(BaseComponent other) {
+
+    }
 }

@@ -14,4 +14,9 @@ import org.terasology.gestalt.entitysystem.component.Component;
 public class HasFlagComponent implements Component<HasFlagComponent> {
     @Replicate
     public String flag;
+
+    @Override
+    public void copy(HasFlagComponent other) {
+        this.flag = other.flag;
+    }
 }

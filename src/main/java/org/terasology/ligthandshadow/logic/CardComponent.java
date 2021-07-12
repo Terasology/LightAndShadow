@@ -30,4 +30,11 @@ public class CardComponent implements Component<CardComponent> {
     public BlockFamily topBlockFamily;
     public BlockFamily bottomBlockFamily;
     public Prefab cardBlockPrefab;
+
+    @Override
+    public void copy(CardComponent other) {
+        this.topBlockFamily = other.topBlockFamily;
+        this.bottomBlockFamily = other.bottomBlockFamily;
+        this.cardBlockPrefab = other.cardBlockPrefab;
+    }
 }

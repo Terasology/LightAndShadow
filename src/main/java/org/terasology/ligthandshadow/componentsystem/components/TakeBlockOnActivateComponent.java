@@ -6,4 +6,8 @@ import org.terasology.gestalt.entitysystem.component.Component;
 
 public class TakeBlockOnActivateComponent implements Component<TakeBlockOnActivateComponent> {
 
+    @Override
+    public void copy(TakeBlockOnActivateComponent other) {
+
+    }
 }

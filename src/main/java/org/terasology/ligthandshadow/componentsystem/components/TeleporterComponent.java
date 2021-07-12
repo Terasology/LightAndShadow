@@ -6,4 +6,8 @@ import org.terasology.gestalt.entitysystem.component.Component;
 
 public class TeleporterComponent implements Component<TeleporterComponent> {
 
+    @Override
+    public void copy(TeleporterComponent other) {
+
+    }
 }

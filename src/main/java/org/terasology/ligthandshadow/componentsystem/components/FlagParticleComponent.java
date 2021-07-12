@@ -7,4 +7,9 @@ import org.terasology.gestalt.entitysystem.component.Component;
 
 public class FlagParticleComponent implements Component<FlagParticleComponent> {
     public EntityRef particleEntity = EntityRef.NULL;
+
+    @Override
+    public void copy(FlagParticleComponent other) {
+
+    }
 }

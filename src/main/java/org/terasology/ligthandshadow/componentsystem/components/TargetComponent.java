@@ -8,4 +8,8 @@ import org.terasology.gestalt.entitysystem.component.Component;
  * Created by synopia on 24.01.14.
  */
 public class TargetComponent implements Component<TargetComponent> {
+    @Override
+    public void copy(TargetComponent other) {
+
+    }
 }

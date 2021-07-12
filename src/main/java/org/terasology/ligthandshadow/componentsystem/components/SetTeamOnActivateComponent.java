@@ -6,4 +6,8 @@ import org.terasology.gestalt.entitysystem.component.Component;
 
 public class SetTeamOnActivateComponent implements Component<SetTeamOnActivateComponent> {
 
+    @Override
+    public void copy(SetTeamOnActivateComponent other) {
+
+    }
 }

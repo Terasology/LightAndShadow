@@ -84,6 +84,10 @@ public class FloatingPlatformProvider implements ConfigurableFacetProvider, Face
     }
 
     private static class Config implements Component<Config> {
+        @Override
+        public void copy(Config other) {
+
+        }
 //        @Range(min = 10, max = 1000, increment = 1, precision = 0, label = "Platform Height")
 //        public int height = 100;
     }

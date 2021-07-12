@@ -5,4 +5,8 @@ package org.terasology.ligthandshadow.componentsystem.components;
 import org.terasology.gestalt.entitysystem.component.Component;
 
 public class FlagComponent implements Component<FlagComponent> {
+    @Override
+    public void copy(FlagComponent other) {
+
+    }
 }

@@ -7,4 +7,8 @@ import org.terasology.gestalt.entitysystem.component.Component;
 
 @AddToBlockBasedItem
 public class SpadesParticleComponent implements Component<SpadesParticleComponent> {
+    @Override
+    public void copy(SpadesParticleComponent other) {
+
+    }
 }

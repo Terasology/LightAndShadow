@@ -7,4 +7,8 @@ import org.terasology.gestalt.entitysystem.component.Component;
 
 @AddToBlockBasedItem
 public class RedFlagComponent implements Component<RedFlagComponent> {
+    @Override
+    public void copy(RedFlagComponent other) {
+
+    }
 }

@@ -6,4 +6,9 @@ import org.terasology.gestalt.entitysystem.component.Component;
 
 public class LASConfigComponent implements Component<LASConfigComponent> {
     public int maxTeamSizeDifference;
+
+    @Override
+    public void copy(LASConfigComponent other) {
+        this.maxTeamSizeDifference = other.maxTeamSizeDifference;
+    }
 }

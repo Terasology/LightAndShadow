@@ -7,4 +7,9 @@ import org.terasology.gestalt.entitysystem.component.Component;
 
 public class MagicDome implements Component<MagicDome> {
     public StaticSound hitSound;
+
+    @Override
+    public void copy(MagicDome other) {
+        this.hitSound = other.hitSound;
+    }
 }
