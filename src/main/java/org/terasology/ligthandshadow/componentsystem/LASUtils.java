@@ -20,6 +20,14 @@ import org.joml.Vector3fc;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
+
+import static java.util.Collections.singletonMap;
+
 public final class LASUtils {
     public static final String BLACK_FLAG_URI = "lightAndShadowResources:blackFlag";
     public static final String RED_FLAG_URI = "lightAndShadowResources:redFlag";
@@ -168,5 +176,48 @@ public final class LASUtils {
             return RED_TEAM;
         }
         return null;
+    }
+
+    public static boolean circle(
+            int x,
+            int y,
+            int c,
+            int r
+    ) {
+        return
+                (r * r) >= ((x / 2) * x) + ((y - c) * y);
+    }
+
+    public static String pixel(int x, int y, int r) {
+        return Stream.<Map<BooleanSupplier, Supplier<String>>>of(
+                singletonMap(
+                        () -> circle(x, y, -r / 2, r / 6),
+                        () -> "LightAndShadowResources:blackfloorblock"
+                ),
+                singletonMap(
+                        () -> circle(x, y, r / 2, r / 6),
+                        () -> "LightAndShadowResources:redfloorblock"
+                ),
+                singletonMap(
+                        () -> circle(x, y, -r / 2, r / 2),
+                        () -> "LightAndShadowResources:redfloorblock"
+                ),
+                singletonMap(
+                        () -> circle(x, y, r / 2, r / 2),
+                        () -> "LightAndShadowResources:blackfloorblock"
+                ),
+                singletonMap(
+                        () -> circle(x, y, 0, r),
+                        () -> x < 0 ? "LightAndShadowResources:redfloorblock" : "LightAndShadowResources:blackfloorblock"
+                )
+        )
+                .sequential()
+                .map(Map::entrySet)
+                .flatMap(Collection::stream)
+                .filter(e -> e.getKey().getAsBoolean())
+                .map(Map.Entry::getValue)
+                .map(Supplier::get)
+                .findAny()
+                .orElse("engine:air");
     }
 }
