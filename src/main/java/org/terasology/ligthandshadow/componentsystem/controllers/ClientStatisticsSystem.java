@@ -17,7 +17,7 @@ import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
 import org.terasology.ligthandshadow.componentsystem.input.TabButton;
 /**
- * Displays game over screen for all clients.
+ * Displays statistics screen when required.
  */
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientStatisticsSystem extends BaseComponentSystem {

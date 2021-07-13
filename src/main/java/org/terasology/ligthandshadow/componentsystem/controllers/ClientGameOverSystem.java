@@ -50,7 +50,6 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     @Override
     public void initialise() {
         deathScreen = nuiManager.createScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
-
     }
 
     /**
