@@ -2,11 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.EventPriority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
@@ -16,16 +13,14 @@ import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.engine.logic.players.PlayerUtil;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.rendering.nui.layers.ingame.DeathScreen;
-import org.terasology.input.ButtonState;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
-import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
-import org.terasology.ligthandshadow.componentsystem.input.TabButton;
 import org.terasology.nui.WidgetUtil;
 import org.terasology.nui.layouts.miglayout.MigLayout;
 import org.terasology.nui.widgets.UIButton;
@@ -38,8 +33,12 @@ import java.util.TimerTask;
  * Displays game over screen for all clients.
  */
 @RegisterSystem(RegisterMode.CLIENT)
+@Share(value = ClientGameOverSystem.class)
 public class ClientGameOverSystem extends BaseComponentSystem {
+
     private static Timer timer;
+
+    private DeathScreen deathScreen;
 
     @In
     private NUIManager nuiManager;
@@ -48,15 +47,10 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     @In
     private EntityManager entityManager;
 
-    private static final Logger logger = LoggerFactory.getLogger(ClientGameOverSystem.class);
-
-    DeathScreen deathScreen;
-    StatisticsScreen stats;
-
     @Override
     public void initialise() {
         deathScreen = nuiManager.createScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
-        stats = nuiManager.createScreen("LightAndShadow:statisticsScreen", StatisticsScreen.class);
+
     }
 
     /**
@@ -106,17 +100,7 @@ public class ClientGameOverSystem extends BaseComponentSystem {
         }
     }
 
-    @ReceiveEvent(priority = EventPriority.PRIORITY_CRITICAL)
-    public void onTab(TabButton event, EntityRef entity) {
-        if (event.getState() == ButtonState.DOWN) {
-            addPlayerStatisticsInfo(stats);
-            if  (!nuiManager.isOpen("LightAndShadow:statisticsScreen")) {
-                nuiManager.pushScreen("LightAndShadow:statisticsScreen");
-            }
-        }
-    }
-
-    private void addPlayerStatisticsInfo(DeathScreen deathScreen) {
+    public void addPlayerStatisticsInfo(DeathScreen deathScreen) {
         MigLayout spadesTeamMigLayout = deathScreen.find("spadesTeamPlayerStatistics", MigLayout.class);
         MigLayout heartsTeamMigLayout = deathScreen.find("heartsTeamPlayerStatistics", MigLayout.class);
         spadesTeamMigLayout.removeAllWidgets();
@@ -132,7 +116,9 @@ public class ClientGameOverSystem extends BaseComponentSystem {
                 PlayerStatisticsComponent playerStatisticsComponent =
                         character.getComponent(PlayerStatisticsComponent.class);
                 MigLayout migLayout = (playerTeam.equals("black") ? spadesTeamMigLayout : heartsTeamMigLayout);
-                addInfoToTeamMigLayout(migLayout, clientComponent, playerStatisticsComponent);
+                if (!playerTeam.equals("white")) {
+                    addInfoToTeamMigLayout(migLayout, clientComponent, playerStatisticsComponent);
+                }
             }
         }
     }
@@ -155,27 +141,12 @@ public class ClientGameOverSystem extends BaseComponentSystem {
         addGoalScore(deathScreen, "heartsGoalScore");
     }
 
-    @ReceiveEvent
-    private void addFlagInfo(ScoreUpdateFromServerEvent event, EntityRef entity) {
-        String team = event.team;
-        if (team.equals(LASUtils.RED_TEAM)) {
-            addTeamScore(deathScreen, "heartsTeamScore", event.score);
-            return;
-        }
-        if (team.equals(LASUtils.BLACK_TEAM)) {
-            addTeamScore(deathScreen, "spadesTeamScore", event.score);
-            return;
-        }
-        addGoalScore(deathScreen, "spadesGoalScore");
-        addGoalScore(deathScreen, "heartsGoalScore");
-    }
-
-    private void addTeamScore(DeathScreen deathScreen, String teamUILabelId, int finalScore) {
+    public void addTeamScore(DeathScreen deathScreen, String teamUILabelId, int finalScore) {
         UILabel teamScore = deathScreen.find(teamUILabelId, UILabel.class);
         teamScore.setText(String.valueOf(finalScore));
     }
 
-    private void addGoalScore(DeathScreen deathScreen, String teamUILabelID) {
+    public void addGoalScore(DeathScreen deathScreen, String teamUILabelID) {
         UILabel goalScore = deathScreen.find(teamUILabelID, UILabel.class);
         goalScore.setText(Integer.toString(LASUtils.GOAL_SCORE));
     }

@@ -1,5 +1,5 @@
 {
-  "type": "StatisticsScreen",
+  "type": "DeathScreen",
   "skin": "LightAndShadowResources:gameoverScreen",
   "contents": {
     "type": "relativeLayout",
