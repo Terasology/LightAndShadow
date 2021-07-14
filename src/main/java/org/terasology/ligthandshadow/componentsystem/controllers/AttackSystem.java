@@ -3,6 +3,8 @@
 
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.Event;
@@ -10,32 +12,56 @@ import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
-import org.terasology.engine.logic.characters.CharacterHeldItemComponent;
 import org.terasology.engine.logic.common.ActivateEvent;
+import org.terasology.engine.logic.inventory.ItemComponent;
+import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.lightandshadowresources.components.FlagComponent;
-import org.terasology.ligthandshadow.componentsystem.events.OnFlagDropEvent;
+import org.terasology.lightandshadowresources.components.LASTeamComponent;
+import org.terasology.ligthandshadow.componentsystem.components.FlagDropOnActivateComponent;
+import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.events.DropFlagEvent;
+import org.terasology.ligthandshadow.componentsystem.events.OnFlagDropEvent;
 import org.terasology.ligthandshadow.componentsystem.events.OnFlagPickupEvent;
 import org.terasology.ligthandshadow.componentsystem.events.ReturnFlagEvent;
 import org.terasology.module.inventory.events.InventorySlotChangedEvent;
-import org.terasology.engine.logic.players.PlayerCharacterComponent;
-import org.terasology.ligthandshadow.componentsystem.components.FlagDropOnActivateComponent;
-import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
-import org.terasology.lightandshadowresources.components.RaycastOnActivateComponent;
-import org.terasology.lightandshadowresources.components.LASTeamComponent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class AttackSystem extends BaseComponentSystem {
+    private static final Logger logger = LoggerFactory.getLogger(AttackSystem.class);
+
     @In
     EntityManager entityManager;
 
     private EntityRef item;
 
+    /**
+     * Drop the flag if a player manages to "touch" (activate) the enemy flag bearer.
+     * @param event the activation event
+     * @param entity the target of the activation (here: the enemy flag bearer)
+     */
     @ReceiveEvent(components = {FlagDropOnActivateComponent.class, PlayerCharacterComponent.class, HasFlagComponent.class})
-    public void onActivate(ActivateEvent event, EntityRef entity) {
+    public void dropFlagOnTouch(ActivateEvent event, EntityRef entity) {
         dropFlagOnPlayerAttack(event, entity);
+    }
+
+    /**
+     * Drop the flag if a player targets the enemy flag bearer with an item that causes a flag drop on activation.
+     * @param event the activation event, must target the enemy flag bearer
+     * @param item the target of the activation (here: the used item)
+     */
+    @ReceiveEvent(components = {FlagDropOnActivateComponent.class, ItemComponent.class})
+    public void dropFlagOnRangeAttack(ActivateEvent event, EntityRef item) {
+        if (event.getTarget().exists()
+                && event.getTarget().hasComponent(PlayerCharacterComponent.class)
+                && event.getTarget().hasComponent(HasFlagComponent.class)) {
+
+            logger.info(event.toString());
+            logger.info(item.toFullDescription());
+
+            dropFlagOnPlayerAttack(event, event.getTarget());
+        }
     }
 
     /**
@@ -44,21 +70,11 @@ public class AttackSystem extends BaseComponentSystem {
      * @param targetPlayer The player being attacked
      */
     private void dropFlagOnPlayerAttack(ActivateEvent event, EntityRef targetPlayer) {
-        EntityRef attackingPlayer = event.getInstigator(); // The player using the staff to attack
-        if (canPlayerAttack(attackingPlayer)) {
-            if (targetPlayer.hasComponent(PlayerCharacterComponent.class) && targetPlayer.hasComponent(HasFlagComponent.class)) {
-                // If the target player has the flag
-                targetPlayer.send(new DropFlagEvent(attackingPlayer));
-            }
+        EntityRef attackingPlayer = event.getInstigator(); // The attacking player
+        if (targetPlayer.hasComponent(PlayerCharacterComponent.class) && targetPlayer.hasComponent(HasFlagComponent.class)) {
+            // If the target player has the flag
+            targetPlayer.send(new DropFlagEvent(attackingPlayer));
         }
-    }
-
-    private boolean canPlayerAttack(EntityRef attackingPlayer) {
-        if (!attackingPlayer.hasComponent(CharacterHeldItemComponent.class)) {
-            return false;
-        }
-        EntityRef heldItem = attackingPlayer.getComponent(CharacterHeldItemComponent.class).selectedItem;
-        return heldItem.hasComponent(RaycastOnActivateComponent.class);
     }
 
     /**
