@@ -1,0 +1,289 @@
+{
+  "type": "DeathScreen",
+  "skin": "LightAndShadowResources:gameoverScreen",
+  "contents": {
+    "type": "relativeLayout",
+    "contents": [
+      {
+        "type": "UIBox",
+        "family": "detailsUIBox",
+        "layoutInfo": {
+          "width": 1200,
+          "height": 780,
+          "position-horizontal-center": {},
+          "position-vertical-center": {}
+        },
+        "content": {
+          "type": "relativeLayout",
+          "family": "outerUIBox",
+          "contents": [
+            {
+              "type": "UIBox",
+              "id": "detailsUIBox",
+              "family": "detailsUIBox",
+              "layoutInfo": {
+                "height": 500,
+                "width": 850,
+                "position-horizontal-center": {
+                },
+                "position-top": {
+                  "offset": 100
+                }
+              },
+              "content": {
+                "type": "MigLayout",
+                "family": "noBackground",
+                "layoutConstraints": "",
+                "colConstraints": "[500][350]",
+                "rowConstraints": "[30][200][200]",
+                "contents": [
+                  {
+                    "type": "MigLayout",
+                    "id": "titles",
+                    "family": "darkerBoxElement",
+                    "colConstraints": "[320][125][125][300]",
+                    "layoutInfo": {
+                      "cc": "cell 0 0 2 1"
+                    },
+                    "contents": [
+                      {
+                        "type": "UISpace",
+                        "family": "noBackground"
+                      },
+                      {
+                        "type": "UILabel",
+                        "text": "Kills",
+                        "family": "noBackground"
+                      },
+                      {
+                        "type": "UILabel",
+                        "text": "Deaths",
+                        "family": "noBackground"
+                      },
+                      {
+                        "type": "UILabel",
+                        "text": "Enemy Flags Captured",
+                        "family": "noBackground"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "MigLayout",
+                    "rowConstraints": "[30][150]",
+                    "layoutInfo": {
+                      "cc": "cell 0 1"
+                    },
+                    "contents": [
+                      {
+                        "type": "UIImage",
+                        "image": "LightAndShadowResources:spadesIcon"
+                      },
+                      {
+                        "type": "UILabel",
+                        "text": "Spades Team",
+                        "family": "spadesTeamLabel"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "MigLayout",
+                        "family": "darkerBoxElement",
+                        "layoutInfo": {
+                          "cc": "dock south"
+                        },
+                        "contents": [
+                          {
+                            "type": "ScrollableArea",
+                            "content": {
+                              "type": "migLayout",
+                              "id": "spadesTeamPlayerStatistics",
+                              "family": "playerNames",
+                              "rowConstraints": "0",
+                              "colConstraints": "[300][100][100]"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "MigLayout",
+                    "rowConstraints": "0",
+                    "contents": [
+                      {
+                        "type": "UILabel",
+                        "id": "spadesTeamScore",
+                        "text": "Spades Score",
+                        "layoutInfo": {
+                          "cc": ""
+                        }
+                      },
+                      {
+                        "type": "UILabel",
+                        "text": "/",
+                        "layoutInfo": {
+                          "cc": ""
+                        }
+                      },
+                      {
+                        "type": "UILabel",
+                        "id": "spadesGoalScore",
+                        "text": "0",
+                        "layoutInfo": {
+                          "cc": ""
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "type": "MigLayout",
+                    "rowConstraints": "[30][150]",
+                    "layoutInfo": {
+                      "cc": "cell 0 2"
+                    },
+                    "contents": [
+                      {
+                        "type": "UIImage",
+                        "image": "LightAndShadowResources:heartsIcon"
+                      },
+                      {
+                        "type": "UILabel",
+                        "text": "Hearts Team",
+                        "family": "heartsTeamLabel"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "UISpace"
+                      },
+                      {
+                        "type": "MigLayout",
+                        "family": "darkerBoxElement",
+                        "layoutInfo": {
+                          "cc": "dock south"
+                        },
+                        "contents": [
+                          {
+                            "type": "ScrollableArea",
+                            "content": {
+                              "type": "migLayout",
+                              "id": "heartsTeamPlayerStatistics",
+                              "family": "playerNames",
+                              "rowConstraints": "0",
+                              "colConstraints": "[300][100][100]"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "type": "MigLayout",
+                    "rowConstraints": "0",
+                    "contents": [
+                      {
+                        "type": "UILabel",
+                        "id": "heartsTeamScore",
+                        "text": "Hearts Score",
+                        "layoutInfo": {
+                          "cc": ""
+                        }
+                      },
+                      {
+                        "type": "UILabel",
+                        "text": "/",
+                        "layoutInfo": {
+                          "cc": ""
+                        }
+                      },
+                      {
+                        "type": "UILabel",
+                        "id": "heartsGoalScore",
+                        "text": "0",
+                        "layoutInfo": {
+                          "cc": ""
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "type": "UIImage",
+              "image": "LightAndShadowResources:spadesParticle",
+              "layoutInfo": {
+                "width": 100,
+                "height": 100,
+                "position-left": {
+                  "offset": 50
+                },
+                "position-bottom": {
+                  "offset": 50
+                }
+              }
+            },
+            {
+              "type": "UIImage",
+              "image": "LightAndShadowResources:heartsParticle",
+              "layoutInfo": {
+                "width": 100,
+                "height": 100,
+                "position-right": {
+                  "offset": 50
+                },
+                "position-bottom": {
+                  "offset": 50
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

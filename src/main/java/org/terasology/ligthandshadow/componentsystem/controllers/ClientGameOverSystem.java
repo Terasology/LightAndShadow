@@ -13,6 +13,7 @@ import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.engine.logic.players.PlayerUtil;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.rendering.nui.layers.ingame.DeathScreen;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
@@ -32,8 +33,12 @@ import java.util.TimerTask;
  * Displays game over screen for all clients.
  */
 @RegisterSystem(RegisterMode.CLIENT)
+@Share(value = ClientGameOverSystem.class)
 public class ClientGameOverSystem extends BaseComponentSystem {
+
     private static Timer timer;
+
+    private DeathScreen deathScreen;
 
     @In
     private NUIManager nuiManager;
@@ -41,6 +46,11 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     private LocalPlayer localPlayer;
     @In
     private EntityManager entityManager;
+
+    @Override
+    public void initialise() {
+        deathScreen = nuiManager.createScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
+    }
 
     /**
      * System to show game over screen once a team achieves goal score.
@@ -52,8 +62,8 @@ public class ClientGameOverSystem extends BaseComponentSystem {
     public void onGameOver(GameOverEvent event, EntityRef entity) {
         if (localPlayer.getClientEntity().equals(entity)) {
             nuiManager.removeOverlay(LASUtils.ONLINE_PLAYERS_OVERLAY);
-            DeathScreen deathScreen = nuiManager.pushScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
-            addPlayerStatisticsInfo(deathScreen, event);
+            nuiManager.pushScreen(deathScreen);
+            addPlayerStatisticsInfo(deathScreen);
             addFlagInfo(deathScreen, event);
             UILabel gameOverResult = deathScreen.find("gameOverResult", UILabel.class);
 
@@ -89,7 +99,7 @@ public class ClientGameOverSystem extends BaseComponentSystem {
         }
     }
 
-    private void addPlayerStatisticsInfo(DeathScreen deathScreen, GameOverEvent event) {
+    public void addPlayerStatisticsInfo(DeathScreen deathScreen) {
         MigLayout spadesTeamMigLayout = deathScreen.find("spadesTeamPlayerStatistics", MigLayout.class);
         MigLayout heartsTeamMigLayout = deathScreen.find("heartsTeamPlayerStatistics", MigLayout.class);
         spadesTeamMigLayout.removeAllWidgets();
@@ -105,7 +115,9 @@ public class ClientGameOverSystem extends BaseComponentSystem {
                 PlayerStatisticsComponent playerStatisticsComponent =
                         character.getComponent(PlayerStatisticsComponent.class);
                 MigLayout migLayout = (playerTeam.equals("black") ? spadesTeamMigLayout : heartsTeamMigLayout);
-                addInfoToTeamMigLayout(migLayout, clientComponent, playerStatisticsComponent);
+                if (!playerTeam.equals("white")) {
+                    addInfoToTeamMigLayout(migLayout, clientComponent, playerStatisticsComponent);
+                }
             }
         }
     }
@@ -128,12 +140,12 @@ public class ClientGameOverSystem extends BaseComponentSystem {
         addGoalScore(deathScreen, "heartsGoalScore");
     }
 
-    private void addTeamScore(DeathScreen deathScreen, String teamUILabelId, int finalScore) {
+    public void addTeamScore(DeathScreen deathScreen, String teamUILabelId, int finalScore) {
         UILabel teamScore = deathScreen.find(teamUILabelId, UILabel.class);
         teamScore.setText(String.valueOf(finalScore));
     }
 
-    private void addGoalScore(DeathScreen deathScreen, String teamUILabelID) {
+    public void addGoalScore(DeathScreen deathScreen, String teamUILabelID) {
         UILabel goalScore = deathScreen.find(teamUILabelID, UILabel.class);
         goalScore.setText(Integer.toString(LASUtils.GOAL_SCORE));
     }
