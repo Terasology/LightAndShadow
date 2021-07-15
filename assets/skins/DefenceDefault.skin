@@ -1,0 +1,29 @@
+{
+  "inherit": "inventoryDefault",
+  "elements": {
+    "UIInteractionWrapper": {
+      "fixed-width": 48,
+      "fixed-height": 48,
+      "texture-scale-mode": "scale fit",
+      "text-align-horizontal": "right",
+      "text-align-vertical": "bottom",
+      "margin": {
+        "top": 4,
+        "bottom": 4,
+        "left": 4,
+        "right": 4
+      }
+    }
+  },
+  "families": {
+    "redText": {
+      "text-color": "FF0000FF"
+    },
+    "whiteText": {
+      "text-color": "FFFFFFFF"
+    },
+    "title":{
+      "font":"NotoSans-Regular-Large"
+    }
+  }
+}
