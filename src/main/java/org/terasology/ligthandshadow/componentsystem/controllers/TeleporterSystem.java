@@ -22,7 +22,9 @@ import org.terasology.engine.logic.console.commandSystem.annotations.Command;
 import org.terasology.engine.logic.console.commandSystem.annotations.CommandParam;
 import org.terasology.engine.logic.console.commandSystem.annotations.Sender;
 import org.terasology.engine.logic.permission.PermissionManager;
+import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
+import org.terasology.engine.logic.players.UpdateDirectionEvent;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.ligthandshadow.componentsystem.components.LASConfigComponent;
@@ -48,6 +50,8 @@ public class TeleporterSystem extends BaseComponentSystem {
     EntityManager entityManager;
     @In
     GameEntitySystem gameEntitySystem;
+    @In
+    LocalPlayer localPlayer;
 
     private boolean gameStart;
 
@@ -129,6 +133,8 @@ public class TeleporterSystem extends BaseComponentSystem {
         Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
         player.send(new PregameEvent());
         player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
+        float playerYaw = team.equals(LASUtils.RED_TEAM) ? -90 : 90;
+        player.send(new UpdateDirectionEvent(playerYaw, 0));
         player.addOrSaveComponent(startingInventory);
         player.send(new RequestInventoryEvent(startingInventory.items));
         sendEventToClients(GameStartMessageEvent::new);
