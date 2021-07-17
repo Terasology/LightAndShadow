@@ -22,7 +22,6 @@ import org.terasology.engine.logic.console.commandSystem.annotations.Command;
 import org.terasology.engine.logic.console.commandSystem.annotations.CommandParam;
 import org.terasology.engine.logic.console.commandSystem.annotations.Sender;
 import org.terasology.engine.logic.permission.PermissionManager;
-import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.engine.logic.players.UpdateDirectionEvent;
 import org.terasology.engine.network.ClientComponent;
@@ -50,8 +49,6 @@ public class TeleporterSystem extends BaseComponentSystem {
     EntityManager entityManager;
     @In
     GameEntitySystem gameEntitySystem;
-    @In
-    LocalPlayer localPlayer;
 
     private boolean gameStart;
 
