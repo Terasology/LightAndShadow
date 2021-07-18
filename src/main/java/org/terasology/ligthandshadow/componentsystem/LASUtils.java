@@ -178,6 +178,14 @@ public final class LASUtils {
         return null;
     }
 
+    public static float getYaw(String team) {
+        return (float) Math.toDegrees(Math.atan2(LASUtils.getTeleportDestination(team).
+                sub(LASUtils.getTeleportDestination(getOppositionTeam(team)), new Vector3f()).
+                cross(new Vector3f(0, 0, 1)).dot(0, 1, 0), LASUtils.getTeleportDestination(team).
+                sub(LASUtils.getTeleportDestination(getOppositionTeam(team)), new Vector3f()).
+                dot(new Vector3f(0, 0, 1))));
+    }
+
     public static boolean circle(
             int x,
             int y,
