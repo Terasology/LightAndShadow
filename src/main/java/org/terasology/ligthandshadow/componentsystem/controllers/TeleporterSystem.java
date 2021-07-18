@@ -7,8 +7,6 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 import org.joml.Vector3f;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.Event;
@@ -53,8 +51,6 @@ public class TeleporterSystem extends BaseComponentSystem {
     GameEntitySystem gameEntitySystem;
 
     private boolean gameStart;
-
-    private static final Logger logger = LoggerFactory.getLogger(TeleporterSystem.class);
 
     Optional<Prefab> prefab = Assets.getPrefab("inventory");
     StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
