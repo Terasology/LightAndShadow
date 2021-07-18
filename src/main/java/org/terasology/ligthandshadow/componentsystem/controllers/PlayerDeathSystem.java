@@ -7,7 +7,7 @@ import java.util.Random;
 
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
-import org.terasology.engine.logic.players.UpdateDirectionEvent;
+import org.terasology.engine.logic.players.SetDirectionEvent;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
@@ -66,8 +66,7 @@ public class PlayerDeathSystem extends BaseComponentSystem {
             player.send(new RestoreFullHealthEvent(player));
             Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
             player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
-            float playerYaw = team.equals(LASUtils.RED_TEAM) ? -90 : 90;
-            player.send(new UpdateDirectionEvent(playerYaw, 0));
+            player.send(new SetDirectionEvent(LASUtils.getYaw(team), 0));
             player.addOrSaveComponent(startingInventory);
             player.send(new RequestInventoryEvent(startingInventory.items));
         }

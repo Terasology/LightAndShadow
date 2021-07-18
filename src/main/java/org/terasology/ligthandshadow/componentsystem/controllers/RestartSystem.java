@@ -10,7 +10,7 @@ import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterTeleportEvent;
 import org.terasology.engine.logic.players.LocalPlayer;
-import org.terasology.engine.logic.players.UpdateDirectionEvent;
+import org.terasology.engine.logic.players.SetDirectionEvent;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.rendering.nui.layers.ingame.DeathScreen;
 import org.terasology.module.health.events.RestoreFullHealthEvent;
@@ -46,8 +46,7 @@ public class RestartSystem extends BaseComponentSystem {
                 String team = player.getComponent(LASTeamComponent.class).team;
                 player.send(new RestoreFullHealthEvent(player));
                 player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
-                float playerYaw = team.equals(LASUtils.RED_TEAM) ? -90 : 90;
-                player.send(new UpdateDirectionEvent(playerYaw, 0));
+                player.send(new SetDirectionEvent(LASUtils.getYaw(team), 0));
                 client.send(new ClientRestartEvent());
             }
     }

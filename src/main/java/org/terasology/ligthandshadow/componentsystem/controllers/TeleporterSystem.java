@@ -7,6 +7,8 @@ import java.util.Random;
 import java.util.function.Supplier;
 
 import org.joml.Vector3f;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.Event;
@@ -23,7 +25,7 @@ import org.terasology.engine.logic.console.commandSystem.annotations.CommandPara
 import org.terasology.engine.logic.console.commandSystem.annotations.Sender;
 import org.terasology.engine.logic.permission.PermissionManager;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
-import org.terasology.engine.logic.players.UpdateDirectionEvent;
+import org.terasology.engine.logic.players.SetDirectionEvent;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.ligthandshadow.componentsystem.components.LASConfigComponent;
@@ -51,6 +53,8 @@ public class TeleporterSystem extends BaseComponentSystem {
     GameEntitySystem gameEntitySystem;
 
     private boolean gameStart;
+
+    private static final Logger logger = LoggerFactory.getLogger(TeleporterSystem.class);
 
     Optional<Prefab> prefab = Assets.getPrefab("inventory");
     StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
@@ -130,8 +134,7 @@ public class TeleporterSystem extends BaseComponentSystem {
         Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
         player.send(new PregameEvent());
         player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
-        float playerYaw = team.equals(LASUtils.RED_TEAM) ? -90 : 90;
-        player.send(new UpdateDirectionEvent(playerYaw, 0));
+        player.send(new SetDirectionEvent(LASUtils.getYaw(team), 0));
         player.addOrSaveComponent(startingInventory);
         player.send(new RequestInventoryEvent(startingInventory.items));
         sendEventToClients(GameStartMessageEvent::new);
