@@ -67,14 +67,7 @@ public class CardSystem extends BaseComponentSystem {
         Vector3i primePos = new Vector3i(targetBlockComponent.getPosition(new Vector3i()));
 
         Block primeBlock = worldProvider.getBlock(primePos);
-        boolean exit = true;
-        for (String s : primeBlock.getBlockFamily().getCategories()) {
-            if (s.equals("soil")) {
-                exit = false;
-                break;
-            }
-        }
-        if (exit) {
+        if (primeBlock.isPenetrable()) {
             event.consume();
             return;
         }
