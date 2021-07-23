@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.joml.Vector3f;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
@@ -46,7 +47,8 @@ public class RestartSystem extends BaseComponentSystem {
                 String team = player.getComponent(LASTeamComponent.class).team;
                 player.send(new RestoreFullHealthEvent(player));
                 player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
-                player.send(new SetDirectionEvent(LASUtils.getYaw(team), 0));
+                player.send(new SetDirectionEvent(LASUtils.getYaw(LASUtils.getTeleportDestination(team).
+                        sub(LASUtils.getTeleportDestination(LASUtils.getOppositionTeam(team)), new Vector3f())), 0));
                 client.send(new ClientRestartEvent());
             }
     }

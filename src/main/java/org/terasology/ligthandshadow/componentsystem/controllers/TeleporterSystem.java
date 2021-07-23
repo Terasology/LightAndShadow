@@ -130,7 +130,8 @@ public class TeleporterSystem extends BaseComponentSystem {
         Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
         player.send(new PregameEvent());
         player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
-        player.send(new SetDirectionEvent(LASUtils.getYaw(team), 0));
+        player.send(new SetDirectionEvent(LASUtils.getYaw(LASUtils.getTeleportDestination(team).
+                sub(LASUtils.getTeleportDestination(LASUtils.getOppositionTeam(team)), new Vector3f())), 0));
         player.addOrSaveComponent(startingInventory);
         player.send(new RequestInventoryEvent(startingInventory.items));
         sendEventToClients(GameStartMessageEvent::new);
