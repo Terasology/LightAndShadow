@@ -11,14 +11,7 @@ import org.terasology.engine.world.chunks.Chunks;
 import org.terasology.engine.world.generation.Region;
 import org.terasology.engine.world.generation.WorldRasterizerPlugin;
 import org.terasology.engine.world.generator.plugin.RegisterPlugin;
-
-import java.util.Collection;
-import java.util.Map;
-import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
-
-import static java.util.Collections.singletonMap;
+import org.terasology.ligthandshadow.componentsystem.LASUtils;
 
 @RegisterPlugin
 public class YinYangRasterizer implements WorldRasterizerPlugin {
@@ -49,7 +42,7 @@ public class YinYangRasterizer implements WorldRasterizerPlugin {
         Vector3i tempPos = new Vector3i();
         for (int i = -RADIUS; i <= RADIUS; i++) {
             for (int j = -2 * RADIUS; j <= 2 * RADIUS; j++) {
-                String blockString = pixel(j, i, RADIUS);
+                String blockString = LASUtils.pixel(j, i, RADIUS);
                 Vector3i chunkBlockPosition = new Vector3i(i, 0, j).add(yinYangPosition);
                 if (chunk.getRegion().contains(chunkBlockPosition)) {
                     chunk.setBlock(Chunks.toRelative(chunkBlockPosition, tempPos), getBlock(blockString));
@@ -68,46 +61,4 @@ public class YinYangRasterizer implements WorldRasterizerPlugin {
         return air;
     }
 
-    public static boolean circle(
-            int x,
-            int y,
-            int c,
-            int r
-    ) {
-        return
-                (r * r) >= ((x / 2) * x) + ((y - c) * y);
-    }
-
-    public static String pixel(int x, int y, int r) {
-        return Stream.<Map<BooleanSupplier, Supplier<String>>>of(
-                singletonMap(
-                        () -> circle(x, y, -r / 2, r / 6),
-                        () -> "LightAndShadowResources:blackfloorblock"
-                ),
-                singletonMap(
-                        () -> circle(x, y, r / 2, r / 6),
-                        () -> "LightAndShadowResources:redfloorblock"
-                ),
-                singletonMap(
-                        () -> circle(x, y, -r / 2, r / 2),
-                        () -> "LightAndShadowResources:redfloorblock"
-                ),
-                singletonMap(
-                        () -> circle(x, y, r / 2, r / 2),
-                        () -> "LightAndShadowResources:blackfloorblock"
-                ),
-                singletonMap(
-                        () -> circle(x, y, 0, r),
-                        () -> x < 0 ? "LightAndShadowResources:redfloorblock" : "LightAndShadowResources:blackfloorblock"
-                )
-        )
-                .sequential()
-                .map(Map::entrySet)
-                .flatMap(Collection::stream)
-                .filter(e -> e.getKey().getAsBoolean())
-                .map(Map.Entry::getValue)
-                .map(Supplier::get)
-                .findAny()
-                .orElse("engine:air");
-    }
 }
