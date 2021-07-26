@@ -59,6 +59,10 @@
             "minVersion": "1.0.0"
         },
         {
+            "id": "StructureTemplates",
+            "minVersion": "1.1.0-SNAPSHOT"
+        },
+        {
             "id": "Tasks",
             "minVersion": "1.0.0"
         }
