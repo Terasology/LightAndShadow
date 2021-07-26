@@ -3,8 +3,6 @@
 
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.Event;
@@ -29,7 +27,6 @@ import org.terasology.module.inventory.events.InventorySlotChangedEvent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class AttackSystem extends BaseComponentSystem {
-    private static final Logger logger = LoggerFactory.getLogger(AttackSystem.class);
 
     @In
     EntityManager entityManager;
@@ -56,9 +53,6 @@ public class AttackSystem extends BaseComponentSystem {
         if (event.getTarget().exists()
                 && event.getTarget().hasComponent(PlayerCharacterComponent.class)
                 && event.getTarget().hasComponent(HasFlagComponent.class)) {
-
-            logger.info(event.toString());
-            logger.info(item.toFullDescription());
 
             dropFlagOnPlayerAttack(event, event.getTarget());
         }
