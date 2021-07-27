@@ -178,6 +178,14 @@ public final class LASUtils {
         return null;
     }
 
+    /**
+     * Calculates the signed angle between the given vector and the z-axis.
+     */
+    public static float getYaw(Vector3f vector) {
+        return (float) Math.toDegrees(Math.atan2(vector.cross(new Vector3f(0, 0, 1))
+                .dot(0, 1, 0), vector.dot(new Vector3f(0, 0, 1))));
+    }
+
     public static boolean circle(
             int x,
             int y,
