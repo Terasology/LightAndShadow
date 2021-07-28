@@ -13,8 +13,6 @@ import org.terasology.engine.entitySystem.event.EventPriority;
 import org.terasology.engine.logic.characters.events.AttackEvent;
 import org.terasology.engine.world.BlockEntityRegistry;
 import org.terasology.module.health.events.BeforeDamagedEvent;
-import org.terasology.structureTemplates.components.CompletionTimeComponent;
-import org.terasology.structureTemplates.components.SpawnBlockRegionsComponent;
 import org.joml.Vector3f;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
@@ -98,14 +96,6 @@ public class TeleporterSystem extends BaseComponentSystem {
     @ReceiveEvent(priority = EventPriority.PRIORITY_CRITICAL)
     public void onAttack(BeforeDamagedEvent event, EntityRef entity) {
         logger.info("Test");
-        Iterable<EntityRef> structures = entityManager.getEntitiesWith(SpawnBlockRegionsComponent.class, CompletionTimeComponent.class);
-        for (EntityRef structure : structures) {
-            for (SpawnBlockRegionsComponent.RegionToFill regionToFill : structure.getComponent(SpawnBlockRegionsComponent.class).regionsToFill) {
-                for (Vector3ic pos : regionToFill.region) {
-                    logger.info(blockRegistry.getEntityAt(pos).toFullDescription());
-                }
-            }
-        }
     }
 
     private boolean isProperTeamSize(EntityRef teleporter, EntityRef player) {
