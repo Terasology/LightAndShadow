@@ -6,13 +6,6 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.function.Supplier;
 
-import org.joml.Vector3ic;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.terasology.engine.entitySystem.event.EventPriority;
-import org.terasology.engine.logic.characters.events.AttackEvent;
-import org.terasology.engine.world.BlockEntityRegistry;
-import org.terasology.module.health.events.BeforeDamagedEvent;
 import org.joml.Vector3f;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
@@ -56,12 +49,9 @@ public class TeleporterSystem extends BaseComponentSystem {
     EntityManager entityManager;
     @In
     GameEntitySystem gameEntitySystem;
-    @In
-    BlockEntityRegistry blockRegistry;
 
     private boolean gameStart;
 
-    private static final Logger logger = LoggerFactory.getLogger(TeleporterSystem.class);
 
     Optional<Prefab> prefab = Assets.getPrefab("inventory");
     StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
@@ -94,10 +84,6 @@ public class TeleporterSystem extends BaseComponentSystem {
         }
     }
 
-    @ReceiveEvent(priority = EventPriority.PRIORITY_CRITICAL)
-    public void onAttack(BeforeDamagedEvent event, EntityRef entity) {
-        logger.info("Test");
-    }
 
     private boolean isProperTeamSize(EntityRef teleporter, EntityRef player) {
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
