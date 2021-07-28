@@ -20,7 +20,7 @@ import org.terasology.input.ButtonState;
 import org.terasology.input.Input;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
-import org.terasology.TabButton;
+import org.terasology.ligthandshadow.componentsystem.input.TabButton;
 import org.terasology.notifications.events.ExpireNotificationEvent;
 import org.terasology.notifications.events.ShowNotificationEvent;
 import org.terasology.notifications.model.Notification;
