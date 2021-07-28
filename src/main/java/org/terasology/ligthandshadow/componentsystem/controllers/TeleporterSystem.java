@@ -52,7 +52,6 @@ public class TeleporterSystem extends BaseComponentSystem {
 
     private boolean gameStart;
 
-
     Optional<Prefab> prefab = Assets.getPrefab("inventory");
     StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
 
@@ -83,7 +82,6 @@ public class TeleporterSystem extends BaseComponentSystem {
             handlePlayerTeleport(player, team);
         }
     }
-
 
     private boolean isProperTeamSize(EntityRef teleporter, EntityRef player) {
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
