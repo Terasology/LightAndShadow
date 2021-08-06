@@ -7,7 +7,7 @@
     "columns": 2,
     "column-widths": [
       0.7,
-      0.3
+      0.25
     ],
     "contents": [
       {
@@ -206,10 +206,8 @@
               "use-content-height": true,
               "use-content-width": false,
               "position-left": {
-                "offset": 32
-              },
-              "position-right": {
-                "offset": 32
+                "target": "LEFT",
+                "offset": 4
               },
               "position-vertical-center": {}
             }
