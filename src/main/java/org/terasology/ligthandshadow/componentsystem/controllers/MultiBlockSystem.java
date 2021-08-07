@@ -31,7 +31,6 @@ public class MultiBlockSystem extends BaseComponentSystem {
 
     @ReceiveEvent(priority = EventPriority.PRIORITY_CRITICAL)
     public void onDamageDone(AttackEvent event, EntityRef entity) {
-        Collection<Vector3i> blocks = null;
         int damage = 1;
         Prefab damageType = EngineDamageTypes.PHYSICAL.get();
         ItemComponent item = event.getDirectCause().getComponent(ItemComponent.class);
@@ -41,11 +40,7 @@ public class MultiBlockSystem extends BaseComponentSystem {
                 damageType = item.damageType;
             }
         }
-        if (entity.hasComponent(MultiBlockMainComponent.class)) {
-            blocks = entity.getComponent(MultiBlockMainComponent.class).getMultiBlockMembers();
-        } else if (entity.hasComponent(MultiBlockMemberComponent.class)) {
-            blocks = blockEntityRegistry.getBlockEntityAt(entity.getComponent(MultiBlockMemberComponent.class).getMainBlockLocation()).getComponent(MultiBlockMainComponent.class).getMultiBlockMembers();
-        }
+        Collection<Vector3i> blocks = getBlocks(entity);
         if (blocks != null) {
             for (Vector3i pos : blocks) {
                 EntityRef block = blockEntityRegistry.getBlockEntityAt(pos);
@@ -53,5 +48,19 @@ public class MultiBlockSystem extends BaseComponentSystem {
                 event.consume();
             }
         }
+    }
+
+    public Collection<Vector3i> getBlocks(EntityRef entity) {
+        Collection<Vector3i> blocks = null;
+        EntityRef mainBlock = null;
+        if (entity.hasComponent(MultiBlockMainComponent.class)) {
+            mainBlock = entity;
+        } else if (entity.hasComponent(MultiBlockMemberComponent.class)) {
+            mainBlock = blockEntityRegistry.getBlockEntityAt(entity.getComponent(MultiBlockMemberComponent.class).getMainBlockLocation());
+        }
+        if (mainBlock != null) {
+            blocks = mainBlock.getComponent(MultiBlockMainComponent.class).getMultiBlockMembers();
+        }
+        return blocks;
     }
 }
