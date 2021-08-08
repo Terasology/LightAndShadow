@@ -8,7 +8,7 @@ import org.terasology.engine.input.RegisterBindButton;
 import org.terasology.input.InputType;
 import org.terasology.input.Keyboard;
 
-@RegisterBindButton(id = "statistics", description = "Show statistics screen", category = "general")
+@RegisterBindButton(id = "statistics", description = "Show statistics screen", category = "general", repeating = true)
 @DefaultBinding(type = InputType.KEY, id = Keyboard.KeyId.V)
 public class TabButton extends BindButtonEvent {
 }

@@ -103,8 +103,8 @@ public class ClientStatisticsSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onLocalPlayerInitialized(LocalPlayerInitializedEvent event, EntityRef entity) {
             Notification notification = new Notification(NOTIFICATION_ID,
-                    "How to open the Statistics Screen?",
-                    "Press " + getActivationKey(new SimpleUri("LightAndShadow:statistics")) + " to access the statistics screen",
+                    "The Numbers Game",
+                    "Press " + getActivationKey(new SimpleUri("LightAndShadow:statistics")) + " to see statistics screen",
                     "engine:items#blueBook");
             localPlayer.getClientEntity().send(new ShowNotificationEvent(notification));
     }
