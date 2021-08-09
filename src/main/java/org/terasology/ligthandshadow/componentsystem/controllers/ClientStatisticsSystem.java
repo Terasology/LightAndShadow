@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.engine.core.SimpleUri;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
@@ -47,6 +49,9 @@ public class ClientStatisticsSystem extends BaseComponentSystem {
     private static final String NOTIFICATION_ID = "LightAndShadow:firstTime";
     private int redScore = 0;
     private int blackScore = 0;
+    private boolean isOpen;
+    private boolean isExpired;
+    private static final Logger logger = LoggerFactory.getLogger(ClientStatisticsSystem.class);
 
     @Override
     public void initialise() {
@@ -70,15 +75,22 @@ public class ClientStatisticsSystem extends BaseComponentSystem {
 
     @ReceiveEvent(priority = EventPriority.PRIORITY_CRITICAL)
     public void onTab(TabButton event, EntityRef entity) {
-        if (event.getState() == ButtonState.DOWN) {
-            if (localPlayer.getClientEntity().equals(entity)) {
-                entity.send(new ExpireNotificationEvent(NOTIFICATION_ID));
+        if (event.isDown()) {
+            if (localPlayer.getClientEntity().equals(entity) && !isOpen) {
+                if (!isExpired) {
+                    entity.send(new ExpireNotificationEvent(NOTIFICATION_ID));
+                    isExpired = true;
+                }
                 clientGameOverSystem.addTeamScore(statisticsScreen, "spadesTeamScore", blackScore);
                 clientGameOverSystem.addTeamScore(statisticsScreen, "heartsTeamScore", redScore);
                 clientGameOverSystem.addPlayerStatisticsInfo(statisticsScreen);
-                nuiManager.toggleScreen("LightAndShadow:statisticsScreen");
+                nuiManager.pushScreen("LightAndShadow:statisticsScreen");
+                isOpen = true;
                 event.consume();
             }
+        } else {
+            isOpen = false;
+            nuiManager.closeScreen("LightAndShadow:statisticsScreen");
         }
     }
 
