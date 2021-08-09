@@ -13,7 +13,7 @@ import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.rendering.nui.layers.ingame.DeathScreen;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.ClientRestartEvent;
-import org.terasology.nui.layouts.miglayout.MigLayout;
+import org.terasology.nui.UILayout;
 
 /**
  * System to close game over screen once restart is complete.
@@ -31,7 +31,7 @@ public class ClientRestartSystem extends BaseComponentSystem {
         if (localPlayer.getClientEntity().equals(clientEntity)) {
             if (nuiManager.isOpen(LASUtils.DEATH_SCREEN)) {
                 DeathScreen deathScreen = (DeathScreen) nuiManager.getScreen(LASUtils.DEATH_SCREEN);
-                MigLayout migLayout = deathScreen.find("playerStatistics", MigLayout.class);
+                UILayout migLayout = deathScreen.find("playerStatistics", UILayout.class);
                 if (migLayout != null) {
                     migLayout.removeAllWidgets();
                 }
