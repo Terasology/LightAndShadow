@@ -97,12 +97,7 @@ public class ScoreSystem extends BaseComponentSystem {
     }
 
     private void sendGameOverEventToClients(String winningTeam) {
-        if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
-            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
-            for (EntityRef client : clients) {
-                client.send(new GameOverEvent(winningTeam, blackScore, redScore));
-            }
-        }
+        sendEventToClients(new GameOverEvent(winningTeam, blackScore, redScore));
     }
 
 
@@ -139,6 +134,10 @@ public class ScoreSystem extends BaseComponentSystem {
         }
     }
 
+    /**
+     * Retrieves the flags from the players and places them back at the bases.
+     * It is used once the game is over.
+     */
     private void resetLevel() {
         Iterable<EntityRef> playersWithFlag = entityManager.getEntitiesWith(HasFlagComponent.class);
         for (EntityRef playerWithFlag : playersWithFlag) {
