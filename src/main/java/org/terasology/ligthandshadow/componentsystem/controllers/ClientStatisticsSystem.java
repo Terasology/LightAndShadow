@@ -2,8 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.engine.core.SimpleUri;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
@@ -18,7 +16,6 @@ import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.rendering.nui.layers.ingame.DeathScreen;
 import org.terasology.engine.unicode.EnclosedAlphanumerics;
-import org.terasology.input.ButtonState;
 import org.terasology.input.Input;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
@@ -34,8 +31,7 @@ import org.terasology.nui.FontColor;
  */
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientStatisticsSystem extends BaseComponentSystem {
-
-    private DeathScreen statisticsScreen;
+    private static final String NOTIFICATION_ID = "LightAndShadow:firstTime";
 
     @In
     private NUIManager nuiManager;
@@ -45,13 +41,11 @@ public class ClientStatisticsSystem extends BaseComponentSystem {
     private ClientGameOverSystem clientGameOverSystem;
     @In
     InputSystem inputSystem;
-
-    private static final String NOTIFICATION_ID = "LightAndShadow:firstTime";
+    private DeathScreen statisticsScreen;
     private int redScore = 0;
     private int blackScore = 0;
     private boolean isOpen;
     private boolean isExpired;
-    private static final Logger logger = LoggerFactory.getLogger(ClientStatisticsSystem.class);
 
     @Override
     public void initialise() {
