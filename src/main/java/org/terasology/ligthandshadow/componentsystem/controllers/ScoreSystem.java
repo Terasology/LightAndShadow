@@ -86,20 +86,15 @@ public class ScoreSystem extends BaseComponentSystem {
                 player.send(new ReturnFlagEvent(heldFlag));
                 if (redScore >= LASUtils.GOAL_SCORE) {
                     resetLevel();
-                    sendGameOverEventToClients(LASUtils.RED_TEAM);
+                    sendEventToClients(new GameOverEvent(LASUtils.RED_TEAM, blackScore, redScore));
                 }
                 if (blackScore >= LASUtils.GOAL_SCORE) {
                     resetLevel();
-                    sendGameOverEventToClients(LASUtils.BLACK_TEAM);
+                    sendEventToClients(new GameOverEvent(LASUtils.BLACK_TEAM, blackScore, redScore));
                 }
             }
         }
     }
-
-    private void sendGameOverEventToClients(String winningTeam) {
-        sendEventToClients(new GameOverEvent(winningTeam, blackScore, redScore));
-    }
-
 
     private EntityRef getHeldFlag(EntityRef player, String flag) {
         int inventorySize = inventoryManager.getNumSlots(player);
