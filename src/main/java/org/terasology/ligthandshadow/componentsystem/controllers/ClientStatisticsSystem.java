@@ -19,7 +19,7 @@ import org.terasology.engine.unicode.EnclosedAlphanumerics;
 import org.terasology.input.Input;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
-import org.terasology.ligthandshadow.componentsystem.input.TabButton;
+import org.terasology.ligthandshadow.componentsystem.input.TapButton;
 import org.terasology.notifications.events.ExpireNotificationEvent;
 import org.terasology.notifications.events.ShowNotificationEvent;
 import org.terasology.notifications.model.Notification;
@@ -68,7 +68,7 @@ public class ClientStatisticsSystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent(priority = EventPriority.PRIORITY_CRITICAL)
-    public void onTab(TabButton event, EntityRef entity) {
+    public void onTab(TapButton event, EntityRef entity) {
         if (event.isDown()) {
             if (localPlayer.getClientEntity().equals(entity) && !isOpen) {
                 if (!isExpired) {
@@ -110,7 +110,7 @@ public class ClientStatisticsSystem extends BaseComponentSystem {
     public void onLocalPlayerInitialized(LocalPlayerInitializedEvent event, EntityRef entity) {
             Notification notification = new Notification(NOTIFICATION_ID,
                     "The Numbers Game",
-                    "Press " + getActivationKey(new SimpleUri("LightAndShadow:statistics")) + " to see statistics screen",
+                    "Press " + getActivationKey(new SimpleUri("LightAndShadow:statistics")) + " to see statistics",
                     "engine:items#blueBook");
             localPlayer.getClientEntity().send(new ShowNotificationEvent(notification));
     }
