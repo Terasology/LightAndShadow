@@ -75,7 +75,6 @@ public class ClientPregameSystem extends BaseComponentSystem {
                     }
                     if (timePeriod < 0) {
                         window.removeNotification("The game starts in " + (timePeriod + 1) + " seconds.");
-                        removePlayerInvulnerableComponents();
                         timer.cancel();
                     }
                 }
@@ -83,10 +82,5 @@ public class ClientPregameSystem extends BaseComponentSystem {
         }
     }
 
-    private void removePlayerInvulnerableComponents() {
-        Iterable<EntityRef> players = entityManager.getEntitiesWith(InvulnerableComponent.class);
-        for (EntityRef player : players) {
-            player.removeComponent(InvulnerableComponent.class);
-        }
-    }
+
 }

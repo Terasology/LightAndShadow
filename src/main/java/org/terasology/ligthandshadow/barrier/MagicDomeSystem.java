@@ -19,6 +19,7 @@ import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
+import org.terasology.ligthandshadow.componentsystem.components.InvulnerableComponent;
 import org.terasology.ligthandshadow.componentsystem.events.ActivateBarrierEvent;
 import org.terasology.ligthandshadow.componentsystem.events.DelayedDeactivateBarrierEvent;
 
@@ -61,6 +62,7 @@ public class MagicDomeSystem extends BaseComponentSystem {
         if (event.getActionId().equals(DEACTIVATE_BARRIERS_ACTION)) {
             redBarrier.destroy();
             blackBarrier.destroy();
+            removePlayerInvulnerableComponents();
         }
     }
 
@@ -85,7 +87,6 @@ public class MagicDomeSystem extends BaseComponentSystem {
                 Vector3f impulse = position.normalize();
                 impulse.mul(8);
                 player.send(new CharacterImpulseEvent(impulse));
-
                 player.send(new PlaySoundEvent(domeEntity.getComponent(MagicDome.class).hitSound, 2f));
 
             }
@@ -107,5 +108,12 @@ public class MagicDomeSystem extends BaseComponentSystem {
         String barrierTeam = barrier.getComponent(MagicDome.class).team;
         String playerTeam = player.getComponent(LASTeamComponent.class).team;
         return barrierTeam.equals(playerTeam);
+    }
+
+    private void removePlayerInvulnerableComponents() {
+        Iterable<EntityRef> players = entityManager.getEntitiesWith(InvulnerableComponent.class);
+        for (EntityRef player : players) {
+            player.removeComponent(InvulnerableComponent.class);
+        }
     }
 }
