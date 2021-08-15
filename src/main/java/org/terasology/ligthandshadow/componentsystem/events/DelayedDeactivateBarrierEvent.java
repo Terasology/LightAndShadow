@@ -3,9 +3,11 @@
 package org.terasology.ligthandshadow.componentsystem.events;
 
 import org.terasology.engine.entitySystem.event.Event;
+import org.terasology.engine.network.ServerEvent;
 
 /**
  * Trigger event to deactivate the pregame barriers.
  */
-public class DeactivateBarrierEvent implements Event {
+@ServerEvent
+public class DelayedDeactivateBarrierEvent implements Event {
 }

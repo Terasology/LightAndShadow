@@ -13,18 +13,22 @@ import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterImpulseEvent;
 import org.terasology.engine.logic.characters.CharacterMoveInputEvent;
+import org.terasology.engine.logic.delay.DelayManager;
+import org.terasology.engine.logic.delay.DelayedActionTriggeredEvent;
 import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.ActivateBarrierEvent;
-import org.terasology.ligthandshadow.componentsystem.events.DeactivateBarrierEvent;
+import org.terasology.ligthandshadow.componentsystem.events.DelayedDeactivateBarrierEvent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class MagicDomeSystem extends BaseComponentSystem {
     private static final int PREGAME_ZONE_RADIUS = 20;
     @In
     private EntityManager entityManager;
+    @In
+    DelayManager delayManager;
 
     private Vector3f position = new Vector3f();
     private EntityRef redBarrier = EntityRef.NULL;
@@ -47,9 +51,16 @@ public class MagicDomeSystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void deactivateBarriers(DeactivateBarrierEvent event, EntityRef entity) {
-        redBarrier.destroy();
-        blackBarrier.destroy();
+    public void delayedDeactivateBarriers(DelayedDeactivateBarrierEvent event, EntityRef entity) {
+        delayManager.addDelayedAction(entity, "deactivate", 30000);
+    }
+
+    @ReceiveEvent
+    public void deactivateBarriers(DelayedActionTriggeredEvent event, EntityRef entity) {
+        if (event.getActionId().equals("deactivate")) {
+            redBarrier.destroy();
+            blackBarrier.destroy();
+        }
     }
 
 
