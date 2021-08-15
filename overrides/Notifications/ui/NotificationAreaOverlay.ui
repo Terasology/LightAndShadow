@@ -1,3 +1,4 @@
+/* Move the notification area to top-left corner of the screen to avoid overlaps with inventory. */
 {
     "type" : "Notifications:NotificationAreaOverlay",
     "contents" : {
@@ -18,7 +19,7 @@
                     "position-left" : {
                         "offset": 8
                     },
-                    "position-bottom" : {
+                    "position-top" : {
                         "offset": 8
                     }
                 }
