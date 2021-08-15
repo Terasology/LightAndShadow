@@ -10,4 +10,13 @@ import org.terasology.engine.network.ServerEvent;
  */
 @ServerEvent
 public class DelayedDeactivateBarrierEvent implements Event {
+    private int delay;
+
+    public DelayedDeactivateBarrierEvent(int delay) {
+        this.delay = delay;
+    }
+
+    public int getDelay() {
+        return delay;
+    }
 }

@@ -104,7 +104,7 @@ public class TeleporterSystem extends BaseComponentSystem {
         if (teleporterTeamCount - oppositeTeamCount < maxTeamSizeDifference) {
             if (teleporterTeamCount >= 0 && oppositeTeamCount >= 1 && !gameStart) {
                 sendEventToClients(TimerEvent::new);
-                player.send(new DelayedDeactivateBarrierEvent());
+                player.send(new DelayedDeactivateBarrierEvent(30000));
                 gameStart = true;
             }
             return true;

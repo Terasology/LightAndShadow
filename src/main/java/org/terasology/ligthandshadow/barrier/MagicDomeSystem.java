@@ -24,6 +24,7 @@ import org.terasology.ligthandshadow.componentsystem.events.DelayedDeactivateBar
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class MagicDomeSystem extends BaseComponentSystem {
+    private static final String DEACTIVATE_BARRIERS_ACTION = "LightAndShadow:deactivateBarriers";
     private static final int PREGAME_ZONE_RADIUS = 20;
     @In
     private EntityManager entityManager;
@@ -52,12 +53,12 @@ public class MagicDomeSystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void delayedDeactivateBarriers(DelayedDeactivateBarrierEvent event, EntityRef entity) {
-        delayManager.addDelayedAction(entity, "deactivate", 30000);
+        delayManager.addDelayedAction(entity, DEACTIVATE_BARRIERS_ACTION, event.getDelay());
     }
 
     @ReceiveEvent
     public void deactivateBarriers(DelayedActionTriggeredEvent event, EntityRef entity) {
-        if (event.getActionId().equals("deactivate")) {
+        if (event.getActionId().equals(DEACTIVATE_BARRIERS_ACTION)) {
             redBarrier.destroy();
             blackBarrier.destroy();
         }
