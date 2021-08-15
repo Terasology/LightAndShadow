@@ -27,6 +27,7 @@ import org.terasology.engine.logic.players.SetDirectionEvent;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.ligthandshadow.componentsystem.components.LASConfigComponent;
+import org.terasology.ligthandshadow.componentsystem.events.DelayedDeactivateBarrierEvent;
 import org.terasology.ligthandshadow.componentsystem.events.GameStartMessageEvent;
 import org.terasology.ligthandshadow.componentsystem.events.PregameEvent;
 import org.terasology.ligthandshadow.componentsystem.events.TimerEvent;
@@ -103,6 +104,7 @@ public class TeleporterSystem extends BaseComponentSystem {
         if (teleporterTeamCount - oppositeTeamCount < maxTeamSizeDifference) {
             if (teleporterTeamCount >= 0 && oppositeTeamCount >= 1 && !gameStart) {
                 sendEventToClients(TimerEvent::new);
+                player.send(new DelayedDeactivateBarrierEvent(30000));
                 gameStart = true;
             }
             return true;
