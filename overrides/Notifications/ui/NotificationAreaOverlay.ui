@@ -1,0 +1,29 @@
+/* Move the notification area to top-left corner of the screen to avoid overlaps with inventory. */
+{
+    "type" : "Notifications:NotificationAreaOverlay",
+    "contents" : {
+        "type" : "relativeLayout",
+        "skin" : "engine:default",
+        "contents" : [
+            {
+                "type" : "columnLayout",
+                "contents" : [
+                    {
+                        "type" : "UIList",
+                        "id" : "notificationArea"
+                    }
+                ],
+                "layoutInfo" : {
+                    "use-content-width" : true,
+                    "use-content-height" : true,
+                    "position-left" : {
+                        "offset": 8
+                    },
+                    "position-top" : {
+                        "offset": 8
+                    }
+                }
+            }
+        ]
+    }
+}
