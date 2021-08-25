@@ -17,7 +17,7 @@
 package org.terasology.las.platform;
 
 import org.joml.Vector3i;
-import org.terasology.engine.entitySystem.Component;
+import org.terasology.gestalt.entitysystem.component.Component;
 import org.terasology.engine.world.block.BlockArea;
 import org.terasology.engine.world.block.BlockAreac;
 import org.terasology.engine.world.block.BlockRegion;
@@ -111,8 +111,13 @@ public class FloatingPlatformProvider implements ConfigurableFacetProvider, Face
         this.configuration = (Config) configuration;
     }
 
-    private static class Config implements Component {
+    private static class Config implements Component<Config> {
 //        @Range(min = 10, max = 1000, increment = 1, precision = 0, label = "Platform Height")
 //        public int height = 100;
+
+        @Override
+        public void copyFrom(Config other) {
+            // no-op, but needs to copy 'height' if commented in again
+        }
     }
 }
