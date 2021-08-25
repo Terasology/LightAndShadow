@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.components;
 
-import org.terasology.engine.entitySystem.Component;
+import org.terasology.gestalt.entitysystem.component.Component;
 import org.terasology.engine.network.Replicate;
 
 /**
@@ -10,7 +10,7 @@ import org.terasology.engine.network.Replicate;
  * It currently stores deaths and kills.
  *
  */
-public class PlayerStatisticsComponent implements Component {
+public class PlayerStatisticsComponent implements Component<PlayerStatisticsComponent> {
     @Replicate
     public int kills;
 
@@ -20,5 +20,11 @@ public class PlayerStatisticsComponent implements Component {
     public  PlayerStatisticsComponent() {
         this.kills = 0;
         this.deaths = 0;
+    }
+
+    @Override
+    public void copyFrom(PlayerStatisticsComponent other) {
+        this.kills = other.kills;
+        this.deaths = other.deaths;
     }
 }
