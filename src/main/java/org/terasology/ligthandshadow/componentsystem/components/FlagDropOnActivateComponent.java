@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.components;
 
-import org.terasology.engine.entitySystem.Component;
+import org.terasology.gestalt.entitysystem.component.EmptyComponent;
 
-public class FlagDropOnActivateComponent implements Component {
+public class FlagDropOnActivateComponent extends EmptyComponent<FlagDropOnActivateComponent> {
 }
