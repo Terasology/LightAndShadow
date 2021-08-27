@@ -13,7 +13,6 @@ import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.gestalt.assets.ResourceUrn;
 import org.terasology.ligthandshadow.componentsystem.components.InvulnerableComponent;
-import org.terasology.ligthandshadow.componentsystem.events.DeactivateBarrierEvent;
 import org.terasology.ligthandshadow.componentsystem.events.GameStartMessageEvent;
 import org.terasology.ligthandshadow.componentsystem.events.TimerEvent;
 import org.terasology.notify.ui.DialogNotificationOverlay;
@@ -76,8 +75,6 @@ public class ClientPregameSystem extends BaseComponentSystem {
                     }
                     if (timePeriod < 0) {
                         window.removeNotification("The game starts in " + (timePeriod + 1) + " seconds.");
-                        entity.send(new DeactivateBarrierEvent());
-                        removePlayerInvulnerableComponents();
                         timer.cancel();
                     }
                 }
@@ -85,10 +82,5 @@ public class ClientPregameSystem extends BaseComponentSystem {
         }
     }
 
-    private void removePlayerInvulnerableComponents() {
-        Iterable<EntityRef> players = entityManager.getEntitiesWith(InvulnerableComponent.class);
-        for (EntityRef player : players) {
-            player.removeComponent(InvulnerableComponent.class);
-        }
-    }
+
 }

@@ -55,6 +55,11 @@
             "minVersion": "1.1.0"
         },
         {
+            "id": "Notifications",
+            "minVersion": "0.1.0",
+            "maxVersion": "0.3.0"
+        },
+        {
             "id": "Pathfinding",
             "minVersion": "1.0.0"
         },

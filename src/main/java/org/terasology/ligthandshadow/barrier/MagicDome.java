@@ -3,9 +3,15 @@
 package org.terasology.ligthandshadow.barrier;
 
 import org.terasology.engine.audio.StaticSound;
-import org.terasology.engine.entitySystem.Component;
+import org.terasology.gestalt.entitysystem.component.Component;
 
-public class MagicDome implements Component {
+public class MagicDome implements Component<MagicDome> {
     public StaticSound hitSound;
     public String team;
+
+    @Override
+    public void copyFrom(MagicDome other) {
+        this.hitSound = other.hitSound;
+        this.team = other.team;
+    }
 }

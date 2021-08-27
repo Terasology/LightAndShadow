@@ -86,25 +86,15 @@ public class ScoreSystem extends BaseComponentSystem {
                 player.send(new ReturnFlagEvent(heldFlag));
                 if (redScore >= LASUtils.GOAL_SCORE) {
                     resetLevel();
-                    sendGameOverEventToClients(LASUtils.RED_TEAM);
+                    sendEventToClients(new GameOverEvent(LASUtils.RED_TEAM, blackScore, redScore));
                 }
                 if (blackScore >= LASUtils.GOAL_SCORE) {
                     resetLevel();
-                    sendGameOverEventToClients(LASUtils.BLACK_TEAM);
+                    sendEventToClients(new GameOverEvent(LASUtils.BLACK_TEAM, blackScore, redScore));
                 }
             }
         }
     }
-
-    private void sendGameOverEventToClients(String winningTeam) {
-        if (entityManager.getCountOfEntitiesWith(ClientComponent.class) != 0) {
-            Iterable<EntityRef> clients = entityManager.getEntitiesWith(ClientComponent.class);
-            for (EntityRef client : clients) {
-                client.send(new GameOverEvent(winningTeam, blackScore, redScore));
-            }
-        }
-    }
-
 
     private EntityRef getHeldFlag(EntityRef player, String flag) {
         int inventorySize = inventoryManager.getNumSlots(player);
@@ -139,6 +129,10 @@ public class ScoreSystem extends BaseComponentSystem {
         }
     }
 
+    /**
+     * Retrieves the flags from the players and places them back at the bases.
+     * It is used once the game is over.
+     */
     private void resetLevel() {
         Iterable<EntityRef> playersWithFlag = entityManager.getEntitiesWith(HasFlagComponent.class);
         for (EntityRef playerWithFlag : playersWithFlag) {

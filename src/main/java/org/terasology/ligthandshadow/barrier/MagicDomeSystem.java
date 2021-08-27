@@ -13,18 +13,24 @@ import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterImpulseEvent;
 import org.terasology.engine.logic.characters.CharacterMoveInputEvent;
+import org.terasology.engine.logic.delay.DelayManager;
+import org.terasology.engine.logic.delay.DelayedActionTriggeredEvent;
 import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
+import org.terasology.ligthandshadow.componentsystem.components.InvulnerableComponent;
 import org.terasology.ligthandshadow.componentsystem.events.ActivateBarrierEvent;
-import org.terasology.ligthandshadow.componentsystem.events.DeactivateBarrierEvent;
+import org.terasology.ligthandshadow.componentsystem.events.DelayedDeactivateBarrierEvent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class MagicDomeSystem extends BaseComponentSystem {
+    private static final String DEACTIVATE_BARRIERS_ACTION = "LightAndShadow:deactivateBarriers";
     private static final int PREGAME_ZONE_RADIUS = 20;
     @In
     private EntityManager entityManager;
+    @In
+    DelayManager delayManager;
 
     private Vector3f position = new Vector3f();
     private EntityRef redBarrier = EntityRef.NULL;
@@ -47,9 +53,17 @@ public class MagicDomeSystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void deactivateBarriers(DeactivateBarrierEvent event, EntityRef entity) {
-        redBarrier.destroy();
-        blackBarrier.destroy();
+    public void delayedDeactivateBarriers(DelayedDeactivateBarrierEvent event, EntityRef entity) {
+        delayManager.addDelayedAction(entity, DEACTIVATE_BARRIERS_ACTION, event.getDelay());
+    }
+
+    @ReceiveEvent
+    public void deactivateBarriers(DelayedActionTriggeredEvent event, EntityRef entity) {
+        if (event.getActionId().equals(DEACTIVATE_BARRIERS_ACTION)) {
+            redBarrier.destroy();
+            blackBarrier.destroy();
+            removePlayerInvulnerableComponents();
+        }
     }
 
 
@@ -73,7 +87,6 @@ public class MagicDomeSystem extends BaseComponentSystem {
                 Vector3f impulse = position.normalize();
                 impulse.mul(8);
                 player.send(new CharacterImpulseEvent(impulse));
-
                 player.send(new PlaySoundEvent(domeEntity.getComponent(MagicDome.class).hitSound, 2f));
 
             }
@@ -95,5 +108,12 @@ public class MagicDomeSystem extends BaseComponentSystem {
         String barrierTeam = barrier.getComponent(MagicDome.class).team;
         String playerTeam = player.getComponent(LASTeamComponent.class).team;
         return barrierTeam.equals(playerTeam);
+    }
+
+    private void removePlayerInvulnerableComponents() {
+        Iterable<EntityRef> players = entityManager.getEntitiesWith(InvulnerableComponent.class);
+        for (EntityRef player : players) {
+            player.removeComponent(InvulnerableComponent.class);
+        }
     }
 }
