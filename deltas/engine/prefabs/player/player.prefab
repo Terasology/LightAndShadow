@@ -2,6 +2,9 @@
     "Character": {
         "nameTagOffset": 1.7
     },
+    "CurrencyStorage": {
+        "amount": 100
+    },
     "LASTeam" : {
         "team" : "white"
     },
