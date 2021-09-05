@@ -45,11 +45,8 @@ public class RestartSystem extends BaseComponentSystem {
         for (EntityRef client: clients) {
             EntityRef player = client.getComponent(ClientComponent.class).character;
             String team = player.getComponent(LASTeamComponent.class).team;
-            CurrencyStorageComponent component = assetManager.getAsset("engine:player", Prefab.class)
-                    .map(prefab -> prefab.getComponent(CurrencyStorageComponent.class))
-                    .orElse(new CurrencyStorageComponent());
-            player.addOrSaveComponent(component);
-            player.send(new WalletUpdatedEvent(component.amount));
+            player.getComponent(CurrencyStorageComponent.class).amount = 100;
+            player.send(new WalletUpdatedEvent(100));
             player.send(new RestoreFullHealthEvent(player));
             player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
             player.send(new SetDirectionEvent(LASUtils.getYaw(LASUtils.getTeleportDestination(team).
