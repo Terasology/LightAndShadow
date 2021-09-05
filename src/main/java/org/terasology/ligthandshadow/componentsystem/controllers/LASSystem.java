@@ -7,10 +7,8 @@ import org.terasology.economy.events.WalletUpdatedEvent;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
-import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
-import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.module.inventory.components.InventoryComponent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.module.inventory.events.RemoveItemAction;
@@ -24,8 +22,6 @@ public class LASSystem extends BaseComponentSystem {
     private InventoryManager inventoryManager;
     @In
     private CelestialSystem celestialSystem;
-    @In
-    private AssetManager assetManager;
 
     /**
      * Gives an empty inventory to a player in the lobby to prevent fight's in the lobby and gives the player some funds.
@@ -37,11 +33,8 @@ public class LASSystem extends BaseComponentSystem {
             player.send(new RemoveItemAction(player, itemInSlot, true));
         }
 
-        CurrencyStorageComponent component = assetManager.getAsset("engine:player", Prefab.class)
-                .map(prefab -> prefab.getComponent(CurrencyStorageComponent.class))
-                .orElse(new CurrencyStorageComponent());
-        player.addOrSaveComponent(component);
-        player.send(new WalletUpdatedEvent(component.amount));
+        player.getComponent(CurrencyStorageComponent.class).amount = 100;
+        player.send(new WalletUpdatedEvent(100));
     }
 
     @Override
