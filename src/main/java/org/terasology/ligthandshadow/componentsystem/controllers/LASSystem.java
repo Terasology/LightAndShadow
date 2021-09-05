@@ -9,6 +9,7 @@ import org.terasology.engine.entitySystem.event.EventPriority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.ligthandshadow.componentsystem.components.LASConfigComponent;
 import org.terasology.module.inventory.components.InventoryComponent;
 import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.module.inventory.events.RemoveItemAction;
@@ -22,6 +23,8 @@ public class LASSystem extends BaseComponentSystem {
     private InventoryManager inventoryManager;
     @In
     private CelestialSystem celestialSystem;
+    @In
+    private GameEntitySystem gameEntitySystem;
 
     /**
      * Gives an empty inventory to a player in the lobby to prevent fight's in the lobby and gives the player some funds.
@@ -32,9 +35,9 @@ public class LASSystem extends BaseComponentSystem {
             EntityRef itemInSlot = inventoryManager.getItemInSlot(player, i);
             player.send(new RemoveItemAction(player, itemInSlot, true));
         }
-
-        player.getComponent(CurrencyStorageComponent.class).amount = 100;
-        player.send(new WalletUpdatedEvent(100));
+        EntityRef gameEntity = gameEntitySystem.getGameEntity();
+        player.getComponent(CurrencyStorageComponent.class).amount = gameEntity.getComponent(CurrencyStorageComponent.class).amount;
+        player.send(new WalletUpdatedEvent(gameEntity.getComponent(CurrencyStorageComponent.class).amount));
     }
 
     @Override
