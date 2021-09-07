@@ -4,25 +4,25 @@ package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.Event;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.common.ActivateEvent;
-import org.terasology.lightandshadowresources.components.FlagComponent;
-import org.terasology.ligthandshadow.componentsystem.events.ReturnFlagEvent;
-import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.world.block.items.BlockItemComponent;
+import org.terasology.gestalt.entitysystem.event.Event;
+import org.terasology.lightandshadowresources.components.FlagComponent;
+import org.terasology.lightandshadowresources.components.LASTeamComponent;
+import org.terasology.lightandshadowresources.components.WinConditionCheckOnActivateComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.HasFlagComponent;
 import org.terasology.ligthandshadow.componentsystem.events.GameOverEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
+import org.terasology.ligthandshadow.componentsystem.events.ReturnFlagEvent;
 import org.terasology.ligthandshadow.componentsystem.events.ScoreUpdateFromServerEvent;
-import org.terasology.lightandshadowresources.components.LASTeamComponent;
-import org.terasology.lightandshadowresources.components.WinConditionCheckOnActivateComponent;
+import org.terasology.module.inventory.systems.InventoryManager;
 
 /**
  * System responsible for calculating and providing score.

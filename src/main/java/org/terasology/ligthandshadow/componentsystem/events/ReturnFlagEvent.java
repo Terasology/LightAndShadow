@@ -3,7 +3,7 @@
 package org.terasology.ligthandshadow.componentsystem.events;
 
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.Event;
+import org.terasology.gestalt.entitysystem.event.Event;
 
 /**
  * This trigger event is responsible for sending the flag back to the base.

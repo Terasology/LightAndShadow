@@ -3,8 +3,8 @@
 package org.terasology.ligthandshadow.componentsystem.events;
 
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.Event;
 import org.terasology.engine.network.BroadcastEvent;
+import org.terasology.gestalt.entitysystem.event.Event;
 
 /**
  * Notification event to indicate that the flag has been dropped.
