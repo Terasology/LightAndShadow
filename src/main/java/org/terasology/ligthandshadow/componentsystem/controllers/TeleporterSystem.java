@@ -51,10 +51,10 @@ public class TeleporterSystem extends BaseComponentSystem {
     @In
     GameEntitySystem gameEntitySystem;
 
-    private boolean gameStart;
-
     Optional<Prefab> prefab = Assets.getPrefab("inventory");
     StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
+
+    private boolean gameStart;
 
     private final Random random = new Random();
 
@@ -110,11 +110,13 @@ public class TeleporterSystem extends BaseComponentSystem {
             return true;
         } else {
             if (maxTeamSizeDifference == 1) {
-                player.getOwner().send(new ChatMessageEvent("The " + teleporterTeam + " team has " + maxTeamSizeDifference + " player more, so please join the "
-                        + LASUtils.getOppositionTeam(teleporterTeam) + " team.", EntityRef.NULL));
+                player.getOwner().send(new ChatMessageEvent(
+                        "The " + teleporterTeam + " team has " + maxTeamSizeDifference + " player more, " +
+                                "so please join the " + LASUtils.getOppositionTeam(teleporterTeam) + " team.", EntityRef.NULL));
             } else {
-                player.getOwner().send(new ChatMessageEvent("The " + teleporterTeam + " team has " + maxTeamSizeDifference + " players more, so please join the "
-                        + LASUtils.getOppositionTeam(teleporterTeam) + " team.", EntityRef.NULL));
+                player.getOwner().send(new ChatMessageEvent(
+                        "The " + teleporterTeam + " team has " + maxTeamSizeDifference + " players more, " +
+                                "so please join the " + LASUtils.getOppositionTeam(teleporterTeam) + " team.", EntityRef.NULL));
             }
             return false;
         }

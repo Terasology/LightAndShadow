@@ -34,13 +34,13 @@ public class ClientStatisticsSystem extends BaseComponentSystem {
     private static final String NOTIFICATION_ID = "LightAndShadow:firstTime";
 
     @In
+    InputSystem inputSystem;
+    @In
     private NUIManager nuiManager;
     @In
     private LocalPlayer localPlayer;
     @In
     private ClientGameOverSystem clientGameOverSystem;
-    @In
-    InputSystem inputSystem;
     private DeathScreen statisticsScreen;
     private int redScore = 0;
     private int blackScore = 0;

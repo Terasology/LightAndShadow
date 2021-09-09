@@ -37,11 +37,11 @@ import org.terasology.lightandshadowresources.components.LASTeamComponent;
  */
 @RegisterSystem
 public class PlayerDeathSystem extends BaseComponentSystem {
-    @In
-    private InventoryManager inventoryManager;
-
     Optional<Prefab> prefab = Assets.getPrefab("inventory");
     StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
+
+    @In
+    private InventoryManager inventoryManager;
 
     private Random random = new Random();
 
@@ -56,7 +56,8 @@ public class PlayerDeathSystem extends BaseComponentSystem {
      * @param aliveCharacterComponent
      */
     @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
-    public void beforeDestroy(BeforeDestroyEvent event, EntityRef player, CharacterComponent characterComponent, AliveCharacterComponent aliveCharacterComponent) {
+    public void beforeDestroy(BeforeDestroyEvent event, EntityRef player,
+                              CharacterComponent characterComponent, AliveCharacterComponent aliveCharacterComponent) {
         if (player.hasComponent(PlayerCharacterComponent.class)) {
             event.consume();
             String team = player.getComponent(LASTeamComponent.class).team;
