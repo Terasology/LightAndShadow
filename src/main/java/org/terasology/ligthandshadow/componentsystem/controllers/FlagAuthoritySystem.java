@@ -173,7 +173,8 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
         BlockComponent blockComponent = event.getFlag().getComponent(BlockComponent.class);
         FlagComponent flagComponent = event.getFlag().getComponent(FlagComponent.class);
         BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
-        inventoryManager.giveItem(player, EntityRef.NULL, blockFactory.newInstance(blockManager.getBlockFamily(LASUtils.getFlagURI(flagComponent.team))));
+        inventoryManager.giveItem(player, EntityRef.NULL, blockFactory.newInstance(
+                blockManager.getBlockFamily(LASUtils.getFlagURI(flagComponent.team))));
         worldProvider.setBlock(blockComponent.getPosition(), blockManager.getBlock(BlockManager.AIR_ID));
         event.getFlag().destroy();
     }

@@ -28,9 +28,9 @@ public class MagicDomeSystem extends BaseComponentSystem {
     private static final String DEACTIVATE_BARRIERS_ACTION = "LightAndShadow:deactivateBarriers";
     private static final int PREGAME_ZONE_RADIUS = 20;
     @In
-    private EntityManager entityManager;
-    @In
     DelayManager delayManager;
+    @In
+    private EntityManager entityManager;
 
     private Vector3f position = new Vector3f();
     private EntityRef redBarrier = EntityRef.NULL;
@@ -67,7 +67,7 @@ public class MagicDomeSystem extends BaseComponentSystem {
     }
 
 
-    @ReceiveEvent(components = {LocationComponent.class})
+    @ReceiveEvent(components = LocationComponent.class)
     public void onCharacterMovement(CharacterMoveInputEvent moveInputEvent, EntityRef player, LocationComponent loc) {
         Vector3f pos = new Vector3f(loc.getWorldPosition(new Vector3f()));
 

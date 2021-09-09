@@ -77,7 +77,7 @@ public class AttackSystem extends BaseComponentSystem {
      * <p>
      * Otherwise checks if player puts down flag. If so, removes particle emitter and HasFlagComponent from player
      */
-    @ReceiveEvent(components = {LASTeamComponent.class})
+    @ReceiveEvent(components = LASTeamComponent.class)
     public void onInventorySlotChanged(InventorySlotChangedEvent event, EntityRef entity) {
         EntityRef player = entity;
 
