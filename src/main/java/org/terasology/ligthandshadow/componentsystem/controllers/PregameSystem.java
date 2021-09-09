@@ -2,8 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
@@ -24,12 +22,11 @@ import java.util.Optional;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class PregameSystem extends BaseComponentSystem {
+    Optional<Prefab> prefab = Assets.getPrefab("inventory");
+    StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
 
     @In
     private EntityManager entityManager;
-
-    Optional<Prefab> prefab = Assets.getPrefab("inventory");
-    StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
 
     @ReceiveEvent
     public void onPregameStart(PregameEvent event, EntityRef entity) {

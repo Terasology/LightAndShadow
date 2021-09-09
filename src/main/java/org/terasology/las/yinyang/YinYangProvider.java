@@ -3,7 +3,6 @@
 package org.terasology.las.yinyang;
 
 import org.joml.Vector3i;
-import org.joml.Vector3ic;
 import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.engine.world.generation.Border3D;
 import org.terasology.engine.world.generation.Facet;

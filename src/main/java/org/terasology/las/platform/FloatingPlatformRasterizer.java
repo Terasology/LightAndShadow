@@ -23,9 +23,6 @@ import org.terasology.engine.world.generation.Region;
 import org.terasology.engine.world.generation.WorldRasterizerPlugin;
 import org.terasology.engine.world.generator.plugin.RegisterPlugin;
 
-/**
- *
- */
 @RegisterPlugin
 public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
 
@@ -78,13 +75,12 @@ public class FloatingPlatformRasterizer implements WorldRasterizerPlugin {
             if (reg.minY() <= base + wallHeight && reg.maxY() >= base) {
 
                 Pen wallPen = new AbstractPen(target.getAffectedArea()) {
-                    int bot = Math.max(target.getMinHeight(), base + 1);
-                    int top = Math.min(target.getMaxHeight(), base + wallHeight - 1);  // top layer is exclusive
+                    final int bot = Math.max(target.getMinHeight(), base + 1);
+                    final int top = Math.min(target.getMaxHeight(), base + wallHeight - 1);  // top layer is exclusive
 
                     @Override
                     public void draw(int x, int z) {
-                        BlockType type = (x % 14 == 0) && (z % 14 == 0) ?
-                                DefaultBlockType.BUILDING_WALL : DefaultBlockType.FENCE;
+                        BlockType type = (x % 14 == 0) && (z % 14 == 0) ? DefaultBlockType.BUILDING_WALL : DefaultBlockType.FENCE;
 
                         for (int y = bot; y <= top; y++) {
                             target.setBlock(x, y, z, type);

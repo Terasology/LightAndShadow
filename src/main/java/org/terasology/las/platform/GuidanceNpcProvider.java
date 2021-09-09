@@ -16,9 +16,6 @@ import org.terasology.engine.world.generation.Region;
 import org.terasology.engine.world.generator.plugin.RegisterPlugin;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 
-/**
- *
- */
 @RegisterPlugin
 public class GuidanceNpcProvider implements EntityProviderPlugin {
 

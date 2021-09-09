@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-/**
- *
- */
 public class FloatingPlatformFacet extends BaseFacet2D {
 
     private final Collection<FloatingPlatform> platforms = new ArrayList<>();

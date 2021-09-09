@@ -14,7 +14,7 @@ public class FloatingPlatform {
     private final BlockRegionc blackTeleporterRegion;
 
     public FloatingPlatform(BlockAreac area, int baseHeight, BlockRegionc redTeleporterRegion, BlockRegionc blackTeleporterRegion) {
-        this.area= new BlockArea(area);
+        this.area = new BlockArea(area);
         this.redTeleporterRegion = redTeleporterRegion;
         this.blackTeleporterRegion = blackTeleporterRegion;
         this.baseHeight = baseHeight;
