@@ -7,6 +7,7 @@ import org.joml.Vector3fc;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
@@ -71,7 +72,8 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
      * @param itemComponent
      * @param blockItemComponent
      */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_LOW)
+    @Priority(EventPriority.PRIORITY_LOW)
+    @ReceiveEvent
     public void onDropItemEvent(DropItemEvent event, EntityRef itemEntity, ItemComponent itemComponent,
                                 BlockItemComponent blockItemComponent) {
         String blockFamilyURI = blockItemComponent.blockFamily.getURI().toString();
@@ -116,7 +118,8 @@ public class FlagAuthoritySystem extends BaseComponentSystem {
      * @param itemComponent
      * @param blockItemComponent
      */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_LOW)
+    @Priority(EventPriority.PRIORITY_LOW)
+    @ReceiveEvent
     public void onGiveItemToCharacterHoldItem(GiveItemEvent event, EntityRef item, ItemComponent itemComponent,
                                               BlockItemComponent blockItemComponent) {
         if (event.isHandled() && delayManager.hasDelayedAction(item, LASUtils.DROPPED_FLAG)) {

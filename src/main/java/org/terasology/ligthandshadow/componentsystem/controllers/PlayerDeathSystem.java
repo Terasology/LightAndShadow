@@ -2,15 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import java.util.Optional;
-import java.util.Random;
-
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
-import org.terasology.engine.logic.players.SetDirectionEvent;
-import org.terasology.engine.utilities.Assets;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
@@ -19,17 +15,22 @@ import org.terasology.engine.logic.characters.AliveCharacterComponent;
 import org.terasology.engine.logic.characters.CharacterComponent;
 import org.terasology.engine.logic.characters.CharacterTeleportEvent;
 import org.terasology.engine.logic.health.BeforeDestroyEvent;
-import org.terasology.module.health.events.RestoreFullHealthEvent;
-import org.terasology.module.inventory.components.StartingInventoryComponent;
-import org.terasology.module.inventory.events.RequestInventoryEvent;
-import org.terasology.module.inventory.systems.InventoryManager;
-import org.terasology.module.inventory.events.DropItemRequest;
 import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
+import org.terasology.engine.logic.players.SetDirectionEvent;
 import org.terasology.engine.registry.In;
+import org.terasology.engine.utilities.Assets;
+import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.components.PlayerStatisticsComponent;
-import org.terasology.lightandshadowresources.components.LASTeamComponent;
+import org.terasology.module.health.events.RestoreFullHealthEvent;
+import org.terasology.module.inventory.components.StartingInventoryComponent;
+import org.terasology.module.inventory.events.DropItemRequest;
+import org.terasology.module.inventory.events.RequestInventoryEvent;
+import org.terasology.module.inventory.systems.InventoryManager;
+
+import java.util.Optional;
+import java.util.Random;
 
 
 /**
@@ -55,7 +56,8 @@ public class PlayerDeathSystem extends BaseComponentSystem {
      * @param characterComponent
      * @param aliveCharacterComponent
      */
-    @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
+    @Priority(EventPriority.PRIORITY_HIGH)
+    @ReceiveEvent
     public void beforeDestroy(BeforeDestroyEvent event, EntityRef player, CharacterComponent characterComponent, AliveCharacterComponent aliveCharacterComponent) {
         if (player.hasComponent(PlayerCharacterComponent.class)) {
             event.consume();

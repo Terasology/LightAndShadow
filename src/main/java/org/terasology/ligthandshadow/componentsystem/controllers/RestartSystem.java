@@ -11,13 +11,13 @@ import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterTeleportEvent;
 import org.terasology.engine.logic.players.SetDirectionEvent;
-import org.terasology.module.health.events.RestoreFullHealthEvent;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
+import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.ligthandshadow.componentsystem.events.ClientRestartEvent;
 import org.terasology.ligthandshadow.componentsystem.events.RestartRequestEvent;
-import org.terasology.lightandshadowresources.components.LASTeamComponent;
+import org.terasology.module.health.events.RestoreFullHealthEvent;
 
 /**
  * System to invoke restart of a game round.

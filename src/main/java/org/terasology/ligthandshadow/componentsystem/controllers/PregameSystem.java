@@ -2,11 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
@@ -37,7 +36,8 @@ public class PregameSystem extends BaseComponentSystem {
         entity.addComponent(new InvulnerableComponent());
     }
 
-    @ReceiveEvent(components = InvulnerableComponent.class, priority = EventPriority.PRIORITY_HIGH)
+    @Priority(EventPriority.PRIORITY_HIGH)
+    @ReceiveEvent(components = InvulnerableComponent.class)
     public void preventFriendlyFire(BeforeDamagedEvent event, EntityRef entity) {
         event.consume();
     }

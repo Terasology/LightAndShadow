@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
-import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.engine.core.modes.loadProcesses.AwaitedLocalCharacterSpawnEvent;
 import org.terasology.engine.entitySystem.entity.EntityBuilder;
 import org.terasology.engine.entitySystem.entity.EntityRef;
@@ -19,10 +18,11 @@ import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.logic.SkeletalMeshComponent;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.utilities.Assets;
-import org.terasology.ligthandshadow.componentsystem.LASUtils;
+import org.terasology.gestalt.assets.management.AssetManager;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
-import org.terasology.nui.widgets.UIIconBar;
+import org.terasology.ligthandshadow.componentsystem.LASUtils;
 import org.terasology.module.health.ui.HealthHud;
+import org.terasology.nui.widgets.UIIconBar;
 
 /**
  * Handles changing players' health HUD and skin based on their teams.

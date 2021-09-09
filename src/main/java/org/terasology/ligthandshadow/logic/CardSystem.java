@@ -13,7 +13,6 @@ import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.common.ActivateEvent;
-import org.terasology.module.health.events.OnDamagedEvent;
 import org.terasology.engine.logic.inventory.ItemComponent;
 import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.math.Side;
@@ -28,6 +27,7 @@ import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.engine.world.block.family.BlockPlacementData;
 import org.terasology.engine.world.block.regions.BlockRegionComponent;
 import org.terasology.lightandshadowresources.components.CardComponent;
+import org.terasology.module.health.events.OnDamagedEvent;
 
 @RegisterSystem
 public class CardSystem extends BaseComponentSystem {
