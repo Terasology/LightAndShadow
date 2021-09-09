@@ -4,7 +4,6 @@ package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
@@ -12,6 +11,7 @@ import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.gestalt.assets.ResourceUrn;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.ligthandshadow.componentsystem.events.GameStartMessageEvent;
 import org.terasology.ligthandshadow.componentsystem.events.TimerEvent;
 import org.terasology.notify.ui.DialogNotificationOverlay;

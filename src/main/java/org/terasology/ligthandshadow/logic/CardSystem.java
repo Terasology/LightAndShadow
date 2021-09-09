@@ -9,7 +9,6 @@ import org.terasology.engine.audio.AudioManager;
 import org.terasology.engine.entitySystem.entity.EntityBuilder;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.common.ActivateEvent;
@@ -26,6 +25,7 @@ import org.terasology.engine.world.block.BlockComponent;
 import org.terasology.engine.world.block.BlockRegion;
 import org.terasology.engine.world.block.family.BlockPlacementData;
 import org.terasology.engine.world.block.regions.BlockRegionComponent;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.lightandshadowresources.components.CardComponent;
 import org.terasology.module.health.events.OnDamagedEvent;
 
