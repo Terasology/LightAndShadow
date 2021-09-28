@@ -6,7 +6,6 @@ package org.terasology.las.platform;
 import org.joml.AxisAngle4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import org.terasology.dialogs.components.DialogComponent;
 import org.terasology.engine.entitySystem.entity.EntityStore;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.logic.location.LocationComponent;
@@ -29,8 +28,6 @@ public class GuidanceNpcProvider implements EntityProviderPlugin {
 
             Prefab chooseFactionNpc = Assets.getPrefab("LightAndShadow:MagicFool").get();
             EntityStore entity = new EntityStore(chooseFactionNpc);
-            DialogComponent dialogComponent = new DialogComponent();
-            entity.addComponent(dialogComponent);
 
             LocationComponent locationComponent = new LocationComponent(new Vector3f(
                     0,
