@@ -1,45 +1,26 @@
 {
-    "skeletalmesh" : {
-        "mesh" : "fool",
-        "heightOffset" : -0.5,
-        "material" : "blackFoolSkin",
-        "animation" : "foolStill",
-        "loop" : true
-    },
-    "CapsuleShape" : {
-        "radius" : 1,
-        "height" : 2
-    },
-    "persisted" : true,
-    "AnimateBounce": {
-        "maxHeight" : 0.15,
-        "period" : 8.0
-    },
-    "RigidBody" : {
-        "kinematic" : false,
-        "mass" : 0
-    },
-    "Dialog": {
-        "firstPage": "main",
-        "pages": [
-            {
-                "id": "main",
-                "title": "Welcome",
-                "paragraphText": [
-                    "Welcome to Light &amp; Shadow, ${player.name}! It is time for you to choose a side in this battle. Approach a teleporter and activate it to join that side in a fight for victory."
-                ],
-                "responses": [
-                    {
-                        "text": "Very well..",
-                        "responseImage": "LightAndShadowResources:answerArrow",
-                        "action": {
-                            "class": "Dialogs:CloseDialogAction"
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    "Network": {
-    }
+  "skeletalmesh": {
+    "mesh": "fool",
+    "heightOffset": -0.5,
+    "material": "blackFoolSkin",
+    "animation": "foolStill",
+    "loop": true
+  },
+  "CapsuleShape": {
+    "radius": 1,
+    "height": 2
+  },
+  "persisted": true,
+  "AnimateBounce": {
+    "maxHeight": 0.15,
+    "period": 8.0
+  },
+  "RigidBody": {
+    "kinematic": false,
+    "mass": 0
+  },
+  "MagicFool": {
+  },
+  "Network": {
+  }
 }
