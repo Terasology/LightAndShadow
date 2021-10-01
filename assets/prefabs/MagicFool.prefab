@@ -124,19 +124,6 @@
             ]
           },
           {
-            "text": "Back",
-            "responseImage": "LightAndShadowResources:answerArrow",
-            "action": [
-              {
-                "class": "Dialogs:CloseDialogAction"
-              },
-              {
-                "class": "Dialogs:NewDialogAction",
-                "target": "main"
-              }
-            ]
-          },
-          {
             "text": "Close",
             "responseImage": "LightAndShadowResources:answerArrow",
             "action": {
@@ -178,7 +165,7 @@
         "id": "whatisdome",
         "title": "What is magic dome?",
         "paragraphText": [
-          "When you will get spawned in the gameplay arena, you will notice a magic dome around you that you cannot escape, same goes for the other team on the other side of the gameplay arena."
+          "Magic dome is a huge dome that will surround you when you will get spawned in the gameplay arena. It will act as a barrier between your base and the remaining area, same goes for the other team on the other side of the gameplay arena."
         ],
         "responses": [
           {
