@@ -55,7 +55,7 @@
         "id": "instructions",
         "title": "Instructions",
         "paragraphText": [
-          "LightAndShadow is a multiplayer-only gameplay. You'll need a second player to actually start the game. However, you can already choose a team by interacting (E) with the teleportors next to me and take a look at the gameplay arena. The goal of the game is to fetch the other team's flag from their base and bring it to your home base."
+          "LightAndShadow is a multiplayer-only gameplay. You'll need a second player to start the game. However, you can already choose a team by interacting (E) with the teleportors next to me and take a look at the gameplay arena. The goal of the game is to fetch the other team's flag from their base and bring it to your home base."
         ],
         "responses": [
           {
@@ -68,6 +68,19 @@
               {
                 "class": "Dialogs:NewDialogAction",
                 "target": "team"
+              }
+            ]
+          },
+          {
+            "text": "What is the magic dome?",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "whatisdome"
               }
             ]
           },
@@ -111,6 +124,19 @@
             ]
           },
           {
+            "text": "Back",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "main"
+              }
+            ]
+          },
+          {
             "text": "Close",
             "responseImage": "LightAndShadowResources:answerArrow",
             "action": {
@@ -127,22 +153,18 @@
         ],
         "responses": [
           {
-            "text": "Close",
+            "text": "Back",
             "responseImage": "LightAndShadowResources:answerArrow",
-            "action": {
-              "class": "Dialogs:CloseDialogAction"
-            }
-          }
-        ]
-      },
-      {
-
-        "id": "dome",
-        "title": "How can I escape the magic dome?",
-        "paragraphText": [
-          "When you will get spawned in the gameplay arena, you will notice that there is a magic dome around you that you cannot escape, same goes for the other team on the other side of the gameplay arena. As long as there's no player in the other team, these magic domes will not resolve and the game will tell you that it's waiting for more players. As soon as somebody joins the other team (you can try this out locally by starting a second client and joining a locally hosted game), a countdown will start and once that's down to 0, the magic domes will resolve and the game will start."
-        ],
-        "responses": [
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "instructions"
+              }
+            ]
+          },
           {
             "text": "Close",
             "responseImage": "LightAndShadowResources:answerArrow",
@@ -152,14 +174,84 @@
           }
         ]
       },
-
+      {
+        "id": "whatisdome",
+        "title": "What is magic dome?",
+        "paragraphText": [
+          "When you will get spawned in the gameplay arena, you will notice a magic dome around you that you cannot escape, same goes for the other team on the other side of the gameplay arena."
+        ],
+        "responses": [
+          {
+            "text": "Back",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "instructions"
+              }
+            ]
+          },
+          {
+            "text": "Close",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": {
+              "class": "Dialogs:CloseDialogAction"
+            }
+          }
+        ]
+      },
+      {
+        "id": "dome",
+        "title": "Escaping magic dome",
+        "paragraphText": [
+          "As long as there's no player in the other team, the magic domes will not resolve and the game will tell you that it's waiting for more players. When somebody joins the other team (you can try this out locally by starting a second client and joining a locally hosted game), a countdown will start and once that's down to 0, the magic domes will resolve and the game will start."
+        ],
+        "responses": [
+          {
+            "text": "Back",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "instructions"
+              }
+            ]
+          },
+          {
+            "text": "Close",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": {
+              "class": "Dialogs:CloseDialogAction"
+            }
+          }
+        ]
+      },
       {
         "id": "flag",
-        "title": "How can I take the other team's flag?",
+        "title": "Fetching the flag",
         "paragraphText": [
           "On your home base, you will notice a single block that is your flag and the same goes for the other team's base. You have to go to the other team's base and fetch their flag (by pressing E) and then come back to your home base to deliver it (by pressing E again). "
         ],
         "responses": [
+          {
+            "text": "Back",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "instructions"
+              }
+            ]
+          },
           {
             "text": "Close",
             "responseImage": "LightAndShadowResources:answerArrow",
@@ -171,11 +263,24 @@
       },
       {
         "id": "score",
-        "title": "How to win and score points?",
+        "title": "Scoring points",
         "paragraphText": [
           "When you successfully fetch and deliver the other team's flag to your base, you will score a point and the team that first scores 5 points (by successfully delivering 5 enemy flags to their home base) wins. But you need to be careful, the players of the other team could try to hinder you. All players have a basic set of weapons to fight their opponents with."
         ],
         "responses": [
+          {
+            "text": "Back",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "instructions"
+              }
+            ]
+          },
           {
             "text": "Close",
             "responseImage": "LightAndShadowResources:answerArrow",
