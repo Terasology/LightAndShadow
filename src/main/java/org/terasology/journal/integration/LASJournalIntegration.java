@@ -50,10 +50,10 @@ public class LASJournalIntegration extends BaseComponentSystem {
     public void preBegin() {
 
         BrowserJournalChapterHandler chapterHandler = new BrowserJournalChapterHandler();
-        Prefab screenshot1 = prefabManager.getPrefab("Journal:LASTutorial Screenshot 1");
-        Prefab screenshot2 = prefabManager.getPrefab("Journal:LASTutorial Screenshot 2");
-        Prefab screenshot3 = prefabManager.getPrefab("Journal:LASTutorial Screenshot 3");
-        Prefab screenshot4 = prefabManager.getPrefab("Journal:LASTutorial Screenshot 4");
+        Prefab screenshot1 = prefabManager.getPrefab("LightAndShadow:LASTutorial Screenshot 1");
+        Prefab screenshot2 = prefabManager.getPrefab("LightAndShadow:LASTutorial Screenshot 2");
+        Prefab screenshot3 = prefabManager.getPrefab("LightAndShadow:LASTutorial Screenshot 3");
+        Prefab screenshot4 = prefabManager.getPrefab("LightAndShadow:LASTutorial Screenshot 4");
         chapterHandler.registerJournalEntry("Instructions",
                 Arrays.asList(
                         new ImageParagraph(new Prefab[]{screenshot1, screenshot2, screenshot3, screenshot4}, null)
