@@ -26,13 +26,11 @@ import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.registry.In;
-import org.terasology.engine.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyle;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.journal.BrowserJournalChapterHandler;
 import org.terasology.journal.DiscoveredNewJournalEntry;
 import org.terasology.journal.JournalManager;
-import org.terasology.journal.ui.ImageParagraph;
-import org.terasology.nui.HorizontalAlign;
+import org.terasology.journal.ui.ScreenshotParagraph;
 
 import java.util.Arrays;
 
@@ -56,7 +54,7 @@ public class LASJournalIntegration extends BaseComponentSystem {
         Prefab screenshot4 = prefabManager.getPrefab("LightAndShadow:LASTutorial Screenshot 4");
         chapterHandler.registerJournalEntry("Instructions",
                 Arrays.asList(
-                        new ImageParagraph(new Prefab[]{screenshot1, screenshot2, screenshot3, screenshot4}, null)
+                        new ScreenshotParagraph(new Prefab[]{screenshot1, screenshot2, screenshot3, screenshot4}, null)
                 ));
         journalManager.registerJournalChapter(lasChapterId,
                 Assets.getTextureRegion("LightAndShadow:MagicFoolIcon").get(),
