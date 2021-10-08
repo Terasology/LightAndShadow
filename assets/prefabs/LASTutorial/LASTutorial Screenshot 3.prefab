@@ -1,0 +1,9 @@
+{
+  "parent": "engine:iconItem",
+  "DisplayName": {
+    "name": "Tutorial Screenshot 1"
+  },
+  "Item": {
+    "icon": "Journal:Tutorial Screenshot 3"
+  }
+}
