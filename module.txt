@@ -36,7 +36,7 @@
         },
         {
             "id": "Economy",
-            "minVersion": "1.1.0-SNAPSHOT"
+            "minVersion": "1.1.0"
         },
         {
             "id": "Health",
