@@ -1,5 +1,8 @@
 {
     "LASConfig" : {
         "maxTeamSizeDifference" : 3
+    },
+    "CurrencyStorage": {
+        "amount": 100
     }
 }
