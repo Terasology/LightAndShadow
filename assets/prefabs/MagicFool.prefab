@@ -1,45 +1,284 @@
 {
-    "skeletalmesh" : {
-        "mesh" : "fool",
-        "heightOffset" : -0.5,
-        "material" : "blackFoolSkin",
-        "animation" : "foolStill",
-        "loop" : true
-    },
-    "CapsuleShape" : {
-        "radius" : 1,
-        "height" : 2
-    },
-    "persisted" : true,
-    "AnimateBounce": {
-        "maxHeight" : 0.15,
-        "period" : 8.0
-    },
-    "RigidBody" : {
-        "kinematic" : false,
-        "mass" : 0
-    },
-    "Dialog": {
-        "firstPage": "main",
-        "pages": [
-            {
-                "id": "main",
-                "title": "Welcome",
-                "paragraphText": [
-                    "Welcome to Light &amp; Shadow, ${player.name}! It is time for you to choose a side in this battle. Approach a teleporter and activate it to join that side in a fight for victory."
-                ],
-                "responses": [
-                    {
-                        "text": "Very well..",
-                        "responseImage": "LightAndShadowResources:answerArrow",
-                        "action": {
-                            "class": "Dialogs:CloseDialogAction"
-                        }
-                    }
-                ]
+  "skeletalmesh": {
+    "mesh": "fool",
+    "heightOffset": -0.5,
+    "material": "blackFoolSkin",
+    "animation": "foolStill",
+    "loop": true
+  },
+  "CapsuleShape": {
+    "radius": 1,
+    "height": 2
+  },
+  "persisted": true,
+  "AnimateBounce": {
+    "maxHeight": 0.15,
+    "period": 8.0
+  },
+  "RigidBody": {
+    "kinematic": false,
+    "mass": 0
+  },
+  "Dialog": {
+    "firstPage": "main",
+    "pages": [
+      {
+        "id": "main",
+        "title": "Welcome",
+        "paragraphText": [
+          "Welcome to Light &amp; Shadow, ${player.name}! It is time for you to choose a side in this battle. Approach a teleporter and activate it to join that side in a fight for victory."
+        ],
+        "responses": [
+          {
+            "text": "Very well..",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": {
+              "class": "Dialogs:CloseDialogAction"
             }
+          },
+          {
+            "text": "How does it work?",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "instructions"
+              }
+            ]
+          }
         ]
-    },
+      },
+      {
+        "id": "instructions",
+        "title": "Instructions",
+        "paragraphText": [
+          "LightAndShadow is a multiplayer-only gameplay. You'll need a second player to start the game. However, you can already choose a team by interacting (E) with the teleportors next to me and take a look at the gameplay arena. The goal of the game is to fetch the other team's flag from their base and bring it to your home base."
+        ],
+        "responses": [
+          {
+            "text": "How can I join a team?",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "team"
+              }
+            ]
+          },
+          {
+            "text": "What is the magic dome?",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "whatisdome"
+              }
+            ]
+          },
+          {
+            "text": "How can I escape the magic dome?",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "dome"
+              }
+            ]
+          },
+          {
+            "text": "How can I take the other team's flag?",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "flag"
+              }
+            ]
+          },
+          {
+            "text": "How to win and score points?",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "score"
+              }
+            ]
+          },
+          {
+            "text": "Close",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": {
+              "class": "Dialogs:CloseDialogAction"
+            }
+          }
+        ]
+      },
+      {
+        "id": "team",
+        "title": "How to join a team?",
+        "paragraphText": [
+          "When you interact with any of the dice teleporters on this platform, you'll join the related red or black team and spawn in the gameplay arena on your team's home base."
+        ],
+        "responses": [
+          {
+            "text": "Back",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "instructions"
+              }
+            ]
+          },
+          {
+            "text": "Close",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": {
+              "class": "Dialogs:CloseDialogAction"
+            }
+          }
+        ]
+      },
+      {
+        "id": "whatisdome",
+        "title": "What is magic dome?",
+        "paragraphText": [
+          "Magic dome is a huge dome that will surround you when you will get spawned in the gameplay arena. It will act as a barrier between your base and the remaining area, same goes for the other team on the other side of the gameplay arena."
+        ],
+        "responses": [
+          {
+            "text": "Back",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "instructions"
+              }
+            ]
+          },
+          {
+            "text": "Close",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": {
+              "class": "Dialogs:CloseDialogAction"
+            }
+          }
+        ]
+      },
+      {
+        "id": "dome",
+        "title": "Escaping magic dome",
+        "paragraphText": [
+          "As long as there's no player in the other team, the magic domes will not resolve and the game will tell you that it's waiting for more players. When somebody joins the other team (you can try this out locally by starting a second client and joining a locally hosted game), a countdown will start and once that's down to 0, the magic domes will resolve and the game will start."
+        ],
+        "responses": [
+          {
+            "text": "Back",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "instructions"
+              }
+            ]
+          },
+          {
+            "text": "Close",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": {
+              "class": "Dialogs:CloseDialogAction"
+            }
+          }
+        ]
+      },
+      {
+        "id": "flag",
+        "title": "Fetching the flag",
+        "paragraphText": [
+          "On your home base, you will notice a single block that is your flag and the same goes for the other team's base. You have to go to the other team's base and fetch their flag (by pressing E) and then come back to your home base to deliver it (by pressing E again). "
+        ],
+        "responses": [
+          {
+            "text": "Back",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "instructions"
+              }
+            ]
+          },
+          {
+            "text": "Close",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": {
+              "class": "Dialogs:CloseDialogAction"
+            }
+          }
+        ]
+      },
+      {
+        "id": "score",
+        "title": "Scoring points",
+        "paragraphText": [
+          "When you successfully fetch and deliver the other team's flag to your base, you will score a point and the team that first scores 5 points (by successfully delivering 5 enemy flags to their home base) wins. But you need to be careful, the players of the other team could try to hinder you. All players have a basic set of weapons to fight their opponents with."
+        ],
+        "responses": [
+          {
+            "text": "Back",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": [
+              {
+                "class": "Dialogs:CloseDialogAction"
+              },
+              {
+                "class": "Dialogs:NewDialogAction",
+                "target": "instructions"
+              }
+            ]
+          },
+          {
+            "text": "Close",
+            "responseImage": "LightAndShadowResources:answerArrow",
+            "action": {
+              "class": "Dialogs:CloseDialogAction"
+            }
+          }
+        ]
+      }
+    ],
     "Network": {
     }
+  }
 }
