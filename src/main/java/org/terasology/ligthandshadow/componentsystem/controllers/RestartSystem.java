@@ -3,6 +3,8 @@
 package org.terasology.ligthandshadow.componentsystem.controllers;
 
 import org.joml.Vector3f;
+import org.terasology.economy.components.CurrencyStorageComponent;
+import org.terasology.economy.events.WalletUpdatedEvent;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
@@ -26,6 +28,8 @@ import org.terasology.lightandshadowresources.components.LASTeamComponent;
 public class RestartSystem extends BaseComponentSystem {
     @In
     EntityManager entityManager;
+    @In
+    private GameEntitySystem gameEntitySystem;
 
     /**
      * All players' health are restored and they are transported back to their bases.
@@ -39,6 +43,9 @@ public class RestartSystem extends BaseComponentSystem {
         for (EntityRef client: clients) {
             EntityRef player = client.getComponent(ClientComponent.class).character;
             String team = player.getComponent(LASTeamComponent.class).team;
+            EntityRef gameEntity = gameEntitySystem.getGameEntity();
+            player.getComponent(CurrencyStorageComponent.class).amount = gameEntity.getComponent(CurrencyStorageComponent.class).amount;
+            player.send(new WalletUpdatedEvent(gameEntity.getComponent(CurrencyStorageComponent.class).amount));
             player.send(new RestoreFullHealthEvent(player));
             player.send(new CharacterTeleportEvent(LASUtils.getTeleportDestination(team)));
             player.send(new SetDirectionEvent(LASUtils.getYaw(LASUtils.getTeleportDestination(team).
