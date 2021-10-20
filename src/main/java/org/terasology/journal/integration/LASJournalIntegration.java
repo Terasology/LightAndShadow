@@ -21,22 +21,31 @@ import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.journal.BrowserJournalChapterHandler;
 import org.terasology.journal.DiscoveredNewJournalEntry;
+import org.terasology.journal.JournalButton;
 import org.terasology.journal.JournalManager;
+import org.terasology.journal.NewJournalEntryDiscoveredEvent;
 
 import java.util.Arrays;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class LASJournalIntegration extends BaseComponentSystem {
     @In
+    private NUIManager nuiManager;
+    @In
     private JournalManager journalManager;
+    private boolean entryReceived;
     private String lasChapterId = "LightAndShadow";
+    private SetTutorialImages window;
 
     @Override
     public void preBegin() {
+        entryReceived = false;
         BrowserJournalChapterHandler chapterHandler = new BrowserJournalChapterHandler();
         chapterHandler.registerJournalEntry("Instructions", Arrays.asList());
         journalManager.registerJournalChapter(lasChapterId,
@@ -47,5 +56,26 @@ public class LASJournalIntegration extends BaseComponentSystem {
     @ReceiveEvent
     public void onDialogActivated(ShowDialogEvent event, EntityRef player) {
         player.send(new DiscoveredNewJournalEntry(lasChapterId, "Instructions"));
+    }
+
+    @ReceiveEvent
+    public void onReceiveNewJournalEntry(NewJournalEntryDiscoveredEvent event, EntityRef character) {
+        entryReceived = true;
+        if (window == null) {
+            if (!nuiManager.isOpen("Journal:JournalWindow")) {
+                nuiManager.toggleScreen("Journal:JournalWindow");
+            }
+            window = (SetTutorialImages) nuiManager.getScreen("Journal:JournalWindow");
+            nuiManager.closeScreen("Journal:JournalWindow");
+        }
+    }
+
+    @ReceiveEvent
+    public void onLASJournalDiscover(JournalButton event, EntityRef character,
+                                     ClientComponent clientComponent) {
+
+        if (entryReceived) {
+            window.setImages();
+        }
     }
 }

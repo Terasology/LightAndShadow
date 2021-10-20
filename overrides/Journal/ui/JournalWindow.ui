@@ -1,5 +1,5 @@
 {
-  "type": "JournalNUIWindow",
+  "type": "SetTutorialImages",
   "skin": "Journal:journal",
   "contents": {
     "type": "rowLayout",
@@ -37,12 +37,10 @@
                   {
                     "type": "UIImage",
                     "id": "fetchFlag"
-
                   },
                   {
                     "type": "UIImage",
                     "id": "deliverFlag"
-
                   }
                 ],
                 "horizontalSpacing": 10
