@@ -90,10 +90,11 @@ public class PlayerDeathSystem extends BaseComponentSystem {
 
     private void updateStatistics(EntityRef player, String type) {
         PlayerStatisticsComponent playerStatisticsComponent = player.getComponent(PlayerStatisticsComponent.class);
-        if (type.equals("kills")) {
+        if (playerStatisticsComponent == null) {
+            return;
+        } else if (type.equals("kills")) {
             playerStatisticsComponent.kills += 1;
-        }
-        if (type.equals("deaths")) {
+        } else if (type.equals("deaths")) {
             playerStatisticsComponent.deaths += 1;
         }
         player.saveComponent(playerStatisticsComponent);
