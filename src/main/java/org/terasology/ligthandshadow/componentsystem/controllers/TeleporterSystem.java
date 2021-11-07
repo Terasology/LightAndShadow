@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.function.Supplier;
 
+import com.google.common.collect.Lists;
 import org.joml.Vector3f;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
@@ -132,7 +133,9 @@ public class TeleporterSystem extends BaseComponentSystem {
 
     private void handlePlayerTeleport(EntityRef player, String team) {
         Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
-        player.send(new PregameEvent());
+        if (gameEntitySystem.isPregamePhase()) {
+            player.send(new PregameEvent());
+        }
         player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
         player.send(new SetDirectionEvent(LASUtils.getYaw(LASUtils.getTeleportDestination(team).
                 sub(LASUtils.getTeleportDestination(LASUtils.getOppositionTeam(team)), new Vector3f())), 0));

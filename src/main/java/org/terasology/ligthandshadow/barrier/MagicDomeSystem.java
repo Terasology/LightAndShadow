@@ -23,9 +23,10 @@ import org.terasology.ligthandshadow.componentsystem.components.InvulnerableComp
 import org.terasology.ligthandshadow.componentsystem.events.ActivateBarrierEvent;
 import org.terasology.ligthandshadow.componentsystem.events.DelayedDeactivateBarrierEvent;
 
+import static org.terasology.ligthandshadow.componentsystem.LASUtils.DEACTIVATE_BARRIERS_ACTION;
+
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class MagicDomeSystem extends BaseComponentSystem {
-    private static final String DEACTIVATE_BARRIERS_ACTION = "LightAndShadow:deactivateBarriers";
     private static final int PREGAME_ZONE_RADIUS = 20;
     @In
     DelayManager delayManager;

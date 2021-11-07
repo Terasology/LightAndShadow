@@ -71,6 +71,8 @@ public final class LASUtils {
     public static final String DROPPED_FLAG = "dropped_flag_indicator";
     public static final long FLAG_TELEPORT_DELAY = 20000;
 
+    public static final String DEACTIVATE_BARRIERS_ACTION = "LightAndShadow:deactivateBarriers";
+
     private LASUtils() {
     }
 

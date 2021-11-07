@@ -80,6 +80,4 @@ public class ClientPregameSystem extends BaseComponentSystem {
             }, 0, 500);
         }
     }
-
-
 }
