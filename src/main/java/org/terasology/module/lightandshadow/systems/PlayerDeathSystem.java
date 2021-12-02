@@ -61,7 +61,10 @@ public class PlayerDeathSystem extends BaseComponentSystem {
         if (player.hasComponent(PlayerCharacterComponent.class)) {
             event.consume();
             String team = player.getComponent(LASTeamComponent.class).team;
-            updateStatistics(event.getInstigator(), "kills");
+            // if a player dies on their own account, we don't want to update kill statistics
+            if (event.getInstigator() != EntityRef.NULL) {
+                updateStatistics(event.getInstigator(), "kills");
+            }
             updateStatistics(player, "deaths");
             dropItemsFromInventory(player);
             player.send(new RestoreFullHealthEvent(player));
@@ -90,9 +93,6 @@ public class PlayerDeathSystem extends BaseComponentSystem {
 
     private void updateStatistics(EntityRef player, String type) {
         PlayerStatisticsComponent playerStatisticsComponent = player.getComponent(PlayerStatisticsComponent.class);
-        if (player.getId() == 0) {
-            return;
-        }
         if (type.equals("kills")) {
             playerStatisticsComponent.kills += 1;
         }
