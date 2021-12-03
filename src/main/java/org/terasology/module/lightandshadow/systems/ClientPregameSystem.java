@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.module.lightandshadow.systems;
 
+import org.terasology.economy.components.AllowShopScreenComponent;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
@@ -52,6 +53,7 @@ public class ClientPregameSystem extends BaseComponentSystem {
     public void onPregameStart(GameStartMessageEvent event, EntityRef entity) {
         if (localPlayer.getClientEntity().equals(entity)) {
             window.addNotification(PREGAME_MESSAGE);
+            entity.upsertComponent(AllowShopScreenComponent.class, c -> c.orElse(new AllowShopScreenComponent()));
         }
     }
 
