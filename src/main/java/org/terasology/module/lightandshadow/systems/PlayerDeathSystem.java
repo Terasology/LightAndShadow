@@ -61,12 +61,16 @@ public class PlayerDeathSystem extends BaseComponentSystem {
         if (player.hasComponent(PlayerCharacterComponent.class)) {
             event.consume();
             String team = player.getComponent(LASTeamComponent.class).team;
-            updateStatistics(event.getInstigator(), "kills");
+            // if a player dies on their own account, we don't want to update kill statistics
+            if (event.getInstigator() != EntityRef.NULL) {
+                updateStatistics(event.getInstigator(), "kills");
+            }
             updateStatistics(player, "deaths");
             dropItemsFromInventory(player);
             player.send(new RestoreFullHealthEvent(player));
             Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
             player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
+
             player.send(new SetDirectionEvent(LASUtils.getYaw(LASUtils.getTeleportDestination(team).
                     sub(LASUtils.getTeleportDestination(LASUtils.getOppositionTeam(team)), new Vector3f())), 0));
             player.addOrSaveComponent(startingInventory);

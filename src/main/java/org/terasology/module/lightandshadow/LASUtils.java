@@ -63,6 +63,7 @@ public final class LASUtils {
     // The position near the team's base that player will be teleported to on choosing a team
     public static final Vector3fc RED_TELEPORT_DESTINATION = new Vector3f(29, 12, 0);
     public static final Vector3fc BLACK_TELEPORT_DESTINATION = new Vector3f(-29, 12, 0);
+    public static final Vector3fc WHITE_TELEPORT_DESTINATION = new Vector3f(0, 61, 252);
     public static final String MAGIC_STAFF_URI = "LightAndShadowResources:magicStaff";
 
     public static final String DEATH_SCREEN = "engine:DeathScreen";
@@ -113,6 +114,9 @@ public final class LASUtils {
         if (team.equals(BLACK_TEAM)) {
             return BLACK_TELEPORT_DESTINATION;
         }
+        if (team.equals(WHITE_TEAM)) {
+            return WHITE_TELEPORT_DESTINATION;
+        }
         return null;
     }
 
@@ -162,6 +166,9 @@ public final class LASUtils {
         if (team.equals(BLACK_TEAM)) {
             return RED_TEAM;
         }
+        if (team.equals(WHITE_TEAM)) {
+            return WHITE_TEAM;
+        }
         return null;
     }
 
@@ -185,27 +192,27 @@ public final class LASUtils {
 
     public static String pixel(int x, int y, int r) {
         return Stream.<Map<BooleanSupplier, Supplier<String>>>of(
-                singletonMap(
-                        () -> circle(x, y, -r / 2, r / 6),
-                        () -> "LightAndShadowResources:blackfloorblock"
-                ),
-                singletonMap(
-                        () -> circle(x, y, r / 2, r / 6),
-                        () -> "LightAndShadowResources:redfloorblock"
-                ),
-                singletonMap(
-                        () -> circle(x, y, -r / 2, r / 2),
-                        () -> "LightAndShadowResources:redfloorblock"
-                ),
-                singletonMap(
-                        () -> circle(x, y, r / 2, r / 2),
-                        () -> "LightAndShadowResources:blackfloorblock"
-                ),
-                singletonMap(
-                        () -> circle(x, y, 0, r),
-                        () -> x < 0 ? "LightAndShadowResources:redfloorblock" : "LightAndShadowResources:blackfloorblock"
+                        singletonMap(
+                                () -> circle(x, y, -r / 2, r / 6),
+                                () -> "LightAndShadowResources:blackfloorblock"
+                        ),
+                        singletonMap(
+                                () -> circle(x, y, r / 2, r / 6),
+                                () -> "LightAndShadowResources:redfloorblock"
+                        ),
+                        singletonMap(
+                                () -> circle(x, y, -r / 2, r / 2),
+                                () -> "LightAndShadowResources:redfloorblock"
+                        ),
+                        singletonMap(
+                                () -> circle(x, y, r / 2, r / 2),
+                                () -> "LightAndShadowResources:blackfloorblock"
+                        ),
+                        singletonMap(
+                                () -> circle(x, y, 0, r),
+                                () -> x < 0 ? "LightAndShadowResources:redfloorblock" : "LightAndShadowResources:blackfloorblock"
+                        )
                 )
-        )
                 .sequential()
                 .map(Map::entrySet)
                 .flatMap(Collection::stream)
