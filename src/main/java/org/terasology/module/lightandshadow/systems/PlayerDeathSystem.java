@@ -53,7 +53,7 @@ public class PlayerDeathSystem extends BaseComponentSystem {
      * @param event notification event that a player entity is about to be destroyed (usually sent on death)
      * @param player the player entity about to be destroyed
      * @param characterComponent ensures that the entity has a character (TODO: why do we need this?)
-     * @param aliveCharacterComponent ensures that the player is currently alive (TODO: parameter not used, move to annotion?)
+     * @param aliveCharacterComponent ensures that the player is currently alive (TODO: parameter not used, move to annotation?)
      */
     @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
     public void beforeDestroy(BeforeDestroyEvent event, EntityRef player,
