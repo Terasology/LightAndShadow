@@ -62,10 +62,14 @@ public class PlayerDeathSystem extends BaseComponentSystem {
             event.consume();
             String team = player.getComponent(LASTeamComponent.class).team;
             // if a player dies on their own account, we don't want to update kill statistics
-            if (event.getInstigator() != EntityRef.NULL) {
-                updateStatistics(event.getInstigator(), "kills");
+            //TODO: 'OwnerSpecific#getUltimateOwner' in CombatSystem may return 'null' if it cannot find the owner of an attacking weapon
+            //      or projectile. Therefore, the event's instigator might be 'null'.
+            //      This happens, for instance, for the thrown spear. We need to investigate why the spear projectile does not carry the
+            //      information about the instigator to fix the root cause. Until then, adding a null check here to prevent a crash by NPE.
+            if (event.getInstigator() != null && event.getInstigator() != EntityRef.NULL) {
+                updateStatistics(event.getInstigator(), StatisticType.KILLS);
             }
-            updateStatistics(player, "deaths");
+            updateStatistics(player, StatisticType.DEATHS);
             dropItemsFromInventory(player);
             player.send(new RestoreFullHealthEvent(player));
             Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
@@ -92,14 +96,24 @@ public class PlayerDeathSystem extends BaseComponentSystem {
         }
     }
 
-    private void updateStatistics(EntityRef player, String type) {
+    /**
+     * Count up the respective statistic value for the given player and save it in their {@link PlayerStatisticsComponent}.
+     *
+     * @param player a player entity that must have a {@link PlayerStatisticsComponent}.
+     * @param statisticType which statistic to update
+     */
+    private void updateStatistics(EntityRef player, StatisticType statisticType) {
         PlayerStatisticsComponent playerStatisticsComponent = player.getComponent(PlayerStatisticsComponent.class);
-        if (type.equals("kills")) {
-            playerStatisticsComponent.kills += 1;
-        }
-        if (type.equals("deaths")) {
-            playerStatisticsComponent.deaths += 1;
+        switch (statisticType) {
+            case KILLS:
+                playerStatisticsComponent.kills += 1;
+            case DEATHS:
+                playerStatisticsComponent.deaths += 1;
         }
         player.saveComponent(playerStatisticsComponent);
+    }
+
+    private enum StatisticType {
+        KILLS, DEATHS
     }
 }
