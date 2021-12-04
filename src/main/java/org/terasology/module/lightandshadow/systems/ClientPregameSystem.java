@@ -3,10 +3,12 @@
 package org.terasology.module.lightandshadow.systems;
 
 import org.terasology.economy.components.AllowShopScreenComponent;
+import org.terasology.economy.ui.MarketUiClientSystem;
 import org.terasology.engine.core.SimpleUri;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.entity.lifecycleEvents.OnAddedComponent;
+import org.terasology.engine.entitySystem.event.EventPriority;
 import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
@@ -103,11 +105,13 @@ public class ClientPregameSystem extends BaseComponentSystem {
 
     /**
      * Handles the button event if in-game shop is enabled.
+     * Needs to have a higher priority than {@link MarketUiClientSystem#onToggleInventory(InventoryButton, EntityRef)}
+     * to receive the {@link InventoryButton} event before it is consumed.
      *
      * @param event the help button event.
      * @param entity the entity to display the help screen to.
      */
-    @ReceiveEvent(components = {ClientComponent.class, AllowShopScreenComponent.class})
+    @ReceiveEvent(components = {ClientComponent.class, AllowShopScreenComponent.class}, priority = EventPriority.PRIORITY_CRITICAL)
     public void onInGameShopButton(InventoryButton event, EntityRef entity) {
         if (event.getState() == ButtonState.DOWN) {
             entity.send(new ExpireNotificationEvent(NOTIFICATION_ID));
