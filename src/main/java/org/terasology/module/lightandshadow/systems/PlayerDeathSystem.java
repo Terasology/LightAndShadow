@@ -43,17 +43,17 @@ public class PlayerDeathSystem extends BaseComponentSystem {
     @In
     private InventoryManager inventoryManager;
 
-    private Random random = new Random();
+    private static final Random random = new Random();
 
     /**
-     * Reset the inventory and send player player back to its base with refilled health.
+     * Reset the inventory and send the player back to its base with refilled health.
      * This is a high priority method, hence it receives the event first and consumes it.
      * This prevents the destruction of player entity and prevents the deathScreen from showing up.
      *
-     * @param event
-     * @param player
-     * @param characterComponent
-     * @param aliveCharacterComponent
+     * @param event notification event that a player entity is about to be destroyed (usually sent on death)
+     * @param player the player entity about to be destroyed
+     * @param characterComponent ensures that the entity has a character (TODO: why do we need this?)
+     * @param aliveCharacterComponent ensures that the player is currently alive (TODO: parameter not used, move to annotion?)
      */
     @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
     public void beforeDestroy(BeforeDestroyEvent event, EntityRef player,
