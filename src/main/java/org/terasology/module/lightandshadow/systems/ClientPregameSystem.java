@@ -26,6 +26,8 @@ public class ClientPregameSystem extends BaseComponentSystem {
 
     private static final String PREGAME_MESSAGE = "The game start's as soon as there is \n at least one player in each team.";
 
+    private static final int COUNTDOWN_IN_SECONDS = 30;
+
     private static Timer timer;
 
     @In
@@ -60,7 +62,7 @@ public class ClientPregameSystem extends BaseComponentSystem {
         if (localPlayer.getClientEntity().equals(entity)) {
             timer = new Timer();
             timer.scheduleAtFixedRate(new TimerTask() {
-                int timePeriod = 30;
+                int timePeriod = COUNTDOWN_IN_SECONDS;
                 boolean addNotification;
                 public void run() {
                     if (addNotification) {
