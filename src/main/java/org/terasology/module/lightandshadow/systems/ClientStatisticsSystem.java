@@ -31,7 +31,7 @@ import org.terasology.nui.FontColor;
  */
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientStatisticsSystem extends BaseComponentSystem {
-    private static final String NOTIFICATION_ID = "LightAndShadow:firstTime";
+    private static final String NOTIFICATION_ID = "LightAndShadow:firstTimeStatistics";
 
     @In
     InputSystem inputSystem;
@@ -88,6 +88,18 @@ public class ClientStatisticsSystem extends BaseComponentSystem {
         }
     }
 
+    /**
+     * Get a formatted representation of the primary {@link Input} associated with the given button binding.
+     *
+     * If the display name of the primary bound key is a single character this representation will be the encircled
+     * character. Otherwise the full display name is used. The bound key will be printed in yellow.
+     *
+     * If no key binding was found the text "n/a" in red color is returned.
+     *
+     * @param button the URI of a bindable button
+     * @return a formatted text to be used as representation for the player
+     */
+    //TODO: put this in a common place? Duplicated in Dialogs, EventualSkills, and InGameHelp
     private String getActivationKey(SimpleUri button) {
         return inputSystem.getInputsForBindButton(button).stream()
                 .findFirst()
