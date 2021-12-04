@@ -9,5 +9,10 @@
   "RandomDamage": {
     "minDamage": 20,
     "maxDamage": 30
+  },
+  "Purchasable": {
+  },
+  "Value": {
+    "value": 50
   }
 }
