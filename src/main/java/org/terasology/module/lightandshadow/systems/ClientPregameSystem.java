@@ -15,7 +15,6 @@ import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.input.InputSystem;
 import org.terasology.engine.logic.players.LocalPlayer;
-import org.terasology.engine.logic.players.event.LocalPlayerInitializedEvent;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
@@ -43,6 +42,8 @@ public class ClientPregameSystem extends BaseComponentSystem {
     public static final ResourceUrn ASSET_URI = new ResourceUrn("LightAndShadow:Timer");
 
     private static final String PREGAME_MESSAGE = "The game start's as soon as there is \n at least one player in each team.";
+
+    private static final int COUNTDOWN_IN_SECONDS = 30;
 
     private static Timer timer;
 
@@ -82,7 +83,7 @@ public class ClientPregameSystem extends BaseComponentSystem {
         if (localPlayer.getClientEntity().equals(entity)) {
             timer = new Timer();
             timer.scheduleAtFixedRate(new TimerTask() {
-                int timePeriod = 30;
+                int timePeriod = COUNTDOWN_IN_SECONDS;
                 boolean addNotification;
                 public void run() {
                     if (addNotification) {
