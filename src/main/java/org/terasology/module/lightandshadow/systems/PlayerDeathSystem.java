@@ -37,23 +37,23 @@ import org.terasology.lightandshadowresources.components.LASTeamComponent;
  */
 @RegisterSystem
 public class PlayerDeathSystem extends BaseComponentSystem {
+    private static final Random RANDOM = new Random();
+
     Optional<Prefab> prefab = Assets.getPrefab("inventory");
     StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
 
     @In
     private InventoryManager inventoryManager;
 
-    private Random random = new Random();
-
     /**
-     * Reset the inventory and send player player back to its base with refilled health.
+     * Reset the inventory and send the player back to its base with refilled health.
      * This is a high priority method, hence it receives the event first and consumes it.
      * This prevents the destruction of player entity and prevents the deathScreen from showing up.
      *
-     * @param event
-     * @param player
-     * @param characterComponent
-     * @param aliveCharacterComponent
+     * @param event notification event that a player entity is about to be destroyed (usually sent on death)
+     * @param player the player entity about to be destroyed
+     * @param characterComponent ensures that the entity has a character (TODO: why do we need this?)
+     * @param aliveCharacterComponent ensures that the player is currently alive (TODO: parameter not used, move to annotation?)
      */
     @ReceiveEvent(priority = EventPriority.PRIORITY_HIGH)
     public void beforeDestroy(BeforeDestroyEvent event, EntityRef player,
@@ -62,13 +62,17 @@ public class PlayerDeathSystem extends BaseComponentSystem {
             event.consume();
             String team = player.getComponent(LASTeamComponent.class).team;
             // if a player dies on their own account, we don't want to update kill statistics
-            if (event.getInstigator() != EntityRef.NULL) {
-                updateStatistics(event.getInstigator(), "kills");
+            //TODO: 'OwnerSpecific#getUltimateOwner' in CombatSystem may return 'null' if it cannot find the owner of an attacking weapon
+            //      or projectile. Therefore, the event's instigator might be 'null'.
+            //      This happens, for instance, for the thrown spear. We need to investigate why the spear projectile does not carry the
+            //      information about the instigator to fix the root cause. Until then, adding a null check here to prevent a crash by NPE.
+            if (event.getInstigator() != null && event.getInstigator() != EntityRef.NULL) {
+                updateStatistics(event.getInstigator(), StatisticType.KILLS);
             }
-            updateStatistics(player, "deaths");
+            updateStatistics(player, StatisticType.DEATHS);
             dropItemsFromInventory(player);
             player.send(new RestoreFullHealthEvent(player));
-            Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
+            Vector3f randomVector = new Vector3f(-1 + RANDOM.nextInt(3), 0, -1 + RANDOM.nextInt(3));
             player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
 
             player.send(new SetDirectionEvent(LASUtils.getYaw(LASUtils.getTeleportDestination(team).
@@ -92,14 +96,28 @@ public class PlayerDeathSystem extends BaseComponentSystem {
         }
     }
 
-    private void updateStatistics(EntityRef player, String type) {
+    /**
+     * Count up the respective statistic value for the given player and save it in their {@link PlayerStatisticsComponent}.
+     *
+     * @param player a player entity that must have a {@link PlayerStatisticsComponent}.
+     * @param statisticType which statistic to update
+     */
+    private void updateStatistics(EntityRef player, StatisticType statisticType) {
         PlayerStatisticsComponent playerStatisticsComponent = player.getComponent(PlayerStatisticsComponent.class);
-        if (type.equals("kills")) {
-            playerStatisticsComponent.kills += 1;
-        }
-        if (type.equals("deaths")) {
-            playerStatisticsComponent.deaths += 1;
+        switch (statisticType) {
+            case KILLS:
+                playerStatisticsComponent.kills += 1;
+                break;
+            case DEATHS:
+                playerStatisticsComponent.deaths += 1;
+                break;
+            default:
+                return;
         }
         player.saveComponent(playerStatisticsComponent);
+    }
+
+    private enum StatisticType {
+        KILLS, DEATHS
     }
 }
