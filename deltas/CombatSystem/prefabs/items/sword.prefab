@@ -1,0 +1,9 @@
+{
+  "Item": {
+    "cooldownTime": 500
+  },
+  "RandomDamage": {
+    "minDamage": 20,
+    "maxDamage": 25
+  }
+}
