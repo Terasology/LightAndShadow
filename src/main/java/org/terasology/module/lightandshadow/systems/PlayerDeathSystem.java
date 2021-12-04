@@ -37,13 +37,13 @@ import org.terasology.lightandshadowresources.components.LASTeamComponent;
  */
 @RegisterSystem
 public class PlayerDeathSystem extends BaseComponentSystem {
+    private static final Random RANDOM = new Random();
+
     Optional<Prefab> prefab = Assets.getPrefab("inventory");
     StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
 
     @In
     private InventoryManager inventoryManager;
-
-    private static final Random random = new Random();
 
     /**
      * Reset the inventory and send the player back to its base with refilled health.
@@ -72,7 +72,7 @@ public class PlayerDeathSystem extends BaseComponentSystem {
             updateStatistics(player, StatisticType.DEATHS);
             dropItemsFromInventory(player);
             player.send(new RestoreFullHealthEvent(player));
-            Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
+            Vector3f randomVector = new Vector3f(-1 + RANDOM.nextInt(3), 0, -1 + RANDOM.nextInt(3));
             player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
 
             player.send(new SetDirectionEvent(LASUtils.getYaw(LASUtils.getTeleportDestination(team).
@@ -107,8 +107,12 @@ public class PlayerDeathSystem extends BaseComponentSystem {
         switch (statisticType) {
             case KILLS:
                 playerStatisticsComponent.kills += 1;
+                break;
             case DEATHS:
                 playerStatisticsComponent.deaths += 1;
+                break;
+            default:
+                return;
         }
         player.saveComponent(playerStatisticsComponent);
     }
