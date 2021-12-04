@@ -1,9 +1,4 @@
 {
-  "Purchasable": {
-  },
-  "Value": {
-    "value": 20
-  },
   "Item": {
     "cooldownTime": 300
   }
