@@ -9,7 +9,7 @@ import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.entity.lifecycleEvents.OnAddedComponent;
 import org.terasology.engine.entitySystem.event.EventPriority;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
@@ -20,6 +20,7 @@ import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.unicode.EnclosedAlphanumerics;
 import org.terasology.gestalt.assets.ResourceUrn;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.input.ButtonState;
 import org.terasology.input.Input;
 import org.terasology.module.inventory.input.InventoryButton;
@@ -112,7 +113,8 @@ public class ClientPregameSystem extends BaseComponentSystem {
      * @param event the help button event.
      * @param entity the entity to display the help screen to.
      */
-    @ReceiveEvent(components = {ClientComponent.class, AllowShopScreenComponent.class}, priority = EventPriority.PRIORITY_CRITICAL)
+    @Priority(EventPriority.PRIORITY_CRITICAL)
+    @ReceiveEvent(components = {ClientComponent.class, AllowShopScreenComponent.class})
     public void onInGameShopButton(InventoryButton event, EntityRef entity) {
         if (event.getState() == ButtonState.DOWN) {
             entity.send(new ExpireNotificationEvent(NOTIFICATION_ID));

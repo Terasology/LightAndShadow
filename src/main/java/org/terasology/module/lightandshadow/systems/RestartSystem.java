@@ -7,19 +7,19 @@ import org.terasology.economy.components.CurrencyStorageComponent;
 import org.terasology.economy.events.WalletUpdatedEvent;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterTeleportEvent;
 import org.terasology.engine.logic.players.SetDirectionEvent;
-import org.terasology.module.health.events.RestoreFullHealthEvent;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
+import org.terasology.lightandshadowresources.components.LASTeamComponent;
+import org.terasology.module.health.events.RestoreFullHealthEvent;
 import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.events.ClientRestartEvent;
 import org.terasology.module.lightandshadow.events.RestartRequestEvent;
-import org.terasology.lightandshadowresources.components.LASTeamComponent;
 
 /**
  * System to invoke restart of a game round.

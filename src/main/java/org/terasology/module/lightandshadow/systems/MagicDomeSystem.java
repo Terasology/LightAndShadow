@@ -2,14 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.module.lightandshadow.systems;
 
-import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.joml.Vector3f;
 import org.joml.Vector3ic;
 import org.terasology.engine.audio.events.PlaySoundEvent;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
+import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterImpulseEvent;
 import org.terasology.engine.logic.characters.CharacterMoveInputEvent;
@@ -17,10 +16,11 @@ import org.terasology.engine.logic.delay.DelayManager;
 import org.terasology.engine.logic.delay.DelayedActionTriggeredEvent;
 import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.registry.In;
-import org.terasology.module.lightandshadow.components.MagicDome;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.components.InvulnerableComponent;
+import org.terasology.module.lightandshadow.components.MagicDome;
 import org.terasology.module.lightandshadow.events.ActivateBarrierEvent;
 import org.terasology.module.lightandshadow.events.DelayedDeactivateBarrierEvent;
 

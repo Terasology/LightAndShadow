@@ -5,7 +5,7 @@ package org.terasology.module.lightandshadow.systems;
 import org.terasology.engine.core.SimpleUri;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
@@ -16,6 +16,7 @@ import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.rendering.nui.layers.ingame.DeathScreen;
 import org.terasology.engine.unicode.EnclosedAlphanumerics;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.input.Input;
 import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.events.ScoreUpdateFromServerEvent;
@@ -67,7 +68,8 @@ public class ClientStatisticsSystem extends BaseComponentSystem {
         }
     }
 
-    @ReceiveEvent(priority = EventPriority.PRIORITY_CRITICAL)
+    @Priority(EventPriority.PRIORITY_CRITICAL)
+    @ReceiveEvent
     public void onTab(TapButton event, EntityRef entity) {
         if (event.isDown()) {
             if (localPlayer.getClientEntity().equals(entity) && !isOpen) {
