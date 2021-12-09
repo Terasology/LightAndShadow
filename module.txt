@@ -64,6 +64,10 @@
             "minVersion": "1.0.0"
         },
         {
+            "id": "MultiBlock",
+            "minVersion": "1.1.0"
+        },
+        {
             "id": "Tasks",
             "minVersion": "1.0.0"
         }
