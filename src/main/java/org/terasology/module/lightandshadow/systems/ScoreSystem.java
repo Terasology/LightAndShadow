@@ -4,25 +4,25 @@ package org.terasology.module.lightandshadow.systems;
 
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.Event;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.common.ActivateEvent;
-import org.terasology.lightandshadowresources.components.FlagComponent;
-import org.terasology.module.lightandshadow.events.ReturnFlagEvent;
-import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.world.block.items.BlockItemComponent;
+import org.terasology.gestalt.entitysystem.event.Event;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
+import org.terasology.lightandshadowresources.components.FlagComponent;
+import org.terasology.lightandshadowresources.components.LASTeamComponent;
+import org.terasology.lightandshadowresources.components.WinConditionCheckOnActivateComponent;
+import org.terasology.module.inventory.systems.InventoryManager;
 import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.components.HasFlagComponent;
 import org.terasology.module.lightandshadow.events.GameOverEvent;
 import org.terasology.module.lightandshadow.events.RestartRequestEvent;
+import org.terasology.module.lightandshadow.events.ReturnFlagEvent;
 import org.terasology.module.lightandshadow.events.ScoreUpdateFromServerEvent;
-import org.terasology.lightandshadowresources.components.LASTeamComponent;
-import org.terasology.lightandshadowresources.components.WinConditionCheckOnActivateComponent;
 
 /**
  * System responsible for calculating and providing score.

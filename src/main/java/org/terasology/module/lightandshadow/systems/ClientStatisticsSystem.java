@@ -5,7 +5,7 @@ package org.terasology.module.lightandshadow.systems;
 import org.terasology.engine.core.SimpleUri;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
@@ -16,6 +16,7 @@ import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.rendering.nui.layers.ingame.DeathScreen;
 import org.terasology.engine.unicode.EnclosedAlphanumerics;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.input.Input;
 import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.events.ScoreUpdateFromServerEvent;
@@ -31,7 +32,7 @@ import org.terasology.nui.FontColor;
  */
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientStatisticsSystem extends BaseComponentSystem {
-    private static final String NOTIFICATION_ID = "LightAndShadow:firstTime";
+    private static final String NOTIFICATION_ID = "LightAndShadow:firstTimeStatistics";
 
     @In
     InputSystem inputSystem;
@@ -67,7 +68,8 @@ public class ClientStatisticsSystem extends BaseComponentSystem {
         }
     }
 
-    @ReceiveEvent(priority = EventPriority.PRIORITY_CRITICAL)
+    @Priority(EventPriority.PRIORITY_CRITICAL)
+    @ReceiveEvent
     public void onTab(TapButton event, EntityRef entity) {
         if (event.isDown()) {
             if (localPlayer.getClientEntity().equals(entity) && !isOpen) {
@@ -88,6 +90,18 @@ public class ClientStatisticsSystem extends BaseComponentSystem {
         }
     }
 
+    /**
+     * Get a formatted representation of the primary {@link Input} associated with the given button binding.
+     *
+     * If the display name of the primary bound key is a single character this representation will be the encircled
+     * character. Otherwise the full display name is used. The bound key will be printed in yellow.
+     *
+     * If no key binding was found the text "n/a" in red color is returned.
+     *
+     * @param button the URI of a bindable button
+     * @return a formatted text to be used as representation for the player
+     */
+    //TODO: put this in a common place? Duplicated in Dialogs, EventualSkills, and InGameHelp
     private String getActivationKey(SimpleUri button) {
         return inputSystem.getInputsForBindButton(button).stream()
                 .findFirst()

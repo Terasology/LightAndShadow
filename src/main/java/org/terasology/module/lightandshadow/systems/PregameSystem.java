@@ -5,18 +5,19 @@ package org.terasology.module.lightandshadow.systems;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.event.EventPriority;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.utilities.Assets;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
+import org.terasology.module.health.events.BeforeDamagedEvent;
+import org.terasology.module.inventory.components.StartingInventoryComponent;
 import org.terasology.module.lightandshadow.components.InvulnerableComponent;
 import org.terasology.module.lightandshadow.events.ActivateBarrierEvent;
 import org.terasology.module.lightandshadow.events.PregameEvent;
-import org.terasology.module.health.events.BeforeDamagedEvent;
-import org.terasology.module.inventory.components.StartingInventoryComponent;
 
 import java.util.Optional;
 
@@ -34,7 +35,8 @@ public class PregameSystem extends BaseComponentSystem {
         entity.addComponent(new InvulnerableComponent());
     }
 
-    @ReceiveEvent(components = InvulnerableComponent.class, priority = EventPriority.PRIORITY_HIGH)
+    @Priority(EventPriority.PRIORITY_HIGH)
+    @ReceiveEvent(components = InvulnerableComponent.class)
     public void preventFriendlyFire(BeforeDamagedEvent event, EntityRef entity) {
         event.consume();
     }

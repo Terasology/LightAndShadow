@@ -2,15 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.module.lightandshadow.systems;
 
-import java.util.Optional;
-import java.util.Random;
-import java.util.function.Supplier;
-
+import org.joml.Random;
 import org.joml.Vector3f;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.event.Event;
-import org.terasology.engine.entitySystem.event.ReceiveEvent;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
@@ -25,18 +20,23 @@ import org.terasology.engine.logic.permission.PermissionManager;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.engine.logic.players.SetDirectionEvent;
 import org.terasology.engine.network.ClientComponent;
+import org.terasology.engine.registry.In;
 import org.terasology.engine.utilities.Assets;
+import org.terasology.gestalt.entitysystem.event.Event;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
+import org.terasology.lightandshadowresources.components.LASTeamComponent;
+import org.terasology.lightandshadowresources.components.SetTeamOnActivateComponent;
+import org.terasology.module.inventory.components.StartingInventoryComponent;
+import org.terasology.module.inventory.events.RequestInventoryEvent;
+import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.components.LASConfigComponent;
 import org.terasology.module.lightandshadow.events.DelayedDeactivateBarrierEvent;
 import org.terasology.module.lightandshadow.events.GameStartMessageEvent;
 import org.terasology.module.lightandshadow.events.PregameEvent;
 import org.terasology.module.lightandshadow.events.TimerEvent;
-import org.terasology.module.inventory.components.StartingInventoryComponent;
-import org.terasology.module.inventory.events.RequestInventoryEvent;
-import org.terasology.engine.registry.In;
-import org.terasology.module.lightandshadow.LASUtils;
-import org.terasology.lightandshadowresources.components.LASTeamComponent;
-import org.terasology.lightandshadowresources.components.SetTeamOnActivateComponent;
+
+import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Teleports players to play arena once they chose their team.
