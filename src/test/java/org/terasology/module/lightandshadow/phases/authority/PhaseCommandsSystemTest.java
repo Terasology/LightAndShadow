@@ -1,13 +1,14 @@
 // Copyright 2021 The Terasology Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-package org.terasology.module.lightandshadow.phases;
+package org.terasology.module.lightandshadow.phases.authority;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.entity.internal.PojoEntityManager;
+import org.terasology.module.lightandshadow.phases.Phase;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;

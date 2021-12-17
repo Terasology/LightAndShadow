@@ -1,7 +1,7 @@
 // Copyright 2021 The Terasology Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-package org.terasology.module.lightandshadow.phases;
+package org.terasology.module.lightandshadow.phases.authority;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +13,7 @@ import org.terasology.engine.logic.console.commandSystem.annotations.Sender;
 import org.terasology.engine.logic.permission.PermissionManager;
 import org.terasology.engine.registry.In;
 import org.terasology.module.inventory.components.ItemCommands;
+import org.terasology.module.lightandshadow.phases.Phase;
 
 public class PhaseCommandsSystem extends BaseComponentSystem {
 

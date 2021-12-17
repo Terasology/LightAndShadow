@@ -3,10 +3,22 @@
 
 package org.terasology.module.lightandshadow.phases;
 
-enum Phase {
-    IDLE,
-    PRE_GAME,
-    COUNTDOWN,
-    IN_GAME,
-    POST_GAME;
+import org.terasology.gestalt.entitysystem.event.Event;
+
+import java.util.function.Supplier;
+
+public enum Phase {
+    IDLE(OnIdlePhaseStartedEvent::new, OnIdlePhaseEndedEvent::new),
+    PRE_GAME(OnPreGamePhaseStartedEvent::new, OnPreGamePhaseEndedEvent::new),
+    COUNTDOWN(OnCountdownPhaseStartedEvent::new, OnCountdownPhaseEndedEvent::new),
+    IN_GAME(OnInGamePhaseStartedEvent::new, OnInGamePhaseEndedEvent::new),
+    POST_GAME(OnPostGamePhaseStartedEvent::new, OnPostGamePhaseEndedEvent::new);
+
+    public final Supplier<Event> endEvent;
+    public final Supplier<Event> startEvent;
+
+    Phase(Supplier<Event> startEvent, Supplier<Event> endEvent) {
+        this.startEvent = startEvent;
+        this.endEvent = endEvent;
+    }
 }

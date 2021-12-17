@@ -1,9 +1,10 @@
 // Copyright 2021 The Terasology Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-package org.terasology.module.lightandshadow.phases;
+package org.terasology.module.lightandshadow.phases.authority;
 
 import org.terasology.gestalt.entitysystem.component.Component;
+import org.terasology.module.lightandshadow.phases.Phase;
 
 /**
  * Read-only component holding the current state of a Light and Shadow game.
