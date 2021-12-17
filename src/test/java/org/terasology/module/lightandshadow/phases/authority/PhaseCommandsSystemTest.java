@@ -17,8 +17,11 @@ import org.terasology.module.lightandshadow.systems.GameEntitySystem;
 import java.util.stream.Stream;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 class PhaseCommandsSystemTest {
@@ -51,7 +54,7 @@ class PhaseCommandsSystemTest {
 
     @ParameterizedTest
     @MethodSource("phaseProvider")
-    void testForceIdlePhaseSuccessful(Phase currentPhase, Phase targetPhase) {
+    void testForcePhaseSuccessful(Phase currentPhase, Phase targetPhase) {
         // Arrange
         when(phaseCommandsSystem.phaseSystem.getCurrentPhase()).thenReturn(currentPhase);
         // Act
@@ -61,4 +64,11 @@ class PhaseCommandsSystemTest {
         verify(phaseCommandsSystem.phaseSystem, times(1)).transitionPhase(currentPhase, targetPhase);
     }
 
+    @ParameterizedTest
+    @EnumSource(Phase.class)
+    void testForcePhaseFailedNonExistingTargetPhase(Phase currentPhase) {
+        when(phaseCommandsSystem.phaseSystem.getCurrentPhase()).thenReturn(currentPhase);
+        phaseCommandsSystem.forcePhase(EntityRef.NULL, "foobar");
+        verifyNoInteractions(phaseCommandsSystem.phaseSystem);
+    }
 }
