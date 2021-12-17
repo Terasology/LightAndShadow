@@ -152,7 +152,7 @@ public class PhaseSystem extends BaseComponentSystem {
             phaseComponent.setCurrentPhase(Phase.IN_GAME);
             return phaseComponent;
         });
-        gameEntity.send(new OnGamePhaseStartedEvent());
+        gameEntity.send(new OnInGamePhaseStartedEvent());
     };
 
     private void startPostGamePhase() {

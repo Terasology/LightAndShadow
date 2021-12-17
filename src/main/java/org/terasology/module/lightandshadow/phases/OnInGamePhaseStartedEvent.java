@@ -9,8 +9,8 @@ import org.terasology.gestalt.entitysystem.event.Event;
 // TODO: Would it make more sense to have a single "OnPhaseTransition" with old and new phase here?
 
 @BroadcastEvent
-public class OnGamePhaseStartedEvent implements Event {
+public class OnInGamePhaseStartedEvent implements Event {
 
-    public OnGamePhaseStartedEvent() {
+    public OnInGamePhaseStartedEvent() {
     }
 }
