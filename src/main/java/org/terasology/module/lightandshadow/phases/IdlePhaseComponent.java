@@ -1,7 +1,7 @@
 // Copyright 2021 The Terasology Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-package org.terasology.module.lightandshadow.statemachine;
+package org.terasology.module.lightandshadow.phases;
 
 public class IdlePhaseComponent implements PhaseComponent {
 

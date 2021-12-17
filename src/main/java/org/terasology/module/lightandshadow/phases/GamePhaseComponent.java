@@ -1,12 +1,12 @@
 // Copyright 2021 The Terasology Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-package org.terasology.module.lightandshadow.statemachine;
+package org.terasology.module.lightandshadow.phases;
 
-public class PregamePhaseComponent implements PhaseComponent {
+public class GamePhaseComponent implements PhaseComponent {
 
     public final PhaseSystem.Phase toPhase() {
-        return PhaseSystem.Phase.PREGAME;
+        return PhaseSystem.Phase.GAME;
     }
 
     @Override

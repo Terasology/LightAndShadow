@@ -3,13 +3,13 @@
 
 package org.terasology.module.lightandshadow.statemachine;
 
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.entity.internal.PojoEntityManager;
+import org.terasology.module.lightandshadow.phases.IdlePhaseComponent;
+import org.terasology.module.lightandshadow.phases.PhaseSystem;
 import org.terasology.module.lightandshadow.systems.GameEntitySystem;
 
 import static org.mockito.Mockito.mock;
