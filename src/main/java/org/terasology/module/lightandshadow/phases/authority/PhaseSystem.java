@@ -37,9 +37,11 @@ public class PhaseSystem extends BaseComponentSystem {
     GameEntitySystem gameEntitySystem;
 
     @Override
-    public void initialise() {
+    public void postBegin() {
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
         gameEntity.addOrSaveComponent(new PhaseComponent());
+        logger.info("hello dog");
+        logger.debug("Initializing PhaseSystem with game entity:\n{}", gameEntity.toFullDescription());
     }
 
     // TODO: What happens here if there's multiple components present that implement PhaseComponent?

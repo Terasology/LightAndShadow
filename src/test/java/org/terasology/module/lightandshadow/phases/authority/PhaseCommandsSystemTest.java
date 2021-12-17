@@ -34,7 +34,7 @@ class PhaseCommandsSystemTest {
     @ParameterizedTest
     @EnumSource(Phase.class)
     void testForceIdlePhaseSuccessful(Phase currentPhase) {
-        phaseCommandsSystem.forcePhase(EntityRef.NULL, Phase.IDLE); // TODO: use non-NULL entity
+        phaseCommandsSystem.forcePhase(EntityRef.NULL, "IDLE"); // TODO: use non-NULL entity
         verify(phaseCommandsSystem.phaseSystem, times(1)).transitionPhase(currentPhase, Phase.IDLE);
     }
 
