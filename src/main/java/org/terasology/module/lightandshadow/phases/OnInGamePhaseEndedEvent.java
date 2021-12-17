@@ -4,13 +4,13 @@
 package org.terasology.module.lightandshadow.phases;
 
 import org.terasology.engine.network.BroadcastEvent;
-import org.terasology.engine.entitySystem.event.Event;
+import org.terasology.gestalt.entitysystem.event.Event;
 
 // TODO: Would it make more sense to have a single "OnPhaseTransition" with old and new phase here?
 
 @BroadcastEvent
-public class OnPregamePhaseStartedEvent implements Event {
+public class OnInGamePhaseEndedEvent implements Event {
 
-    public OnPregamePhaseStartedEvent() {
+    public OnInGamePhaseEndedEvent() {
     }
 }

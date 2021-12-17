@@ -27,25 +27,25 @@ public class PhaseCommandsSystem extends BaseComponentSystem {
             requiredPermission = PermissionManager.CHEAT_PERMISSION)
     public String forcePhase(
             @Sender EntityRef client,
-            @CommandParam("targetPhase") PhaseSystem.Phase targetPhase) {
+            @CommandParam("targetPhase") Phase targetPhase) {
 
-        switch(targetPhase) {
+        switch (targetPhase) {
             case IDLE:
-            case PREGAME:
+            case PRE_GAME:
             case COUNTDOWN:
-            case GAME:
-            case POSTGAME:
+            case IN_GAME:
+            case POST_GAME:
                 break;
             default:
                 StringBuilder errorMsg = new StringBuilder(targetPhase + " is not a valid phase, please choose one of the following:");
-                for (PhaseSystem.Phase validPhase : PhaseSystem.Phase.values()) {
+                for (Phase validPhase : Phase.values()) {
                     errorMsg.append(" ").append(validPhase.toString());
                 }
                 logger.error(errorMsg.toString());
                 return errorMsg.toString();
         }
 
-        PhaseSystem.Phase currentPhase = phaseSystem.getCurrentPhase();
+        Phase currentPhase = phaseSystem.getCurrentPhase();
         phaseSystem.transitionPhase(currentPhase, targetPhase);
         return "Initiated phase transition from " + currentPhase + " to " + targetPhase;
     }

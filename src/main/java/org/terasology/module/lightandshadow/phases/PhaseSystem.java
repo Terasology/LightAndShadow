@@ -10,7 +10,6 @@ import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.registry.Share;
-import org.terasology.gestalt.naming.Name;
 import org.terasology.module.lightandshadow.systems.GameEntitySystem;
 
 /**
@@ -25,61 +24,15 @@ public class PhaseSystem extends BaseComponentSystem {
     @In
     GameEntitySystem gameEntitySystem;
 
-    enum Phase {
-        IDLE(new Name("Idle")),
-        PREGAME(new Name("Pregame")),
-        COUNTDOWN(new Name("Countdown")),
-        GAME(new Name("Game")),
-        POSTGAME(new Name("Postgame"));
-
-        private final Name phaseName;
-
-        Phase(final Name phaseName) {
-            this.phaseName = phaseName;
-        }
-
-        @Override
-        public final String toString() {
-            return phaseName.toString();
-        }
-
-        public Phase fromString(String phaseString) {
-            Name input = new Name(phaseString);
-            switch (input.toString()) {
-                case IDLE.phaseName.toString():
-            }
-        }
-    }
-
     @Override
     public void initialise() {
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
-        gameEntity.addOrSaveComponent(new IdlePhaseComponent());
+        gameEntity.addOrSaveComponent(new PhaseComponent());
     }
 
     // TODO: What happens here if there's multiple components present that implement PhaseComponent?
     public Phase getCurrentPhase() {
-        return gameEntitySystem.getGameEntity().getComponent(PhaseComponent.class).toPhase();
-    }
-
-    public boolean isInIdlePhase() {
-        return gameEntitySystem.getGameEntity().hasComponent(IdlePhaseComponent.class);
-    }
-
-    public boolean isInPregamePhase() {
-        return gameEntitySystem.getGameEntity().hasComponent(PregamePhaseComponent.class);
-    }
-
-    public boolean isInCountdownPhase() {
-        return gameEntitySystem.getGameEntity().hasComponent(CountdownPhaseComponent.class);
-    }
-
-    public boolean isInGamePhase() {
-        return gameEntitySystem.getGameEntity().hasComponent(GamePhaseComponent.class);
-    }
-
-    public boolean isInPostgamePhase() {
-        return gameEntitySystem.getGameEntity().hasComponent(PostgamePhaseComponent.class);
+        return gameEntitySystem.getGameEntity().getComponent(PhaseComponent.class).getCurrentPhase();
     }
 
     void transitionPhase(Phase from, Phase to) {
@@ -88,17 +41,17 @@ public class PhaseSystem extends BaseComponentSystem {
             case IDLE:
                 endIdlePhase();
                 break;
-            case PREGAME:
-                endPregamePhase();
+            case PRE_GAME:
+                endPreGamePhase();
                 break;
             case COUNTDOWN:
                 endCountdownPhase();
                 break;
-            case GAME:
-                endGamePhase();
+            case IN_GAME:
+                endInGamePhase();
                 break;
-            case POSTGAME:
-                endPostgamePhase();
+            case POST_GAME:
+                endPostGamePhase();
                 break;
             default:
                 logger.debug("Attempted to transition from invalid phase " + to.toString());
@@ -108,100 +61,106 @@ public class PhaseSystem extends BaseComponentSystem {
             case IDLE:
                 startIdlePhase();
                 break;
-            case PREGAME:
-                startPregamePhase();
+            case PRE_GAME:
+                startPreGamePhase();
                 break;
             case COUNTDOWN:
                 startCountdownPhase();
                 break;
-            case GAME:
-                startGamePhase();
+            case IN_GAME:
+                startInGamePhase();
                 break;
-            case POSTGAME:
-                startPostgamePhase();
+            case POST_GAME:
+                startPostGamePhase();
                 break;
             default:
                 logger.debug("Attempted to transition into invalid phase " + to.toString());
         }
     };
 
+    private void assertInPhase(Phase expectedPhase, EntityRef gameEntity) {
+        PhaseComponent phase = gameEntity.getComponent(PhaseComponent.class);
+
+        if (phase == null || phase.getCurrentPhase() != expectedPhase) {
+            String message = "LightAndShadow/PhaseSystem: Attempting to end idle phase without being in `" + expectedPhase + "` phase.";
+            String entityDump = gameEntity.toFullDescription();
+            throw new RuntimeException(message + "\n" + entityDump);
+        }
+        gameEntity.send(new OnIdlePhaseEndedEvent());
+    }
+
     private void endIdlePhase() {
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
-        if (gameEntity.hasComponent(IdlePhaseComponent.class)) {
-            gameEntity.removeComponent(IdlePhaseComponent.class);
-        } else {
-            logger.debug("Ending idle phase without `IdlePhaseComponent` being present.");
-        }
+        assertInPhase(Phase.IDLE, gameEntity);
         gameEntity.send(new OnIdlePhaseEndedEvent());
     };
 
-    private void endPregamePhase() {
+    private void endPreGamePhase() {
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
-        if (gameEntity.hasComponent(PregamePhaseComponent.class)) {
-            gameEntity.removeComponent(PregamePhaseComponent.class);
-        } else {
-            logger.debug("Ending pregame phase without `PregamePhaseComponent` being present.");
-        }
-        gameEntity.send(new OnPregamePhaseEndedEvent());
+        assertInPhase(Phase.PRE_GAME, gameEntity);
+        gameEntity.send(new OnPreGamePhaseEndedEvent());
     };
 
     private void endCountdownPhase() {
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
-        if (gameEntity.hasComponent(CountdownPhaseComponent.class)) {
-            gameEntity.removeComponent(CountdownPhaseComponent.class);
-        } else {
-            logger.debug("Ending countdown phase without `CountdownPhaseComponent` being present.");
-        }
+        assertInPhase(Phase.COUNTDOWN, gameEntity);
         gameEntity.send(new OnCountdownPhaseEndedEvent());
     };
 
-    private void endGamePhase() {
+    private void endInGamePhase() {
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
-        if (gameEntity.hasComponent(GamePhaseComponent.class)) {
-            gameEntity.removeComponent(GamePhaseComponent.class);
-        } else {
-            logger.debug("Ending game phase without `GamePhaseComponent` being present.");
-        }
-        gameEntity.send(new OnGamePhaseEndedEvent());
+        assertInPhase(Phase.IN_GAME, gameEntity);
+        gameEntity.send(new OnInGamePhaseEndedEvent());
     };
 
-    private void endPostgamePhase() {
+    private void endPostGamePhase() {
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
-        if (gameEntity.hasComponent(PostgamePhaseComponent.class)) {
-            gameEntity.removeComponent(PostgamePhaseComponent.class);
-        } else {
-            logger.debug("Ending postgame phase without `PostgamePhaseComponent` being present.");
-        }
-        gameEntity.send(new OnPostgamePhaseEndedEvent());
+        assertInPhase(Phase.POST_GAME, gameEntity);
+        gameEntity.send(new OnPostGamePhaseEndedEvent());
     };
 
     private void startIdlePhase() {
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
-        gameEntity.addOrSaveComponent(new IdlePhaseComponent());
+        gameEntity.updateComponent(PhaseComponent.class, phaseComponent -> {
+            phaseComponent.setCurrentPhase(Phase.IDLE);
+            return phaseComponent;
+        });
         gameEntity.send(new OnIdlePhaseStartedEvent());
     };
 
-    private void startPregamePhase() {
+    private void startPreGamePhase() {
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
-        gameEntity.addOrSaveComponent(new PregamePhaseComponent());
-        gameEntity.send(new OnPregamePhaseStartedEvent());
+        gameEntity.updateComponent(PhaseComponent.class, phaseComponent -> {
+            phaseComponent.setCurrentPhase(Phase.PRE_GAME);
+            return phaseComponent;
+        });
+        gameEntity.send(new OnPreGamePhaseStartedEvent());
     };
 
     private void startCountdownPhase() {
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
-        gameEntity.addOrSaveComponent(new CountdownPhaseComponent());
+        gameEntity.updateComponent(PhaseComponent.class, phaseComponent -> {
+            phaseComponent.setCurrentPhase(Phase.COUNTDOWN);
+            return phaseComponent;
+        });
         gameEntity.send(new OnCountdownPhaseStartedEvent());
     };
 
-    private void startGamePhase() {
+    private void startInGamePhase() {
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
-        gameEntity.addOrSaveComponent(new GamePhaseComponent());
+        gameEntity.updateComponent(PhaseComponent.class, phaseComponent -> {
+            phaseComponent.setCurrentPhase(Phase.IN_GAME);
+            return phaseComponent;
+        });
         gameEntity.send(new OnGamePhaseStartedEvent());
     };
 
-    private void startPostgamePhase() {
+    private void startPostGamePhase() {
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
-        gameEntity.addOrSaveComponent(new PostgamePhaseComponent());
-        gameEntity.send(new OnPostgamePhaseStartedEvent());
+        gameEntity.updateComponent(PhaseComponent.class, phaseComponent -> {
+            phaseComponent.setCurrentPhase(Phase.POST_GAME);
+            return phaseComponent;
+        });
+        gameEntity.send(new OnPostGamePhaseStartedEvent());
     };
 }

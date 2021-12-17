@@ -1,16 +1,13 @@
 // Copyright 2021 The Terasology Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-package org.terasology.module.lightandshadow.statemachine;
+package org.terasology.module.lightandshadow.phases;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.entity.internal.PojoEntityManager;
-import org.terasology.module.lightandshadow.phases.IdlePhaseComponent;
-import org.terasology.module.lightandshadow.phases.PhaseCommandsSystem;
-import org.terasology.module.lightandshadow.phases.PhaseSystem;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -24,8 +21,7 @@ class PhaseCommandsSystemTest {
     void setUp() {
         phaseCommandsSystem = new PhaseCommandsSystem();
         EntityRef gameEntity = new PojoEntityManager().create();
-        IdlePhaseComponent idlePhaseComponent = new IdlePhaseComponent();
-        gameEntity.saveComponent(idlePhaseComponent);
+        gameEntity.saveComponent(new PhaseComponent());
         createMockPhaseSystem(gameEntity);
     }
 
@@ -35,10 +31,10 @@ class PhaseCommandsSystemTest {
     }
 
     @ParameterizedTest
-    @EnumSource(PhaseSystem.Phase.class)
-    void testForceIdlePhaseSuccessful(PhaseSystem.Phase currentPhase) {
-        phaseCommandsSystem.forcePhase(PhaseSystem.Phase.IDLE);
-        verify(phaseCommandsSystem.phaseSystem, times(1)).transitionPhase(currentPhase, PhaseSystem.Phase.IDLE);
+    @EnumSource(Phase.class)
+    void testForceIdlePhaseSuccessful(Phase currentPhase) {
+        phaseCommandsSystem.forcePhase(EntityRef.NULL, Phase.IDLE); // TODO: use non-NULL entity
+        verify(phaseCommandsSystem.phaseSystem, times(1)).transitionPhase(currentPhase, Phase.IDLE);
     }
 
 }
