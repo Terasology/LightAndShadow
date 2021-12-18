@@ -3,11 +3,9 @@
 
 package org.terasology.module.lightandshadow.phases.authority;
 
-import org.codehaus.plexus.util.cli.Arg;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.entity.internal.PojoEntityManager;
@@ -17,11 +15,8 @@ import org.terasology.module.lightandshadow.systems.GameEntitySystem;
 import java.util.stream.Stream;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 class PhaseCommandsSystemTest {
@@ -58,17 +53,9 @@ class PhaseCommandsSystemTest {
         // Arrange
         when(phaseCommandsSystem.phaseSystem.getCurrentPhase()).thenReturn(currentPhase);
         // Act
-        phaseCommandsSystem.forcePhase(EntityRef.NULL, targetPhase.toString()); // TODO: use non-NULL entity
+        phaseCommandsSystem.forcePhase(EntityRef.NULL, targetPhase);
         // Assert
         verify(phaseCommandsSystem.phaseSystem, times(1)).getCurrentPhase();
         verify(phaseCommandsSystem.phaseSystem, times(1)).transitionPhase(currentPhase, targetPhase);
-    }
-
-    @ParameterizedTest
-    @EnumSource(Phase.class)
-    void testForcePhaseFailedNonExistingTargetPhase(Phase currentPhase) {
-        when(phaseCommandsSystem.phaseSystem.getCurrentPhase()).thenReturn(currentPhase);
-        phaseCommandsSystem.forcePhase(EntityRef.NULL, "foobar");
-        verifyNoInteractions(phaseCommandsSystem.phaseSystem);
     }
 }
