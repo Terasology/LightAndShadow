@@ -60,10 +60,6 @@
             "maxVersion": "0.3.0"
         },
         {
-            "id": "Pathfinding",
-            "minVersion": "1.0.0"
-        },
-        {
             "id": "Tasks",
             "minVersion": "1.0.0"
         }
