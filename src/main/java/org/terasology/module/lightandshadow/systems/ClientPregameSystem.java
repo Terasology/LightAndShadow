@@ -75,15 +75,13 @@ public class ClientPregameSystem extends BaseComponentSystem {
 
     @ReceiveEvent
     public void onPregameStart(OnPreGamePhaseStartedEvent event, EntityRef entity) {
-        if (localPlayer.getClientEntity().equals(entity)) {
-            Notification notification = new Notification(SHOP_NOTIFICATION_ID,
-                    "Ain't Nobody Got Time For That!",
-                    "The game starts as soon as each team has at least " +
-                            gameEntitySystem.getGameEntity().getComponent(LASConfigComponent.class).minTeamSize + " player(s)",
-                    "engine:icons#halfGreenHeart");
-            localPlayer.getClientEntity().send(new ShowNotificationEvent(notification));
-            entity.upsertComponent(AllowShopScreenComponent.class, c -> c.orElse(new AllowShopScreenComponent()));
-        }
+        Notification notification = new Notification(SHOP_NOTIFICATION_ID,
+                "Too Few Players",
+                "Each team needs at least " +
+                        gameEntitySystem.getGameEntity().getComponent(LASConfigComponent.class).minTeamSize + " player(s)",
+                "engine:icons#halfGreenHeart");
+        localPlayer.getClientEntity().send(new ShowNotificationEvent(notification));
+        entity.upsertComponent(AllowShopScreenComponent.class, c -> c.orElse(new AllowShopScreenComponent()));
     }
 
     @ReceiveEvent
