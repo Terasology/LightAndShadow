@@ -9,8 +9,11 @@ import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.common.ActivateEvent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.registry.Share;
+import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
+import org.terasology.lightandshadowresources.components.SetTeamOnActivateComponent;
 import org.terasology.module.lightandshadow.phases.OnCountdownPhaseEndedEvent;
 import org.terasology.module.lightandshadow.phases.OnCountdownPhaseStartedEvent;
 import org.terasology.module.lightandshadow.phases.OnIdlePhaseEndedEvent;
@@ -22,6 +25,7 @@ import org.terasology.module.lightandshadow.phases.OnPostGamePhaseStartedEvent;
 import org.terasology.module.lightandshadow.phases.OnPreGamePhaseEndedEvent;
 import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
 import org.terasology.module.lightandshadow.phases.Phase;
+import org.terasology.module.lightandshadow.phases.SwitchToPhaseEvent;
 import org.terasology.module.lightandshadow.systems.GameEntitySystem;
 
 /**
@@ -54,6 +58,11 @@ public class PhaseSystem extends BaseComponentSystem {
         endPhase(from);
         startPhase(to);
     };
+
+    @ReceiveEvent(components = PhaseComponent.class)
+    public void switchToPhase(SwitchToPhaseEvent event, EntityRef entity) {
+        transitionPhase(getCurrentPhase(), event.targetPhase);
+    }
 
     private void assertInPhase(Phase expectedPhase, EntityRef gameEntity) {
         PhaseComponent phase = gameEntity.getComponent(PhaseComponent.class);
