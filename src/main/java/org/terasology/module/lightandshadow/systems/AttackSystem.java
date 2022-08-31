@@ -5,6 +5,8 @@ package org.terasology.module.lightandshadow.systems;
 
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
@@ -17,13 +19,17 @@ import org.terasology.gestalt.entitysystem.event.Event;
 import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.lightandshadowresources.components.FlagComponent;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
+import org.terasology.module.health.events.BeforeDamagedEvent;
+import org.terasology.module.inventory.events.InventorySlotChangedEvent;
 import org.terasology.module.lightandshadow.components.FlagDropOnActivateComponent;
 import org.terasology.module.lightandshadow.components.HasFlagComponent;
+import org.terasology.module.lightandshadow.components.InvulnerableComponent;
 import org.terasology.module.lightandshadow.events.DropFlagEvent;
 import org.terasology.module.lightandshadow.events.OnFlagDropEvent;
 import org.terasology.module.lightandshadow.events.OnFlagPickupEvent;
+import org.terasology.module.lightandshadow.events.PregameEvent;
 import org.terasology.module.lightandshadow.events.ReturnFlagEvent;
-import org.terasology.module.inventory.events.InventorySlotChangedEvent;
+import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class AttackSystem extends BaseComponentSystem {
@@ -69,6 +75,17 @@ public class AttackSystem extends BaseComponentSystem {
             // If the target player has the flag
             targetPlayer.send(new DropFlagEvent(attackingPlayer));
         }
+    }
+
+    @ReceiveEvent
+    public void onPregameStart(PregameEvent event, EntityRef entity) {
+        entity.addComponent(new InvulnerableComponent());
+    }
+
+    @Priority(EventPriority.PRIORITY_HIGH)
+    @ReceiveEvent(components = InvulnerableComponent.class)
+    public void preventFriendlyFire(BeforeDamagedEvent event, EntityRef entity) {
+        event.consume();
     }
 
     /**

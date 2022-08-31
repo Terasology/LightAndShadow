@@ -21,8 +21,9 @@ import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.components.InvulnerableComponent;
 import org.terasology.module.lightandshadow.components.MagicDome;
-import org.terasology.module.lightandshadow.events.ActivateBarrierEvent;
 import org.terasology.module.lightandshadow.events.DelayedDeactivateBarrierEvent;
+import org.terasology.module.lightandshadow.events.PregameEvent;
+import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class MagicDomeSystem extends BaseComponentSystem {
@@ -41,16 +42,17 @@ public class MagicDomeSystem extends BaseComponentSystem {
     /**
      * Activates the barriers for the pregame regions corresponding to both the teams only in the beginning when
      * the barriers haven't been created yet.
-     *
-     * @param event
-     * @param entity
      */
-    @ReceiveEvent
-    public void activateBarriers(ActivateBarrierEvent event, EntityRef entity) {
+    private void activateBarriers() {
         if (redBarrier == EntityRef.NULL && blackBarrier == EntityRef.NULL) {
             redBarrier = createBarrier("lightAndShadowResources:magicDome", LASUtils.CENTER_RED_BASE_POSITION, "red");
             blackBarrier = createBarrier("lightAndShadowResources:magicDome", LASUtils.CENTER_BLACK_BASE_POSITION, "black");
         }
+    }
+
+    @ReceiveEvent
+    public void onPregameStart(PregameEvent event, EntityRef entity) {
+        activateBarriers();
     }
 
     @ReceiveEvent
