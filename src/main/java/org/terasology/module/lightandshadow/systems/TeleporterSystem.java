@@ -64,8 +64,6 @@ public class TeleporterSystem extends BaseComponentSystem {
     Optional<Prefab> prefab = Assets.getPrefab("inventory");
     StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
 
-    private boolean gameStart;
-
     private final Random random = new Random();
 
     @Command(shortDescription = "Set the maximum team size difference", helpText = "Set maxTeamSizeDifference", runOnServer = true,
@@ -101,10 +99,10 @@ public class TeleporterSystem extends BaseComponentSystem {
                 handlePlayerTeleport(player, team);
 
                 // check game start condition
-                if (isMinSizeTeams() && !gameStart) {
+                if (isMinSizeTeams() && phaseSystem.getCurrentPhase() == Phase.PRE_GAME) {
                     sendEventToClients(TimerEvent::new);
                     player.send(new DelayedDeactivateBarrierEvent(30000));
-                    gameStart = true;
+                    gameEntitySystem.getGameEntity().send(new SwitchToPhaseEvent(Phase.COUNTDOWN));
                 }
             } else {
                 EntityRef gameEntity = gameEntitySystem.getGameEntity();
