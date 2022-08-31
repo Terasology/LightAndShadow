@@ -4,6 +4,8 @@ package org.terasology.module.lightandshadow.systems;
 
 import org.joml.Random;
 import org.joml.Vector3f;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.prefab.Prefab;
@@ -20,6 +22,7 @@ import org.terasology.engine.logic.permission.PermissionManager;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.engine.logic.players.SetDirectionEvent;
 import org.terasology.engine.network.ClientComponent;
+import org.terasology.engine.network.events.DisconnectedEvent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.gestalt.entitysystem.event.Event;
@@ -30,6 +33,7 @@ import org.terasology.module.inventory.components.StartingInventoryComponent;
 import org.terasology.module.inventory.events.RequestInventoryEvent;
 import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.components.LASConfigComponent;
+import org.terasology.module.lightandshadow.components.LASTeamStatsComponent;
 import org.terasology.module.lightandshadow.events.DelayedDeactivateBarrierEvent;
 import org.terasology.module.lightandshadow.events.GameStartMessageEvent;
 import org.terasology.module.lightandshadow.events.TimerEvent;
@@ -54,6 +58,8 @@ public class TeleporterSystem extends BaseComponentSystem {
     GameEntitySystem gameEntitySystem;
     @In
     PhaseSystem phaseSystem;
+
+    private static final Logger logger = LoggerFactory.getLogger(TeleporterSystem.class);
 
     Optional<Prefab> prefab = Assets.getPrefab("inventory");
     StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
@@ -80,51 +86,52 @@ public class TeleporterSystem extends BaseComponentSystem {
      * @param entity
      */
     @ReceiveEvent(components = SetTeamOnActivateComponent.class)
-    public void onActivate(ActivateEvent event, EntityRef entity) {
+    public void onTeleportActivation(ActivateEvent event, EntityRef entity) {
         EntityRef player = event.getInstigator();
-        if (isProperTeamSize(entity, player)) {
-            String team = setPlayerTeamToTeleporterTeam(player, entity);
-            handlePlayerTeleport(player, team);
+        String targetTeam = entity.getComponent(LASTeamComponent.class).team;
+        if (targetTeam.equals(LASUtils.WHITE_TEAM)) {
+            // teleporters are (currently) expected to only target black or red team
+            logger.debug("Player {} attempted to join white team", player.getId());
+            event.consume();
+        } else {
+            gameEntitySystem.updateTeamStats();
+
+            if (isBalancedTeams(targetTeam)) {
+                String team = setPlayerTeamToTeleporterTeam(player, entity);
+                handlePlayerTeleport(player, team);
+
+                // check game start condition
+                if (isMinSizeTeams() && !gameStart) {
+                    sendEventToClients(TimerEvent::new);
+                    player.send(new DelayedDeactivateBarrierEvent(30000));
+                    gameStart = true;
+                }
+            } else {
+                EntityRef gameEntity = gameEntitySystem.getGameEntity();
+                LASConfigComponent config = gameEntity.getComponent(LASConfigComponent.class);
+                player.getOwner().send(new ChatMessageEvent(
+                        "The " + targetTeam + " team has " + config.maxTeamSizeDifference + " player(s) more, " +
+                                "please join the " + LASUtils.getOppositionTeam(targetTeam) + " team.", EntityRef.NULL));
+            }
         }
     }
 
-    private boolean isProperTeamSize(EntityRef teleporter, EntityRef player) {
+    private boolean isBalancedTeams(String targetTeam) {
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
-        int oppositeTeamCount = 0;
-        int teleporterTeamCount = 0;
+        LASTeamStatsComponent teamStats = gameEntity.getComponent(LASTeamStatsComponent.class);
         int maxTeamSizeDifference = gameEntity.getComponent(LASConfigComponent.class).maxTeamSizeDifference;
-        int minTeamSize = gameEntity.getComponent(LASConfigComponent.class).minTeamSize;
-        String teleporterTeam = teleporter.getComponent(LASTeamComponent.class).team;
-        Iterable<EntityRef> characters = entityManager.getEntitiesWith(PlayerCharacterComponent.class,
-                LASTeamComponent.class);
+        int currentTeamSizeDiff = teamStats.blackTeamSize - teamStats.redTeamSize;
+        int postTeleportTeamSizeDiff = targetTeam.equals(LASUtils.BLACK_TEAM) ? currentTeamSizeDiff + 1 : currentTeamSizeDiff - 1;
 
-        for (EntityRef character : characters) {
-            String otherPlayerTeam = character.getComponent(LASTeamComponent.class).team;
-            if (teleporterTeam.equals(otherPlayerTeam)) {
-                teleporterTeamCount++;
-            } else if (!otherPlayerTeam.equals(LASUtils.WHITE_TEAM)) {
-                oppositeTeamCount++;
-            }
-        }
-        if (teleporterTeamCount - oppositeTeamCount < maxTeamSizeDifference) {
-            if (teleporterTeamCount >= minTeamSize - 1 && oppositeTeamCount >= minTeamSize && !gameStart) {
-                sendEventToClients(TimerEvent::new);
-                player.send(new DelayedDeactivateBarrierEvent(30000));
-                gameStart = true;
-            }
-            return true;
-        } else {
-            if (maxTeamSizeDifference == 1) {
-                player.getOwner().send(new ChatMessageEvent(
-                        "The " + teleporterTeam + " team has " + maxTeamSizeDifference + " player more, " +
-                                "so please join the " + LASUtils.getOppositionTeam(teleporterTeam) + " team.", EntityRef.NULL));
-            } else {
-                player.getOwner().send(new ChatMessageEvent(
-                        "The " + teleporterTeam + " team has " + maxTeamSizeDifference + " players more, " +
-                                "so please join the " + LASUtils.getOppositionTeam(teleporterTeam) + " team.", EntityRef.NULL));
-            }
-            return false;
-        }
+        return Math.abs(postTeleportTeamSizeDiff) <= maxTeamSizeDifference;
+    }
+
+    private boolean isMinSizeTeams() {
+        EntityRef gameEntity = gameEntitySystem.getGameEntity();
+        LASTeamStatsComponent teamStats = gameEntity.getComponent(LASTeamStatsComponent.class);
+        int minTeamSize = gameEntity.getComponent(LASConfigComponent.class).minTeamSize;
+
+        return teamStats.redTeamSize >= minTeamSize && teamStats.blackTeamSize >= minTeamSize;
     }
 
     private String setPlayerTeamToTeleporterTeam(EntityRef player, EntityRef teleporter) {
