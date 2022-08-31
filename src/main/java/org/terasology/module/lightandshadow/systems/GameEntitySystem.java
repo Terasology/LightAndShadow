@@ -12,6 +12,10 @@ import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.console.commandSystem.annotations.Command;
+import org.terasology.engine.logic.console.commandSystem.annotations.CommandParam;
+import org.terasology.engine.logic.console.commandSystem.annotations.Sender;
+import org.terasology.engine.logic.permission.PermissionManager;
 import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.engine.registry.Share;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
@@ -66,6 +70,24 @@ public class GameEntitySystem extends BaseComponentSystem {
         }
 
         gameEntity.addOrSaveComponent(teamStats);
+    }
+
+    @Command(shortDescription = "Set the maximum team size difference", helpText = "Set maxTeamSizeDifference", runOnServer = true,
+            requiredPermission = PermissionManager.CHEAT_PERMISSION)
+    public String setMaxTeamSizeDifference(@Sender EntityRef client, @CommandParam("difference") int difference) {
+        LASConfigComponent lasconfig = gameEntity.getComponent(LASConfigComponent.class);
+        lasconfig.maxTeamSizeDifference = difference;
+        gameEntity.saveComponent(lasconfig);
+        return "The max team size difference is set to " + difference;
+    }
+
+    @Command(shortDescription = "Set the minimum team size", helpText = "Set minTeamSize", runOnServer = true,
+            requiredPermission = PermissionManager.CHEAT_PERMISSION)
+    public String setMinTeamSize(@Sender EntityRef client, @CommandParam("size") int size) {
+        LASConfigComponent lasconfig = gameEntity.getComponent(LASConfigComponent.class);
+        lasconfig.minTeamSize = size;
+        gameEntity.saveComponent(lasconfig);
+        return "The min team size is set to " + size;
     }
 }
 

@@ -66,16 +66,6 @@ public class TeleporterSystem extends BaseComponentSystem {
 
     private final Random random = new Random();
 
-    @Command(shortDescription = "Set the maximum team size difference", helpText = "Set maxTeamSizeDifference", runOnServer = true,
-            requiredPermission = PermissionManager.CHEAT_PERMISSION)
-    public String setMaxTeamSizeDifference(@Sender EntityRef client, @CommandParam("difference") int difference) {
-        EntityRef gameEntity = gameEntitySystem.getGameEntity();
-        LASConfigComponent lasconfig = gameEntity.getComponent(LASConfigComponent.class);
-        lasconfig.maxTeamSizeDifference = difference;
-        gameEntity.saveComponent(lasconfig);
-        return "The max team size difference is set to " + difference;
-    }
-
     /**
      * Depending on which teleporter the player chooses, they are set to that team
      * and teleported to that base
