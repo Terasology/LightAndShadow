@@ -22,7 +22,6 @@ import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.components.InvulnerableComponent;
 import org.terasology.module.lightandshadow.components.MagicDome;
 import org.terasology.module.lightandshadow.events.DelayedDeactivateBarrierEvent;
-import org.terasology.module.lightandshadow.events.PregameEvent;
 import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
@@ -51,7 +50,7 @@ public class MagicDomeSystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void onPregameStart(PregameEvent event, EntityRef entity) {
+    public void onPregameStart(OnPreGamePhaseStartedEvent event, EntityRef entity) {
         activateBarriers();
     }
 

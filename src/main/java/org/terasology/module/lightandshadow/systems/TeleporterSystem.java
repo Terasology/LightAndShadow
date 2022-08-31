@@ -32,8 +32,10 @@ import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.components.LASConfigComponent;
 import org.terasology.module.lightandshadow.events.DelayedDeactivateBarrierEvent;
 import org.terasology.module.lightandshadow.events.GameStartMessageEvent;
-import org.terasology.module.lightandshadow.events.PregameEvent;
 import org.terasology.module.lightandshadow.events.TimerEvent;
+import org.terasology.module.lightandshadow.phases.Phase;
+import org.terasology.module.lightandshadow.phases.SwitchToPhaseEvent;
+import org.terasology.module.lightandshadow.phases.authority.PhaseSystem;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -50,6 +52,8 @@ public class TeleporterSystem extends BaseComponentSystem {
     EntityManager entityManager;
     @In
     GameEntitySystem gameEntitySystem;
+    @In
+    PhaseSystem phaseSystem;
 
     Optional<Prefab> prefab = Assets.getPrefab("inventory");
     StartingInventoryComponent startingInventory = prefab.get().getComponent(StartingInventoryComponent.class);
@@ -131,8 +135,11 @@ public class TeleporterSystem extends BaseComponentSystem {
     }
 
     private void handlePlayerTeleport(EntityRef player, String team) {
+        // when the first player joins the game, switch to pre-game phase
+        if (phaseSystem.getCurrentPhase() == Phase.IDLE) {
+            gameEntitySystem.getGameEntity().send(new SwitchToPhaseEvent(Phase.PRE_GAME));
+        }
         Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
-        player.send(new PregameEvent());
         player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
         player.send(new SetDirectionEvent(LASUtils.getYaw(LASUtils.getTeleportDestination(team).
                 sub(LASUtils.getTeleportDestination(LASUtils.getOppositionTeam(team)), new Vector3f())), 0));
