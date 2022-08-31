@@ -93,6 +93,7 @@ public class TeleporterSystem extends BaseComponentSystem {
         int oppositeTeamCount = 0;
         int teleporterTeamCount = 0;
         int maxTeamSizeDifference = gameEntity.getComponent(LASConfigComponent.class).maxTeamSizeDifference;
+        int minTeamSize = gameEntity.getComponent(LASConfigComponent.class).minTeamSize;
         String teleporterTeam = teleporter.getComponent(LASTeamComponent.class).team;
         Iterable<EntityRef> characters = entityManager.getEntitiesWith(PlayerCharacterComponent.class,
                 LASTeamComponent.class);
@@ -106,7 +107,7 @@ public class TeleporterSystem extends BaseComponentSystem {
             }
         }
         if (teleporterTeamCount - oppositeTeamCount < maxTeamSizeDifference) {
-            if (teleporterTeamCount >= 0 && oppositeTeamCount >= 1 && !gameStart) {
+            if (teleporterTeamCount >= minTeamSize - 1 && oppositeTeamCount >= minTeamSize && !gameStart) {
                 sendEventToClients(TimerEvent::new);
                 player.send(new DelayedDeactivateBarrierEvent(30000));
                 gameStart = true;
