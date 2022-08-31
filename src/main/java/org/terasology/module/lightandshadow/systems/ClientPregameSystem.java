@@ -24,8 +24,9 @@ import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.input.ButtonState;
 import org.terasology.input.Input;
 import org.terasology.module.inventory.input.InventoryButton;
-import org.terasology.module.lightandshadow.events.GameStartMessageEvent;
+import org.terasology.module.lightandshadow.components.LASConfigComponent;
 import org.terasology.module.lightandshadow.events.TimerEvent;
+import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
 import org.terasology.notifications.events.ExpireNotificationEvent;
 import org.terasology.notifications.events.ShowNotificationEvent;
 import org.terasology.notifications.model.Notification;
@@ -42,8 +43,6 @@ public class ClientPregameSystem extends BaseComponentSystem {
 
     public static final ResourceUrn ASSET_URI = new ResourceUrn("LightAndShadow:Timer");
 
-    private static final String PREGAME_MESSAGE = "The game start's as soon as there is \n at least one player in each team.";
-
     private static final int COUNTDOWN_IN_SECONDS = 30;
 
     private static Timer timer;
@@ -55,6 +54,8 @@ public class ClientPregameSystem extends BaseComponentSystem {
     private EntityManager entityManager;
     @In
     private NUIManager nuiManager;
+    @In
+    private GameEntitySystem gameEntitySystem;
 
     @In
     private LocalPlayer localPlayer;
@@ -72,9 +73,11 @@ public class ClientPregameSystem extends BaseComponentSystem {
     }
 
     @ReceiveEvent
-    public void onPregameStart(GameStartMessageEvent event, EntityRef entity) {
+    public void onPregameStart(OnPreGamePhaseStartedEvent event, EntityRef entity) {
         if (localPlayer.getClientEntity().equals(entity)) {
-            window.addNotification(PREGAME_MESSAGE);
+            String msg = "The game starts as soon as each team \n has at least " +
+                    gameEntitySystem.getGameEntity().getComponent(LASConfigComponent.class).minTeamSize + " player(s)";
+            window.addNotification(msg);
             entity.upsertComponent(AllowShopScreenComponent.class, c -> c.orElse(new AllowShopScreenComponent()));
         }
     }

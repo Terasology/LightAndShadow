@@ -15,14 +15,8 @@ import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterTeleportEvent;
 import org.terasology.engine.logic.chat.ChatMessageEvent;
 import org.terasology.engine.logic.common.ActivateEvent;
-import org.terasology.engine.logic.console.commandSystem.annotations.Command;
-import org.terasology.engine.logic.console.commandSystem.annotations.CommandParam;
-import org.terasology.engine.logic.console.commandSystem.annotations.Sender;
-import org.terasology.engine.logic.permission.PermissionManager;
-import org.terasology.engine.logic.players.PlayerCharacterComponent;
 import org.terasology.engine.logic.players.SetDirectionEvent;
 import org.terasology.engine.network.ClientComponent;
-import org.terasology.engine.network.events.DisconnectedEvent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.gestalt.entitysystem.event.Event;
@@ -35,7 +29,6 @@ import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.components.LASConfigComponent;
 import org.terasology.module.lightandshadow.components.LASTeamStatsComponent;
 import org.terasology.module.lightandshadow.events.DelayedDeactivateBarrierEvent;
-import org.terasology.module.lightandshadow.events.GameStartMessageEvent;
 import org.terasology.module.lightandshadow.events.TimerEvent;
 import org.terasology.module.lightandshadow.phases.Phase;
 import org.terasology.module.lightandshadow.phases.SwitchToPhaseEvent;
@@ -87,13 +80,6 @@ public class TeleporterSystem extends BaseComponentSystem {
             if (isBalancedTeams(targetTeam)) {
                 String team = setPlayerTeamToTeleporterTeam(player, entity);
                 handlePlayerTeleport(player, team);
-
-                // check game start condition
-                if (isMinSizeTeams() && phaseSystem.getCurrentPhase() == Phase.PRE_GAME) {
-                    sendEventToClients(TimerEvent::new);
-                    player.send(new DelayedDeactivateBarrierEvent(30000));
-                    gameEntitySystem.getGameEntity().send(new SwitchToPhaseEvent(Phase.COUNTDOWN));
-                }
             } else {
                 EntityRef gameEntity = gameEntitySystem.getGameEntity();
                 LASConfigComponent config = gameEntity.getComponent(LASConfigComponent.class);
@@ -135,13 +121,20 @@ public class TeleporterSystem extends BaseComponentSystem {
         if (phaseSystem.getCurrentPhase() == Phase.IDLE) {
             gameEntitySystem.getGameEntity().send(new SwitchToPhaseEvent(Phase.PRE_GAME));
         }
+
         Vector3f randomVector = new Vector3f(-1 + random.nextInt(3), 0, -1 + random.nextInt(3));
         player.send(new CharacterTeleportEvent(randomVector.add(LASUtils.getTeleportDestination(team))));
         player.send(new SetDirectionEvent(LASUtils.getYaw(LASUtils.getTeleportDestination(team).
                 sub(LASUtils.getTeleportDestination(LASUtils.getOppositionTeam(team)), new Vector3f())), 0));
         player.addOrSaveComponent(startingInventory);
         player.send(new RequestInventoryEvent(startingInventory.items));
-        sendEventToClients(GameStartMessageEvent::new);
+
+        // check game start condition
+        if (isMinSizeTeams() && phaseSystem.getCurrentPhase() == Phase.PRE_GAME) {
+            sendEventToClients(TimerEvent::new);
+            player.send(new DelayedDeactivateBarrierEvent(30000));
+            gameEntitySystem.getGameEntity().send(new SwitchToPhaseEvent(Phase.COUNTDOWN));
+        }
     }
 
     private void sendEventToClients(Supplier<Event> eventSupplier) {
