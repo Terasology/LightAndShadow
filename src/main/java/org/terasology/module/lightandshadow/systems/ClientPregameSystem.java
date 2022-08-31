@@ -39,7 +39,8 @@ import java.util.TimerTask;
 
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientPregameSystem extends BaseComponentSystem {
-    private static final String NOTIFICATION_ID = "LightAndShadow:firstTimeShop";
+    private static final String SHOP_NOTIFICATION_ID = "LightAndShadow:firstTimeShop";
+    private static final String WAIT_NOTIFICATION_ID = "LightAndShadow:waitForPlayers";
 
     public static final ResourceUrn ASSET_URI = new ResourceUrn("LightAndShadow:Timer");
 
@@ -75,9 +76,12 @@ public class ClientPregameSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onPregameStart(OnPreGamePhaseStartedEvent event, EntityRef entity) {
         if (localPlayer.getClientEntity().equals(entity)) {
-            String msg = "The game starts as soon as each team \n has at least " +
-                    gameEntitySystem.getGameEntity().getComponent(LASConfigComponent.class).minTeamSize + " player(s)";
-            window.addNotification(msg);
+            Notification notification = new Notification(SHOP_NOTIFICATION_ID,
+                    "Ain't Nobody Got Time For That!",
+                    "The game starts as soon as each team has at least " +
+                            gameEntitySystem.getGameEntity().getComponent(LASConfigComponent.class).minTeamSize + " player(s)",
+                    "engine:icons#halfGreenHeart");
+            localPlayer.getClientEntity().send(new ShowNotificationEvent(notification));
             entity.upsertComponent(AllowShopScreenComponent.class, c -> c.orElse(new AllowShopScreenComponent()));
         }
     }
@@ -91,11 +95,11 @@ public class ClientPregameSystem extends BaseComponentSystem {
                 boolean addNotification;
                 public void run() {
                     if (addNotification) {
-                        window.removeNotification(PREGAME_MESSAGE);
+                        entity.send(new ExpireNotificationEvent(WAIT_NOTIFICATION_ID));
                         window.addNotification("The game starts in " + timePeriod-- + " seconds.");
                         addNotification = false;
                     } else {
-                        window.removeNotification(PREGAME_MESSAGE);
+                        entity.send(new ExpireNotificationEvent(WAIT_NOTIFICATION_ID));
                         window.removeNotification("The game starts in " + (timePeriod + 1) + " seconds.");
                         addNotification = true;
                     }
@@ -120,7 +124,7 @@ public class ClientPregameSystem extends BaseComponentSystem {
     @ReceiveEvent(components = {ClientComponent.class, AllowShopScreenComponent.class})
     public void onInGameShopButton(InventoryButton event, EntityRef entity) {
         if (event.getState() == ButtonState.DOWN) {
-            entity.send(new ExpireNotificationEvent(NOTIFICATION_ID));
+            entity.send(new ExpireNotificationEvent(SHOP_NOTIFICATION_ID));
         }
     }
 
@@ -156,7 +160,7 @@ public class ClientPregameSystem extends BaseComponentSystem {
 
     @ReceiveEvent(components = AllowShopScreenComponent.class)
     public void onShopComponentAdded(OnAddedComponent event, EntityRef entity) {
-        Notification notification = new Notification(NOTIFICATION_ID,
+        Notification notification = new Notification(SHOP_NOTIFICATION_ID,
                 "Shut Up and Take My Money!",
                 "Press " + getActivationKey(new SimpleUri("Inventory:inventory")) + " to buy items",
                 "Economy:GoldCoin");
