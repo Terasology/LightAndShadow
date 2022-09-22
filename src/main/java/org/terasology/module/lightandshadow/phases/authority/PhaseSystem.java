@@ -9,27 +9,16 @@ import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
-import org.terasology.engine.logic.common.ActivateEvent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.registry.Share;
 import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
-import org.terasology.lightandshadowresources.components.SetTeamOnActivateComponent;
-import org.terasology.module.lightandshadow.phases.OnCountdownPhaseEndedEvent;
-import org.terasology.module.lightandshadow.phases.OnCountdownPhaseStartedEvent;
 import org.terasology.module.lightandshadow.phases.OnIdlePhaseEndedEvent;
-import org.terasology.module.lightandshadow.phases.OnIdlePhaseStartedEvent;
-import org.terasology.module.lightandshadow.phases.OnInGamePhaseEndedEvent;
-import org.terasology.module.lightandshadow.phases.OnInGamePhaseStartedEvent;
-import org.terasology.module.lightandshadow.phases.OnPostGamePhaseEndedEvent;
-import org.terasology.module.lightandshadow.phases.OnPostGamePhaseStartedEvent;
-import org.terasology.module.lightandshadow.phases.OnPreGamePhaseEndedEvent;
-import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
 import org.terasology.module.lightandshadow.phases.Phase;
 import org.terasology.module.lightandshadow.phases.SwitchToPhaseEvent;
 import org.terasology.module.lightandshadow.systems.GameEntitySystem;
 
 /**
- *  Provides an entity that keeps track of game state information.
+ * Provides an entity that keeps track of game state information.
  */
 @RegisterSystem(RegisterMode.AUTHORITY)
 @Share(value = PhaseSystem.class)
@@ -57,7 +46,7 @@ public class PhaseSystem extends BaseComponentSystem {
         logger.debug("Transitioning phases from " + from + " to " + to);
         endPhase(from);
         startPhase(to);
-    };
+    }
 
     @ReceiveEvent(components = PhaseComponent.class)
     public void switchToPhase(SwitchToPhaseEvent event, EntityRef entity) {
