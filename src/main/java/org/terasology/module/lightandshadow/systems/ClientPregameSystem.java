@@ -18,12 +18,11 @@ import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
-import org.terasology.engine.unicode.EnclosedAlphanumerics;
 import org.terasology.gestalt.assets.ResourceUrn;
 import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.input.ButtonState;
-import org.terasology.input.Input;
 import org.terasology.module.inventory.input.InventoryButton;
+import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.components.LASConfigComponent;
 import org.terasology.module.lightandshadow.events.TimerEvent;
 import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
@@ -31,8 +30,6 @@ import org.terasology.notifications.events.ExpireNotificationEvent;
 import org.terasology.notifications.events.ShowNotificationEvent;
 import org.terasology.notifications.model.Notification;
 import org.terasology.notify.ui.DialogNotificationOverlay;
-import org.terasology.nui.Color;
-import org.terasology.nui.FontColor;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -126,41 +123,11 @@ public class ClientPregameSystem extends BaseComponentSystem {
         }
     }
 
-    /**
-     * Get a formatted representation of the primary {@link Input} associated with the given button binding.
-     *
-     * If the display name of the primary bound key is a single character this representation will be the encircled
-     * character. Otherwise the full display name is used. The bound key will be printed in yellow.
-     *
-     * If no key binding was found the text "n/a" in red color is returned.
-     *
-     * @param button the URI of a bindable button
-     * @return a formatted text to be used as representation for the player
-     */
-    //TODO: put this in a common place? Duplicated in Dialogs, EventualSkills, and InGameHelp
-    private String getActivationKey(SimpleUri button) {
-        return inputSystem.getInputsForBindButton(button).stream()
-                .findFirst()
-                .map(Input::getDisplayName)
-                .map(key -> {
-                    if (key.length() == 1) {
-                        // print the key in yellow within a circle
-                        int off = key.charAt(0) - 'A';
-                        char code = (char) (EnclosedAlphanumerics.CIRCLED_LATIN_CAPITAL_LETTER_A + off);
-                        return String.valueOf(code);
-                    } else {
-                        return key;
-                    }
-                })
-                .map(key -> FontColor.getColored(key, Color.yellow))
-                .orElse(FontColor.getColored("n/a", Color.red));
-    }
-
     @ReceiveEvent(components = AllowShopScreenComponent.class)
     public void onShopComponentAdded(OnAddedComponent event, EntityRef entity) {
         Notification notification = new Notification(SHOP_NOTIFICATION_ID,
                 "Shut Up and Take My Money!",
-                "Press " + getActivationKey(new SimpleUri("Inventory:inventory")) + " to buy items",
+                "Press " + LASUtils.getActivationKey(inputSystem, new SimpleUri("Inventory:inventory")) + " to buy items",
                 "Economy:GoldCoin");
         localPlayer.getClientEntity().send(new ShowNotificationEvent(notification));
     }
