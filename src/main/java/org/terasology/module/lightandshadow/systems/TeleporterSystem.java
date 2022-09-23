@@ -75,8 +75,6 @@ public class TeleporterSystem extends BaseComponentSystem {
             logger.debug("Player {} attempted to join white team", player.getId());
             event.consume();
         } else {
-            gameEntitySystem.updateTeamStats();
-
             if (isBalancedTeams(targetTeam)) {
                 String team = setPlayerTeamToTeleporterTeam(player, entity);
                 handlePlayerTeleport(player, team);
@@ -91,6 +89,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     }
 
     private boolean isBalancedTeams(String targetTeam) {
+        gameEntitySystem.updateTeamStats();
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
         LASTeamStatsComponent teamStats = gameEntity.getComponent(LASTeamStatsComponent.class);
         int maxTeamSizeDifference = gameEntity.getComponent(LASConfigComponent.class).maxTeamSizeDifference;
@@ -101,6 +100,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     }
 
     private boolean isMinSizeTeams() {
+        gameEntitySystem.updateTeamStats();
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
         LASTeamStatsComponent teamStats = gameEntity.getComponent(LASTeamStatsComponent.class);
         int minTeamSize = gameEntity.getComponent(LASConfigComponent.class).minTeamSize;
