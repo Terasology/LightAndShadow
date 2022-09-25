@@ -2,8 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.module.lightandshadow.systems;
 
-import org.terasology.economy.components.AllowShopScreenComponent;
-import org.terasology.economy.ui.MarketUiClientSystem;
 import org.terasology.engine.core.SimpleUri;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
@@ -40,7 +38,6 @@ import java.util.TimerTask;
 
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientPregameSystem extends BaseComponentSystem {
-    private static final String SHOP_NOTIFICATION_ID = "LightAndShadow:firstTimeShop";
     private static final String WAIT_NOTIFICATION_ID = "LightAndShadow:waitForPlayers";
 
     public static final ResourceUrn ASSET_URI = new ResourceUrn("LightAndShadow:Timer");
@@ -79,7 +76,6 @@ public class ClientPregameSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onPregameStart(OnPreGamePhaseStartedEvent event, EntityRef entity) {
         notifyOnTooFewPlayers();
-        entity.upsertComponent(AllowShopScreenComponent.class, c -> c.orElse(new AllowShopScreenComponent()));
     }
 
     @ReceiveEvent
@@ -118,31 +114,6 @@ public class ClientPregameSystem extends BaseComponentSystem {
                 }
             }, 0, 500);
         }
-    }
-
-    /**
-     * Handles the button event if in-game shop is enabled.
-     * Needs to have a higher priority than {@link MarketUiClientSystem#onToggleInventory(InventoryButton, EntityRef)}
-     * to receive the {@link InventoryButton} event before it is consumed.
-     *
-     * @param event the help button event.
-     * @param entity the entity to display the help screen to.
-     */
-    @Priority(EventPriority.PRIORITY_CRITICAL)
-    @ReceiveEvent(components = {ClientComponent.class, AllowShopScreenComponent.class})
-    public void onInGameShopButton(InventoryButton event, EntityRef entity) {
-        if (event.getState() == ButtonState.DOWN) {
-            entity.send(new ExpireNotificationEvent(SHOP_NOTIFICATION_ID));
-        }
-    }
-
-    @ReceiveEvent(components = AllowShopScreenComponent.class)
-    public void onShopComponentAdded(OnAddedComponent event, EntityRef entity) {
-        Notification notification = new Notification(SHOP_NOTIFICATION_ID,
-                "Shut Up and Take My Money!",
-                "Press " + LASUtils.getActivationKey(inputSystem, new SimpleUri("Inventory:inventory")) + " to buy items",
-                "Economy:GoldCoin");
-        localPlayer.getClientEntity().send(new ShowNotificationEvent(notification));
     }
 
     public void notifyOnTooFewPlayers() {
