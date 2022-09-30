@@ -2,26 +2,18 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.module.lightandshadow.systems;
 
-import org.terasology.engine.core.SimpleUri;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
-import org.terasology.engine.entitySystem.entity.lifecycleEvents.OnAddedComponent;
-import org.terasology.engine.entitySystem.event.EventPriority;
-import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.input.InputSystem;
 import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.logic.players.event.OnPlayerSpawnedEvent;
-import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.gestalt.assets.ResourceUrn;
 import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
-import org.terasology.input.ButtonState;
-import org.terasology.module.inventory.input.InventoryButton;
-import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.components.LASConfigComponent;
 import org.terasology.module.lightandshadow.events.TimerEvent;
 import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
@@ -37,7 +29,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 @RegisterSystem(RegisterMode.CLIENT)
-public class ClientPregameSystem extends BaseComponentSystem {
+public class ClientGameStateInfoSystem extends BaseComponentSystem {
     private static final String WAIT_NOTIFICATION_ID = "LightAndShadow:waitForPlayers";
 
     public static final ResourceUrn ASSET_URI = new ResourceUrn("LightAndShadow:Timer");
