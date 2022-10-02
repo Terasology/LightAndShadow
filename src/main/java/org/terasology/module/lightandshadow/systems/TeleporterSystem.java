@@ -15,6 +15,9 @@ import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterTeleportEvent;
 import org.terasology.engine.logic.chat.ChatMessageEvent;
 import org.terasology.engine.logic.common.ActivateEvent;
+import org.terasology.engine.logic.console.commandSystem.annotations.Command;
+import org.terasology.engine.logic.console.commandSystem.annotations.Sender;
+import org.terasology.engine.logic.permission.PermissionManager;
 import org.terasology.engine.logic.players.SetDirectionEvent;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
@@ -142,5 +145,19 @@ public class TeleporterSystem extends BaseComponentSystem {
         for (EntityRef client : clients) {
             client.send(eventSupplier.get());
         }
+    }
+
+    @Command(shortDescription = "Teleport player back to platform", helpText = "Platform Teleport", runOnServer = true,
+            requiredPermission = PermissionManager.CHEAT_PERMISSION)
+    public String teleportToPlatform(@Sender EntityRef sender) {
+        ClientComponent clientComp = sender.getComponent(ClientComponent.class);
+        LASTeamComponent senderTeam = clientComp.character.getComponent(LASTeamComponent.class);
+        if (senderTeam != null && (senderTeam.team.equals(LASUtils.RED_TEAM) || senderTeam.team.equals(LASUtils.BLACK_TEAM))) {
+            // players teleporting back to platform should be removed from the playing teams
+            // white team (spectator) members are allowed to teleport without losing their team
+            clientComp.character.removeComponent(LASTeamComponent.class);
+        }
+        clientComp.character.send(new CharacterTeleportEvent(new Vector3f(LASUtils.FLOATING_PLATFORM_POSITION).add(0, 1, 0)));
+        return "Teleporting you to the platform.";
     }
 }
