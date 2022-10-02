@@ -23,6 +23,8 @@ import org.terasology.module.lightandshadow.components.InvulnerableComponent;
 import org.terasology.module.lightandshadow.components.MagicDome;
 import org.terasology.module.lightandshadow.events.DelayedDeactivateBarrierEvent;
 import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
+import org.terasology.module.lightandshadow.phases.Phase;
+import org.terasology.module.lightandshadow.phases.authority.PhaseSystem;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class MagicDomeSystem extends BaseComponentSystem {
@@ -30,6 +32,8 @@ public class MagicDomeSystem extends BaseComponentSystem {
     private static final int PREGAME_ZONE_RADIUS = 20;
     @In
     DelayManager delayManager;
+    @In
+    PhaseSystem phaseSystem;
     @In
     private EntityManager entityManager;
 
@@ -69,8 +73,19 @@ public class MagicDomeSystem extends BaseComponentSystem {
     }
 
 
-    @ReceiveEvent(components = LocationComponent.class)
+    @ReceiveEvent(components = {LocationComponent.class, LASTeamComponent.class})
     public void onCharacterMovement(CharacterMoveInputEvent moveInputEvent, EntityRef player, LocationComponent loc) {
+        String team = player.getComponent(LASTeamComponent.class).team;
+        if (team.equals(LASUtils.WHITE_TEAM)) {
+            // spectators should not be affected by the barriers
+            return;
+        }
+
+        if (! (phaseSystem.getCurrentPhase().equals(Phase.PRE_GAME) || phaseSystem.getCurrentPhase().equals(Phase.COUNTDOWN))) {
+            // barriers should only be active during pre-game and countdown phase
+            return;
+        }
+
         Vector3f pos = new Vector3f(loc.getWorldPosition(new Vector3f()));
 
         for (EntityRef domeEntity : entityManager.getEntitiesWith(MagicDome.class, LocationComponent.class)) {
