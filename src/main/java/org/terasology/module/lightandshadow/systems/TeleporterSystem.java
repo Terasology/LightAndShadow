@@ -54,6 +54,8 @@ public class TeleporterSystem extends BaseComponentSystem {
     GameEntitySystem gameEntitySystem;
     @In
     PhaseSystem phaseSystem;
+    @In
+    TeamSystem teamSystem;
 
     private static final Logger logger = LoggerFactory.getLogger(TeleporterSystem.class);
 
@@ -65,6 +67,7 @@ public class TeleporterSystem extends BaseComponentSystem {
     /**
      * Depending on which teleporter the player chooses, they are set to that team
      * and teleported to that base
+     * Assumption: there are two teleporters, one for the red, one for the black team
      *
      * @param event
      * @param entity
@@ -75,11 +78,12 @@ public class TeleporterSystem extends BaseComponentSystem {
         String targetTeam = entity.getComponent(LASTeamComponent.class).team;
         if (targetTeam.equals(LASUtils.WHITE_TEAM)) {
             // teleporters are (currently) expected to only target black or red team
-            logger.debug("Player {} attempted to join white team", player.getId());
+            logger.debug("Player {} attempted to join white team via teleporter", player.getId());
             event.consume();
         } else {
-            if (isBalancedTeams(targetTeam)) {
-                String team = setPlayerTeamToTeleporterTeam(player, entity);
+            if (teamSystem.isBalancedTeams(targetTeam)) {
+                LASTeamComponent teleporterTeamComponent = entity.getComponent(LASTeamComponent.class);
+                String team = teamSystem.setPlayerTeamToTeam(player, teleporterTeamComponent.team);
                 handlePlayerTeleport(player, team);
             } else {
                 EntityRef gameEntity = gameEntitySystem.getGameEntity();
@@ -89,34 +93,6 @@ public class TeleporterSystem extends BaseComponentSystem {
                                 "please join the " + LASUtils.getOppositionTeam(targetTeam) + " team.", EntityRef.NULL));
             }
         }
-    }
-
-    private boolean isBalancedTeams(String targetTeam) {
-        gameEntitySystem.updateTeamStats();
-        EntityRef gameEntity = gameEntitySystem.getGameEntity();
-        LASTeamStatsComponent teamStats = gameEntity.getComponent(LASTeamStatsComponent.class);
-        int maxTeamSizeDifference = gameEntity.getComponent(LASConfigComponent.class).maxTeamSizeDifference;
-        int currentTeamSizeDiff = teamStats.blackTeamSize - teamStats.redTeamSize;
-        int postTeleportTeamSizeDiff = targetTeam.equals(LASUtils.BLACK_TEAM) ? currentTeamSizeDiff + 1 : currentTeamSizeDiff - 1;
-
-        return Math.abs(postTeleportTeamSizeDiff) <= maxTeamSizeDifference;
-    }
-
-    private boolean isMinSizeTeams() {
-        gameEntitySystem.updateTeamStats();
-        EntityRef gameEntity = gameEntitySystem.getGameEntity();
-        LASTeamStatsComponent teamStats = gameEntity.getComponent(LASTeamStatsComponent.class);
-        int minTeamSize = gameEntity.getComponent(LASConfigComponent.class).minTeamSize;
-
-        return teamStats.redTeamSize >= minTeamSize && teamStats.blackTeamSize >= minTeamSize;
-    }
-
-    private String setPlayerTeamToTeleporterTeam(EntityRef player, EntityRef teleporter) {
-        LASTeamComponent teleporterTeamComponent = teleporter.getComponent(LASTeamComponent.class);
-        LASTeamComponent playerTeamComponent = player.getComponent(LASTeamComponent.class);
-        playerTeamComponent.team = teleporterTeamComponent.team;
-        player.saveComponent(playerTeamComponent);
-        return playerTeamComponent.team;
     }
 
     private void handlePlayerTeleport(EntityRef player, String team) {
@@ -133,7 +109,7 @@ public class TeleporterSystem extends BaseComponentSystem {
         player.send(new RequestInventoryEvent(startingInventory.items));
 
         // check game start condition
-        if (isMinSizeTeams() && phaseSystem.getCurrentPhase() == Phase.PRE_GAME) {
+        if (teamSystem.isMinSizeTeams() && phaseSystem.getCurrentPhase() == Phase.PRE_GAME) {
             sendEventToClients(TimerEvent::new);
             player.send(new DelayedDeactivateBarrierEvent(30000));
             gameEntitySystem.getGameEntity().send(new SwitchToPhaseEvent(Phase.COUNTDOWN));
