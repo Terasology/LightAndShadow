@@ -2,19 +2,27 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.module.lightandshadow.systems;
 
+import org.terasology.engine.core.SimpleUri;
 import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.input.InputSystem;
 import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.logic.players.event.LocalPlayerInitializedEvent;
 import org.terasology.engine.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
+import org.terasology.engine.rendering.nui.layers.ingame.DeathScreen;
 import org.terasology.gestalt.assets.ResourceUrn;
 import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
+import org.terasology.module.lightandshadow.LASUtils;
+import org.terasology.module.lightandshadow.TapButton;
 import org.terasology.module.lightandshadow.components.LASConfigComponent;
+import org.terasology.module.lightandshadow.events.ScoreUpdateFromServerEvent;
 import org.terasology.module.lightandshadow.events.TimerEvent;
 import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
 import org.terasology.module.lightandshadow.phases.OnPreGamePhaseEndedEvent;
@@ -31,6 +39,7 @@ import java.util.TimerTask;
 @RegisterSystem(RegisterMode.CLIENT)
 public class ClientInformationSystem extends BaseComponentSystem {
     private static final String WAIT_NOTIFICATION_ID = "LightAndShadow:waitForPlayers";
+    private static final String STATS_NOTIFICATION_ID = "LightAndShadow:firstTimeStatistics";
 
     public static final ResourceUrn ASSET_URI = new ResourceUrn("LightAndShadow:Timer");
 
@@ -52,12 +61,25 @@ public class ClientInformationSystem extends BaseComponentSystem {
 
     @In
     private LocalPlayer localPlayer;
+    @In
+    private ClientGameOverSystem clientGameOverSystem;
+
+    private DeathScreen statisticsScreen;
+    private int redScore = 0;
+    private int blackScore = 0;
+    private boolean statsScreenIsOpen;
+    private boolean isExpired;
 
     private DialogNotificationOverlay window;
 
     @Override
     public void initialise() {
         window = nuiManager.addOverlay(ASSET_URI, DialogNotificationOverlay.class);
+        statisticsScreen = nuiManager.createScreen("LightAndShadow:statisticsScreen", DeathScreen.class);
+        clientGameOverSystem.addGoalScore(statisticsScreen, "spadesGoalScore");
+        clientGameOverSystem.addGoalScore(statisticsScreen, "heartsGoalScore");
+        clientGameOverSystem.addTeamScore(statisticsScreen, "heartsTeamScore", redScore);
+        clientGameOverSystem.addTeamScore(statisticsScreen, "spadesTeamScore", blackScore);
     }
 
     @Override
@@ -80,6 +102,48 @@ public class ClientInformationSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onPregameEnd(OnPreGamePhaseEndedEvent event, EntityRef entity) {
         localPlayer.getClientEntity().send(new ExpireNotificationEvent(WAIT_NOTIFICATION_ID));
+    }
+
+    @ReceiveEvent
+    public void onScoreUpdate(ScoreUpdateFromServerEvent event, EntityRef entity) {
+        String team = event.team;
+        if (team.equals(LASUtils.RED_TEAM)) {
+            redScore = event.score;
+        }
+        if (team.equals(LASUtils.BLACK_TEAM)) {
+            blackScore = event.score;
+        }
+    }
+
+    @Priority(EventPriority.PRIORITY_CRITICAL)
+    @ReceiveEvent
+    public void onTab(TapButton event, EntityRef entity) {
+        if (event.isDown()) {
+            if (localPlayer.getClientEntity().equals(entity) && !statsScreenIsOpen) {
+                if (!isExpired) {
+                    entity.send(new ExpireNotificationEvent(STATS_NOTIFICATION_ID));
+                    isExpired = true;
+                }
+                clientGameOverSystem.addTeamScore(statisticsScreen, "spadesTeamScore", blackScore);
+                clientGameOverSystem.addTeamScore(statisticsScreen, "heartsTeamScore", redScore);
+                clientGameOverSystem.addPlayerStatisticsInfo(statisticsScreen);
+                nuiManager.pushScreen("LightAndShadow:statisticsScreen");
+                statsScreenIsOpen = true;
+                event.consume();
+            }
+        } else {
+            statsScreenIsOpen = false;
+            nuiManager.closeScreen("LightAndShadow:statisticsScreen");
+        }
+    }
+
+    @ReceiveEvent
+    public void onLocalPlayerInitialized(LocalPlayerInitializedEvent event, EntityRef entity) {
+        Notification notification = new Notification(STATS_NOTIFICATION_ID,
+                "The Numbers Game",
+                "Hold " + LASUtils.getActivationKey(inputSystem, new SimpleUri("LightAndShadow:statistics")) + " to see statistics",
+                "engine:items#blueBook");
+        localPlayer.getClientEntity().send(new ShowNotificationEvent(notification));
     }
 
     @ReceiveEvent
