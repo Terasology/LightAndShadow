@@ -27,6 +27,7 @@ import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.TapButton;
 import org.terasology.module.lightandshadow.components.LASConfigComponent;
 import org.terasology.module.lightandshadow.components.PlayerStatisticsComponent;
+import org.terasology.module.lightandshadow.events.ClientRestartEvent;
 import org.terasology.module.lightandshadow.events.GameOverEvent;
 import org.terasology.module.lightandshadow.events.RestartRequestEvent;
 import org.terasology.module.lightandshadow.events.ScoreUpdateFromServerEvent;
@@ -40,6 +41,7 @@ import org.terasology.notifications.events.ExpireNotificationEvent;
 import org.terasology.notifications.events.ShowNotificationEvent;
 import org.terasology.notifications.model.Notification;
 import org.terasology.notify.ui.DialogNotificationOverlay;
+import org.terasology.nui.UILayout;
 import org.terasology.nui.WidgetUtil;
 import org.terasology.nui.layouts.miglayout.MigLayout;
 import org.terasology.nui.widgets.UIButton;
@@ -201,6 +203,20 @@ public class ClientInformationSystem extends BaseComponentSystem {
                     gameOverResult.setText("Defeat");
                     gameOverResult.setFamily("lose");
                 }
+            }
+        }
+    }
+
+    @ReceiveEvent
+    public void onClientRestart(ClientRestartEvent event, EntityRef clientEntity) {
+        if (localPlayer.getClientEntity().equals(clientEntity)) {
+            if (nuiManager.isOpen(LASUtils.DEATH_SCREEN)) {
+                DeathScreen deathScreen = (DeathScreen) nuiManager.getScreen(LASUtils.DEATH_SCREEN);
+                UILayout migLayout = deathScreen.find("playerStatistics", UILayout.class);
+                if (migLayout != null) {
+                    migLayout.removeAllWidgets();
+                }
+                nuiManager.closeScreen(LASUtils.DEATH_SCREEN);
             }
         }
     }
