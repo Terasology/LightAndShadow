@@ -12,16 +12,23 @@ import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.input.InputSystem;
 import org.terasology.engine.logic.players.LocalPlayer;
+import org.terasology.engine.logic.players.PlayerCharacterComponent;
+import org.terasology.engine.logic.players.PlayerUtil;
 import org.terasology.engine.logic.players.event.LocalPlayerInitializedEvent;
 import org.terasology.engine.logic.players.event.OnPlayerSpawnedEvent;
+import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.engine.rendering.nui.layers.ingame.DeathScreen;
 import org.terasology.gestalt.assets.ResourceUrn;
 import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
+import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.TapButton;
 import org.terasology.module.lightandshadow.components.LASConfigComponent;
+import org.terasology.module.lightandshadow.components.PlayerStatisticsComponent;
+import org.terasology.module.lightandshadow.events.GameOverEvent;
+import org.terasology.module.lightandshadow.events.RestartRequestEvent;
 import org.terasology.module.lightandshadow.events.ScoreUpdateFromServerEvent;
 import org.terasology.module.lightandshadow.events.TimerEvent;
 import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
@@ -33,6 +40,10 @@ import org.terasology.notifications.events.ExpireNotificationEvent;
 import org.terasology.notifications.events.ShowNotificationEvent;
 import org.terasology.notifications.model.Notification;
 import org.terasology.notify.ui.DialogNotificationOverlay;
+import org.terasology.nui.WidgetUtil;
+import org.terasology.nui.layouts.miglayout.MigLayout;
+import org.terasology.nui.widgets.UIButton;
+import org.terasology.nui.widgets.UILabel;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -62,10 +73,9 @@ public class ClientInformationSystem extends BaseComponentSystem {
 
     @In
     private LocalPlayer localPlayer;
-    @In
-    private ClientGameOverSystem clientGameOverSystem;
 
     private DeathScreen statisticsScreen;
+    private DeathScreen deathScreen;
     private int redScore = 0;
     private int blackScore = 0;
     private boolean statsScreenIsOpen;
@@ -76,11 +86,12 @@ public class ClientInformationSystem extends BaseComponentSystem {
     @Override
     public void initialise() {
         window = nuiManager.addOverlay(ASSET_URI, DialogNotificationOverlay.class);
+        deathScreen = nuiManager.createScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
         statisticsScreen = nuiManager.createScreen("LightAndShadow:statisticsScreen", DeathScreen.class);
-        clientGameOverSystem.addGoalScore(statisticsScreen, "spadesGoalScore");
-        clientGameOverSystem.addGoalScore(statisticsScreen, "heartsGoalScore");
-        clientGameOverSystem.addTeamScore(statisticsScreen, "heartsTeamScore", redScore);
-        clientGameOverSystem.addTeamScore(statisticsScreen, "spadesTeamScore", blackScore);
+        addGoalScore(statisticsScreen, "spadesGoalScore");
+        addGoalScore(statisticsScreen, "heartsGoalScore");
+        addTeamScore(statisticsScreen, "heartsTeamScore", redScore);
+        addTeamScore(statisticsScreen, "spadesTeamScore", blackScore);
     }
 
     @Override
@@ -125,9 +136,9 @@ public class ClientInformationSystem extends BaseComponentSystem {
                     entity.send(new ExpireNotificationEvent(STATS_NOTIFICATION_ID));
                     isExpired = true;
                 }
-                clientGameOverSystem.addTeamScore(statisticsScreen, "spadesTeamScore", blackScore);
-                clientGameOverSystem.addTeamScore(statisticsScreen, "heartsTeamScore", redScore);
-                clientGameOverSystem.addPlayerStatisticsInfo(statisticsScreen);
+                addTeamScore(statisticsScreen, "spadesTeamScore", blackScore);
+                addTeamScore(statisticsScreen, "heartsTeamScore", redScore);
+                addPlayerStatisticsInfo(statisticsScreen);
                 nuiManager.pushScreen("LightAndShadow:statisticsScreen");
                 statsScreenIsOpen = true;
                 event.consume();
@@ -145,6 +156,53 @@ public class ClientInformationSystem extends BaseComponentSystem {
                 "Hold " + LASUtils.getActivationKey(inputSystem, new SimpleUri("LightAndShadow:statistics")) + " to see statistics",
                 "engine:items#blueBook");
         localPlayer.getClientEntity().send(new ShowNotificationEvent(notification));
+    }
+
+    /**
+     * System to show game over screen once a team achieves goal score.
+     *
+     * @param event the GameOverEvent event which stores the winning team and the final scores of both teams.
+     * @param entity the entity about each player connected to the game. TODO: needs more details/clarification
+     */
+    @ReceiveEvent
+    public void onGameOver(GameOverEvent event, EntityRef entity) {
+        if (localPlayer.getClientEntity().equals(entity)) {
+            nuiManager.removeOverlay(LASUtils.ONLINE_PLAYERS_OVERLAY);
+            nuiManager.pushScreen(deathScreen);
+            addPlayerStatisticsInfo(deathScreen);
+            addFlagInfo(deathScreen, event);
+            UILabel gameOverResult = deathScreen.find("gameOverResult", UILabel.class);
+
+            UIButton restartButton = deathScreen.find("restart", UIButton.class);
+            UILabel countDown = deathScreen.find("timer", UILabel.class);
+            if (restartButton != null && countDown != null) {
+                timer = new Timer();
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    int timePeriod = 10;
+                    public void run() {
+                        countDown.setText(Integer.toString(timePeriod--));
+                        if (timePeriod < 0) {
+                            countDown.setText(" ");
+                            restartButton.setEnabled(true);
+                            timer.cancel();
+                        }
+                    }
+                }, 0, 1000);
+                restartButton.setVisible(true);
+                restartButton.setEnabled(false);
+            }
+
+            WidgetUtil.trySubscribe(deathScreen, "restart", widget -> triggerRestart());
+            if (gameOverResult != null) {
+                if (event.winningTeam.equals(localPlayer.getCharacterEntity().getComponent(LASTeamComponent.class).team)) {
+                    gameOverResult.setText("Victory");
+                    gameOverResult.setFamily("win");
+                } else {
+                    gameOverResult.setText("Defeat");
+                    gameOverResult.setFamily("lose");
+                }
+            }
+        }
     }
 
     @ReceiveEvent
@@ -187,5 +245,60 @@ public class ClientInformationSystem extends BaseComponentSystem {
                         gameEntitySystem.getGameEntity().getComponent(LASConfigComponent.class).minTeamSize + " player(s)",
                 "engine:icons#halfGreenHeart");
         localPlayer.getClientEntity().send(new ShowNotificationEvent(notification));
+    }
+
+    public void addPlayerStatisticsInfo(DeathScreen deathScreen) {
+        MigLayout spadesTeamMigLayout = deathScreen.find("spadesTeamPlayerStatistics", MigLayout.class);
+        MigLayout heartsTeamMigLayout = deathScreen.find("heartsTeamPlayerStatistics", MigLayout.class);
+        spadesTeamMigLayout.removeAllWidgets();
+        heartsTeamMigLayout.removeAllWidgets();
+        if (spadesTeamMigLayout != null && heartsTeamMigLayout != null) {
+            Iterable<EntityRef> characters = entityManager.getEntitiesWith(PlayerCharacterComponent.class,
+                    LASTeamComponent.class);
+
+            for (EntityRef character : characters) {
+                EntityRef client = character.getOwner();
+                ClientComponent clientComponent = client.getComponent(ClientComponent.class);
+                String playerTeam = character.getComponent(LASTeamComponent.class).team;
+                PlayerStatisticsComponent playerStatisticsComponent =
+                        character.getComponent(PlayerStatisticsComponent.class);
+                MigLayout migLayout = (playerTeam.equals("black") ? spadesTeamMigLayout : heartsTeamMigLayout);
+                if (!playerTeam.equals("white")) {
+                    addInfoToTeamMigLayout(migLayout, clientComponent, playerStatisticsComponent);
+                }
+            }
+        }
+    }
+
+    private void addInfoToTeamMigLayout(MigLayout migLayout, ClientComponent clientComponent,
+                                        PlayerStatisticsComponent playerStatisticsComponent) {
+        migLayout.addWidget(new UILabel(PlayerUtil.getColoredPlayerName(clientComponent.clientInfo)),
+                new MigLayout.CCHint());
+        migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.kills)), new MigLayout.CCHint());
+        migLayout.addWidget(new UILabel(String.valueOf(playerStatisticsComponent.deaths)), new MigLayout.CCHint("wrap"
+        ));
+        playerStatisticsComponent.kills = 0;
+        playerStatisticsComponent.deaths = 0;
+    }
+
+    private void addFlagInfo(DeathScreen deathScreen, GameOverEvent event) {
+        addTeamScore(deathScreen, "spadesTeamScore", event.blackTeamScore);
+        addTeamScore(deathScreen, "heartsTeamScore", event.redTeamScore);
+        addGoalScore(deathScreen, "spadesGoalScore");
+        addGoalScore(deathScreen, "heartsGoalScore");
+    }
+
+    public void addTeamScore(DeathScreen deathScreen, String teamUILabelId, int finalScore) {
+        UILabel teamScore = deathScreen.find(teamUILabelId, UILabel.class);
+        teamScore.setText(String.valueOf(finalScore));
+    }
+
+    public void addGoalScore(DeathScreen deathScreen, String teamUILabelID) {
+        UILabel goalScore = deathScreen.find(teamUILabelID, UILabel.class);
+        goalScore.setText(Integer.toString(LASUtils.GOAL_SCORE));
+    }
+
+    private void triggerRestart() {
+        localPlayer.getClientEntity().send(new RestartRequestEvent());
     }
 }
