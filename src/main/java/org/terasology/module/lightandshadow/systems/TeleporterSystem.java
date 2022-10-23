@@ -81,10 +81,9 @@ public class TeleporterSystem extends BaseComponentSystem {
             logger.debug("Player {} attempted to join white team via teleporter", player.getId());
             event.consume();
         } else {
-            if (teamSystem.isBalancedTeams(targetTeam)) {
-                LASTeamComponent teleporterTeamComponent = entity.getComponent(LASTeamComponent.class);
-                String team = teamSystem.setPlayerTeamToTeam(player, teleporterTeamComponent.team);
-                handlePlayerTeleport(player, team);
+            if (teamSystem.setPlayerTeamToTeam(player, targetTeam)) {
+                logger.debug("Player {} successfully added to team {}", player, targetTeam);
+                handlePlayerTeleport(player, targetTeam);
             } else {
                 EntityRef gameEntity = gameEntitySystem.getGameEntity();
                 LASConfigComponent config = gameEntity.getComponent(LASConfigComponent.class);

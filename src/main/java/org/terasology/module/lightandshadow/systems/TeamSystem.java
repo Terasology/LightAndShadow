@@ -52,11 +52,13 @@ public class TeamSystem extends BaseComponentSystem {
         return teamStats.redTeamSize >= minTeamSize && teamStats.blackTeamSize >= minTeamSize;
     }
 
-    public String setPlayerTeamToTeam(EntityRef player, String team) {
-        LASTeamComponent playerTeamComponent = player.getComponent(LASTeamComponent.class);
-        playerTeamComponent.team = team;
-        player.saveComponent(playerTeamComponent);
-        return playerTeamComponent.team;
+    public boolean setPlayerTeamToTeam(EntityRef player, String team) {
+        if (!isBalancedTeams(team)) {
+            return false;
+        }
+        LASTeamComponent playerTeamComponent = new LASTeamComponent(team);
+        player.addOrSaveComponent(playerTeamComponent);
+        return true;
     }
 
     public int getTeamSize(String team) {
@@ -71,6 +73,8 @@ public class TeamSystem extends BaseComponentSystem {
             case LASUtils.WHITE_TEAM:
                 return teamStats.whiteTeamSize;
         }
+        logger.error("Was requested to get team size for non-existant team {}", team);
+        return 0;
     }
 
 }
