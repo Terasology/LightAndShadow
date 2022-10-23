@@ -20,6 +20,7 @@ import org.terasology.engine.logic.console.commandSystem.annotations.Sender;
 import org.terasology.engine.logic.permission.PermissionManager;
 import org.terasology.engine.logic.players.SetDirectionEvent;
 import org.terasology.engine.network.ClientComponent;
+import org.terasology.engine.network.events.DisconnectedEvent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.gestalt.entitysystem.event.Event;
@@ -30,7 +31,6 @@ import org.terasology.module.inventory.components.StartingInventoryComponent;
 import org.terasology.module.inventory.events.RequestInventoryEvent;
 import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.components.LASConfigComponent;
-import org.terasology.module.lightandshadow.components.LASTeamStatsComponent;
 import org.terasology.module.lightandshadow.events.DelayedDeactivateBarrierEvent;
 import org.terasology.module.lightandshadow.events.TimerEvent;
 import org.terasology.module.lightandshadow.phases.Phase;
@@ -129,11 +129,45 @@ public class TeleporterSystem extends BaseComponentSystem {
         ClientComponent clientComp = sender.getComponent(ClientComponent.class);
         LASTeamComponent senderTeam = clientComp.character.getComponent(LASTeamComponent.class);
         if (senderTeam != null && (senderTeam.team.equals(LASUtils.RED_TEAM) || senderTeam.team.equals(LASUtils.BLACK_TEAM))) {
-            // players teleporting back to platform should be removed from the playing teams
-            // white team (spectator) members are allowed to teleport without losing their team
-            clientComp.character.removeComponent(LASTeamComponent.class);
+            // spectators (white team) are not relevant for arena exit actions
+            performArenaExitActions(clientComp);
         }
         clientComp.character.send(new CharacterTeleportEvent(new Vector3f(LASUtils.FLOATING_PLATFORM_POSITION).add(0, 1, 0)));
         return "Teleporting you to the platform.";
+    }
+
+    @ReceiveEvent(components = ClientComponent.class)
+    public void onPlayerDisconnect(DisconnectedEvent event, EntityRef entity) {
+        ClientComponent clientComp = entity.getComponent(ClientComponent.class);
+        LASTeamComponent senderTeam = clientComp.character.getComponent(LASTeamComponent.class);
+        if (senderTeam != null && (senderTeam.team.equals(LASUtils.RED_TEAM) || senderTeam.team.equals(LASUtils.BLACK_TEAM))) {
+            // spectators (white team) are not relevant for arena exit actions
+            performArenaExitActions(clientComp);
+        }
+    }
+
+    /**
+     * Follow-up actions necessary when a player leaves the arena, either by porting back to the platform
+     * or by disconnecting from the server.
+     * These action are required to verify the current game state and update the phase accordingly if necessary.
+     */
+    private void performArenaExitActions(ClientComponent clientComp) {
+        // players teleporting back to platform should be removed from the playing teams
+        // white team (spectator) members are allowed to teleport without losing their team
+        clientComp.character.removeComponent(LASTeamComponent.class);
+
+        // if in game phase: verify that game start condition still met
+        Phase currentPhase = phaseSystem.getCurrentPhase();
+        if ((currentPhase == Phase.IN_GAME || currentPhase == Phase.COUNTDOWN) && !teamSystem.isMinSizeTeams()) {
+            logger.debug("Starting condition no longer met, switching from phase {} to PRE_GAME", currentPhase);
+            gameEntitySystem.getGameEntity().send(new SwitchToPhaseEvent(Phase.PRE_GAME));
+        }
+
+        // if the player teleporting was the last one still in the arena
+        // switch back to idle phase
+        if (teamSystem.getTeamSize(LASUtils.BLACK_TEAM) == 0 && teamSystem.getTeamSize(LASUtils.RED_TEAM) == 0) {
+            logger.debug("No players left in arena, switching to IDLE phase");
+            gameEntitySystem.getGameEntity().send(new SwitchToPhaseEvent(Phase.IDLE));
+        }
     }
 }
