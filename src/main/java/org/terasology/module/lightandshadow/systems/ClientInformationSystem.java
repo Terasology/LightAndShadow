@@ -27,6 +27,7 @@ import org.terasology.module.lightandshadow.events.TimerEvent;
 import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
 import org.terasology.module.lightandshadow.phases.OnPreGamePhaseEndedEvent;
 import org.terasology.module.lightandshadow.phases.Phase;
+import org.terasology.module.lightandshadow.phases.SwitchToPhaseEvent;
 import org.terasology.module.lightandshadow.phases.authority.PhaseSystem;
 import org.terasology.notifications.events.ExpireNotificationEvent;
 import org.terasology.notifications.events.ShowNotificationEvent;
@@ -154,6 +155,12 @@ public class ClientInformationSystem extends BaseComponentSystem {
                 int timePeriod = COUNTDOWN_IN_SECONDS;
                 boolean addNotification;
                 public void run() {
+                    if (phaseSystem.getCurrentPhase() != Phase.COUNTDOWN) {
+                        if (!addNotification) {
+                            window.removeNotification("The game starts in " + (timePeriod + 1) + " seconds.");
+                        }
+                        timer.cancel();
+                    }
                     if (addNotification) {
                         entity.send(new ExpireNotificationEvent(WAIT_NOTIFICATION_ID));
                         window.addNotification("The game starts in " + timePeriod-- + " seconds.");
@@ -165,6 +172,7 @@ public class ClientInformationSystem extends BaseComponentSystem {
                     }
                     if (timePeriod < 0) {
                         window.removeNotification("The game starts in " + (timePeriod + 1) + " seconds.");
+                        gameEntitySystem.getGameEntity().send(new SwitchToPhaseEvent(Phase.IN_GAME));
                         timer.cancel();
                     }
                 }
