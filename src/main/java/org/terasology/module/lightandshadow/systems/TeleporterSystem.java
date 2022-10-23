@@ -31,7 +31,6 @@ import org.terasology.module.inventory.components.StartingInventoryComponent;
 import org.terasology.module.inventory.events.RequestInventoryEvent;
 import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.components.LASConfigComponent;
-import org.terasology.module.lightandshadow.events.DelayedDeactivateBarrierEvent;
 import org.terasology.module.lightandshadow.events.TimerEvent;
 import org.terasology.module.lightandshadow.phases.Phase;
 import org.terasology.module.lightandshadow.phases.SwitchToPhaseEvent;
@@ -110,7 +109,6 @@ public class TeleporterSystem extends BaseComponentSystem {
         // check game start condition
         if (teamSystem.isMinSizeTeams() && phaseSystem.getCurrentPhase() == Phase.PRE_GAME) {
             sendEventToClients(TimerEvent::new);
-            player.send(new DelayedDeactivateBarrierEvent(30000));
             gameEntitySystem.getGameEntity().send(new SwitchToPhaseEvent(Phase.COUNTDOWN));
         }
     }

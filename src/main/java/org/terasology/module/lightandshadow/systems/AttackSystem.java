@@ -28,6 +28,7 @@ import org.terasology.module.lightandshadow.events.DropFlagEvent;
 import org.terasology.module.lightandshadow.events.OnFlagDropEvent;
 import org.terasology.module.lightandshadow.events.OnFlagPickupEvent;
 import org.terasology.module.lightandshadow.events.ReturnFlagEvent;
+import org.terasology.module.lightandshadow.phases.OnInGamePhaseStartedEvent;
 import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
@@ -79,6 +80,11 @@ public class AttackSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onPregameStart(OnPreGamePhaseStartedEvent event, EntityRef entity) {
         entity.addComponent(new InvulnerableComponent());
+    }
+
+    @ReceiveEvent
+    public void onGameStart(OnInGamePhaseStartedEvent event, EntityRef entity) {
+        entity.removeComponent(InvulnerableComponent.class);
     }
 
     @Priority(EventPriority.PRIORITY_HIGH)

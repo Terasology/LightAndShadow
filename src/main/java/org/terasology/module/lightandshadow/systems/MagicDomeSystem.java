@@ -13,25 +13,21 @@ import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.logic.characters.CharacterImpulseEvent;
 import org.terasology.engine.logic.characters.CharacterMoveInputEvent;
 import org.terasology.engine.logic.delay.DelayManager;
-import org.terasology.engine.logic.delay.DelayedActionTriggeredEvent;
 import org.terasology.engine.logic.location.LocationComponent;
 import org.terasology.engine.registry.In;
 import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.module.lightandshadow.LASUtils;
-import org.terasology.module.lightandshadow.components.InvulnerableComponent;
 import org.terasology.module.lightandshadow.components.MagicDome;
-import org.terasology.module.lightandshadow.events.DelayedDeactivateBarrierEvent;
+import org.terasology.module.lightandshadow.phases.OnInGamePhaseStartedEvent;
 import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
 import org.terasology.module.lightandshadow.phases.Phase;
 import org.terasology.module.lightandshadow.phases.authority.PhaseSystem;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 public class MagicDomeSystem extends BaseComponentSystem {
-    private static final String DEACTIVATE_BARRIERS_ACTION = "LightAndShadow:deactivateBarriers";
     private static final int PREGAME_ZONE_RADIUS = 20;
-    @In
-    DelayManager delayManager;
+;
     @In
     PhaseSystem phaseSystem;
     @In
@@ -41,6 +37,16 @@ public class MagicDomeSystem extends BaseComponentSystem {
     private EntityRef redBarrier = EntityRef.NULL;
     private EntityRef blackBarrier = EntityRef.NULL;
 
+
+    @ReceiveEvent
+    public void onPregameStart(OnPreGamePhaseStartedEvent event, EntityRef entity) {
+        activateBarriers();
+    }
+
+    @ReceiveEvent
+    public void onGameStart(OnInGamePhaseStartedEvent event, EntityRef entity) {
+        deactivateBarriers();
+    }
 
     /**
      * Activates the barriers for the pregame regions corresponding to both the teams only in the beginning when
@@ -53,23 +59,9 @@ public class MagicDomeSystem extends BaseComponentSystem {
         }
     }
 
-    @ReceiveEvent
-    public void onPregameStart(OnPreGamePhaseStartedEvent event, EntityRef entity) {
-        activateBarriers();
-    }
-
-    @ReceiveEvent
-    public void delayedDeactivateBarriers(DelayedDeactivateBarrierEvent event, EntityRef entity) {
-        delayManager.addDelayedAction(entity, DEACTIVATE_BARRIERS_ACTION, event.getDelay());
-    }
-
-    @ReceiveEvent
-    public void deactivateBarriers(DelayedActionTriggeredEvent event, EntityRef entity) {
-        if (event.getActionId().equals(DEACTIVATE_BARRIERS_ACTION)) {
-            redBarrier.destroy();
-            blackBarrier.destroy();
-            removePlayerInvulnerableComponents();
-        }
+    public void deactivateBarriers() {
+        redBarrier.destroy();
+        blackBarrier.destroy();
     }
 
 
@@ -125,12 +117,5 @@ public class MagicDomeSystem extends BaseComponentSystem {
         String barrierTeam = barrier.getComponent(MagicDome.class).team;
         String playerTeam = player.getComponent(LASTeamComponent.class).team;
         return barrierTeam.equals(playerTeam);
-    }
-
-    private void removePlayerInvulnerableComponents() {
-        Iterable<EntityRef> players = entityManager.getEntitiesWith(InvulnerableComponent.class);
-        for (EntityRef player : players) {
-            player.removeComponent(InvulnerableComponent.class);
-        }
     }
 }
