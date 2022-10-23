@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.module.lightandshadow.systems;
 
+import org.joml.Vector3f;
 import org.terasology.economy.components.CurrencyStorageComponent;
 import org.terasology.economy.events.WalletUpdatedEvent;
 import org.terasology.engine.entitySystem.entity.EntityRef;
@@ -9,6 +10,7 @@ import org.terasology.engine.entitySystem.event.EventPriority;
 import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
+import org.terasology.engine.logic.characters.CharacterTeleportEvent;
 import org.terasology.engine.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.world.sun.CelestialSystem;
@@ -16,6 +18,7 @@ import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.module.inventory.components.InventoryComponent;
 import org.terasology.module.inventory.events.RemoveItemAction;
 import org.terasology.module.inventory.systems.InventoryManager;
+import org.terasology.module.lightandshadow.LASUtils;
 
 @RegisterSystem
 public class LASSystem extends BaseComponentSystem {
@@ -39,6 +42,7 @@ public class LASSystem extends BaseComponentSystem {
         EntityRef gameEntity = gameEntitySystem.getGameEntity();
         player.getComponent(CurrencyStorageComponent.class).amount = gameEntity.getComponent(CurrencyStorageComponent.class).amount;
         player.send(new WalletUpdatedEvent(gameEntity.getComponent(CurrencyStorageComponent.class).amount));
+        player.send(new CharacterTeleportEvent(new Vector3f(LASUtils.FLOATING_PLATFORM_POSITION).add(0, 1, 0)));
     }
 
     @Override
