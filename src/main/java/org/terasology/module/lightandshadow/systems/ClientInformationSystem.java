@@ -32,8 +32,8 @@ import org.terasology.module.lightandshadow.events.GameOverEvent;
 import org.terasology.module.lightandshadow.events.RestartRequestEvent;
 import org.terasology.module.lightandshadow.events.ScoreUpdateFromServerEvent;
 import org.terasology.module.lightandshadow.events.TimerEvent;
-import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
 import org.terasology.module.lightandshadow.phases.OnPreGamePhaseEndedEvent;
+import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
 import org.terasology.module.lightandshadow.phases.Phase;
 import org.terasology.module.lightandshadow.phases.SwitchToPhaseEvent;
 import org.terasology.module.lightandshadow.phases.authority.PhaseSystem;
@@ -41,8 +41,10 @@ import org.terasology.notifications.events.ExpireNotificationEvent;
 import org.terasology.notifications.events.ShowNotificationEvent;
 import org.terasology.notifications.model.Notification;
 import org.terasology.notify.ui.DialogNotificationOverlay;
+import org.terasology.nui.ControlWidget;
 import org.terasology.nui.UILayout;
 import org.terasology.nui.WidgetUtil;
+import org.terasology.nui.databinding.ReadOnlyBinding;
 import org.terasology.nui.layouts.miglayout.MigLayout;
 import org.terasology.nui.widgets.UIButton;
 import org.terasology.nui.widgets.UILabel;
@@ -86,8 +88,33 @@ public class ClientInformationSystem extends BaseComponentSystem {
     private DialogNotificationOverlay window;
 
     @Override
+    public void postBegin() {
+        // Sets score screen bindings
+        ControlWidget scoreScreen = nuiManager.getHUD().getHUDElement("LightAndShadow:ScoreHud");
+        UILabel blackScoreArea = scoreScreen.find("blackScoreArea", UILabel.class);
+        blackScoreArea.bindText(new ReadOnlyBinding<String>() {
+            @Override
+            public String get() {
+                return String.valueOf(blackScore);
+            }
+        });
+        UILabel redScoreArea = scoreScreen.find("redScoreArea", UILabel.class);
+        redScoreArea.bindText(new ReadOnlyBinding<String>() {
+            @Override
+            public String get() {
+                return String.valueOf(redScore);
+            }
+        });
+        UILabel blackGoalScore = scoreScreen.find("blackGoalScore", UILabel.class);
+        blackGoalScore.setText(Integer.toString(LASUtils.GOAL_SCORE));
+        UILabel redGoalScore = scoreScreen.find("redGoalScore", UILabel.class);
+        redGoalScore.setText(Integer.toString(LASUtils.GOAL_SCORE));
+    }
+
+    @Override
     public void initialise() {
         window = nuiManager.addOverlay(ASSET_URI, DialogNotificationOverlay.class);
+        nuiManager.getHUD().addHUDElement("ScoreHud");
         deathScreen = nuiManager.createScreen(LASUtils.DEATH_SCREEN, DeathScreen.class);
         statisticsScreen = nuiManager.createScreen("LightAndShadow:statisticsScreen", DeathScreen.class);
         addGoalScore(statisticsScreen, "spadesGoalScore");
