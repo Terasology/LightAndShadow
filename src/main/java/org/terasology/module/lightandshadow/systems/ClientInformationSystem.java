@@ -29,7 +29,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 @RegisterSystem(RegisterMode.CLIENT)
-public class ClientGameStateInfoSystem extends BaseComponentSystem {
+public class ClientInformationSystem extends BaseComponentSystem {
     private static final String WAIT_NOTIFICATION_ID = "LightAndShadow:waitForPlayers";
 
     public static final ResourceUrn ASSET_URI = new ResourceUrn("LightAndShadow:Timer");
