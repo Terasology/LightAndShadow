@@ -30,7 +30,7 @@ public class TeamSystem extends BaseComponentSystem {
     @ReceiveEvent(components = LASTeamComponent.class)
     public void onTeamChange(OnChangedComponent event, EntityRef entity) {
         logger.debug("Player {} switched to team {}",
-                entity.getComponent(ClientComponent.class).clientInfo,
+                entity.getOwner().getComponent(ClientComponent.class).clientInfo,
                 entity.getComponent(LASTeamComponent.class).team);
     }
 
