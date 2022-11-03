@@ -12,6 +12,7 @@ import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
 import org.terasology.engine.network.ClientComponent;
 import org.terasology.engine.registry.In;
+import org.terasology.engine.registry.Share;
 import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.module.lightandshadow.LASUtils;
@@ -19,6 +20,7 @@ import org.terasology.module.lightandshadow.components.LASConfigComponent;
 import org.terasology.module.lightandshadow.components.LASTeamStatsComponent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
+@Share(value = TeamSystem.class)
 public class TeamSystem extends BaseComponentSystem {
     @In
     GameEntitySystem gameEntitySystem;
