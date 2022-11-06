@@ -20,7 +20,7 @@ import org.terasology.engine.logic.console.commandSystem.annotations.Sender;
 import org.terasology.engine.logic.permission.PermissionManager;
 import org.terasology.engine.logic.players.SetDirectionEvent;
 import org.terasology.engine.network.ClientComponent;
-import org.terasology.engine.network.events.DisconnectedEvent;
+import org.terasology.engine.network.events.BeforeDisconnectEvent;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.utilities.Assets;
 import org.terasology.gestalt.entitysystem.event.Event;
@@ -31,6 +31,7 @@ import org.terasology.module.inventory.components.StartingInventoryComponent;
 import org.terasology.module.inventory.events.RequestInventoryEvent;
 import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.components.LASConfigComponent;
+import org.terasology.module.lightandshadow.events.PlayerExitedArenaEvent;
 import org.terasology.module.lightandshadow.events.TimerEvent;
 import org.terasology.module.lightandshadow.phases.Phase;
 import org.terasology.module.lightandshadow.phases.SwitchToPhaseEvent;
@@ -40,8 +41,8 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
- * Teleports players to play arena once they chose their team.
- * It also sends events to change players skins and hud based on team they have chosen.
+ * Teleports players to play arena once they chose their team. It also sends events to change players skins and hud based on team they have
+ * chosen.
  *
  * @see ClientSkinSystem
  */
@@ -64,9 +65,8 @@ public class TeleporterSystem extends BaseComponentSystem {
     private final Random random = new Random();
 
     /**
-     * Depending on which teleporter the player chooses, they are set to that team
-     * and teleported to that base
-     * Assumption: there are two teleporters, one for the red, one for the black team
+     * Depending on which teleporter the player chooses, they are set to that team and teleported to that base Assumption: there are two
+     * teleporters, one for the red, one for the black team
      *
      * @param event
      * @param entity
@@ -127,44 +127,19 @@ public class TeleporterSystem extends BaseComponentSystem {
         LASTeamComponent senderTeam = clientComp.character.getComponent(LASTeamComponent.class);
         if (senderTeam != null && (senderTeam.team.equals(LASUtils.RED_TEAM) || senderTeam.team.equals(LASUtils.BLACK_TEAM))) {
             // spectators (white team) are not relevant for arena exit actions
-            performArenaExitActions(clientComp);
+            clientComp.character.send(new PlayerExitedArenaEvent(sender));
         }
         clientComp.character.send(new CharacterTeleportEvent(new Vector3f(LASUtils.FLOATING_PLATFORM_POSITION).add(0, 1, 0)));
         return "Teleporting you to the platform.";
     }
 
     @ReceiveEvent(components = ClientComponent.class)
-    public void onPlayerDisconnect(DisconnectedEvent event, EntityRef entity) {
+    public void onPlayerDisconnect(BeforeDisconnectEvent event, EntityRef entity) {
         ClientComponent clientComp = entity.getComponent(ClientComponent.class);
         LASTeamComponent senderTeam = clientComp.character.getComponent(LASTeamComponent.class);
         if (senderTeam != null && (senderTeam.team.equals(LASUtils.RED_TEAM) || senderTeam.team.equals(LASUtils.BLACK_TEAM))) {
             // spectators (white team) are not relevant for arena exit actions
-            performArenaExitActions(clientComp);
-        }
-    }
-
-    /**
-     * Follow-up actions necessary when a player leaves the arena, either by porting back to the platform
-     * or by disconnecting from the server.
-     * These action are required to verify the current game state and update the phase accordingly if necessary.
-     */
-    private void performArenaExitActions(ClientComponent clientComp) {
-        // players teleporting back to platform should be removed from the playing teams
-        // white team (spectator) members are allowed to teleport without losing their team
-        clientComp.character.removeComponent(LASTeamComponent.class);
-
-        // if in game phase: verify that game start condition still met
-        Phase currentPhase = phaseSystem.getCurrentPhase();
-        if ((currentPhase == Phase.IN_GAME || currentPhase == Phase.COUNTDOWN) && !teamSystem.isMinSizeTeams()) {
-            logger.debug("Starting condition no longer met, switching from phase {} to PRE_GAME", currentPhase);
-            gameEntitySystem.getGameEntity().send(new SwitchToPhaseEvent(Phase.PRE_GAME));
-        }
-
-        // if the player teleporting was the last one still in the arena
-        // switch back to idle phase
-        if (teamSystem.getTeamSize(LASUtils.BLACK_TEAM) == 0 && teamSystem.getTeamSize(LASUtils.RED_TEAM) == 0) {
-            logger.debug("No players left in arena, switching to IDLE phase");
-            gameEntitySystem.getGameEntity().send(new SwitchToPhaseEvent(Phase.IDLE));
+            teleportToPlatform(entity);
         }
     }
 }

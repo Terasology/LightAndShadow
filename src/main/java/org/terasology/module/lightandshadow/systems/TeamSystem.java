@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.entity.lifecycleEvents.OnChangedComponent;
+import org.terasology.engine.entitySystem.event.EventPriority;
+import org.terasology.engine.entitySystem.event.Priority;
 import org.terasology.engine.entitySystem.systems.BaseComponentSystem;
 import org.terasology.engine.entitySystem.systems.RegisterMode;
 import org.terasology.engine.entitySystem.systems.RegisterSystem;
@@ -18,6 +20,7 @@ import org.terasology.lightandshadowresources.components.LASTeamComponent;
 import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.components.LASConfigComponent;
 import org.terasology.module.lightandshadow.components.LASTeamStatsComponent;
+import org.terasology.module.lightandshadow.events.PlayerExitedArenaEvent;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 @Share(value = TeamSystem.class)
@@ -32,6 +35,16 @@ public class TeamSystem extends BaseComponentSystem {
         logger.debug("Player {} switched to team {}",
                 entity.getOwner().getComponent(ClientComponent.class).clientInfo,
                 entity.getComponent(LASTeamComponent.class).team);
+    }
+
+    @Priority(EventPriority.PRIORITY_HIGH)
+    @ReceiveEvent(components = LASTeamComponent.class)
+    public void onArenaExit(PlayerExitedArenaEvent event, EntityRef player) {
+        // players exiting the arena (e.g. by teleporting to platform or disconnecting from the game)
+        // should be removed from the playing teams
+        LASTeamComponent lasTeamComponent = player.getComponent(LASTeamComponent.class);
+        lasTeamComponent.team = LASUtils.WHITE_TEAM;
+        player.addOrSaveComponent(lasTeamComponent);
     }
 
     public boolean isBalancedTeams(String targetTeam) {

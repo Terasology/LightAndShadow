@@ -20,6 +20,7 @@ import org.terasology.gestalt.entitysystem.event.ReceiveEvent;
 import org.terasology.input.ButtonState;
 import org.terasology.module.inventory.input.InventoryButton;
 import org.terasology.module.lightandshadow.LASUtils;
+import org.terasology.module.lightandshadow.events.PlayerExitedArenaEvent;
 import org.terasology.module.lightandshadow.phases.OnPreGamePhaseStartedEvent;
 import org.terasology.notifications.events.ExpireNotificationEvent;
 import org.terasology.notifications.events.ShowNotificationEvent;
@@ -41,6 +42,11 @@ public class ClientShopSystem extends BaseComponentSystem {
     @ReceiveEvent
     public void onPregameStart(OnPreGamePhaseStartedEvent event, EntityRef entity) {
         entity.upsertComponent(AllowShopScreenComponent.class, c -> c.orElse(new AllowShopScreenComponent()));
+    }
+
+    @ReceiveEvent
+    public void onArenaExit(PlayerExitedArenaEvent event, EntityRef entity) {
+        entity.removeComponent(AllowShopScreenComponent.class);
     }
 
     /**
