@@ -290,6 +290,11 @@ public class ClientInformationSystem extends BaseComponentSystem {
         localPlayer.getClientEntity().send(new ShowNotificationEvent(notification));
     }
 
+    @ReceiveEvent
+    public void removeTooFewPlayersNotification(OnPreGamePhaseEndedEvent event, EntityRef entity) {
+        entity.send(new ExpireNotificationEvent(WAIT_NOTIFICATION_ID));
+    }
+
     public void addPlayerStatisticsInfo(DeathScreen deathScreen) {
         MigLayout spadesTeamMigLayout = deathScreen.find("spadesTeamPlayerStatistics", MigLayout.class);
         MigLayout heartsTeamMigLayout = deathScreen.find("heartsTeamPlayerStatistics", MigLayout.class);
