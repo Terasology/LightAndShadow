@@ -98,7 +98,7 @@ public class FloatingPlatformProvider implements ConfigurableFacetProvider, Face
         this.configuration = (Config) configuration;
     }
 
-    private static class Config implements Component<Config> {
+    public static class Config implements Component<Config> {
 //        @Range(min = 10, max = 1000, increment = 1, precision = 0, label = "Platform Height")
 //        public int height = 100;
 
