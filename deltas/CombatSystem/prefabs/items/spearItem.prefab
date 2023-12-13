@@ -1,10 +1,10 @@
 {
   "Item": {
-    "cooldownTime": 500
+    "cooldownTime": 1000
   },
   "Melee": {
     "primaryAttack": true,
-    "range": 2
+    "range": 4
   },
   "RandomDamage": {
     "minDamage": 20,

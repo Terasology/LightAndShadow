@@ -1,10 +1,10 @@
 {
   "Item": {
-    "cooldownTime": 300
+    "cooldownTime": 200
   },
   "Purchasable": {
   },
   "Value": {
-    "value": 50
+    "value": 30
   }
 }

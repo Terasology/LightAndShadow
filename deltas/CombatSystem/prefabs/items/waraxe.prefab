@@ -2,8 +2,17 @@
   "Item": {
     "cooldownTime": 1000
   },
+  "Melee": {
+    "primaryAttack": true,
+    "range": 2
+  },
   "RandomDamage": {
-    "minDamage": 30,
-    "maxDamage": 40
+    "minDamage": 40,
+    "maxDamage": 60
+  },
+  "Purchasable": {
+  },
+  "Value": {
+    "value": 50
   }
 }
