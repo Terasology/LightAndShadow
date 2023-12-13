@@ -1,8 +1,13 @@
 {
     "LASConfig" : {
-        "maxTeamSizeDifference" : 3
+        "maxTeamSizeDifference": 3,
+        "minTeamSize": 1
     },
     "CurrencyStorage": {
         "amount": 100
+    },
+    // this component is required for the PhaseSystem phase change events to be broadcasted
+    "Network": {
+        "replicateMode": "ALWAYS"
     }
 }

@@ -23,6 +23,8 @@ import org.terasology.module.lightandshadow.events.GameOverEvent;
 import org.terasology.module.lightandshadow.events.RestartRequestEvent;
 import org.terasology.module.lightandshadow.events.ReturnFlagEvent;
 import org.terasology.module.lightandshadow.events.ScoreUpdateFromServerEvent;
+import org.terasology.module.lightandshadow.phases.Phase;
+import org.terasology.module.lightandshadow.phases.SwitchToPhaseEvent;
 
 /**
  * System responsible for calculating and providing score.
@@ -34,6 +36,8 @@ public class ScoreSystem extends BaseComponentSystem {
     private InventoryManager inventoryManager;
     @In
     private EntityManager entityManager;
+    @In
+    GameEntitySystem gameEntitySystem;
 
     private int redScore;
     private int blackScore;
@@ -87,10 +91,12 @@ public class ScoreSystem extends BaseComponentSystem {
                 if (redScore >= LASUtils.GOAL_SCORE) {
                     resetLevel();
                     sendEventToClients(new GameOverEvent(LASUtils.RED_TEAM, blackScore, redScore));
+                    gameEntitySystem.getGameEntity().send(new SwitchToPhaseEvent(Phase.POST_GAME));
                 }
                 if (blackScore >= LASUtils.GOAL_SCORE) {
                     resetLevel();
                     sendEventToClients(new GameOverEvent(LASUtils.BLACK_TEAM, blackScore, redScore));
+                    gameEntitySystem.getGameEntity().send(new SwitchToPhaseEvent(Phase.POST_GAME));
                 }
             }
         }

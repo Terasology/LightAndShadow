@@ -13,6 +13,13 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import org.terasology.engine.core.SimpleUri;
+import org.terasology.engine.unicode.EnclosedAlphanumerics;
+import org.terasology.engine.input.InputSystem;
+import org.terasology.input.Input;
+import org.terasology.nui.Color;
+import org.terasology.nui.FontColor;
+
 import static java.util.Collections.singletonMap;
 
 public final class LASUtils {
@@ -221,5 +228,35 @@ public final class LASUtils {
                 .map(Supplier::get)
                 .findAny()
                 .orElse("engine:air");
+    }
+
+    /**
+     * Get a formatted representation of the primary {@link Input} associated with the given button binding.
+     *
+     * If the display name of the primary bound key is a single character this representation will be the encircled
+     * character. Otherwise the full display name is used. The bound key will be printed in yellow.
+     *
+     * If no key binding was found the text "n/a" in red color is returned.
+     *
+     * @param button the URI of a bindable button
+     * @return a formatted text to be used as representation for the player
+     */
+    //TODO: put this in a common place? Duplicated in Dialogs, EventualSkills, and InGameHelp
+    public static String getActivationKey(InputSystem inputSystem, SimpleUri button) {
+        return inputSystem.getInputsForBindButton(button).stream()
+                .findFirst()
+                .map(Input::getDisplayName)
+                .map(key -> {
+                    if (key.length() == 1) {
+                        // print the key in yellow within a circle
+                        int off = key.charAt(0) - 'A';
+                        char code = (char) (EnclosedAlphanumerics.CIRCLED_LATIN_CAPITAL_LETTER_A + off);
+                        return String.valueOf(code);
+                    } else {
+                        return key;
+                    }
+                })
+                .map(key -> FontColor.getColored(key, Color.yellow))
+                .orElse(FontColor.getColored("n/a", Color.red));
     }
 }

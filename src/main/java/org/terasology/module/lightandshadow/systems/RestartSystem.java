@@ -20,6 +20,8 @@ import org.terasology.module.health.events.RestoreFullHealthEvent;
 import org.terasology.module.lightandshadow.LASUtils;
 import org.terasology.module.lightandshadow.events.ClientRestartEvent;
 import org.terasology.module.lightandshadow.events.RestartRequestEvent;
+import org.terasology.module.lightandshadow.phases.Phase;
+import org.terasology.module.lightandshadow.phases.SwitchToPhaseEvent;
 
 /**
  * System to invoke restart of a game round.
@@ -52,5 +54,6 @@ public class RestartSystem extends BaseComponentSystem {
                     sub(LASUtils.getTeleportDestination(LASUtils.getOppositionTeam(team)), new Vector3f())), 0));
             client.send(new ClientRestartEvent());
         }
+        gameEntitySystem.getGameEntity().send(new SwitchToPhaseEvent(Phase.PRE_GAME));
     }
 }
