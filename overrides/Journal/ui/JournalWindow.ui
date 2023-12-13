@@ -1,0 +1,101 @@
+{
+  "type": "SetTutorialImages",
+  "skin": "Journal:journal",
+  "contents": {
+    "type": "rowLayout",
+    "contents": [
+      {
+        "type": "relativeLayout",
+        "contents": [
+          {
+            "type": "ScrollableArea",
+            "id": "entries",
+            "content": {
+              "type": "BrowserWidget",
+              "id": "journalList"
+            },
+            "family": "journalList",
+            "layoutInfo": {
+              "width": 450,
+              "height": 600,
+              "position-horizontal-center": {},
+              "position-vertical-center": {}
+            }
+          },
+          {
+            "type": "ColumnLayout",
+            "id": "row",
+            "contents": [
+              {
+                "type": "ColumnLayout",
+                "columns": 2,
+                "column-widths": [
+                  0.5,
+                  0.5
+                ],
+                "contents": [
+                  {
+                    "type": "UIImage",
+                    "id": "fetchFlag"
+                  },
+                  {
+                    "type": "UIImage",
+                    "id": "deliverFlag"
+                  }
+                ],
+                "horizontalSpacing": 10
+              },
+              {
+                "type": "ColumnLayout",
+                "columns": 2,
+                "column-widths": [
+                  0.5,
+                  0.5
+                ],
+                "contents": [
+                  {
+                    "type": "UIImage",
+                    "id": "openStatistics"
+                  },
+                  {
+                    "type": "UIImage",
+                    "id": "openInventory"
+                  }
+                ],
+                "horizontalSpacing": 10
+              }
+            ],
+            "layoutInfo": {
+              "height": 400,
+              "position-horizontal-center": {},
+              "position-top": {
+                "target": "TOP",
+                "widget": "entries"
+              },
+              "width": 430,
+              "position-vertical-center": {}
+            }
+          },
+          {
+            "type": "ScrollableArea",
+            "id": "chapters",
+            "content": {
+              "type": "UIList",
+              "id": "chapterList"
+            },
+            "family": "chapterList",
+            "layoutInfo": {
+              "width": 80,
+              "height": 600,
+              "position-right": {
+                "target": "LEFT",
+                "widget": "entries"
+              },
+              "position-vertical-center": {}
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

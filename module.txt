@@ -46,6 +46,10 @@
             "id": "ItemRendering",
             "minVersion": "1.1.0"
         },
+		{
+            "id": "Journal",
+            "minVersion": "1.0.0"
+        },
         {
             "id": "LightAndShadowResources",
             "minVersion": "1.1.0"
